@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "@/core/hooks/useAuth";
+import { useDispatch } from 'react-redux';
+import { authApi } from '../api/authApi';
+import { logout } from '../store/authSlice';
 import { toast } from "sonner";
 import { ConfirmationAlert } from "@/components/ui/ConfirmationAlert";
 
@@ -14,13 +16,14 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({
   variant = "primary",
   showIcon = true,
 }) => {
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
     setIsLoading(true);
     try {
-      await logout();
+      await authApi.logoutUser();
+      dispatch(logout());
       toast.success("Logged out successfully");
     } catch (error) {
       toast.error("Failed to logout");

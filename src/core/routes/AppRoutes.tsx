@@ -1,12 +1,19 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import { routes } from "./RoutesConfig";
 import Login from "../../features/auth/pages/login/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { useAuth } from "../hooks/useAuth";
-import { DEFAULT_ROUTES } from "../../features/auth/context/AuthContext";
+import { DEFAULT_ROUTES } from "@/features/auth/constants/routes";
+import { UserRole } from "@/features/auth/types/auth.types";
+import { RootState } from "@/store";
 
 export const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  const getDefaultRoute = (userRole?: UserRole | null) => {
+    if (!userRole) return "/login";
+    return DEFAULT_ROUTES[userRole] || "/login";
+  };
 
   return (
     <Routes>
@@ -25,13 +32,13 @@ export const AppRoutes = () => {
       <Route
         path="/"
         element={
-          <Navigate to={user ? DEFAULT_ROUTES[user.role] : "/login"} replace />
+          <Navigate to={getDefaultRoute(user?.role)} replace />
         }
       />
       <Route
         path="*"
         element={
-          <Navigate to={user ? DEFAULT_ROUTES[user.role] : "/login"} replace />
+          <Navigate to={getDefaultRoute(user?.role)} replace />
         }
       />
     </Routes>
