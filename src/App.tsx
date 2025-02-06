@@ -1,15 +1,15 @@
 import { BrowserRouter, useLocation } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { AppRoutes } from "./core/routes/AppRoutes";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import LoadingFallback from "./components/loader/LoadingFallback";
 import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
-import { store } from "./store";
-// import Footer from "./components/layout/Footer/Footer";
-// import Header from "./components/layout/Header/Header";
-//import MainLayout from "./components/layout/Main-layout/Main-layout";
+import { ThemeProvider } from "./providers/ThemeProvider";
+import { cleanupAxiosInterceptors } from './core/services/axios/axiosInstance';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from "./store";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,33 +19,32 @@ const queryClient = new QueryClient({
     },
   },
 });
-// interface LayoutWrapperProps {
-//   children: React.ReactNode;
-// }
-// const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
-//   const location = useLocation();
-//   // Exclude login page or other pages from the layout
-//   const isLayoutRequired = location.pathname !== "/login";
-
-//   return isLayoutRequired ? <MainLayout>{children}</MainLayout> : <>{children}</>;
-// };
 
 const App = () => {
+  useEffect(() => {
+    return () => {
+      // Cleanup axios interceptors on unmount
+      cleanupAxiosInterceptors();
+    };
+  }, []);
+
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Toaster />
-          <ErrorBoundary>
-            <Suspense fallback={<LoadingFallback />}>
-             {/* <Header/> */}
-              <AppRoutes />
-             {/* <Footer/> */}
-            </Suspense>
-          </ErrorBoundary>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </Provider>
+    <ThemeProvider>
+      <Provider store={store}>
+        <PersistGate loading={<LoadingFallback />} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+              <Toaster />
+              <ErrorBoundary>
+                <Suspense fallback={<LoadingFallback />}>
+                  <AppRoutes />
+                </Suspense>
+              </ErrorBoundary>
+            </BrowserRouter>
+          </QueryClientProvider>
+        </PersistGate>
+      </Provider>
+    </ThemeProvider>
   );
 };
 

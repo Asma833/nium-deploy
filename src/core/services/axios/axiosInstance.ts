@@ -1,3 +1,4 @@
+import { getEndpoint } from "@/core/constant/apis";
 import axios from "axios";
 import { toast } from 'sonner';
 
@@ -15,8 +16,8 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor
-axiosInstance.interceptors.request.use(
+// Add these interceptor IDs
+const requestInterceptorId = axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -27,8 +28,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor
-axiosInstance.interceptors.response.use(
+const responseInterceptorId = axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -42,34 +42,59 @@ axiosInstance.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      
       try {
         const refreshToken = localStorage.getItem("refreshToken");
         if (!refreshToken) {
           throw new Error('No refresh token available');
         }
 
-        const { data } = await axios.post(`${API_URL}/token`, { refreshToken });
+        // Use a new axios instance for refresh to avoid interceptor loop
+        const response = await axios.create().post(
+          `${API_URL}${getEndpoint('AUTH.REFRESH_TOKEN')}`,
+          { refreshToken },
+          {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+
+        const { data } = response;
+
+        if (!data.accessToken || !data.refreshToken) {
+          throw new Error('Invalid token refresh response');
+        }
+
         localStorage.setItem("accessToken", data.accessToken);
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`;
+        localStorage.setItem("refreshToken", data.refreshToken);
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        toast.error("Session expired", {
-          description: "Please login again"
-        });
+        // Use window.location.replace instead of href for cleaner navigation
         localStorage.clear();
-        window.location.replace("/login");
+        window.location.replace('/login');
         return Promise.reject(refreshError);
       }
     }
 
-    if (error.response?.data?.error) {
-      toast.error("Error", {
-        description: error.response.data.error
-      });
+    // Handle other errors
+    if (error.response?.data?.message) {
+      toast.error(error.response.data.message);
+    } else if (error.message) {
+      toast.error(error.message);
     }
 
-    return Promise.reject(error.response?.data || error);
+    return Promise.reject(error);
   }
 );
+
+// Add cleanup function
+export const cleanupAxiosInterceptors = () => {
+  axiosInstance.interceptors.request.eject(requestInterceptorId);
+  axiosInstance.interceptors.response.eject(responseInterceptorId);
+};
 
 export default axiosInstance;

@@ -1,5 +1,6 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { LoginResponse, User, UserRole } from "../types/auth.types";
+import { getEndpoint } from "@/core/constant/apis";
 
 export interface LoginCredentials {
   email: string;
@@ -11,26 +12,22 @@ export const authApi = {
     email,
     password,
   }: LoginCredentials): Promise<LoginResponse> => {
-    const { data } = await axiosInstance.post<LoginResponse>("/auth/login", {
-      email,
-      password,
-    });
-    
-    // Ensure the role is of type UserRole
-    const user: User = {
-      ...data.user,
-      role: data.user.role.toLowerCase() as UserRole
-    };
+    const { data } = await axiosInstance.post<LoginResponse>(
+      getEndpoint('AUTH.LOGIN'),
+      { email, password }
+    );
 
-    return {
-      ...data,
-      user
-    };
+    if (!data.accessToken || !data.refreshToken || !data.user) {
+      throw new Error('Invalid login response');
+    }
+
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`;
+    return data;
   },
   logoutUser: async (): Promise<void> => {
-    await axiosInstance.post("/auth/logout");
+    await axiosInstance.post(getEndpoint('AUTH.LOGOUT'));
   },
   forgotPassword: async (email: string): Promise<void> => {
-    await axiosInstance.post("/auth/forgot-password", { email });
+    await axiosInstance.post(getEndpoint('AUTH.FORGOT_PASSWORD'), { email });
   },
 };

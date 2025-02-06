@@ -18,7 +18,6 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
-  // add other user properties as needed
 }
 
 export interface LoginResponse {

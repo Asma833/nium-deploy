@@ -2,11 +2,13 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 import { UserRole } from '@/features/auth/types/auth.types';
-import { RootState } from '@/core/store/store';
+import { RootState } from '@/store';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   allowedRoles?: UserRole[];
+  roles: string[];
+  permission?: string;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({

@@ -15,14 +15,19 @@ interface ConfirmationAlertProps {
   title: string;
   description: string;
   onConfirm: () => void;
+  isLoading?: boolean;
 }
 
-export function ConfirmationAlert({ children, title, description, onConfirm }: ConfirmationAlertProps) {
+export function ConfirmationAlert({
+  children,
+  title,
+  description,
+  onConfirm,
+  isLoading = false,
+}: ConfirmationAlertProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        {children}
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="bg-white border-none">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -30,7 +35,12 @@ export function ConfirmationAlert({ children, title, description, onConfirm }: C
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+            <AlertDialogAction
+            onClick={onConfirm}
+            disabled={isLoading}
+            >
+            {isLoading ? "Loading..." : "Continue"}
+            </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

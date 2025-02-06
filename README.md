@@ -1,12 +1,118 @@
-# NIUM
-# React + TypeScript + Vite
+# NIUM Web Agent Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React-based web portal for NIUM agents built with TypeScript and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **State Management**
+  - Redux Toolkit for global state management
+  - React Hook Form for efficient form handling
+  - React Query for server state management
+
+- **UI/UX**
+  - Responsive Shadcn and Material-UI components
+  - Light/Dark mode support
+  - Accessibility compliance
+
+- **API Integration**
+  - RESTful API integration via Axios
+  - Request caching and optimization with React Query
+  - Type-safe API interfaces
+
+## Prerequisites
+
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+- Git
+
+## Installation
+
+```bash
+# Clone the repository
+git clone [repository-url]
+
+# Install dependencies
+npm install
+```
+
+## Usage
+
+```bash
+# Development server
+npm run dev
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Folder Structure
+
+```
+src/
+├── assets/        # Static assets
+├── components/    # Reusable UI components
+├── features/      # Feature-based modules
+├── hooks/         # Custom React hooks
+├── layouts/       # Page layouts
+├── pages/         # Route components
+├── services/      # API services
+├── store/         # Redux store configuration
+├── types/         # TypeScript definitions
+└── utils/         # Utility functions
+```
+
+## Development
+
+```bash
+# Run linting
+npm run lint
+
+# Run type checking
+npm run type-check
+
+# Run tests
+npm run test
+```
+
+## Configuration Files
+
+Key configuration files in the project:
+
+- **tsconfig.app.json**: TypeScript configuration for strict type checking and advanced compilation options
+- **vite.config.ts**: Vite bundler configuration with plugins and build optimizations
+- **eslint.config.js**: ESLint rules for code quality and consistency
+- **.prettierrc**: Code formatting rules
+- **jest.config.js**: Test runner configuration
+
+## Environment Variables
+
+```bash
+VITE_API_BASE_URL=https://api.example.com
+VITE_ENV=development
+```
+
+## Contributing
+
+1. Create feature branch (`git checkout -b feature/amazing-feature`)
+2. Commit changes (`git commit -m 'Add amazing feature'`)
+3. Push to branch (`git push origin feature/amazing-feature`)
+4. Open a Pull Request
+
+## Additional Resources
+
+- [Internal API Documentation](./docs/api.md)
+- [Component Documentation](./docs/components.md)
+- [State Management Guide](./docs/state-management.md)
+
+## Support
+
+Contact the development team through:
+- Slack: #nium-support
+- Email: dev-support@nium.com
+````
 
 ## Expanding the ESLint configuration
 
