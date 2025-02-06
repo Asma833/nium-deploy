@@ -1,171 +1,179 @@
-import { useState, useEffect, useRef } from "react";
-import { Bell, User } from "lucide-react";
-import { Link, useLocation } from "react-router-dom"; 
-import logo from "../../../assets/images/nium-logo.png"; 
-import { navItems } from "./NavItems";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Bell, Power, ChevronDown, ChevronUp, Menu } from 'lucide-react';
+import { defaultNavItems,NavItem } from './NavItems';
+import logo from "../../../assets/images/nium-logo.svg"; 
 
-const Header = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation(); // Use location to check the current active route
-  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-// Close dropdown when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setDropdownOpen(null);
+
+const Header = ({ navItems = defaultNavItems }) => {
+  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState('Dashboard');
+  const [activeDropdownItem, setActiveDropdownItem] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
+
+  const isItemActive = (item: NavItem) => {
+    if (item.title === activeItem) return true;
+    if (item.dropdown && activeDropdownItem) {
+      return item.dropdown.some(dropItem => dropItem.title === activeDropdownItem);
+    }
+    return false;
+  };
+
+  const handleDropdownItemClick = (parentTitle: string, dropdownTitle: string, path: string) => {
+    setActiveItem(parentTitle);
+    setActiveDropdownItem(dropdownTitle);
+    setIsMobileMenuOpen(false);
+    setOpenMobileDropdown(null);
+    navigate(path); // Use navigate instead of href
+  };
+
+  const handleNavItemClick = (item: NavItem) => {
+    setActiveItem(item.title);
+    if (!item.dropdown && item.path) {
+      setActiveDropdownItem(null);
+      setIsMobileMenuOpen(false);
+      navigate(item.path);
     }
   };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, []);
-  
-const handleDropdownToggle = (title: string) => {
-    setDropdownOpen(dropdownOpen === title ? null : title); // Toggle dropdown open/close
+  const toggleMobileDropdown = (title: string) => {
+    setOpenMobileDropdown(openMobileDropdown === title ? null : title);
   };
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen); // Toggle mobile menu visibility
-  };
+  const NavLink = ({ item }: { item: NavItem }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-
-  const getNavItemClass = (path: string, isDropdown: boolean = false) => {
-    const isActive = location.pathname === path;
-    return `
-       ${isActive || (dropdownOpen === path && isDropdown) ? 'text-text-black border-b-2 border-black' : ''}
-      hover:text-gray-800 focus:outline-none focus:border-b-2 focus:border-black
-    `;
-  };
-  
-  
-  return (
-    <nav className="p-4">
-      <div className="container mx-auto flex justify-between items-center">
-      {/* Mobile Menu Button on the Left */}
-      <button
-        onClick={toggleMobileMenu}
-        className="md:hidden focus:outline-none"
+    return (
+      <div
+        className="relative group"
+        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseLeave={() => setIsDropdownOpen(false)}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
+        <button
+          className={`px-3 py-2 rounded-md text-sm flex items-center gap-1 transition-colors
+            ${isItemActive(item)
+              ? 'text-black font-semibold' 
+              : 'text-gray-500 hover:text-black'
+            }`}
+          onClick={() => handleNavItemClick(item)}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+          {item.title}
+          {item.dropdown && (
+            <ChevronDown className="w-4 h-4" />
+          )}
+        </button>
 
-  {/* Logo on the Right */}
-  <img src={logo} className="h-10 ml-auto" />
-</div>
-      
+        {item.dropdown && isDropdownOpen && (
+          <div className="absolute left-0 mt-1 w-64 bg-white rounded-md shadow-lg border border-gray-100 z-50">
+            <div className="py-2">
+              {item.dropdown.map((dropdownItem, idx) => (
+                <button
+                  key={idx}
+                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50
+                    ${activeDropdownItem === dropdownItem.title 
+                      ? 'text-black font-semibold bg-gray-50' 
+                      : 'text-gray-700'
+                    }`}
+                  onClick={() => handleDropdownItemClick(item.title, dropdownItem.title, dropdownItem.path)}
+                >
+                  {dropdownItem.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
-      <div className="container mx-auto flex justify-center items-center">
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-4" ref={dropdownRef}>
-          <ul className="flex justify-between items-center lg:space-x-12 md:space-x-2">
-            {navItems.map((item, index) => (
-              <li key={index} className="relative">
-                {!item.dropdown ? (
-                  <Link
-                    to={item.path || ''}
-                    className={`${getNavItemClass(item.path || '')}`}
-                  >
-                    {item.title}
-                  </Link>
-                ) : (
-                  <div className="relative" >
-                    <button
-                      onClick={() => handleDropdownToggle(item.title)}
-                      className={`${getNavItemClass(item.path || '', true)} bg-transparent`}
-                    >
-                      {item.title}
-                    </button>
-                    {dropdownOpen === item.title && (
-                      <div className="absolute left-0 mt-2 rounded-md shadow-lg w-48">
-                        <ul>
-                          {item.dropdown.map((subItem, index) => (
-                            <li key={index}  onClick={() => handleDropdownToggle(item.title)}>
-                              <Link
-                                to={subItem.path}
-                                className="block px-4 py-2 hover:bg-gray-100 hover:text-black focus:outline-none focus:bg-gray-100 focus:text-black"
-                              >
-                                {subItem.title}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+  return (
+    <nav className="bg-white border-b border-gray-200">
+       {/* <div className="flex items-end h-14">
+          <div className="flex items-end">
+            <Link to="/" className="flex-shrink-0">
+              <img src={logo} className="h-8" />
+            </Link>
+          </div>
+          </div> */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+       
+        <div className="flex items-center justify-between h-16 ">
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden p-2 rounded-md hover:bg-gray-100"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Menu className="w-6 h-6 text-gray-500" />
+          </button>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            {navItems.map((item, idx) => (
+              <NavLink key={idx} item={item} />
+            ))}
+          </div>
+
+          {/* Right side icons */}
+          <div className="flex items-center space-x-4">
+            <button className="p-2 rounded-full hover:bg-gray-100">
+              <Bell className="w-5 h-5 text-gray-500" />
+            </button>
+            <button className="p-2 rounded-full hover:bg-gray-100">
+              <Power className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden py-2">
+            {navItems.map((item, idx) => (
+              <div key={idx} className="px-2 pt-2 pb-3">
+                <button
+                  className={`w-full text-left px-3 py-2 rounded-md text-base font-medium flex items-center justify-between
+                    ${isItemActive(item)
+                      ? 'text-black bg-gray-50' 
+                      : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                    }`}
+                  onClick={() => {
+                    if (item.dropdown) {
+                      toggleMobileDropdown(item.title);
+                    } else {
+                      handleNavItemClick(item);
+                    }
+                  }}
+                >
+                  {item.title}
+                  {item.dropdown && (
+                    openMobileDropdown === item.title 
+                      ? <ChevronUp className="w-5 h-5" />
+                      : <ChevronDown className="w-5 h-5" />
+                  )}
+                </button>
+                {item.dropdown && openMobileDropdown === item.title && (
+                  <div className="pl-4 mt-2 space-y-1">
+                    {item.dropdown.map((dropdownItem, dropIdx) => (
+                      <button
+                        key={dropIdx}
+                        className={`block w-full text-left px-3 py-2 rounded-md text-sm
+                          ${activeDropdownItem === dropdownItem.title 
+                            ? 'text-black font-semibold bg-gray-50' 
+                            : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                          }`}
+                        onClick={() => handleDropdownItemClick(item.title, dropdownItem.title, dropdownItem.path)}
+                      >
+                        {dropdownItem.title}
+                      </button>
+                    ))}
                   </div>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
-          
-          
-        </div>
-        <div className="flex space-x-2 ml-auto">
-        <button className="hover:bg-gray-200 text-gray-400 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <Bell size={20} />
-        </button>
-        <button className="hover:bg-gray-200 text-gray-400 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <User size={20} />
-        </button>
+          </div>
+        )}
       </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-gray-50  text-black p-4 space-y-4">
-          {navItems.map((item, index) => (
-            <div key={index}>
-              {!item.dropdown ? (
-                <Link
-                  to={item.path || ''}
-                  className={`${getNavItemClass(item.path || '')}`}
-                 onClick={()=> setMobileMenuOpen(!mobileMenuOpen)}>
-                  {item.title}
-                </Link>
-              ) : (
-                <div className="relative">
-                  <button
-                    onClick={() => handleDropdownToggle(item.title)}
-                    className={`${getNavItemClass(item.path || '', true)} bg-transparent`}
-                  >
-                    {item.title}
-                  </button>
-                  {dropdownOpen === item.title && (
-                    <div className="rounded-md shadow-lg w-full">
-                      <ul>
-                        {item.dropdown.map((subItem, index) => (
-                          <li key={index} onClick={()=> setMobileMenuOpen(!mobileMenuOpen)}>
-                            <Link
-                              to={subItem.path}
-                              className="block px-4 py-2 hover:bg-gray-200 hover:text-black focus:outline-none focus:border-b-2 focus:border-blue-500"
-                            >
-                              {subItem.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
     </nav>
   );
 };

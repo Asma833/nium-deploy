@@ -1,15 +1,12 @@
-import logo from "../../../assets/images/nium-logo.png"; 
+import logo from "../../../assets/images/nium-logo.svg"; 
 
 const Footer = () => {
   return (
     <footer className="py-6">
       <div className="container mx-auto text-center">
-      <a  className="hover:text-gray-300 text-sm">Powered By</a>  
-      <img src={logo} className="h-12 w-100 m-auto"/>
-        {/* <p>&copy; 2024 All rights reserved.</p>
-        <div className="mt-4 space-x-4">
-          <a href="" className="hover:text-gray-300">Privacy Policy</a>  
-        </div> */}
+      {/* <a  className="hover:text-gray-300 text-sm text-gray-300">Powered By</a>  
+      <img src={logo} className="h-11 w-200 m-auto"/>
+         */}
       </div>
     </footer>
   )

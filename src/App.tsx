@@ -7,7 +7,9 @@ import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import MainLayout from "./components/layout/Main-layout/Main-layout";
+// import Footer from "./components/layout/Footer/Footer";
+// import Header from "./components/layout/Header/Header";
+//import MainLayout from "./components/layout/Main-layout/Main-layout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,16 +19,16 @@ const queryClient = new QueryClient({
     },
   },
 });
-interface LayoutWrapperProps {
-  children: React.ReactNode;
-}
-const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
-  const location = useLocation();
-  // Exclude login page or other pages from the layout
-  const isLayoutRequired = location.pathname !== "/login";
+// interface LayoutWrapperProps {
+//   children: React.ReactNode;
+// }
+// const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
+//   const location = useLocation();
+//   // Exclude login page or other pages from the layout
+//   const isLayoutRequired = location.pathname !== "/login";
 
-  return isLayoutRequired ? <MainLayout></MainLayout> : <>{children}</>;
-};
+//   return isLayoutRequired ? <MainLayout>{children}</MainLayout> : <>{children}</>;
+// };
 
 const App = () => {
   return (
@@ -36,9 +38,9 @@ const App = () => {
           <Toaster />
           <ErrorBoundary>
             <Suspense fallback={<LoadingFallback />}>
-              <LayoutWrapper>
+             {/* <Header/> */}
               <AppRoutes />
-              </LayoutWrapper>
+             {/* <Footer/> */}
             </Suspense>
           </ErrorBoundary>
         </BrowserRouter>

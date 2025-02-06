@@ -1,5 +1,4 @@
 
-import MainLayout from "@/components/layout/Main-layout/Main-layout";
 import AgentReport from "@/features/admin-portal/agent-report/pages/AgentReport";
 import Dashboard from "@/features/admin-portal/dashboard/pages/dashboard";
 import AgentProfileCreation from "@/features/admin-portal/user-management/pages/AgentProfileCreation";
@@ -17,11 +16,9 @@ import AgentProfileCreation from "@/features/admin-portal/user-management/pages/
  *                                    "view_transactions" | "approve_transactions"
  */
 export const routes = [
-  {
-    path: "/dashboard",
-    element: MainLayout,children:[
-      {
-        path: "/",
+      
+    {
+        path: "/dashboard",
         element: Dashboard,
         roles: ["admin", "co-admin"],
         permission: "view_dashboard",
@@ -48,9 +45,7 @@ export const routes = [
         path: "/agents",
         element: AgentReport,
         roles: ["admin", "co-admin"],
-        permission: "",
+        permission: "view_dashboard",
       },
-    ]
-  
-  },
+    
 ];
