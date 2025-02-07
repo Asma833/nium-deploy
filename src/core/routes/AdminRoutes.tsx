@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { adminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
-import AdminLayout from "@/features/admin-portal/dashboard/components/AdminLayout";
+import AdminLayout from "@/features/admin-portal/components/AdminLayout";
+import NotFoundPage from "@/components/common/NotFoundPage";
 
 export const AdminRoutes = () => {
   return (
@@ -19,6 +20,14 @@ export const AdminRoutes = () => {
           }
         />
       ))}
+      <Route
+        path="*"
+        element={
+          <AdminLayout>
+            <NotFoundPage />
+          </AdminLayout>
+        }
+      />
     </Routes>
   );
 };

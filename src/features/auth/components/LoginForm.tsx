@@ -13,14 +13,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
-import { useForgotPassword } from "../hooks/useForgotPassword";
 import { loginSchema, LoginSchema } from "../schemas/login.schema";
+import { Link } from "react-router";
 
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { mutate, isLoading } = useLogin();
-  const forgotPasswordMutation = useForgotPassword();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -34,14 +33,7 @@ const LoginForm = () => {
     mutate(values);
   };
 
-  const handleForgotPassword = () => {
-    const email = form.getValues("email");
-    if (!email) {
-      form.setError("email", { message: "Please enter your email" });
-      return;
-    }
-    forgotPasswordMutation.mutate(email);
-  };
+
 
   return (
       <Form {...form}>
@@ -98,13 +90,12 @@ const LoginForm = () => {
           />
 
           <div className="text-center">
-            <button
-              type="button"
-              onClick={handleForgotPassword}
+            <Link
+              to="/send-password-reset-link"
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Forgot Password?
-            </button>
+            </Link>
           </div>
 
           <Button type="submit" disabled={isLoading} className="w-full">

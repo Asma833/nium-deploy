@@ -4,9 +4,10 @@ import logoUrl from "@/assets/images/nium-logo.svg";
 type Props = {
   width?: number;
   height?: number;
+  className?: string;
 };
 
-const Logo = ({ width = 120, height = 120 }: Props) => {
+const Logo = ({ width = 120, height = 120, className }: Props) => {
   return (
     <Image
       src={logoUrl}
@@ -14,7 +15,7 @@ const Logo = ({ width = 120, height = 120 }: Props) => {
       width={width}
       height={height}
       loading="eager"
-      priority
+      className={className || ''}
     />
   );
 };

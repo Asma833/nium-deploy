@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import Logo from "@/components/logo/logo";
+import LogoHeader from "@/components/common/LogoHeader";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
+  title?: string;
 }
 
-export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
+export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -20,14 +20,10 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-start">
-      <div className="w-full flex justify-between items-center p-4">
-        <ThemeToggle />
-        <div className="flex justify-center">
-          <Logo />
-        </div>
-      </div>
+      <LogoHeader />
       <div className="h-full w-full flex items-center justify-between flex-1 bg-secondary">
-        <div className="max-w-md mx-auto w-full border-2 border-gray-200 p-5 rounded-md">
+        <div className="max-w-md mx-auto w-full bg-background border-2 border-gray-200 p-5 rounded-xl">
+          <h1 className="text-2xl font-semibold mb-3">{title}</h1>
           {children}
         </div>
       </div>

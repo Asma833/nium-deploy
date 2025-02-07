@@ -5,6 +5,7 @@ import { DEFAULT_ROUTES } from "@/core/constant/routes";
 import { UserRole } from "@/features/auth/types/auth.types";
 import { RootState } from "@/store";
 import { AdminRoutes } from "./AdminRoutes";
+import NotFoundPage from "@/components/common/NotFoundPage";
 
 export const AppRoutes = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -24,10 +25,7 @@ export const AppRoutes = () => {
         path="/"
         element={<Navigate to={getDefaultRoute(user?.role)} replace />}
       />
-      <Route
-        path="*"
-        element={<Navigate to={getDefaultRoute(user?.role)} replace />}
-      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

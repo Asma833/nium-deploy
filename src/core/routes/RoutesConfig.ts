@@ -1,10 +1,16 @@
-import Login from "@/features/auth/pages/login/Login";
+import UserPage from "@/features/admin-portal/pages/n-user/UserPage";
 import { lazy } from "react";
 
 // Admin components
-const Dashboard = lazy(
-  () => import("@/features/admin-portal/dashboard/pages/dashboard")
+const DashboardPage = lazy(
+  () => import("@/features/admin-portal/pages/dashboard/DashboardPage")
 );
+
+// Auth components
+const SendEmailPage = lazy(
+  () => import("@/features/auth/pages/send-email/SendEmailPage")
+);
+const Login = lazy(() => import("@/features/auth/pages/login/LoginPage"));
 
 // Public routes
 export const publicRoutes = [
@@ -13,13 +19,24 @@ export const publicRoutes = [
     element: Login,
     roles: ["*"],
   },
+  {
+    path: "/send-password-reset-link",
+    element: SendEmailPage,
+    roles: ["*"],
+  },
 ];
 
 // Admin routes configuration
 export const adminRoutes = [
   {
-    path: "/dashboard", // Changed from /admin/dashboard since we're already under /admin/* route
-    element: Dashboard,
+    path: "/dashboard",
+    element: DashboardPage,
+    roles: ["admin", "co-admin"],
+    permission: "view_dashboard",
+  },
+  {
+    path: "/n-user",
+    element: UserPage,
     roles: ["admin", "co-admin"],
     permission: "view_dashboard",
   },

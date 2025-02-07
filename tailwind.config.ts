@@ -65,8 +65,20 @@ export default {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
+      filter: {
+        'invert-dark': 'invert(1)',
+      },
     },
   },
 
-  plugins: [tailwindcssAnimate],
+  plugins: [
+    tailwindcssAnimate,
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
+      addUtilities({
+        '.invert-in-dark': {
+          '@apply dark:invert': {}
+        }
+      });
+    }
+  ],
 };

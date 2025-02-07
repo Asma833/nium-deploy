@@ -1,12 +1,12 @@
 import AuthLayout from "../../components/AuthLayout";
 import LoginForm from "../../components/LoginForm";
 
-const Login = () => {
+const LoginPage = () => {
   return (
-    <AuthLayout>
+    <AuthLayout title="Login">
       <LoginForm />
     </AuthLayout>
   );
 };
 
-export default Login;
+export default LoginPage;

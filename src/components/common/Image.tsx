@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Img } from 'react-image';
+import { useState } from "react";
+import { Img } from "react-image";
 
 interface ImageProps {
   src: string;
@@ -7,8 +7,7 @@ interface ImageProps {
   width?: number;
   height?: number;
   className?: string;
-  loading?: 'lazy' | 'eager';
-  priority?: boolean;
+  loading?: "lazy" | "eager";
 }
 
 const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
@@ -20,7 +19,10 @@ const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
       alt={alt}
       loader={
         isLoading ? (
-          <div className="animate-pulse bg-gray-200 rounded" style={{ width: props.width, height: props.height }} />
+          <div
+            className="animate-pulse bg-gray-200 rounded"
+            style={{ width: props.width, height: props.height }}
+          />
         ) : null
       }
       onLoad={() => setIsLoading(false)}
