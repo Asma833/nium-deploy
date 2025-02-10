@@ -12,12 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLogin } from "../hooks/useLogin";
 import { loginSchema, LoginSchema } from "../schemas/login.schema";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Loader2 } from "lucide-react";
 
 const SendEmailForm = () => {
   const { mutate, isLoading } = useLogin();
-
+  const navigate = useNavigate();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -60,7 +60,7 @@ const SendEmailForm = () => {
           </div>
         </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full">
+        <Button type="submit" disabled={isLoading} className="w-full" onClick={() => navigate("/forget-password")}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

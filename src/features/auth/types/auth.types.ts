@@ -34,3 +34,12 @@ export interface AuthContextType {
   isLoading: boolean;
   error: string | null;
 }
+export interface ChangePasswordRequest {
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string; 
+}

@@ -1,10 +1,14 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { LoginResponse, User, UserRole } from "../types/auth.types";
+import { ChangePasswordResponse, LoginResponse, User, UserRole } from "../types/auth.types";
 import { getEndpoint } from "@/core/constant/apis";
 
 export interface LoginCredentials {
   email: string;
   password: string;
+}
+export interface ChangePasswordRequest {
+  newPassword: string;
+  confirmPassword: string;
 }
 
 export const authApi = {
@@ -29,5 +33,8 @@ export const authApi = {
   },
   forgotPassword: async (email: string): Promise<void> => {
     await axiosInstance.post(getEndpoint('AUTH.FORGOT_PASSWORD'), { email });
+  },
+  changePassword: async ({newPassword, confirmPassword }: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    await axiosInstance.post(getEndpoint("AUTH.CHANGE_PASSWORD"), {newPassword, confirmPassword });
   },
 };

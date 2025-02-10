@@ -1,5 +1,12 @@
+import AuthLayout from "../../components/AuthLayout";
+import ChangePasswordForm from "../../components/ChangePasswordForm";
+
 const ForgetPassword = () => {
-  return <div>ForgetPassword</div>;
+  return(
+    <AuthLayout title="Change Password">
+      <ChangePasswordForm />
+    </AuthLayout>
+  );
 };
 
 export default ForgetPassword;

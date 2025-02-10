@@ -26,7 +26,7 @@ export function ConfirmationAlert({
   isLoading = false,
 }: ConfirmationAlertProps) {
   return (
-    <AlertDialog>
+    <AlertDialog >
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="bg-white border-none">
         <AlertDialogHeader>
