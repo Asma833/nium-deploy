@@ -8,9 +8,9 @@ interface SearchInputProps {
 
 export function SearchInput({ value, onChange }: SearchInputProps) {
   return (
-    <div className="relative inputBase w-[250px]">
+    <div className="relative w-full sm:w-[250px]" >
       <Input
-      placeholder="Search..."
+      placeholder="Search"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="placeholder:text-[14px]"

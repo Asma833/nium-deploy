@@ -1,9 +1,12 @@
-import UserPage from "@/features/admin-portal/pages/n-user/UserPage";
+import UserPage from "@/features/admin-portal/pages/user-management/n-user/page/UserPage";
 import { lazy } from "react";
 
 // Admin components
 const DashboardPage = lazy(
   () => import("@/features/admin-portal/pages/dashboard/DashboardPage")
+);
+const AgentBranchUserCreationPage = lazy(
+  () => import("@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserCreationPage")
 );
 
 // Auth components
@@ -35,10 +38,17 @@ export const adminRoutes = [
     permission: "view_dashboard",
   },
   {
-    path: "/n-user",
+    path: "/user-management/n-user",
     element: UserPage,
     roles: ["admin", "co-admin"],
     permission: "view_dashboard",
   },
+  {
+    path: "/user-management/agent-branch-user-creation",
+    element: AgentBranchUserCreationPage,
+    roles: ["admin", "co-admin"],
+    permission: "view_dashboard",
+  },
+
   // Add other admin routes here
 ];

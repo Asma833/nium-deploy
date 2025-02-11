@@ -1,6 +1,7 @@
 export interface DropdownItem {
   title: string;
   path: string;
+  description?: string;
 }
 
 export interface NavItem {

@@ -1,4 +1,3 @@
-"use client";
 import { useState, useMemo } from "react";
 
 import {
@@ -9,12 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DataNotFound from "@/assets/images/DataNotFound.svg";
 import TableSearchFilter from "../filter/TableSearchFilter";
-import Image from "./Image";
 import TableDataLoader from "./TableDataLoader";
 import { TablePagination } from "./TablePagination";
-
+import { cn } from "@/utils/cn";
+import { FileX2 } from "lucide-react";
 
 interface Column<T> {
   key: number | string;
@@ -30,6 +28,8 @@ interface Column<T> {
 
 interface DynamicTableProps<T> {
   columns: any;
+  tableWrapperClass?: string;
+  renderLeftSideActions?: () => React.ReactNode;
   data: T[];
   initialPageSize?: number;
   pageSizeOption?: number[];
@@ -39,11 +39,14 @@ interface DynamicTableProps<T> {
   filterComponents?: React.ReactNode;
   renderComponents?: React.ReactNode;
   loading?: boolean;
+  loadingMessage?: string;
   filter?: any;
 }
 
 export function DynamicTable<T extends Record<string, any>>({
   columns,
+  tableWrapperClass,
+  renderLeftSideActions,
   data: initialData,
   initialPageSize = 10,
   defaultSortColumn,
@@ -287,100 +290,99 @@ export function DynamicTable<T extends Record<string, any>>({
     return Math.ceil((filteredData?.length || 0) / pageSize);
   }, [filteredData, pageSize]);
 
-
-
   return (
-    <div className="space-y-4 dynamic-table-container">
-      {(filter || renderComponents) && (
-        <div className="flex w-full items-center px-4 py-2">
-          {filter?.filterOption && (
-            <div className="flex-1">
-              <TableSearchFilter
-                filters={filters}
-                filterConfig={filter}
-                setFilters={setFilters}
-                onFilter={handleFilter}
-                onReset={handleReset}
-              />
-            </div>
-          )}
-          {renderComponents && <div>{renderComponents}</div>}
-        </div>
-      )}
-      <div className="border ">
-        <Table>
-          <TableHeader>
-            <TableRow>
-                {columns.map((col: Column<T>) => (
-                <TableHead
-                  key={col.id}
-                  className={`${col.sortable ? "cursor-pointer" : ""} ${
-                  col.className || ""
-                  }`}
-                  onClick={() => {
-                  if (col.sortable) {
-                    setSortColumn(col.id);
-                    setSortDirection(
-                    sortColumn === col.id && sortDirection === "asc"
-                      ? "desc"
-                      : "asc"
-                    );
-                  }
-                  }}
-                >
-                  {col.name}
-                  {sortColumn === col.id && (
-                  <span className="ml-2">
-                    {sortDirection === "asc" ? "↑" : "↓"}
-                  </span>
-                  )}
-                </TableHead>
-                ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody >
-            {!loading ? (
-              
-                paginatedData.length > 0 ? 
-
-         
-                (   paginatedData.map((row, idx) => (
-                    <TableRow
-                    key={idx}
-                    className={
-                      onRowClick ? "cursor-pointer hover:bg-gray-50" : ""
-                    }
-                    onClick={() => onRowClick?.(row)}
-                    >
-                    {columns.map((col: Column<T>) => (
-                      <TableCell key={`${idx}-${col.key}`}>
-                      {getCellContent(row, col)}
-                      </TableCell>
-                    ))}
-                    </TableRow>
-                 
-                )))
-            
-                : 
-                <TableRow>
-                <TableCell colSpan={columns.length }>
-                  <div className="not-data-found-w">
-                    <Image src={DataNotFound} alt="No Data" width={250} height={250} />
-                  </div>
-                </TableCell>
-              </TableRow>
-
-            
-              
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length}>
-                  <TableDataLoader />
-                </TableCell>
-              </TableRow>
+    <div className="space-y-4 dynamic-table-container w-full">
+      <div className="flex sm:items-center justify-between w-full md:flex-row flex-col">
+        {renderLeftSideActions && (
+          <div className="flex-1 py-2">{renderLeftSideActions()}</div>
+        )}
+        {(filter || renderComponents) && (
+          <div className="w-full sm:flex-1 items-center sm:px-4 sm:py-2">
+            {filter?.filterOption && (
+              <div className="w-full sm:flex-1">
+                <TableSearchFilter
+                  filters={filters}
+                  filterConfig={filter}
+                  setFilters={setFilters}
+                  onFilter={handleFilter}
+                  onReset={handleReset}
+                />
+              </div>
             )}
-          </TableBody>
-        </Table>
+            {renderComponents && <div>{renderComponents}</div>}
+          </div>
+        )}
+      </div>
+      <div className={cn("overflow-x-auto w-full", tableWrapperClass)}>
+        <div className="border rounded-lg shadow-sm overflow-clip">
+          <Table className="w-full overflow-auto">
+            <TableHeader className="bg-secondary">
+              <TableRow>
+                {columns.map((col: Column<T>) => (
+                  <TableHead
+                    key={col.id}
+                    className={` min-w-40 ${
+                      col.sortable ? "cursor-pointer" : ""
+                    } ${col.className || ""}`}
+                    onClick={() => {
+                      if (col.sortable) {
+                        setSortColumn(col.id);
+                        setSortDirection(
+                          sortColumn === col.id && sortDirection === "asc"
+                            ? "desc"
+                            : "asc"
+                        );
+                      }
+                    }}
+                  >
+                    {col.name}
+                    {sortColumn === col.id && (
+                      <span className="ml-2">
+                        {sortDirection === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {!loading ? (
+                paginatedData.length > 0 ? (
+                  paginatedData.map((row, idx) => (
+                    <TableRow
+                      key={idx}
+                      className={
+                        onRowClick ? "cursor-pointer hover:bg-gray-50" : ""
+                      }
+                      onClick={() => onRowClick?.(row)}
+                    >
+                      {columns.map((col: Column<T>) => (
+                        <TableCell key={`${idx}-${col.key}`}>
+                          {getCellContent(row, col)}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length}>
+                      <div className="flex items-center justify-center space-x-2 py-20 text-primary">
+                        <FileX2 size="20px" />
+                        <div className="not-data-found-w">Data Not Found</div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length}>
+                    <TableDataLoader />
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {initialData?.length !== 0 && (

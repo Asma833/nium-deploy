@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Img } from "react-image";
 
 interface ImageProps {
@@ -12,6 +12,20 @@ interface ImageProps {
 
 const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const handleLoad = () => {
+    if (isMounted.current) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Img
@@ -25,7 +39,7 @@ const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
           />
         ) : null
       }
-      onLoad={() => setIsLoading(false)}
+      onLoad={handleLoad}
       {...props}
     />
   );

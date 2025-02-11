@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { publicRoutes } from "./RoutesConfig";
@@ -8,7 +9,11 @@ import { AdminRoutes } from "./AdminRoutes";
 import NotFoundPage from "@/components/common/NotFoundPage";
 
 export const AppRoutes = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const selectUser = useMemo(
+    () => (state: RootState) => state.auth.user,
+    []
+  );
+  const user = useSelector(selectUser);
 
   const getDefaultRoute = (userRole?: UserRole | null) =>
     userRole ? DEFAULT_ROUTES[userRole] ?? "/login" : "/login";

@@ -9,7 +9,7 @@ type Props = {
 const LogoHeader = ({ className }: Props) => {
   return (
     <div
-      className={cn("w-full flex justify-between items-center p-4", className)}
+      className={cn("w-full h-[80px] flex justify-between items-center p-4", className)}
     >
       <ThemeToggle />
       <div className="flex justify-center">

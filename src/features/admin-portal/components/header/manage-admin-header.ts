@@ -18,7 +18,7 @@ export const AdminNavItems = [
     dropdown: [
       { title: "N-User", path: `${userPrefix}/n-user` },
       { title: "Agent Profile Creation", path: `${userPrefix}/agents` },
-      { title: "Agent Branch User Creation", path: `${userPrefix}/branch-user` },
+      { title: "Agent Branch User Creation", path: `${userPrefix}/user-management/agent-branch-user-creation` },
     ],
   },
   {
