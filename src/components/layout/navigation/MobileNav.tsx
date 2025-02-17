@@ -1,6 +1,6 @@
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { NavItem } from "./navigation.types";
+import { motion } from "framer-motion";
+import { MobileNavProps } from "./navigation.types";
 import {
   Accordion,
   AccordionContent,
@@ -10,18 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { X } from "lucide-react";
-
-interface MobileNavProps {
-  navItems: NavItem[];
-  activeItem: string;
-  activeDropdownItem: string | null;
-  setIsMobileMenuOpen: (isOpen: boolean) => void;
-  onNavigation: (
-    path: string,
-    itemTitle: string,
-    dropdownTitle?: string
-  ) => void;
-}
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   navItems,

@@ -1,11 +1,7 @@
-import React from "react";
 import { Loader as LucideLoader } from "lucide-react";
+import { TableDataLoaderProps } from "./common-components.types";
 
-type Props = {
-  text?: string;
-};
-
-const TableDataLoader = ({ text = "Fetching..." }: Props) => {
+const TableDataLoader = ({ text = "Fetching..." }: TableDataLoaderProps) => {
   return (
     <div className="flex justify-center items-center gap-2">
       <LucideLoader

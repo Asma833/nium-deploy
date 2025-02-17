@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bell, Power, Menu } from "lucide-react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,19 +11,20 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { NavItem } from "./navigation.types";
+import { HeaderProps } from "./navigation.types";
 import { MobileNav } from "./MobileNav";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
 import { cn } from "@/utils/cn";
-import { useActiveMenu } from '@/hooks/useActiveMenu';
-
-interface HeaderProps {
-  navItems: NavItem[];
-}
+import { useActiveMenu } from "@/hooks/useActiveMenu";
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {
   const navigate = useNavigate();
-  const { activeItem, setActiveItem, activeDropdownItem, setActiveDropdownItem } = useActiveMenu(navItems);
+  const {
+    activeItem,
+    setActiveItem,
+    activeDropdownItem,
+    setActiveDropdownItem,
+  } = useActiveMenu(navItems);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleNavigation = (
@@ -63,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                           {item.title}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-1">
                             {item.dropdown.map((dropItem, dropIdx) => (
                               <li key={dropIdx}>
                                 <NavigationMenuLink

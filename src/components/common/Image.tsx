@@ -1,14 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Img } from "react-image";
-
-interface ImageProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  className?: string;
-  loading?: "lazy" | "eager";
-}
+import { ImageProps } from './common-components.types';
 
 const Image: React.FC<ImageProps> = ({ src, alt, ...props }) => {
   const [isLoading, setIsLoading] = useState(true);

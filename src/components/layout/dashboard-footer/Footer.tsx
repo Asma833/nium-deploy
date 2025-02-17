@@ -1,4 +1,4 @@
-import logo from "../../../assets/images/nium-logo.svg"; 
+// import logo from "../../../assets/images/nium-logo.svg"; 
 
 const Footer = () => {
   return (

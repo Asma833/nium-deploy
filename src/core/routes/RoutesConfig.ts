@@ -1,4 +1,3 @@
-import UserPage from "@/features/admin-portal/pages/user-management/n-user/page/UserPage";
 import { lazy } from "react";
 
 // Admin components
@@ -6,7 +5,15 @@ const DashboardPage = lazy(
   () => import("@/features/admin-portal/pages/dashboard/DashboardPage")
 );
 const AgentBranchUserCreationPage = lazy(
-  () => import("@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserCreationPage")
+  () =>
+    import(
+      "@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserCreationPage"
+    )
+);
+
+const UserPage = lazy(
+  () =>
+    import("@/features/admin-portal/pages/user-management/n-user/page/UserPage")
 );
 
 // Auth components
@@ -17,6 +24,10 @@ const ForgetPasswordPage = lazy(
   () => import("@/features/auth/pages/forget-password/ForgetPasswordPage")
 );
 const Login = lazy(() => import("@/features/auth/pages/login/LoginPage"));
+
+const ResetLinkConfirmationAlert = lazy(
+  () => import("@/features/auth/pages/send-email/ResetLinkConfirmationAlert")
+);
 
 // Public routes
 export const publicRoutes = [
@@ -33,6 +44,11 @@ export const publicRoutes = [
   {
     path: "/send-password-reset-link",
     element: SendEmailPage,
+    roles: ["*"],
+  },
+  {
+    path: "/reset-link-confirmation",
+    element: ResetLinkConfirmationAlert,
     roles: ["*"],
   },
 ];

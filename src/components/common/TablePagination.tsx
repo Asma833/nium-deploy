@@ -2,16 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-interface TablePaginationProps {
-  currentPage: number;
-  totalPages: number;
-  pageSize: number;
-  pageSizeOption: number[];
-  setPageSize: (size: number) => void;
-  setCurrentPage: (page: number) => void;
-  filteredDataLength: number;
-}
+import { TablePaginationProps } from './common-components.types';
 
 export function TablePagination({
   currentPage,

@@ -1,15 +1,17 @@
 import { cn } from "@/utils/cn";
-import { ThemeToggle } from "../ThemeToggle";
 import Logo from "../logo/logo";
+import { ThemeToggle } from "./ThemeToggle";
+import { CommonProps } from "./common-components.types";
 
-type Props = {
-  className?: string;
-};
 
-const LogoHeader = ({ className }: Props) => {
+
+const LogoHeader = ({ className }: CommonProps) => {
   return (
     <div
-      className={cn("w-full h-[80px] flex justify-between items-center p-4", className)}
+      className={cn(
+        "w-full h-[80px] flex justify-between items-center p-4",
+        className
+      )}
     >
       <ThemeToggle />
       <div className="flex justify-center">

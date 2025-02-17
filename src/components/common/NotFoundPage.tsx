@@ -1,4 +1,4 @@
-const NotFoundPage = () => {
+function NotFoundPage() {
   return (
     <div className="flex w-full h-full items-center justify-center pt-5">
       <div className="text-center">
@@ -17,6 +17,6 @@ const NotFoundPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default NotFoundPage;

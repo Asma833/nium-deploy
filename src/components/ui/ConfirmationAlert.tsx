@@ -28,7 +28,7 @@ export function ConfirmationAlert({
   return (
     <AlertDialog >
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent className="bg-card">
+      <AlertDialogContent className="bg-card max-w-sm sm:max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

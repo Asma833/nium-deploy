@@ -10,28 +10,14 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/utils/cn";
 import { Download, Loader2, PlusIcon, UploadIcon } from "lucide-react";
+import { DialogWrapperProps } from './common-components.types';
 
-type IconType = 'default' | 'upload' | 'download';
-
-type Props = {
-  triggerBtnText: string;
-  renderContent?: React.ReactNode;
-  title?: string;
-  description?: string;
-  showFooter?: boolean;
-  showHeader?: boolean;
-  isLoading?: boolean;
-  iconType?: IconType;
-  triggerBtnClassName?: string;
-  className?: string;
-  onSave?: () => void;
-  footerBtnText?: string;
-};
+type IconType = "default" | "upload" | "download";
 
 export function DialogWrapper({
   triggerBtnText,
   renderContent,
-  title = 'Edit Profile',
+  title = "Edit Profile",
   description,
   showFooter = true,
   showHeader = true,
@@ -41,12 +27,12 @@ export function DialogWrapper({
   className,
   onSave,
   footerBtnText,
-}: Props) {
+}: DialogWrapperProps) {
   const getIcon = (type: IconType) => {
     const icons = {
       default: <PlusIcon />,
       upload: <UploadIcon />,
-      download: <Download />
+      download: <Download />,
     };
     return icons[type];
   };
@@ -61,11 +47,13 @@ export function DialogWrapper({
           {triggerBtnText}
         </Button>
       </DialogTrigger>
-      <DialogContent className={cn("sm:max-w-[425px]", className)}>
+      <DialogContent className={cn("max-w-sm sm:max-w-md", className)}>
         {showHeader && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            {description && <DialogDescription>{description}</DialogDescription>}
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
           </DialogHeader>
         )}
 
@@ -74,7 +62,11 @@ export function DialogWrapper({
         {showFooter && (
           <DialogFooter>
             <Button onClick={onSave} disabled={isLoading}>
-              {isLoading ? <Loader2 className="animate-spin" /> : footerBtnText || "Save"}
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                footerBtnText || "Save"
+              )}
             </Button>
           </DialogFooter>
         )}

@@ -11,14 +11,19 @@ export interface NavItem {
 
 const userPrefix = "/admin";
 
+
 export const AdminNavItems = [
   { title: "Dashboard", path: `${userPrefix}/dashboard` },
   {
     title: "User Management",
     dropdown: [
-      { title: "N-User", path: `${userPrefix}/n-user` },
-      { title: "Agent Profile Creation", path: `${userPrefix}/agents` },
-      { title: "Agent Branch User Creation", path: `${userPrefix}/user-management/agent-branch-user-creation` },
+      { title: "N-User", path: `${userPrefix}/n-user`, description: "Create, Update, Delete N-User" },
+      { title: "Agent Profile Creation", path: `${userPrefix}/agents`, description: "Create, Update, Delete Agent Profile" },
+      {
+        title: "Agent Branch User Creation",
+        path: `${userPrefix}/user-management/agent-branch-user-creation`,
+        description: "Create, Update, Delete Agent Branch User",
+      },
     ],
   },
   {

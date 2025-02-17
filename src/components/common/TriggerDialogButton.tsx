@@ -1,19 +1,13 @@
 import { Button } from "../ui/button";
 import { Download, Loader2, PlusIcon, UploadIcon } from "lucide-react";
-
-type Props = {
-  text: string;
-  className?: string;
-  iconType?: string;
-  isLoading?: boolean;
-};
+import { TriggerDialogButtonProps } from './common-components.types';
 
 export default function TriggerDialogButton({
   text,
   className,
   iconType = "default",
   isLoading = false,
-}: Props) {
+}: TriggerDialogButtonProps) {
   const icon =
     iconType === "default" ? (
       <PlusIcon />

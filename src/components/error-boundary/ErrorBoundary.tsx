@@ -1,10 +1,8 @@
 import React from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundaryProps } from './error-boundary.types';
 
-interface ErrorBoundaryProps {
-    children: React.ReactNode;
-    fallback?: React.ReactNode;
-}
+
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, fallback }) => {
     return (
