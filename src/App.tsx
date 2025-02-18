@@ -1,4 +1,4 @@
-import { BrowserRouter, useLocation } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 import { AppRoutes } from "./core/routes/AppRoutes";
 import LoadingFallback from "./components/loader/LoadingFallback";
