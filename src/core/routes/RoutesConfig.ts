@@ -10,6 +10,12 @@ const AgentBranchUserCreationPage = lazy(
       "@/features/admin-portal/pages/user-management/agent-branch-user-creation/page/AgentBranchUserCreationPage"
     )
 );
+const AgentProfileCreationPage = lazy(
+  () =>
+    import(
+      "@/features/admin-portal/pages/user-management/agent-profile-creation/page/AgentProfileCreationPage"
+    )
+);
 
 const UserPage = lazy(
   () =>
@@ -73,6 +79,11 @@ export const adminRoutes = [
     roles: ["admin", "co-admin"],
     permission: "view_dashboard",
   },
-
+  {
+    path: "/user-management/agent-profile-creation",
+    element: AgentProfileCreationPage,
+    roles: ["admin", "co-admin"],
+    permission: "view_dashboard",
+  },
   // Add other admin routes here
 ];
