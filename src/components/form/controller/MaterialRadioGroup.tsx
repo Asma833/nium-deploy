@@ -12,7 +12,7 @@ import { Circle, CircleAlert, CircleCheck  } from "lucide-react";
 type MaterialRadioGroupProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
-  options: { [key: string]: { label: string } };
+  options: { [key: string]: { label: string; checked?: boolean } };
 };
 
 export const MaterialRadioGroup = <T extends FieldValues>({

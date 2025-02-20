@@ -24,6 +24,9 @@
 .formFieldRow.row-cols-4 .fieldWrapper {
   width: calc(25% - 20px);
 }
+.formFieldRow.row-cols-5 .fieldWrapper {
+  width: calc(20% - 20px);
+}
 .formCard {
   @apply flex flex-col bg-[--card-bg] p-6 rounded-lg;
 }

@@ -14,7 +14,7 @@ type MaterialSelectProps<T extends FieldValues> = Omit<
   "name" | "defaultValue"
 > & {
   name: Path<T>;
-  options: Array<{ value: string; label: string }>;
+  options: { [key: string]: { label: string } };
   baseStyle?: any;
   className?: string;
 };
@@ -87,8 +87,8 @@ export const MaterialSelect = <T extends FieldValues>({
                 },
               }}
             >
-              {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+              {Object.entries(options).map(([value, option]) => (
+                <MenuItem key={value} value={value}>
                   {option.label}
                 </MenuItem>
               ))}

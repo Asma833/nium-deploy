@@ -19,13 +19,12 @@ export const basicDetails: Record<string, FormField> = {
     label: "Type of Organization",
     type: "select",
     required: true,
-    options: [
-      { value: "1", label: "Proprietorship" },
-      { value: "2", label: "Partnership" },
-      { value: "3", label: "Private Limited" },
-      { value: "4", label: "Public Limited" },
-      { value: "5", label: "LLP" },
-    ],
+    options: {
+      partnership: { label: "Partnership" },
+      proprietorship: { label: "Proprietorship" },
+      privateLimited: { label: "Private Limited" },
+      publicLimited: { label: "Public Limited" },
+    },
   },
   agreementExpiryDate: {
     name: "agreementExpiryDate",
@@ -64,10 +63,12 @@ export const basicDetails: Record<string, FormField> = {
     label: "GST State",
     type: "select",
     required: true,
-    options: [
-      { value: "1", label: "Maharashtra" },
-      { value: "2", label: "Karnataka" },
-    ],
+    options: {
+      maharashtra: { label: "Maharashtra" },
+      gujarat: { label: "Gujarat" },
+      karnataka: { label: "Karnataka" },
+      delhi: { label: "Delhi" },
+    },
   },
   agentCode: {
     name: "agentCode",
@@ -117,10 +118,11 @@ export const agreementDetails = {
       label: "Document",
       type: "select",
       required: true,
-      options: [
-        { value: "1", label: "Aadhar" },
-        { value: "2", label: "PAN" },
-      ],
+      options: {
+        aadhar: { label: "Aadhar" },
+        pan: { label: "PAN" },
+        drivingLicense: { label: "Driving License" },
+      },
     },
   },
   adminDetails: {
@@ -137,7 +139,11 @@ export const agreementDetails = {
       label: "Configuration: Products",
       type: "checkbox",
       required: true,
-      options: ["card", "currency", "remittance"],
+      options: {
+        card: { label: "Card", checked: true },
+        currency: { label: "Currency", checked: false },
+        remittance: { label: "Remittance", checked: false },
+      },
     },
   },
 };
@@ -165,6 +171,32 @@ export const charges = {
       fixed: { label: "Fixed" },
       variable: { label: "Variable" },
       hybrid: { label: "Hybrid" },
+    },
+  },
+};
+export const adminDetails = {
+  basicDetails: {
+    hoBranchName: {
+      name: "hoBranchName",
+      label: "HO Branch Name",
+      type: "text",
+      required: true,
+    },
+    address: {
+      name: "Address",
+      label: "Address",
+      type: "text",
+      required: true,
+    },
+    status: {
+      name: "status",
+      label: "Status",
+      type: "radio",
+      required: true,
+      options: {
+        active: { label: "Active", checked: true },
+        inactive: { label: "Inactive", checked: false },
+      },
     },
   },
 };

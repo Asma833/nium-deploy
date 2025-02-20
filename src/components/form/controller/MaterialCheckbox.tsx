@@ -6,7 +6,7 @@ import { Circle, CircleCheck } from "lucide-react";
 interface MaterialCheckboxProps {
   name: string;
   label: string;
-  options: string[];
+  options: { [key: string]: { label: string; checked?: boolean } };
 }
 
 export const MaterialCheckbox = ({ name, options }: MaterialCheckboxProps) => {
@@ -17,25 +17,28 @@ export const MaterialCheckbox = ({ name, options }: MaterialCheckboxProps) => {
       <Controller
         name={name}
         control={control}
+        defaultValue={Object.entries(options)
+          .filter(([_, opt]) => opt.checked)
+          .map(([key]) => key)}
         render={({ field: { value = [], onChange } }) => (
           <FormGroup>
-            {options.map((option) => (
+            {Object.entries(options).map(([key, option]) => (
               <FormControlLabel
-                key={option}
+                key={key}
                 control={
                   <Checkbox
-                    checked={value.includes(option)}
+                    checked={value.includes(key)}
                     icon={<Circle size={"20"} />}
-                    checkedIcon={<CircleCheck className="text-primary" size={"20"}  />}
+                    checkedIcon={<CircleCheck className="text-primary" size={"20"} />}
                     onChange={(e) => {
                       const newValue = e.target.checked
-                        ? [...value, option]
-                        : value.filter((v: string) => v !== option);
+                        ? [...value, key]
+                        : value.filter((v: string) => v !== key);
                       onChange(newValue);
                     }}
                   />
                 }
-                label={option}
+                label={option.label}
               />
             ))}
           </FormGroup>

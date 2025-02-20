@@ -2,7 +2,7 @@ import { cn } from "@/utils/cn";
 
 type Props = {
   children: React.ReactNode;
-  label: string;
+  label?: string;
   id: string;
   className?: string;
 };

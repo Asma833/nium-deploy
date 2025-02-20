@@ -7,6 +7,7 @@ import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import { getController } from "@/components/form/utils/getController";
 import Spacer from "@/components/form/wrapper/Spacer";
+import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 
 interface FormValues {
   [key: string]: string;
@@ -28,7 +29,7 @@ export const BasicDetailsStep: React.FC = () => {
     <FormContentWrapper>
       <form onSubmit={handleSubmit((values) => console.log(values))}>
         <Spacer>
-          <FormFieldRow rowCols={4}>
+          <FormFieldRow rowCols={5}>
             {Object.values(basicDetails)
               .slice(0, 7)
               .map((field, index) => {
@@ -44,14 +45,17 @@ export const BasicDetailsStep: React.FC = () => {
               .slice(7, 8)
               .map((field, index) => {
                 return (
-                  <FieldWrapper key={index}>
+                  <CheckboxWrapper 
+                    key={index}
+                    id={field.name}
+                    className="items-direction-row"
+                  >
                     {getController(field)}
-                  </FieldWrapper>
+                  </CheckboxWrapper>
                 );
               })}
           </FormFieldRow>
         </Spacer>
-        <button type="submit">Submit</button>
       </form>
     </FormContentWrapper>
   );
