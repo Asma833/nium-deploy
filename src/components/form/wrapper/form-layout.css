@@ -1,0 +1,32 @@
+.formFieldRow {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  row-gap: 30px;
+  column-gap: 20px;
+}
+
+.fieldWrapper {
+  @apply flex;
+}
+.formFieldRow.row-cols-100d2 .fieldWrapper {
+  width: calc(50% - 15px);
+}
+.formFieldRow.row-cols-1 .fieldWrapper {
+  width: calc(100% - 15px);
+}
+.formFieldRow.row-cols-2 .fieldWrapper {
+  width: calc(50% - 15px);
+}
+.formFieldRow.row-cols-3 .fieldWrapper {
+  width: calc(33.33% - 15px);
+}
+.formFieldRow.row-cols-4 .fieldWrapper {
+  width: calc(25% - 20px);
+}
+.formCard {
+  @apply flex flex-col bg-[--card-bg] p-6 rounded-lg;
+}
+.formCardHeader {
+  @apply flex items-center justify-between;
+}

@@ -11,8 +11,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
     --primary: 328 100% 50%; /* #fd0194 */
+    --primary-light: 328 100% 95%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 13% 98%; /* #f9fafc */
+    --optional: 100 0% 79%;
     --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 45%; /* #747474 */
     --muted-foreground: 0 0% 45%;
@@ -36,12 +38,14 @@
     --card: 0 0% 10%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
+    --optional: 64 0% 19%;
     --popover-foreground: 0 0% 98%;
     --primary: 328 100% 50%; /* #fd0194 */
+    --primary-light: 328 100% 10%;
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
+    --muted: 328 100% 50%;
     --muted-foreground: 0 0% 63.9%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
@@ -65,4 +69,53 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.MuiStepper-root .Mui-completed.stepper-btn {
+  @apply bg-primary/50;
+}
+
+.MuiStepper-root .MuiStepLabel-label.Mui-active,
+.MuiStepper-root .MuiStepLabel-label.Mui-completed {
+  @apply text-white;
+}
+
+/* Date Picker Calendar Styles */
+.MuiDateCalendar-root {
+  @apply bg-background text-foreground;
+}
+
+.MuiPickersDay-root {
+  @apply text-foreground;
+}
+
+.MuiPickersDay-root.Mui-selected {
+  @apply bg-primary text-primary-foreground;
+}
+
+.MuiDayCalendar-weekDayLabel {
+  @apply text-muted-foreground;
+}
+
+.MuiPickersCalendarHeader-label {
+  @apply text-foreground;
+}
+
+.MuiPickersArrowSwitcher-button {
+  @apply text-muted-foreground;
+}
+.MuiButtonBase-root.MuiButton-root {
+  border-radius: 6px;
+}
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+  background: hsl(var(--primary));
+}
+
+.formFieldRow .items-direction-row .MuiFormGroup-root {
+  display: flex;
+  flex-direction: row;
+}
+.formFieldRow .items-direction-col .MuiFormGroup-root {
+  display: flex;
+  flex-direction: column;
 }

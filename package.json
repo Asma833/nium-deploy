@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@casl/ability": "^6.7.3",
-    "@casl/react": "^5.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.10.0",
+    "@mui/lab": "^6.0.0-beta.28",
     "@mui/material": "^6.4.2",
+    "@mui/x-date-pickers": "^7.27.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.5",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -51,6 +52,7 @@
     "react-error-boundary": "^5.0.0",
     "react-hook-form": "^7.54.2",
     "react-image": "^4.1.0",
+    "react-number-format": "^5.4.3",
     "react-redux": "^9.2.0",
     "react-router": "^7.1.4",
     "react-router-dom": "^7.1.4",
