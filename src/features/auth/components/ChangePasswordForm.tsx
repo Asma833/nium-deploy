@@ -13,12 +13,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useChangePassword } from "../hooks/useChangePassword";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { changePasswordSchema, ChangePasswordSchema } from "../schemas/changePassword.schema";
 
 const ChangePasswordForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [searchParams] = useSearchParams();
+  
+  const token = searchParams.get('token') || `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzbWFAZGF0YXNlZWR0ZWNoLmNvbSIsInR5cGUiOiJyZXNldCIsImlhdCI6MTc0MDEzNTQzOSwiZXhwIjoxNzQwMTM2MzM5fQ.2bpZeoxVZay9nRKWOxi9889svniqZwD_WN0fYI26aJw`
   
   const { mutate, isLoading } = useChangePassword();
 
@@ -27,6 +30,7 @@ const ChangePasswordForm = () => {
     defaultValues: {
       newPassword: "",
       confirmPassword: "",
+      token: token
     },
   });
 
@@ -34,6 +38,7 @@ const ChangePasswordForm = () => {
     mutate({
       newPassword: values.newPassword,
       confirmPassword: values.confirmPassword,
+      token: token
     });
   };
 

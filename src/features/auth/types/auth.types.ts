@@ -23,8 +23,8 @@ export interface User {
 export interface LoginResponse {
   message: string;
   user: User;
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 export interface AuthContextType {
@@ -37,6 +37,7 @@ export interface AuthContextType {
 export interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
+  token:string;
 }
 
 export interface ChangePasswordResponse {

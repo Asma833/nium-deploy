@@ -10,6 +10,7 @@ export const ROUTES = {
     USER_MANAGEMENT: {
       N_USER: '/user-management/n-user',
       AGENT_BRANCH: '/user-management/agent-branch-user-creation',
+      CREATE_BRANCH_NEW_USER: '/user-management/agent-branch-user-registration',
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent'
     }

@@ -6,14 +6,14 @@
  */
 export const API = {
   AUTH: {
-    LOGIN: `/auth/login`,
+    LOGIN: `/users/login`,
     LOGOUT: `/auth/logout`,
     REGISTER: `/auth/register`,
     REFRESH_TOKEN: `/auth/refresh-token`,
-    FORGOT_PASSWORD: `/auth/forgot-password`,
+    FORGOT_PASSWORD: `/users/forgot-password`,
     RESET_PASSWORD: `/auth/reset-password`,
     VERIFY_EMAIL: `/auth/verify-email`,
-    CHANGE_PASSWORD: `/auth/change-password`,
+    CHANGE_PASSWORD: `/users/reset-password`,
   },
   USER: {
     GET_PROFILE: `/users/profile`,

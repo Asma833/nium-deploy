@@ -19,12 +19,13 @@ export const useLogin = () => {
   >({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
+  
       dispatch(setCredentials({ 
         user: data.user, 
-        accessToken: data.accessToken 
+        accessToken: data.access_token 
       }));
       
-      const defaultRoute = DEFAULT_ROUTES[data.user.role];
+      const defaultRoute = DEFAULT_ROUTES[data.user.role.name];
       if (defaultRoute) {
         toast.success('Login successful');
         navigate(defaultRoute);

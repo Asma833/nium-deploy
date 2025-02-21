@@ -9,6 +9,7 @@ export interface LoginCredentials {
 export interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
+  token:string;
 }
 
 export const authApi = {
@@ -21,11 +22,11 @@ export const authApi = {
       { email, password }
     );
 
-    if (!data.accessToken || !data.refreshToken || !data.user) {
+    if (!data.access_token || !data.refresh_token || !data.user) {
       throw new Error('Invalid login response');
     }
 
-    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`;
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.access_token}`;
     return data;
   },
   logoutUser: async (): Promise<void> => {
@@ -34,7 +35,8 @@ export const authApi = {
   forgotPassword: async (email: string): Promise<void> => {
     await axiosInstance.post(getEndpoint('AUTH.FORGOT_PASSWORD'), { email });
   },
-  changePassword: async ({newPassword, confirmPassword }: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
-    await axiosInstance.post(getEndpoint("AUTH.CHANGE_PASSWORD"), {newPassword, confirmPassword });
+  changePassword: async ({newPassword, confirmPassword,token }: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    const { data } = await axiosInstance.post(getEndpoint("AUTH.CHANGE_PASSWORD"), {newPassword, confirmPassword,token });
+    return data;
   },
 };
