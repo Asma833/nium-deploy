@@ -131,10 +131,9 @@ export default function StepperTabs({
   activeStep,
   onNext,
   onBack,
-  isStepValid,
   config = defaultConfig,
 }: StepperTabsProps) {
-  const [skipped, setSkipped] = React.useState(new Set<number>());
+  const [skipped] = React.useState(new Set<number>());
   const methods = useFormContext();
 
   const handleReset = () => {

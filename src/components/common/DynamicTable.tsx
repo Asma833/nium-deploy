@@ -15,7 +15,7 @@ import { FileX2 } from "lucide-react";
 import { useTableSorting } from "@/hooks/useTableSorting";
 import { useTablePagination } from "@/hooks/useTablePagination";
 import { Column, DynamicTableProps } from "./common-components.types";
-import { SetFilters, TableSearchFilterProps } from "../filter/filter.types";
+import { SetFilters } from "../filter/filter.types";
 
 const formatDate = (date: Date | string | undefined) => {
   if (!date) return "";

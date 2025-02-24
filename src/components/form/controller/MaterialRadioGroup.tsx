@@ -25,7 +25,7 @@ export const MaterialRadioGroup = <T extends FieldValues>({
       <FormLabel component="legend">{label}</FormLabel>
       <Controller
         name={name}
-        render={({ field, fieldState }) => {
+        render={({ field }) => {
           console.log("field:", field);
           return (
             <RadioGroup {...field}>

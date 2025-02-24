@@ -10,7 +10,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { loginSchema, LoginSchema } from "../schemas/login.schema";
 import { Link } from "react-router";
 import { Loader2 } from "lucide-react";
 import { useForgotPassword } from "../hooks/useForgotPassword";

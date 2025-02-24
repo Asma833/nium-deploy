@@ -9,7 +9,7 @@ export const useForgotPassword = () => {
  
   const { mutate, isPending, error } = useMutation({
     mutationFn: authApi.forgotPassword,
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate('/forget-password')
       toast.success('Password reset email sent successfully')
       // Handle successful password reset request

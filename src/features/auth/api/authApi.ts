@@ -1,5 +1,5 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { ChangePasswordResponse, LoginResponse, User, UserRole } from "../types/auth.types";
+import { ChangePasswordResponse, LoginResponse } from "../types/auth.types";
 import { getEndpoint } from "@/core/constant/apis";
 
 export interface LoginCredentials {

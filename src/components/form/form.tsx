@@ -20,7 +20,6 @@ import {
 import { ZodSchema } from "zod";
 import { FormProvider } from "react-hook-form";
 import { RotateCcw, ShieldAlert } from "lucide-react";
-import { useConfirm } from "@/hooks/useConfirm";
 
 type FormProps<T extends FieldValues> = {
   children: ReactNode;
@@ -55,8 +54,6 @@ const Form = <T extends FieldValues>({
   submitButtonText,
   readOnly = false,
 }: FormProps<T>) => {
-  const confirm = useConfirm();
-
   const form = useForm<T>({
     mode,
     defaultValues: defaultValues as DefaultValues<T>,
@@ -64,14 +61,9 @@ const Form = <T extends FieldValues>({
     resolver: zodResolver(schema),
   });
 
-  const handleConfirm = () => {
-    form.reset(defaultValues as DefaultValues<T>);
-  };
 
   const handleResetFormClick = async () => {
-    await confirm({
-      onConfirm: handleConfirm,
-    });
+    console.log("Resetting form");
   };
 
   const extendedForm = {

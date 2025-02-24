@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
-import { X } from "lucide-react";
+// import { X } from "lucide-react";
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   navItems,
@@ -33,10 +33,10 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className="h-full overflow-y-auto pb-20"
       >
         <div className="top-actions flex items-end justify-end px-4">
-          <X
+          <span
             className="w-6 h-6 text-muted-foreground"
             onClick={() => setIsMobileMenuOpen(false)}
-          />
+          >Close</span>
         </div>
         <Accordion type="single" collapsible className="w-full">
           {navItems.map((item, idx) =>
@@ -46,8 +46,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   className={cn(
                     "px-6 py-2",
                     activeItem === item.title && "text-primary font-medium"
-                  )}
-                >
+                  )}>
                   {item.title}
                 </AccordionTrigger>
                 <AccordionContent>

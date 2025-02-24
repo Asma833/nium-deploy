@@ -37,7 +37,7 @@ export const MaterialSelect = ({
               value={value || ""}
               label={label}
               sx={baseStyle}
-              className={className}
+              className={cn(className)}
             >
               {isArrayOptions
                 ? (options as Array<{ value: string; label: string }>).map(

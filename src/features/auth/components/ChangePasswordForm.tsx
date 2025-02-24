@@ -14,15 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { useChangePassword } from "../hooks/useChangePassword";
 import { Link, useSearchParams } from "react-router-dom";
-import { changePasswordSchema, ChangePasswordSchema } from "../schemas/changePassword.schema";
+import {
+  changePasswordSchema,
+  ChangePasswordSchema,
+} from "../schemas/changePassword.schema";
 
 const ChangePasswordForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [searchParams] = useSearchParams();
-  
-  const token = searchParams.get('token') || `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzbWFAZGF0YXNlZWR0ZWNoLmNvbSIsInR5cGUiOiJyZXNldCIsImlhdCI6MTc0MDEzNTQzOSwiZXhwIjoxNzQwMTM2MzM5fQ.2bpZeoxVZay9nRKWOxi9889svniqZwD_WN0fYI26aJw`
-  
+
+  const token = searchParams.get("token") || "";
+
   const { mutate, isLoading } = useChangePassword();
 
   const form = useForm<ChangePasswordSchema>({
@@ -30,7 +33,7 @@ const ChangePasswordForm = () => {
     defaultValues: {
       newPassword: "",
       confirmPassword: "",
-      token: token
+      token: token,
     },
   });
 
@@ -38,13 +41,16 @@ const ChangePasswordForm = () => {
     mutate({
       newPassword: values.newPassword,
       confirmPassword: values.confirmPassword,
-      token: token
+      token: token,
     });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleChangePassword)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleChangePassword)}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="newPassword"
@@ -109,7 +115,7 @@ const ChangePasswordForm = () => {
             </FormItem>
           )}
         />
-       <div className="text-center">
+        <div className="text-center">
           <div className="text-sm text-muted-foreground">
             <Link to="/login" className="text-primary">
               Go Back to Login

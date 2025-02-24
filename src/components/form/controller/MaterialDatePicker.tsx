@@ -17,7 +17,7 @@ export const MaterialDatePicker = ({
   className,
   error,
 }: MaterialDatePickerProps) => {
-  const { control, formState, clearErrors } = useFormContext();
+  const { control, clearErrors } = useFormContext();
 
   const mergedStyles = {
     ...baseStyle,

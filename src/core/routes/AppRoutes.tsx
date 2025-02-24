@@ -28,7 +28,7 @@ export const AppRoutes = () => {
 
       <Route
         path="/"
-        element={<Navigate to={getDefaultRoute(user?.role)} replace />}
+        element={<Navigate to={getDefaultRoute(user?.role.name)} replace />}
       />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

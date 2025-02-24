@@ -5,8 +5,8 @@ import { authApi } from "../api/authApi";
 import { setCredentials } from "../store/authSlice";
 import { DEFAULT_ROUTES } from "../../../core/constant/routes";
 import { toast } from "sonner";
-import { LoginResponse  } from "../types/auth.types";
-import type { LoginCredentials } from "../api/authApi"; // Add this import
+import { LoginResponse } from "../types/auth.types"; // Updated import
+import type { LoginCredentials } from "../api/authApi"; 
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -19,10 +19,10 @@ export const useLogin = () => {
   >({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
-  
       dispatch(setCredentials({ 
         user: data.user, 
-        accessToken: data.access_token 
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token 
       }));
       
       const defaultRoute = DEFAULT_ROUTES[data.user.role.name];
