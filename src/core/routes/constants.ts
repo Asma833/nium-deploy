@@ -14,5 +14,12 @@ export const ROUTES = {
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent'
     }
+  },
+  BMFCHECKER:{
+    DASHBOARD: '/dashboard',
+    ASSIGN: '/assign',
+    VIEWALL: '/view-all',
+    UPDATEINCIDENT: '/update-incident',
+    COMPLETEDTRANSACTIONS: '/completed-transactions'
   }
 } as const;

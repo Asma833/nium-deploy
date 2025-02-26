@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import { adminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
 import AdminLayout from "@/features/admin-portal/components/AdminLayout";
 import NotFoundPage from "@/components/common/NotFoundPage";
+import { adminRoutes } from "./RoutesConfig";
 
 export const AdminRoutes = () => {
   return (
