@@ -1,7 +1,8 @@
 import React from "react";
-import { Menu, X, Bell, Power } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Menu,Bell,Power } from "lucide-react";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
+import BreadCrumb from "@/components/common/BreadCrumb";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -9,10 +10,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const navigate = useNavigate();
-
   return (
-    <nav className="bg-background border-b border-border h-[70px] top-0">
+    <nav className="bg-background shadow-lg h-[70px] top-0 rounded-md m-2">
       <div className="sm:px-6 lg:px-8 flex items-center h-16">
         
         <button
@@ -24,10 +23,15 @@ const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
+        <div className="block lg:hidden">
+        <BreadCrumb />
+      </div>
+                  
         </div>
 
         {/* Notification and Logout Buttons (Right) */}
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           <button className="p-2 rounded-full hover:bg-muted/20">
             <Bell className="w-5 h-5 text-muted-foreground" />
           </button>

@@ -4,15 +4,20 @@ import { transactionTableData as initialData} from "./assign-table-value";
 import { useState } from "react";
 
 const AssignCreationTable = () => {
-  const columns = getTransactionTableColumns();
+  
   const [tableData, setTableData] = useState(initialData);
-const handleSelectChange = (checked: boolean, rowIndex: number) => {
+  const handleSelectChange = (rowIndex: number, checked: boolean) => {
+   // console.log("Before update:", rowIndex, checked);
+  
     setTableData((prevData) =>
       prevData.map((row, idx) =>
         idx === rowIndex ? { ...row, select: checked } : row
       )
     );
   };
+  
+  const columns = getTransactionTableColumns(handleSelectChange);
+  
 
   return (
     <div className="">

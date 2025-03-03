@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
-import AdminLayout from "@/features/admin-portal/components/AdminLayout";
+// import AdminLayout from "@/features/admin-portal/components/AdminLayout";
+import AdminLayout from "@/features/admin/components/AdminLayout";
 import NotFoundPage from "@/components/common/NotFoundPage";
-import { adminRoutes } from "./RoutesConfig";
-
+//import { adminRoutes } from "./RoutesConfig";
+import { adminNewRoutes } from "./RoutesConfig";
 export const AdminRoutes = () => {
   return (
     <Routes>
-      {adminRoutes.map(({ path, element: Element, roles, permission }) => (
+      {adminNewRoutes.map(({ path, element: Element, roles, permission }) => (
         <Route
           key={path}
           path={path}

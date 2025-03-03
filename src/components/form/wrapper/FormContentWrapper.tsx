@@ -7,7 +7,7 @@ export const FormContentWrapper = ({
 }: GeneralWrapperProps) => {
   return (
     <div
-      className={cn(className, "space-y-4 bg-card p-10 mt-4 rounded-md")}
+      className={cn("space-y-4 bg-card py-10 px-2 mt-4 rounded-md",className)}
     >
       {children}
     </div>

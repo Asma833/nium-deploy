@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DashboardContentWrapper from "@/components/common/DashboardContentWrapper";
-import CheckerSideNavigation from "./side-navigation/CheckerSideNav";
+
 import Header from "@/components/layout/side-navigaion/HeaderNav";
 
 import { ReactNode } from "react";
+import AdminSideNavigation from "./side-navigation/AdminSideNav";
 
-interface CheckerLayoutProps {
+interface AdminLayoutProps {
   children: ReactNode;
 }
 
-const CheckerLayout = ({ children }: CheckerLayoutProps) => {
+const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+ const handleSidebarToggle = () => {
+  if(window.innerWidth < 768){
+    setIsSidebarOpen(!isSidebarOpen);
+  }
+ }
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -19,18 +24,17 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
         className={`w-48 transition-transform transform 
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-64"} md:translate-x-0 fixed md:static h-full`}
       >
-        <CheckerSideNavigation />
+        <AdminSideNavigation />
       </div>
 
       {/* Main Content */}
       
-        <main className="flex-1 w-[calc(100%-15rem)]"> 
+        <main className="flex-1 w-[calc(100%-15rem)] h-screen" onClick={handleSidebarToggle}> 
         <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
           <DashboardContentWrapper>{children}</DashboardContentWrapper>
         </main>
-     
     </div>
   );
 };
 
-export default CheckerLayout;
+export default AdminLayout;

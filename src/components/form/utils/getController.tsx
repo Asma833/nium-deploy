@@ -6,6 +6,7 @@ import { MaterialEmail } from "@/components/form/controller/MaterialEmail";
 import { MaterialFile } from "@/components/form/controller/MaterialFile";
 import { MaterialCheckbox } from "@/components/form/controller/MaterialCheckbox";
 import { MaterialNumber } from "@/components/form/controller/MaterialNumber";
+import  MaterialPassword  from "@/components/form/controller/MaterialPassword";
 
 export const getController = (field: any) => {
   const fieldHeight = field.height || "45px";
@@ -143,6 +144,7 @@ export const getController = (field: any) => {
           options={field.options}
         />
       );
+      
     case "select":
       return (
         <MaterialSelect
@@ -174,7 +176,17 @@ export const getController = (field: any) => {
           options={field.options}
         />
       );
+      case "password":
+      return <MaterialPassword 
+      {...commonProps} 
+      name={field.name} 
+      label={field.label} 
+      baseStyle={baseStyle} 
+      className={baseGeneralFieldStyle} 
+      />;
     default:
       return null;
   }
 };
+
+
