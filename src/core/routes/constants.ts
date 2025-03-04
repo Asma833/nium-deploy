@@ -22,8 +22,9 @@ export const ROUTES = {
     UPDATEINCIDENT: '/update-incident',
     COMPLETEDTRANSACTIONS: '/completed-transactions'
   },
-  ADMINNEW:{
+  SUPERADMIN:{
     NUSER: '/users',
-    CREATEUSER:'/users/create-user'
+    CREATEUSER:'/users/create-user',
+    UPDATEUSER:'/users/update-user/:id'
   }
 } as const;

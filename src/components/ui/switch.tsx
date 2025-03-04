@@ -14,7 +14,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange }) => {
 
   return (
     <button
-      className={`relative w-12 h-6 flex items-center rounded-full transition-all 
+      className={`relative w-12 h-5 flex items-center rounded-full transition-all 
       ${isChecked ? "bg-primary" : "bg-gray-300"}`}
       onClick={() => {
         setIsChecked(!isChecked); // ✅ Toggle local state

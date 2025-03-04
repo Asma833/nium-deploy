@@ -8,8 +8,8 @@ export const ROLES: Record<string, UserRole> = {
 } as const;
 
 export const DEFAULT_ROUTES: Record<UserRole, string> = {
-  'admin': '/admin/dashboard',
+  'admin': '/admin/users',
   'co-admin': '/dashboard',
-  'maker': '/maker/users',
+  'maker': '/transaction',
   'checker': '/checker/dashboard'
 } as const;

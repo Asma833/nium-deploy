@@ -4,11 +4,11 @@ import Header from "@/components/layout/side-navigaion/HeaderNav";
 import { ReactNode } from "react";
 import SideNavigation from "./side-navigation/SideNav";
 
-interface makerLayoutProps {
+interface SuperAdminLayoutProps {
   children: ReactNode;
 }
 
-const MakerLayout = ({ children }: makerLayoutProps) => {
+const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  const handleSidebarToggle = () => {
   if(window.innerWidth < 768){
@@ -35,4 +35,4 @@ const MakerLayout = ({ children }: makerLayoutProps) => {
   );
 };
 
-export default MakerLayout;
+export default SuperAdminLayout;

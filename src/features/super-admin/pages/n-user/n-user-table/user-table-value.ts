@@ -1,7 +1,5 @@
 export const userTableData = [
   
-  
- 
   {
     userName: "John",
     email: "johnsmith@abcd.com",

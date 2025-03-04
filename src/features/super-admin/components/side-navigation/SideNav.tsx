@@ -1,9 +1,9 @@
 
 import Sidebar from "@/components/layout/side-navigaion/SideNav";
-import { MakerSideNavItems } from "./side-nav-items";
+import { SideNavItems } from "./side-nav-items";
 
 const SideNavigation = () => {
-  return <Sidebar navItems={MakerSideNavItems}  />;
+  return <Sidebar navItems={SideNavItems}  />;
 };
 
 export default SideNavigation;

@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import { makerRoutes } from "./RoutesConfig";
+import { superAdminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
 import NotFoundPage from "@/components/common/NotFoundPage";
-import Layout from "@/features/maker/components/Layout";
+import Layout from "@/features/super-admin/components/SuperAdminLayout";
 
-export const MakerRoutes = () => {
+export const SuperAdminRoutes = () => {
   return (
     
     <Routes>
-    {makerRoutes.map(({ path, element: Element, roles, permission }) => (
+    {superAdminRoutes.map(({ path, element: Element, roles, permission }) => (
       <Route
         key={path}
         path={path}
