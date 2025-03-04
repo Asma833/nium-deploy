@@ -18,8 +18,8 @@ export const ROUTES = {
   CHECKER:{
     DASHBOARD: '/dashboard',
     ASSIGN: '/assign',
-    VIEWALL: '/view-all',
-    UPDATEINCIDENT: '/update-incident',
+    VIEWALL: '/viewall',
+    UPDATE_INCIDENT: '/updateincident',
     COMPLETEDTRANSACTIONS: '/completed-transactions'
   },
   SUPERADMIN:{
