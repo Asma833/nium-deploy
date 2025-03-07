@@ -5,10 +5,10 @@ export const getTransactionTableColumns = (handleStatusChange: (index: number, c
     key: "select",
     id: "select",
     name: "Select",
-    cell: (value: boolean, index: number) => (
+    cell: (rowData: any, index: number) => (
       <Checkbox
-        checked={value} // ✅ Uses value from the row
-        onCheckedChange={(checked) => handleStatusChange(index, checked as boolean)} // ✅ Calls parent function
+        checked={rowData.select} // Bind directly to rowData.select
+        onCheckedChange={(checked) => handleStatusChange(index, checked as boolean)}
       />
     ),
   },
@@ -63,5 +63,3 @@ export const getTransactionTableColumns = (handleStatusChange: (index: number, c
     name: "Purpose Type",
   },
 ];
-
-  

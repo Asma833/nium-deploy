@@ -77,6 +77,8 @@ export type DialogWrapperProps = {
   className?: string;
   onSave?: () => void;
   footerBtnText?: string;
+  isOpen?: boolean;  
+  setIsOpen?: (open: boolean) => void;
 };
 
 export type DashboardContentWrapperProps = {

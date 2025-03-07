@@ -39,7 +39,7 @@ const UserCreationFormPage = () => {
     ),
   });
 
-  const { handleSubmit, control, watch, reset, formState: { errors, isSubmitting } } = methods;
+  const { handleSubmit, control, reset, formState: { errors, isSubmitting } } = methods;
 
   // Fetch user data if in edit mode
   useEffect(() => {

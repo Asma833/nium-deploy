@@ -44,7 +44,7 @@ export const getUserTableColumns = (handleStatusChange: (index: number, checked:
       key: "actions",
       id: "actions",
       name: "Action",
-      cell: (rowData: any) => (
+      cell: () => (
         <div className="flex gap-2">
           <button
             className="p-2 rounded-md hover:bg-muted/20"

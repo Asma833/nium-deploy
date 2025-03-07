@@ -28,7 +28,7 @@ const FieldWrapper = ({
     >
       {children}
       {error && (
-        <span className="text-sm text-[hsl(var(--destructive))]">
+        <span className="text-sm text-[hsl(var(--destructive))]" >
           {error}
         </span>
       )}

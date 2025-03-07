@@ -9,12 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/utils/cn";
-import { Download, Loader2, PlusIcon, UploadIcon } from "lucide-react";
+import { Download, Loader2, PlusIcon, UploadIcon, X } from "lucide-react";
 import { DialogWrapperProps } from './common-components.types';
 
 type IconType = "default" | "upload" | "download";
 
 export function DialogWrapper({
+  isOpen = false,
+  setIsOpen = () => {},
   triggerBtnText,
   renderContent,
   title = "Edit Profile",
@@ -40,14 +42,25 @@ export function DialogWrapper({
   const icon = getIcon(iconType);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      {triggerBtnText && (
+        <DialogTrigger asChild>
         <Button className={triggerBtnClassName} disabled={isLoading}>
           {isLoading ? <Loader2 className="animate-spin" /> : icon}
           {triggerBtnText}
         </Button>
-      </DialogTrigger>
-      <DialogContent className={cn("max-w-sm sm:max-w-md", className)}>
+        </DialogTrigger>
+      )}
+     
+      {/* <DialogContent  className={cn("max-w-sm sm:max-w-md", className)}> */}
+      <DialogContent  className={cn("sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto", className)}>
+         {/* Close Button at Top Right */}
+         <button
+          className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
+          onClick={() => setIsOpen(false)}
+        >
+          <X className="w-5 h-5 text-custom-primary hover:opacity-95 outline-none" />
+        </button>
         {showHeader && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
@@ -60,14 +73,19 @@ export function DialogWrapper({
         {renderContent}
 
         {showFooter && (
-          <DialogFooter>
-            <Button onClick={onSave} disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                footerBtnText || "Save"
-              )}
-            </Button>
+          <DialogFooter className="sm:justify-center">
+            {
+              triggerBtnText && (
+                <Button onClick={()=>{onSave}} disabled={isLoading}>
+                {isLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  footerBtnText || "Save"
+                )}
+              </Button>
+              )
+            }
+           
           </DialogFooter>
         )}
       </DialogContent>

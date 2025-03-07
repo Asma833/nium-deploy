@@ -31,7 +31,7 @@ export default function CheckboxWrapper({
         {id && (
           <label
             htmlFor={id}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
           </label>

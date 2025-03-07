@@ -8,5 +8,5 @@ export const CheckerSideNavItems = [
   { title: "Assign", path: `${userPrefix}/assign`, icon: ClipboardList }, 
   { title: "Update Incident", path: `${userPrefix}/updateIncident`, icon: FileEdit }, 
   { title: "View All", path: `${userPrefix}/viewall`, icon: Eye }, 
-  { title: "Transactions", path: `${userPrefix}/completedtransactions`, icon: CreditCard } 
+  { title: "Completed Transactions", path: `${userPrefix}/completedtransactions`, icon: CreditCard } 
 ];
