@@ -6,6 +6,7 @@ const checkerComponents = {
     Assign: lazy(() => import("@/features/bmf-checker/pages/assign/assign-table/AssignCreationTable")),
     UpdateIncident: lazy(() => import("@/features/bmf-checker/pages/updateIncident/update-incident-table/UpdateIncidentCreationTable")),
     ViewAll: lazy(() => import("@/features/bmf-checker/pages/view-all/view-table/ViewAllTable")),
+    CompletedTransaction: lazy(() => import("@/features/bmf-checker/pages/completed-transactions/completed-transaction-table/CompletedTransactionTable")),
   }
 export const checkerRoutes = [
   {
@@ -29,6 +30,12 @@ export const checkerRoutes = [
   {
     path: ROUTES.BMFCHECKER.VIEWALL,
     element: checkerComponents.ViewAll,
+    roles: ["checker", "co-admin"],
+    permission: "view_dashboard",
+  },
+  {
+    path: ROUTES.BMFCHECKER.COMPLETEDTRANSACTIONS,
+    element: checkerComponents.CompletedTransaction,
     roles: ["checker", "co-admin"],
     permission: "view_dashboard",
   },
