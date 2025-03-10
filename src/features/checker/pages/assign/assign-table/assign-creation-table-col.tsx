@@ -1,14 +1,18 @@
 import { Checkbox } from "@/components/ui/checkbox";
 
-export const getTransactionTableColumns = (handleStatusChange: (index: number, checked: boolean) => void) => [
+export const getTransactionTableColumns = (
+  handleSelectionChange: (rowId: string, checked: boolean) => void
+) => [
   {
     key: "select",
     id: "select",
     name: "Select",
-    cell: (value: boolean, index: number) => (
+    cell: (value: boolean, row: any) => (
       <Checkbox
-        checked={value} // ✅ Uses value from the row
-        onCheckedChange={(checked) => handleStatusChange(index, checked as boolean)} // ✅ Calls parent function
+        checked={row.isSelected || false} 
+        onCheckedChange={(checked) =>
+          handleSelectionChange(row.niumId, checked as boolean)
+        } 
       />
     ),
   },
@@ -63,5 +67,3 @@ export const getTransactionTableColumns = (handleStatusChange: (index: number, c
     name: "Purpose Type",
   },
 ];
-
-  

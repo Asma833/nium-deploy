@@ -1,48 +1,64 @@
-export interface TableSearchFilterProps {
-  filters: {
-    search: string;
-    status: string;
-    role: string;
-    dateRange: {
-      from: Date | undefined;
-      to: Date | undefined;
-    };
-    customFilterValues: Record<string, string>;
-  };
+export interface DateRange {
+  from: Date | undefined;
+  to: Date | undefined;
+}
 
-  setFilters: React.Dispatch<
-    React.SetStateAction<{
-      search: string;
-      status: string;
-      role: string;
-      dateRange: {
-        from: Date | undefined;
-        to: Date | undefined;
-      };
-      customFilterValues: Record<string, string>;
-    }>
-  >;
+export interface SelectOption {
+  label: string;
+  value: string;
+}
 
-  onFilter: () => void;
-  onReset: () => void;
-  filterConfig: {
-    filterOption: boolean;
-    rederFilerOptions: {
-      search?: boolean;
-      status?: boolean;
-      role?: boolean;
-      dateRange?: boolean;
-    };
-  };
+export interface SelectConfig {
+  id: string;
+  label: string;
+  placeholder?: string;
+  options: SelectOption[];
+}
+
+export interface StatusConfig {
+  label?: string;
+  placeholder?: string;
+  options: SelectOption[];
+}
+
+export interface RenderFilterOptions {
+  search: boolean;
+  dateRange?: boolean;
+  status?: StatusConfig;
+  selects?: SelectConfig[];
+}
+
+export type FilterMode = "static" | "dynamic";
+
+export interface DynamicFilterCallbacks<T = any> {
+  onSearch?: (term: string) => Promise<T[]>;
+  onDateRangeChange?: (from: Date | undefined, to: Date | undefined) => Promise<T[]>;
+  onStatusChange?: (status: string) => Promise<T[]>;
+  onSelectChange?: (id: string, value: string) => Promise<T[]>;
+  onFilterApply?: (filters: SetFilters) => Promise<T[]>;
+}
+
+export interface FilterConfig {
+  filterOption: boolean;
+  mode?: FilterMode;
+  rederFilerOptions: RenderFilterOptions;
+  dynamicCallbacks?: DynamicFilterCallbacks;
 }
 
 export interface SetFilters {
   search: string;
   status: string;
   role: string;
-  dateRange: {
-    from: Date | undefined;
-    to: Date | undefined;
-  };
+  dateRange: DateRange;
   customFilterValues: Record<string, string>;
+}
+
+export interface TableSearchFilterProps {
+  filters: SetFilters;
+  filterConfig: FilterConfig;
+  setFilters: (filters: SetFilters) => void;
+  onFilter?: () => void;
+  onReset?: () => void;
+  setLoading?: (loading: boolean) => void;
+  setDynamicData?: (data: any[]) => void;
 }

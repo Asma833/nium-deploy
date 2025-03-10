@@ -1,3 +1,5 @@
+import { FilterConfig } from "../filter/filter.types";
+
 export type CommonProps = {
   className?: string;
   children?: React.ReactNode;
@@ -38,29 +40,24 @@ export type Column<T> = {
   id: string;
   name: string;
   className?: string;
-  cell?: (
-    value: string | number | Date | React.ReactNode | null,
-    row: T
-  ) => React.ReactNode;
+  cell?: any;
   sortable?: boolean;
 };
 
-export type DynamicTableProps<T> = {
-  columns: any;
-  tableWrapperClass?: string;
-  renderLeftSideActions?: () => React.ReactNode;
+export interface DynamicTableProps<T> {
+  columns: Column<T>[];
   data: T[];
+  tableWrapperClass?: string;
+  renderLeftSideActions?: () => JSX.Element;
   initialPageSize?: number;
   pageSizeOption?: number[];
-  defaultSortColumn?: string;
+  defaultSortColumn?: keyof T | string;
   defaultSortDirection?: "asc" | "desc";
   onRowClick?: (row: T) => void;
-  filterComponents?: React.ReactNode;
-  renderComponents?: React.ReactNode;
-  loading?: boolean;
-  loadingMessage?: string;
   filter?: any;
-};
+  loading?: boolean;
+  renderComponents?: JSX.Element;
+}
 
 export type IconType = "default" | "upload" | "download";
 

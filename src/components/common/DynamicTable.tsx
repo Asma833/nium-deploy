@@ -71,7 +71,7 @@ export function DynamicTable<T extends Record<string, any>>({
   pageSizeOption = [10, 15, 20, 25],
   onRowClick,
   filter,
-  loading,
+  loading: externalLoading,
   renderComponents,
 }: DynamicTableProps<T>) {
   const [filters, setFilters] = useState<SetFilters>({
@@ -81,12 +81,68 @@ export function DynamicTable<T extends Record<string, any>>({
     dateRange: { from: undefined, to: undefined },
     customFilterValues: {},
   });
+  
+  const [internalLoading, setInternalLoading] = useState(false);
+  const [dynamicData, setDynamicData] = useState<T[]>([]);
+  
+  // Use dynamic data if in dynamic mode, otherwise use filtered data
+  const mode = filter?.mode || "static";
+  const loading = externalLoading || internalLoading;
+  
+  // Use either the dynamically fetched data or the original data based on mode
+  const dataSource = mode === "dynamic" && dynamicData.length > 0 ? dynamicData : initialData;
 
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
-    initialData,
-    defaultSortColumn,
+    dataSource,
+    defaultSortColumn as string | undefined,
     defaultSortDirection
   );
+
+  // Only filter data in static mode
+  const filteredData = mode === "static" 
+    ? sortedData.filter(item => {
+        // Apply search filter
+        if (filters.search && filter?.filterOption) {
+          const searchTerm = filters.search.toLowerCase();
+          const matchesSearch = columns.some(column => {
+            const value = item[column.id];
+            if (value === undefined || value === null) return false;
+            return String(value).toLowerCase().includes(searchTerm);
+          });
+          if (!matchesSearch) return false;
+        }
+        
+        // Apply date range filter
+        if (filter?.dateFilterColumn && filters.dateRange) {
+          const dateColumn = filter.dateFilterColumn as string;
+          const itemDate = item[dateColumn] ? new Date(item[dateColumn]) : null;
+          
+          if (filters.dateRange.from && itemDate) {
+            const fromDate = new Date(filters.dateRange.from);
+            if (itemDate < fromDate) return false;
+          }
+          
+          if (filters.dateRange.to && itemDate) {
+            const toDate = new Date(filters.dateRange.to);
+            toDate.setHours(23, 59, 59, 999); // End of the day
+            if (itemDate > toDate) return false;
+          }
+        }
+        
+        // Apply status filter
+        if (filter?.statusFilerColumn && filters.status && filters.status !== 'all') {
+          const statusColumn = filter.statusFilerColumn as string;
+          if (item[statusColumn] !== filters.status) return false;
+        }
+        
+        // Apply custom select filters
+        for (const [key, value] of Object.entries(filters.customFilterValues)) {
+          if (value && value !== 'all' && item[key] !== value) return false;
+        }
+        
+        return true;
+      })
+    : sortedData; // In dynamic mode, we don't filter locally
 
   const {
     paginatedData,
@@ -95,7 +151,7 @@ export function DynamicTable<T extends Record<string, any>>({
     pageSize,
     setPageSize,
     setCurrentPage,
-  } = useTablePagination(sortedData, initialPageSize, pageSizeOption);
+  } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
   const handleFilter = () => {
     setCurrentPage(1);
@@ -110,6 +166,11 @@ export function DynamicTable<T extends Record<string, any>>({
       customFilterValues: {},
     });
     setCurrentPage(1);
+    
+    // Reset dynamic data to empty if in dynamic mode
+    if (mode === "dynamic") {
+      setDynamicData([]);
+    }
   };
 
   return (
@@ -128,6 +189,8 @@ export function DynamicTable<T extends Record<string, any>>({
                   setFilters={setFilters}
                   onFilter={handleFilter}
                   onReset={handleReset}
+                  setLoading={setInternalLoading}
+                  setDynamicData={setDynamicData}
                 />
               </div>
             )}
@@ -209,7 +272,7 @@ export function DynamicTable<T extends Record<string, any>>({
           pageSizeOption={pageSizeOption}
           setPageSize={setPageSize}
           setCurrentPage={setCurrentPage}
-          filteredDataLength={sortedData.length}
+          filteredDataLength={filteredData.length}
         />
       )}
     </div>

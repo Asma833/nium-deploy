@@ -1,3 +1,5 @@
+import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
+
 function NotFoundPage() {
   return (
     <div className="flex w-full h-full items-center justify-center pt-5">
@@ -14,6 +16,13 @@ function NotFoundPage() {
         >
           Go to Homepage
         </a>
+        <div className="flex items-center justify-center mt-8">
+          <LogoutWrapper>
+            <button className="p-2 rounded-full hover:bg-muted/20">
+              logout
+            </button>
+          </LogoutWrapper>
+        </div>
       </div>
     </div>
   );

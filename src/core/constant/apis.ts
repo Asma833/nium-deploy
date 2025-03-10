@@ -29,6 +29,12 @@ export const API = {
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
   },
+  CHECKER: {
+    ASSIGN: {
+      TAKE_REQUEST: `/checker/assign/take-request`,
+      SEARCH_FILTER: `/checker/assign/search-filter`,
+    },
+  },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
