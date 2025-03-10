@@ -1,25 +1,63 @@
 import { z } from "zod";
 
-// Define the schema for the update incident form
 export const updateIncidentFormSchema = z.object({
-  passportNumber: z.string().min(6, "Passport number must be at least 6 characters"),
-  departureDate: z.string().regex(/^\d{2}\/\d{2}\/\d{4}$/, "Invalid date format (DD/MM/YYYY)"),
-  buySell: z.enum(["Buy", "Sell"], { message: "Buy or sell is required" }),
-  cardNumber: z.string().regex(/^\d{4}-\d{4}-\d{4}-\d{4}$/, "Invalid card number format"),
-  incidentNumber: z.string().min(5, "Incident number must be at least 5 characters"),
-  transactionType: z.string().min(3, "Transaction type is required"),
-  eonInvoiceNumber: z.string().min(5, "EON Invoice Number is required"),
-  comment: z.string().optional(),
-  status: z.enum(["approve", "reject"], { message: "Status is required" }),
-  tableData: z
-    .array(
-      z.object({
-        currency: z.string(),
-        rate: z.number().positive("Rate must be a positive number"),
-        amount: z.number().positive("Amount must be a positive number"),
-      })
-    )
-    .min(1, "At least one exchange rate entry is required"),
+  passportNumber: z
+    .string()
+    .nonempty("Passport Number is required") // Required validation
+    .length(8, "Must be 8 alphanumeric characters")
+    .regex(/^[A-Za-z0-9]{8}$/, "No spaces/special characters"),
+
+  departureDate: z
+    .string()
+    .nonempty("Departure Date is required")
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, "Format: DD/MM/YYYY"),
+
+  buySell: z.enum(["Buy", "Sell"], { message: "Buy/Sell is required" }),
+
+  cardNumber: z
+    .string()
+    .nonempty("Card Number is required")
+    .regex(/^\d{4}-\d{4}-\d{4}-\d{4}$/, "Format: ####-####-####-####"),
+
+  incidentNumber: z
+    .string()
+    .nonempty("Incident Number is required")
+    .min(5, "Must be at least 5 characters")
+    .regex(/^\S.*\S$/, "No spaces at start/end"),
+
+  transactionType: z
+    .string()
+    .nonempty("Transaction Type is required")
+    .min(3, "Must be at least 3 characters")
+    .regex(/^\S.*\S$/, "No spaces at start/end"),
+
+  eonInvoiceNumber: z
+    .string()
+    .nonempty("EON Invoice Number is required")
+    .min(5, "Must be at least 5 characters")
+    .regex(/^\S.*\S$/, "No spaces at start/end"),
+
+  comment: z
+    .string()
+    .nonempty("Comment is required")
+    .trim()
+    .regex(/^\S.*\S$/, "No spaces at start/end"),
+
+  status: z
+    .object({
+      approve: z.boolean(),
+      reject: z.boolean(),
+    })
+    .refine((data) => Object.values(data).some(Boolean), {
+      message: "Status is required",
+    }),
 });
 
-export type UpdateIncidentFormType = z.infer<typeof updateIncidentFormSchema>;
+
+
+
+
+
+export type updateIncidentFormSchema = z.infer<typeof updateIncidentFormSchema>;
+
+

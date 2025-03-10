@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom"; // Get ID from URL
@@ -13,6 +12,8 @@ import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
+import { useCreateUser } from "../../../hooks/useCreateUser"; // Import the create user hook
+import { toast } from "sonner";
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -32,28 +33,71 @@ const UserCreationFormPage = () => {
   const { id } = useParams(); // Get the user ID from URL (if available)
   const isEditMode = !!id; // Boolean flag for edit mode
 
+  const { mutate: createUser, isLoading } = useCreateUser(); // Using the create user hook
+
   const methods = useForm({
     resolver: zodResolver(userSchema),
-    defaultValues: Object.fromEntries(
-      Object.keys(userFormConfig.fields).map((key) => [key, ""])
-    ),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      productType: {
+        card: true,
+        remittance: false,
+        both: false,
+      },
+    },
   });
+  
 
-  const { handleSubmit, control, reset, formState: { errors, isSubmitting } } = methods;
+  const { handleSubmit, control, reset,watch,setValue, formState: { errors, isSubmitting } } = methods;
 
+  const handleCheckboxChange = (key: "card" | "remittance" | "both", checked: boolean) => {
+    const currentValues = watch("productType"); // Get the latest state before updating
+  
+    if (key === "both") {
+      // ✅ If "Both" is checked, enable all checkboxes; otherwise, disable all
+      const updatedValues = {
+        card: checked,
+        remittance: checked,
+        both: checked,
+      };
+      setValue("productType", updatedValues, { shouldValidate: true });
+    } else {
+      // ✅ Update only the specific checkbox ("Card" or "Remittance")
+      setValue(`productType.${key}`, checked, { shouldValidate: true });
+  
+      // ✅ Get the updated values after modifying state
+      const updatedValues = {
+        ...currentValues,
+        [key]: checked,
+      };
+  
+      // ✅ If both "Card" and "Remittance" are checked, check "Both"
+      const isBothChecked = updatedValues.card && updatedValues.remittance;
+      setValue("productType.both", isBothChecked, { shouldValidate: true });
+  
+      // ✅ Force re-render using a temporary state change
+      setValue("productType", { ...updatedValues, both: isBothChecked }, { shouldValidate: true });
+    }
+  };
+  
+  
+  
   // Fetch user data if in edit mode
   useEffect(() => {
     if (isEditMode) {
-      // Simulate an API call (Replace with actual API call)
       const fetchUserData = async () => {
         const userData = await new Promise<{ [key: string]: any }>((resolve) =>
           setTimeout(() => resolve({
             firstName: "John",
             lastName: "Doe",
             email: "john.doe@example.com",
-            productType: { card: true, remittance: false, both: false },
-            password:"maker@123#",
-            confirmPassword:"maker@123#"
+            productType: ["card"], // Modify to match the actual backend structure
+            password: "maker@123#",
+            confirmPassword: "maker@123#"
           }), 1000)
         );
 
@@ -65,8 +109,18 @@ const UserCreationFormPage = () => {
   }, [id, reset, isEditMode]);
 
   const onSubmit = async (data: any) => {
-    console.log(isEditMode ? "Updating User:" : "Creating User:", data);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      console.log("Form Data:", data);
+      if (isEditMode) {
+        console.log("Updating User:", data);
+        toast.info("User updated successfully!");
+      } else {
+        console.log("Creating User:", data);
+        createUser(data); 
+      }
+    } catch (error) {
+      toast.error("Something went wrong.Please try again.");
+    }
   };
 
   return (
@@ -99,8 +153,15 @@ const UserCreationFormPage = () => {
                   {userFormConfig.fields.productType.label}
                 </small>
                 <CheckboxWrapper className="flex space-x-4 items-center">
-                  {getController({ ...userFormConfig.fields.productType, name: "productType", control })}
-                </CheckboxWrapper>
+                {getController({
+                  ...userFormConfig.fields.productType,
+                  name: "productType",
+                  control,
+                  errors,
+                  handleCheckboxChange,
+                  isMulti:true
+                })}
+            </CheckboxWrapper>
               </FieldWrapper>
             </FormFieldRow>
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
@@ -119,9 +180,15 @@ const UserCreationFormPage = () => {
           <button
             type="submit"
             className="bg-primary text-white px-4 py-2 rounded-md"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoading}
           >
-            {isSubmitting ? (isEditMode ? "Updating..." : "Submitting...") : (isEditMode ? "Update" : "Submit")}
+            {isSubmitting || isLoading
+              ? isEditMode
+                ? "Updating..."
+                : "Submitting..."
+              : isEditMode
+                ? "Update"
+                : "Submit"}
           </button>
         </div>
       </form>
@@ -130,3 +197,4 @@ const UserCreationFormPage = () => {
 };
 
 export default UserCreationFormPage;
+

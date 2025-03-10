@@ -14,7 +14,8 @@ interface FormField {
 
 interface CheckboxField extends FormField {
   type: FieldType.Checkbox;
-  options: Record<string, { label: string }>;
+  options: Record<string, { label: string; checked: boolean }>;
+  isMulti: boolean;
 }
 
 type Field = FormField | CheckboxField;
@@ -72,10 +73,11 @@ export const userFormConfig: UserFormConfig = {
       required: true,
       placeholder: "",
       options: {
-        card: { label: "Card" },
-        remittance: { label: "Remittance" },
-        both: { label: "Both" }
-      }
+        card: { label: "Card", checked: true },
+        remittance: { label: "Remittance", checked: false },
+        both: { label: "Both", checked: false }
+      },
+      isMulti:false
     
     }
   }

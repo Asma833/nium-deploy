@@ -17,7 +17,7 @@ interface FormField {
   }
 interface CheckboxField extends FormField {
     type: FieldType.Checkbox;
-    options: Record<string, { label: string }>;
+    options: Record<string, { label: string; checked: boolean }>;
   }
 type Field = FormField | CheckboxField;
 
@@ -88,8 +88,8 @@ sectionTitle: "Transaction Form",
       required: true,
       placeholder: "",
       options: {
-        approve: { label: "Approve" },
-        reject: { label: "Reject" }
+        approve: { label: "Approve" ,checked:true },
+        reject: { label: "Reject",checked:false  }
       }
     },
     eonInvoiceNumber: {
@@ -110,6 +110,4 @@ sectionTitle: "Transaction Form",
     { currency: "EUR/INR", rate: 95.50, amount: 300 },
   ]
 };
-
-
 

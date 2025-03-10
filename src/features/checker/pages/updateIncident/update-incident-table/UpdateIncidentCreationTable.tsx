@@ -2,7 +2,7 @@
 import { DynamicTable } from "@/components/common/DynamicTable";
 import { getTransactionTableColumns } from "./update-incident-creation-table-col";
 import { transactionTableData as initialData } from "./update-incident-table-value";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 
 import { DialogWrapper } from "@/components/common/DialogWrapper";
 import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
@@ -15,7 +15,7 @@ const UpdateIncidentCreationTable = () => {
 
   const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const formRef = useRef<() => void | null>(null); // Ref for triggering form submission
+ // const formRef = useRef<() => void | null>(null); // Ref for triggering form submission
 
   const openModal = (value: string) => {
     setSelectedNiumId(value);
@@ -43,9 +43,10 @@ const UpdateIncidentCreationTable = () => {
           setIsOpen={setIsModalOpen}
           description={selectedNiumId ?? ""}
           renderContent={
-            <UpdateIncidentForm onSubmit={() => {
-              if (formRef.current) formRef.current();
-            }} />
+            // <UpdateIncidentForm onSubmit={() => {
+            //   if (formRef.current) formRef.current();
+            // }} />
+            <UpdateIncidentForm />
           }
          
         />

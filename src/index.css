@@ -61,6 +61,7 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     --text-p: 328 100% 50%;
+    --d-card:
   }
 }
 
@@ -125,3 +126,5 @@
 .fieldWrapper  .MuiFormControl-root{
   width: 100%;
 }
+
+

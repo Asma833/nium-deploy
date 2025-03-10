@@ -142,6 +142,9 @@ export const getController = (field: any) => {
           name={field.name}
           label={field.label}
           options={field.options}
+          handleCheckboxChange={field.handleCheckboxChange}
+          isMulti={field.isMulti}
+          defaultSelected={field.defaultSelected}
         />
       );
       

@@ -32,6 +32,15 @@ export const API = {
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
+  NUSERS:{
+    LIST:`/users`,
+    CREATE:`/users`,
+    GET_BY_ID: (id: string) => `/users/${id}`,
+  },
+  CHECKER:{
+    LIST:`/update-incident`,
+    UPDATE: (id: string) => `/update-incident/${id}`,
+  }
 } as const;
 
 /**
