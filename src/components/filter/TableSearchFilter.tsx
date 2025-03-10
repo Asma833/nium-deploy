@@ -168,7 +168,7 @@ const TableSearchFilter = ({
   return (
     <div className="flex flex-col gap-3 w-full">
       <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
-        <div className="flex items-end gap-2">
+        <div className="flex items-end gap-2 flex-wrap">
           {dateRange && (
             <>
               <div className="flex items-start flex-col ">

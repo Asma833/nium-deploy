@@ -8,7 +8,7 @@ export const getAssignCreationColumns = (
     id: "select",
     name: "Select",
     className: "50px",
-    cell: (value: boolean, row: any) => (
+    cell: (row: any) => (
       <Checkbox
         checked={row.isSelected || false} 
         onCheckedChange={(checked) =>

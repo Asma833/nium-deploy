@@ -1,10 +1,25 @@
 import { Edit } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import Switch from "@/components/ui/switch";
 
-export const getUserTableColumns = (handleStatusChange: (index: number, checked: boolean) => void) => {
-  const navigate = useNavigate(); // Initialize navigate
+interface TableColumn {
+  key: string;
+  id: string;
+  name: string;
+  cell?: (value: any, index: number) => React.ReactNode;
+}
 
+interface HandleStatusChange {
+  (index: number, checked: boolean): void;
+}
+
+interface HandleNavigate {
+  (path: string): void;
+}
+
+export const getUserTableColumns = (
+  handleStatusChange: HandleStatusChange,
+  handleNavigate: HandleNavigate
+): TableColumn[] => {
   return [
     {
       key: "userName",
@@ -32,7 +47,9 @@ export const getUserTableColumns = (handleStatusChange: (index: number, checked:
       name: "Status",
       cell: (value: boolean, index: number) => (
         <div className="flex flex-col items-start">
-          <span className="text-sm font-medium">{value ? "Active" : "Inactive"}</span>
+          <span className="text-sm font-medium">
+            {value ? "Active" : "Inactive"}
+          </span>
           <Switch
             checked={value}
             onCheckedChange={(checked) => handleStatusChange(index, checked)}
@@ -48,7 +65,7 @@ export const getUserTableColumns = (handleStatusChange: (index: number, checked:
         <div className="flex gap-2">
           <button
             className="p-2 rounded-md hover:bg-muted/20"
-            onClick={() => navigate(`update-user/1`)} // Navigate to edit page
+            onClick={() => handleNavigate(`update-user/1`)}
           >
             <Edit className="w-5 h-5 text-muted-foreground" />
           </button>

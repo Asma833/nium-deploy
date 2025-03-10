@@ -1,3 +1,4 @@
+// Note: Run `npm install --save-dev @types/file-saver` to fix TypeScript errors
 import { toast } from "sonner";
 // Import xlsx and file-saver properly at the top level
 import * as XLSX from 'xlsx';

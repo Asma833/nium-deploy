@@ -1,5 +1,3 @@
-import { FilterConfig } from "../filter/filter.types";
-
 export type CommonProps = {
   className?: string;
   children?: React.ReactNode;
@@ -38,12 +36,12 @@ export type ImageProps = {
   loading?: "lazy" | "eager";
 };
 
-export type Column<T> = {
+export type Column<_T> = {
   key: number | string;
   id: string;
   name: string;
   className?: string;
-  cell?: any;
+  cell?: (value: any, row?: any) => React.ReactNode;
   sortable?: boolean;
 };
 

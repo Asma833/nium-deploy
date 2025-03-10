@@ -73,7 +73,7 @@ export function TablePagination({
   };
 
   return (
-    <div className="flex items-center justify-between px-2">
+    <div className="flex flex-col sm:flex-row items-center justify-between px-2">
       <p className="text-sm text-gray-700">
         Showing {filteredDataLength > 0 ? (currentPage - 1) * pageSize + 1 : 0} to{" "}
         {Math.min(currentPage * pageSize, filteredDataLength)} of {filteredDataLength} entries

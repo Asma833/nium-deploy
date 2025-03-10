@@ -29,7 +29,7 @@ const formatDate = (date: Date | string | undefined) => {
 };
 
 const getCellContent = <T extends Record<string, any>>(
-  row: T,
+  row: any,
   column: Column<T>
 ) => {
   if (column.cell) {

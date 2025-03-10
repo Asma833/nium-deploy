@@ -5,8 +5,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 const NuserCreationTable = () => {
   const navigate = useNavigate();
+  const [tableData, setTableData] = useState(initialData);
+  
   const handleStatusChange = (rowIndex: number, checked: boolean) => {
     console.log("Before update:", tableData); // ✅ Debugging log before update
     setTableData((prevData) =>
@@ -17,12 +20,15 @@ const NuserCreationTable = () => {
     console.log("After update:", tableData); // ✅ Debugging log after update
   };
   
+  const handleCreateUser = () => {
+    navigate("create-user");
+  };
+  
+  const handleNavigate = (path: string) => {
+    navigate(path);
+  };
 
-const columns = getUserTableColumns(handleStatusChange);
-const [tableData, setTableData] = useState(initialData);
-const handleCreateUser = () => {
-  navigate("create-user");
-};
+  const columns = getUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
     <div className="">

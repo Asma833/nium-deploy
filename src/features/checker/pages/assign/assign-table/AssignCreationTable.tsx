@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
 
@@ -24,7 +23,7 @@ const AssignCreationTable = () => {
     endpoint: API.CHECKER.ASSIGN.SEARCH_FILTER,
     initialPageSize: 10,
     initialData,
-    dataPath: "transactions", 
+    dataPath: "transactions",
     totalRecordsPath: "totalRecords",
   });
 
@@ -65,9 +64,9 @@ const AssignCreationTable = () => {
     setIsSubmitting(true);
     try {
       // Mock API call - replace with actual API endpoint in production
-      const response = await axios.post(API.CHECKER.ASSIGN.TAKE_REQUEST, {
-        transactionIds: selectedRows,
-      });
+      // const response = await axios.post(API.CHECKER.ASSIGN.TAKE_REQUEST, {
+      //   transactionIds: selectedRows,
+      // });
 
       // Handle successful response
       toast.success(
@@ -92,14 +91,12 @@ const AssignCreationTable = () => {
 
   const columns = getAssignCreationColumns(handleSelectionChange);
 
-
-
   // Load initial data when the component mounts
   useEffect(() => {
     if (isPaginationDynamic) {
       pagination.loadInitialData();
     }
-  }, [isPaginationDynamic]);
+  }, [isPaginationDynamic, pagination]);
 
   return (
     <div className="flex flex-col">
@@ -129,29 +126,19 @@ const AssignCreationTable = () => {
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
-            : async (page: number, pageSize: number) => []
+            : async (_page: number, _pageSize: number) => []
         }
         totalRecords={pagination.totalRecords}
         filter={{
           filterOption: true,
           mode: isTableFilterDynamic ? "dynamic" : "static",
-          dateFilterColumn: "orderDate",
-          statusFilerColumn: "status",
-          roleFilerColumn: "role",
           rederFilerOptions: {
             search: true,
-            dateRange: false,
-            applyAction: false,
-            resetAction: false,
           },
           // Dynamic callbacks - API functions
           dynamicCallbacks: isTableFilterDynamic
             ? {
                 onSearch: filterApi.search,
-                onDateRangeChange: filterApi.filterByDateRange,
-                onStatusChange: filterApi.filterByStatus,
-                onSelectChange: filterApi.filterBySelect,
-                onFilterApply: filterApi.applyFilters,
               }
             : undefined,
         }}
