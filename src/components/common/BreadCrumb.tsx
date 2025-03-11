@@ -68,7 +68,7 @@ export default function BreadCrumb() {
       <div className="flex w-full top-[70px]">
         <Breadcrumb>
           <BreadcrumbItem>
-            <BreadcrumbPage> <span className="text-xl font-bold">{toTitleCase(lastSegment)} Page</span></BreadcrumbPage> {/* ✅ Convert to Title Case */}
+            <BreadcrumbPage> <span className="text-xl font-bold">{toTitleCase(lastSegment)} </span></BreadcrumbPage> {/* ✅ Convert to Title Case */}
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
