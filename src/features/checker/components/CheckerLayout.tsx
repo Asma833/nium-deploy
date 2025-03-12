@@ -66,7 +66,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
       
 
       {/* Scrollable Content (Excludes Header) */}
-      <main className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto">
+      <main className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto" onClick={()=>{setIsSidebarOpen(false)}}>
         <DashboardContentWrapper>{children}</DashboardContentWrapper>
       </main>
      
