@@ -1,4 +1,4 @@
-export const transactionTableData = [
+export const viewAllTableData = [
     {
       niumId: "N-001",
       orderDate: "18.02.2025",

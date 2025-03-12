@@ -34,6 +34,9 @@ export const API = {
       TAKE_REQUEST: `/checker/assign/take-request`,
       SEARCH_FILTER: `/checker/assign/search-filter`,
     },
+    VIEW_ALL: {
+      SEARCH_FILTER: `/checker/view-all/search-filter`,
+    },
     COMPLETED_TRANSACTIONS: {
       SEARCH_FILTER: `/checker/completed-transactions/search-filter`,
     },
