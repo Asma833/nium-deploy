@@ -24,7 +24,7 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
       <Header
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        className="fixed top-0 w-full lg:left-48 lg:w-[calc(100%-12rem)] h-20vh bg-background shadow-md border-b border-gray-200 z-40"
+        className="fixed top-0 w-full lg:left-48 lg:w-[calc(100%-12rem)] bg-background shadow-md"
       />
       
       {/* Scrollable Content (Excludes Header) */}
