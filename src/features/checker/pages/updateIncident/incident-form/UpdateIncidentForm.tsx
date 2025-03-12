@@ -54,7 +54,9 @@ const UpdateIncidentForm = () => {
   });
 
   const { handleSubmit, control, formState: { errors }} = methods;
-
+  const handleRowCols = ()=>{
+    return screenWidth < 768 ? 1 : 3
+  }
   
   const onSubmit = (data: UpdateIncidentRequest) => {
     console.log("Update Incident:", data);
@@ -73,30 +75,39 @@ const UpdateIncidentForm = () => {
         <FormContentWrapper className="py-2 mt-0 rounded-none">
           <Spacer>
             {/* First Row */}
-            <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
-            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
-              {Object.entries(updateFormIncidentConfig.fields).slice(0,3).map(([name, field]) => (
-                <FieldWrapper key={name} className="w-full">
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
-              ))}
+            
+            <FormFieldRow rowCols={handleRowCols()}>
+              {Object.entries(updateFormIncidentConfig.fields).slice(0, 3).map(([name, field]) => {
+                const hasError = !!errors[name as keyof typeof errors]; 
+                return (
+                  <FieldWrapper 
+                    key={name} 
+                    className={cn("w-full", hasError ? "mb-8" : "mb-2")}
+                  >
+                    {getController({ ...field, name, control, errors })}
+                  </FieldWrapper>
+                );
+              })}
             </FormFieldRow>
 
+
             {/* Second Row */}
-            <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
-            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
-              {Object.entries(updateFormIncidentConfig.fields).slice(3,6).map(([name, field]) => (
-                <FieldWrapper key={name} className="w-full">
-                  {getController({ ...field, name, control, errors })}
+            <FormFieldRow rowCols={handleRowCols()}>
+              {Object.entries(updateFormIncidentConfig.fields).slice(3,6).map(([name, field]) =>{
+              const hasError = !!errors[name as keyof typeof errors];
+              return (   
+                <FieldWrapper key={name} className={cn("w-full", hasError ? "mb-8" : "mb-2")}>
+                  {getController({ ...field, name, control, errors})}
                 </FieldWrapper>
-              ))}
+              )
+              })}
             </FormFieldRow>
 
             {/* Exchange Rate Details */}
             <ExchangeRateDetails data={updateFormIncidentConfig.tableData} />
 
             {/* Status and EON Invoice Number */}
-            <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
+            <FormFieldRow rowCols={handleRowCols()} 
             className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2", "mt-2")}>
               <FieldWrapper>
                 <div className="flex space-x-4">
@@ -128,12 +139,16 @@ const UpdateIncidentForm = () => {
             </FormFieldRow>
 
             {/* Comment Field */}
-            <FormFieldRow rowCols={1} className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
-              {Object.entries(updateFormIncidentConfig.fields).slice(8,9).map(([name, field]) => (
-                <FieldWrapper key={name} className="w-full">
+            <FormFieldRow rowCols={1} >
+              {Object.entries(updateFormIncidentConfig.fields).slice(8,9).map(([name, field]) =>{ 
+              const hasError = !!errors[name as keyof typeof errors];
+              return(
+                
+                <FieldWrapper key={name} className={cn("w-full", hasError ? "mb-8" : "mb-2")}>
                   {getController({ ...field, name, control, errors })}
                 </FieldWrapper>
-              ))}
+              )
+              })}
             </FormFieldRow>
           </Spacer>
         </FormContentWrapper>
