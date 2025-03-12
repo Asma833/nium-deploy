@@ -59,5 +59,21 @@ export const transactionTableData = [
       vkycStatus: "Success",
       incidentStatus: "Pending",
     },
+    {
+      niumId: "N-005",
+      bmfId: "BMF-004",
+      orderDate: "28.12.2024",
+      customerPan: "BYUOW345T",
+      transactionType: "Remittance",
+      fxCurrency: "USD",
+      fxValue: "40,000.00",
+      fxRate: "85.40",
+      inrRate: "34,16,000.00",
+      purposeType: "University Fee - Self Funded",
+      esignStatus: "Rejected",
+      vkycStatus: "Success",
+      incidentStatus: "Pending",
+    }
+    
   ];
   

@@ -24,11 +24,11 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
       <Header
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        className="fixed top-0 w-full lg:left-48 lg:w-[calc(100%-12rem)] h-20vh bg-background shadow-md border-b border-gray-200 z-50"
+        className="fixed top-0 w-full lg:left-48 lg:w-[calc(100%-12rem)] h-20vh bg-background shadow-md border-b border-gray-200 z-40"
       />
       
-      {/* ✅ Scrollable Content (Excludes Header) */}
-      <main className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto  p-2">
+      {/* Scrollable Content (Excludes Header) */}
+      <main className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto">
           <DashboardContentWrapper>{children}</DashboardContentWrapper>
         </main>
     </div>

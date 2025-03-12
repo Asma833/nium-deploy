@@ -37,8 +37,11 @@ export const API = {
     COMPLETED_TRANSACTIONS: {
       SEARCH_FILTER: `/checker/completed-transactions/search-filter`,
     },
-    LIST: `/update-incident`,
-    UPDATE: (id: string) => `/update-incident/${id}`,
+    UPDATE_INCIDENT:{
+      LIST: `/update-incident`,
+      UPDATE: (id: string) => `/update-incident/${id}`,
+      SEARCH_FILTER: `/update-incident/search-filter`,
+    }
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
@@ -47,6 +50,7 @@ export const API = {
     LIST: `/users`,
     CREATE: `/users`,
     GET_BY_ID: (id: string) => `/users/${id}`,
+    SEARCH_FILTER: `/users/search-filter`,
   },
 } as const;
 

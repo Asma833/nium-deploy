@@ -9,7 +9,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   useEffect(() => {
-    setIsChecked(checked); // ✅ Sync with external updates
+    setIsChecked(checked); // Sync with external updates
   }, [checked]);
 
   return (
@@ -17,7 +17,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange }) => {
       className={`relative w-12 h-5 flex items-center rounded-full transition-all 
       ${isChecked ? "bg-primary" : "bg-gray-300"}`}
       onClick={() => {
-        setIsChecked(!isChecked); // ✅ Toggle local state
+        setIsChecked(!isChecked); // Toggle local state
         onCheckedChange(!isChecked);
       }}
     >

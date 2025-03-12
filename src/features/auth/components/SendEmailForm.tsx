@@ -52,9 +52,9 @@ const SendEmailForm = () => {
 
         <div className="text-center">
           <div className="text-sm text-muted-foreground">
-            Remember Password?{" "}
+            {/* Remember Password?{" "} */}
             <Link to="/login" className="text-primary">
-              Log in
+             Go back to Login
             </Link>
           </div>
         </div>

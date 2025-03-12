@@ -5,20 +5,35 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
+import { API } from "@/core/constant/apis";
+import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
   const [tableData, setTableData] = useState(initialData);
   
   const handleStatusChange = (rowIndex: number, checked: boolean) => {
-    console.log("Before update:", tableData); // ✅ Debugging log before update
+    //console.log("Before update:", tableData); // Debugging log before update
     setTableData((prevData) =>
       prevData.map((row, idx) =>
         idx === rowIndex ? { ...row, status: checked ? "true" : "false" } : row
       )
     );
-    console.log("After update:", tableData); // ✅ Debugging log after update
+    //console.log("After update:", tableData); // Debugging log after update
   };
+  
+     const isTableFilterDynamic = false;
+     const isPaginationDynamic = false;
+   
+     // Use the dynamic pagination hook
+     const pagination = useDynamicPagination({
+       endpoint: API.NUSERS.SEARCH_FILTER,
+       initialPageSize: 10,
+       initialData,
+       dataPath: "transactions",
+       totalRecordsPath: "totalRecords",
+     });
   
   const handleCreateUser = () => {
     navigate("create-user");
@@ -27,11 +42,28 @@ const NuserCreationTable = () => {
   const handleNavigate = (path: string) => {
     navigate(path);
   };
-
+const filterApi = useFilterApi({
+      endpoint: API.NUSERS.SEARCH_FILTER,
+      initialData,
+      // base query params if needed
+      baseQueryParams: {
+        // For example: clientId: '123'
+      },
+    });
   const columns = getUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
     <div className="">
+       <div className="flex flex-col">
+    <div className="mb-4 flex items-center">
+      {(filterApi.loading || pagination.loading) && (
+        <span className="text-blue-500">Loading data...</span>
+      )}
+      {(filterApi.error || pagination.error) && (
+        <span className="text-red-500">Error loading data</span>
+      )}
+    </div>
+    </div>
       <DynamicTable
         columns={columns}
         data={tableData}
@@ -44,14 +76,27 @@ const NuserCreationTable = () => {
             <PlusIcon /> Create User
           </Button>
        )}
+       loading={pagination.loading}
+       paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+       onPageChange={
+         isPaginationDynamic
+           ? pagination.handlePageChange
+           : async (_page: number, _pageSize: number) => []
+       }
+       totalRecords={pagination.totalRecords}
+       
         filter={{
           filterOption: true,
-          dateFilterColumn: "orderDate",
-          statusFilerColumn: "status",
-          roleFilerColumn: "role",
+          mode: isTableFilterDynamic ? "dynamic" : "static",
           rederFilerOptions: {
             search: true,
           },
+          // Dynamic callbacks - API functions
+          dynamicCallbacks: isTableFilterDynamic
+            ? {
+                onSearch: filterApi.search,
+              }
+            : undefined,
         }}
       />
     </div>

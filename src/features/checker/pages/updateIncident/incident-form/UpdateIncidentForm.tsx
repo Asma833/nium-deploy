@@ -33,7 +33,7 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = () => {
   const screenWidth = useScreenSize();
-  const { mutate: updateIncident, isLoading } = useUpdateIncident(); // ✅ Use mutation hook
+  const { mutate: updateIncident, isLoading } = useUpdateIncident(); // Use mutation hook
 
   const methods = useForm<UpdateIncidentRequest>({
     resolver: zodResolver(updateIncidentFormSchema),
@@ -63,7 +63,7 @@ const UpdateIncidentForm = () => {
   const handleCheckboxChange = (key: string) => (checked: boolean) => {
     methods.setValue("fields.status", {
       ...methods.getValues("fields.status"), // Preserve existing values
-      [key]: checked, // ✅ Update only the specific checkbox
+      [key]: checked, // Update only the specific checkbox
     });
   };
   
@@ -74,7 +74,7 @@ const UpdateIncidentForm = () => {
           <Spacer>
             {/* First Row */}
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
-            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-4")}>
+            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
               {Object.entries(updateFormIncidentConfig.fields).slice(0,3).map(([name, field]) => (
                 <FieldWrapper key={name} className="w-full">
                   {getController({ ...field, name, control, errors })}
@@ -84,7 +84,7 @@ const UpdateIncidentForm = () => {
 
             {/* Second Row */}
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
-            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-4")}>
+            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
               {Object.entries(updateFormIncidentConfig.fields).slice(3,6).map(([name, field]) => (
                 <FieldWrapper key={name} className="w-full">
                   {getController({ ...field, name, control, errors })}
@@ -97,7 +97,7 @@ const UpdateIncidentForm = () => {
 
             {/* Status and EON Invoice Number */}
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 3} 
-            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-4", "mt-4")}>
+            className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2", "mt-2")}>
               <FieldWrapper>
                 <div className="flex space-x-4">
                   <button type="button" className="bg-primary text-white px-6 py-3 my-1 text-sm rounded-md">
@@ -128,7 +128,7 @@ const UpdateIncidentForm = () => {
             </FormFieldRow>
 
             {/* Comment Field */}
-            <FormFieldRow rowCols={1} className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-4")}>
+            <FormFieldRow rowCols={1} className={cn(Object.keys(errors).some(key => key in updateFormIncidentConfig.fields) ? "mb-8" : "mb-2")}>
               {Object.entries(updateFormIncidentConfig.fields).slice(8,9).map(([name, field]) => (
                 <FieldWrapper key={name} className="w-full">
                   {getController({ ...field, name, control, errors })}
@@ -139,7 +139,7 @@ const UpdateIncidentForm = () => {
         </FormContentWrapper>
 
         {/* Submit Button */}
-        <div className="flex justify-center bg-transparent">
+        <div className="flex justify-center bg-background">
           <Button type="submit" disabled={isLoading}>
             {isLoading ? <Loader2 className="animate-spin" /> : "Submit"}
           </Button>

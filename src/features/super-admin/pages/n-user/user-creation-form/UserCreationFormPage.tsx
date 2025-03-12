@@ -58,7 +58,7 @@ const UserCreationFormPage = () => {
     const currentValues = watch("productType"); // Get the latest state before updating
   
     if (key === "both") {
-      // ✅ If "Both" is checked, enable all checkboxes; otherwise, disable all
+      // If "Both" is checked, enable all checkboxes; otherwise, disable all
       const updatedValues = {
         card: checked,
         remittance: checked,
@@ -66,20 +66,20 @@ const UserCreationFormPage = () => {
       };
       setValue("productType", updatedValues, { shouldValidate: true });
     } else {
-      // ✅ Update only the specific checkbox ("Card" or "Remittance")
+      // Update only the specific checkbox ("Card" or "Remittance")
       setValue(`productType.${key}`, checked, { shouldValidate: true });
   
-      // ✅ Get the updated values after modifying state
+      // Get the updated values after modifying state
       const updatedValues = {
         ...currentValues,
         [key]: checked,
       };
   
-      // ✅ If both "Card" and "Remittance" are checked, check "Both"
+      // If both "Card" and "Remittance" are checked, check "Both"
       const isBothChecked = updatedValues.card && updatedValues.remittance;
       setValue("productType.both", isBothChecked, { shouldValidate: true });
   
-      // ✅ Force re-render using a temporary state change
+      // Force re-render using a temporary state change
       setValue("productType", { ...updatedValues, both: isBothChecked }, { shouldValidate: true });
     }
   };
@@ -95,7 +95,11 @@ const UserCreationFormPage = () => {
             firstName: "John",
             lastName: "Doe",
             email: "john.doe@example.com",
-            productType: ["card"], // Modify to match the actual backend structure
+            productType: {
+              card: true,
+              remittance: false,
+              both: false,
+            },
             password: "maker@123#",
             confirmPassword: "maker@123#"
           }), 1000)
@@ -159,7 +163,7 @@ const UserCreationFormPage = () => {
                   control,
                   errors,
                   handleCheckboxChange,
-                  isMulti:true
+                  isMulti:true,
                 })}
             </CheckboxWrapper>
               </FieldWrapper>

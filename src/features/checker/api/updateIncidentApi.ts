@@ -5,7 +5,7 @@ import { UpdateIncidentRequest, UpdateIncidentResponse } from "../types/updateIn
 export const updateIncidentApi = {
   updateIncident: async (incidentData: UpdateIncidentRequest): Promise<UpdateIncidentResponse> => {
     const { data } = await axiosInstance.put<UpdateIncidentResponse>(
-      getEndpoint("CHECKER.UPDATE"),incidentData 
+      getEndpoint("CHECKER.UPDATE_INCIDENT.UPDATE"),incidentData 
     );
     return data;
   },
