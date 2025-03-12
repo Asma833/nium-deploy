@@ -118,7 +118,7 @@ const ChangePasswordForm = () => {
         <div className="text-center">
           <div className="text-sm text-muted-foreground">
             <Link to="/login" className="text-primary">
-              Go Back to Login
+              Back to Login
             </Link>
           </div>
         </div>
