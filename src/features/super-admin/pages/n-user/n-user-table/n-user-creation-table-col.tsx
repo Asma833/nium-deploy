@@ -16,6 +16,7 @@ interface HandleNavigate {
   (path: string): void;
 }
 
+
 export const getUserTableColumns = (
   handleStatusChange: HandleStatusChange,
   handleNavigate: HandleNavigate
@@ -41,22 +42,21 @@ export const getUserTableColumns = (
       id: "creationDate",
       name: "Creation Date",
     },
-    {
-      key: "status",
-      id: "status",
-      name: "Status",
-      cell: (value: boolean, index: number) => (
-        <div className="flex flex-col items-start">
-          <span className="text-sm font-medium">
-            {value ? "Active" : "Inactive"}
-          </span>
-          <Switch
-            checked={value}
-            onCheckedChange={(checked) => handleStatusChange(index, checked)}
-          />
-        </div>
-      ),
-    },
+        {
+        key: "status",
+        id: "status",
+        name: "Status",
+        cell: (value: boolean, index: number) => (
+          <div className="flex flex-col items-start">
+            <span className="text-sm font-medium">{value ? "Active" : "Inactive"}</span>
+            <Switch
+              checked={value}
+              onCheckedChange={(checked) => handleStatusChange(index, checked)}
+            />
+          </div>
+        ),
+      },
+
     {
       key: "actions",
       id: "actions",

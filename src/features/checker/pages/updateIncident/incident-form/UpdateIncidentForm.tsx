@@ -17,11 +17,15 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { Loader2 } from "lucide-react";
 import { UpdateIncidentRequest } from "@/features/checker/types/updateIncident.type";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
+  const { setTitle } = usePageTitle();
+  useEffect(() => {
+    setTitle("Update Incident");
+  }, [setTitle]);
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);

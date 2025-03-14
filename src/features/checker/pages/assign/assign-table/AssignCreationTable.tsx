@@ -7,12 +7,18 @@ import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/us
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 const AssignCreationTable = () => {
+  const { setTitle } = usePageTitle();
+        useEffect(() => {
+          setTitle("Assign");
+        }, [setTitle]);
   const [tableData, setTableData] = useState(
     // Add isSelected property to all rows initialized as false
     initialData.map((item) => ({ ...item, isSelected: false }))
   );
+  
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;

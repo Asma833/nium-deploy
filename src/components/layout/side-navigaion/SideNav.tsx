@@ -39,7 +39,7 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
   return (
     <aside className="bg-background h-screen shadow-lg fixed top-0 left-0 flex flex-col transition-all z-30 w-48">
       {/* Sidebar Logo */}
-      <Logo className="invert-in-dark ml-4 my-3" />
+      <Logo className="invert-in-dark ml-4 mb-1 mt-4" />
 
       {/* Navigation List */}
       <nav className="px-3">

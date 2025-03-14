@@ -7,8 +7,14 @@ import { Button } from "@/components/ui/button";
 import { API } from "@/core/constant/apis";
 import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 const ViewAllTable = () => {
+   const { setTitle } = usePageTitle();
+      useEffect(() => {
+        setTitle("View All");
+      }, [setTitle]);
+      
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 

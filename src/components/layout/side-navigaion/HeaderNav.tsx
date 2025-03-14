@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, Bell, Power } from "lucide-react";
 import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
-import PageTitle from "@/components/common/PageTitle";
+import { usePageTitle } from "@/components/common/PageTitle";
 import { cn } from "@/utils/cn";
 
 interface HeaderProps {
@@ -12,6 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen,className }) => {
+  const { title } = usePageTitle();
   return (
     <nav className={cn(`bg-background fixed top-0 right-0 border-b border-gray-200 h-[70px]  z-40`,className)}>
       <div className="sm:px-6 lg:px-8 flex items-center h-16">
@@ -31,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen,classNa
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
         <div className="block">
-        <PageTitle/>
+        <h1 className="text-2xl font-bold">{title}</h1>
       </div>
                   
         </div>

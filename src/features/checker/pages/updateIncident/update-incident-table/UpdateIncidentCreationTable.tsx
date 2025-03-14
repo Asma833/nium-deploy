@@ -2,19 +2,25 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getTransactionTableColumns } from "./update-incident-creation-table-col";
 import { transactionTableData as initialData } from "./update-incident-table-value";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 
 import { DialogWrapper } from "@/components/common/DialogWrapper";
 import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { API } from "@/core/constant/apis";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 
 
 
 const UpdateIncidentCreationTable = () => {
   const [tableData] = useState(initialData);
+  const { setTitle } = usePageTitle();
+    
+    useEffect(() => {
+      setTitle("Update Incident");
+    }, [setTitle]);
 
   const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

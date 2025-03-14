@@ -1,27 +1,42 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getUserTableColumns } from "./n-user-creation-table-col";
 import { userTableData as initialData} from "./user-table-value";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { API } from "@/core/constant/apis";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
+   const { setTitle } = usePageTitle();
+    useEffect(() => {
+      setTitle("N-Users");
+    }, [setTitle]);
   const [tableData, setTableData] = useState(initialData);
   
+  // const handleStatusChange = (rowIndex: number, checked: boolean) => {
+  //   setTableData((prevData) =>
+  //     prevData.map((row, idx) =>
+  //       idx === rowIndex ? { ...row, status: checked } : row
+  //     )
+  //   );
+  // };
   const handleStatusChange = (rowIndex: number, checked: boolean) => {
-    //console.log("Before update:", tableData); // Debugging log before update
-    setTableData((prevData) =>
-      prevData.map((row, idx) =>
-        idx === rowIndex ? { ...row, status: checked ? "true" : "false" } : row
-      )
-    );
-    //console.log("After update:", tableData); // Debugging log after update
+    setTableData((prevData) => {
+      const newData = prevData.map((row, idx) =>
+        idx === rowIndex ? { ...row, status: checked } : row
+      );
+      console.log("Updated Data:", newData); // ✅ Debug: Ensure the new state is correct
+      return [...newData]; // ✅ Return a new array to trigger re-render
+    });
   };
+  
+  
+  
   
      const isTableFilterDynamic = false;
      const isPaginationDynamic = false;
@@ -50,7 +65,7 @@ const filterApi = useFilterApi({
         // For example: clientId: '123'
       },
     });
-  const columns = getUserTableColumns(handleStatusChange, handleNavigate);
+  const columns = getUserTableColumns(handleStatusChange,handleNavigate);
 
   return (
     <div className="">

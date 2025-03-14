@@ -14,6 +14,7 @@ import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { useCreateUser } from "../../../hooks/useCreateUser"; // Import the create user hook
 import { toast } from "sonner";
+import { usePageTitle } from "@/components/common/PageTitle";
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -32,7 +33,10 @@ const UserCreationFormPage = () => {
   const screenWidth = useScreenSize();
   const { id } = useParams(); // Get the user ID from URL (if available)
   const isEditMode = !!id; // Boolean flag for edit mode
-
+  const { setTitle } = usePageTitle();
+  useEffect(() => {
+    setTitle(isEditMode ? "Edit User" : "Create User");
+  }, [setTitle]);
   const { mutate: createUser, isLoading } = useCreateUser(); // Using the create user hook
 
   const methods = useForm({
