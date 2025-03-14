@@ -1,4 +1,4 @@
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 
 export const getAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void
@@ -8,12 +8,26 @@ export const getAssignCreationColumns = (
     id: "select",
     name: "Select",
     className: "50px",
-    cell: (row: any) => (
-      <Checkbox
-        checked={row.isSelected || false} 
-        onCheckedChange={(checked) =>
-          handleSelectionChange(row.niumId, checked as boolean)
-        } 
+    // cell: (row: any) => (
+    //   <Checkbox
+    //     checked={row.isSelected || false} 
+    //     onCheckedChange={(checked) =>
+    //       handleSelectionChange(row.niumId, checked as boolean)
+    //     } 
+    //   />
+    // ),
+    cell: (value:any,row: any) => (
+      <input
+        type="checkbox"
+        checked={value} // ✅ Ensure it reads the correct value
+        onChange={(e) => handleSelectionChange(row.niumId, e.target.checked)}
+        className={`h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300`}
+        style={{  
+          accentColor: value ? "red" : "#E53888", // ✅ WebKit color control
+          display: "inline-block",
+          verticalAlign: "middle",
+          position: "relative",
+        }}
       />
     ),
   },

@@ -1,6 +1,6 @@
 export const transactionTableData = [
     {
-      select: false, // For checkbox selection (can be managed dynamically)
+      isSelected: false, // For checkbox selection (can be managed dynamically)
       niumId: "N-001",
       orderDate: "18.02.2025",
       customerPan: "AFJPW0198D",
@@ -12,7 +12,7 @@ export const transactionTableData = [
       purposeType: "BTQ",
     },
     {
-      select: false,
+      isSelected: false,
       niumId: "N-002",
       orderDate: "10.02.2025",
       customerPan: "AHURE123R",
@@ -24,7 +24,7 @@ export const transactionTableData = [
       purposeType: "BT",
     },
     {
-      select: false,
+      isSelected: false,
       niumId: "N-003",
       orderDate: "05.01.2025",
       customerPan: "AJYOI8986E",
@@ -36,7 +36,7 @@ export const transactionTableData = [
       purposeType: "-",
     },
     {
-      select: false,
+      isSelected: false,
       niumId: "N-004",
       orderDate: "28.12.2024",
       customerPan: "BYUOW345T",
