@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardCardProps {
   count: number;
@@ -59,40 +60,53 @@ const getStatusColor = (status: string) => {
 
 
 
-const DashboardCard: React.FC<DashboardCardProps> = ({ count, title, path, status}) => {
+const DashboardCard: React.FC<DashboardCardProps> = ({ count, title, path, status }) => {
+  const navigate = useNavigate();
   const cardStyle = getCardStyle(title);
   const statusDotColor = getStatusColor(status);
-  
-  return (
-    <div className={`rounded-xl overflow-hidden transition-all duration-300 lg:hover:shadow-lg hover:opacity-85 h-[120px] ease-linear`}>
-      <div className={`relative h-full bg-gradient-to-br ${cardStyle.gradientFrom} ${cardStyle.gradientTo} backdrop-blur-lg  shadow-md`}>
-        {/* Background accent circles */}
-        <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-white/15 z-0"></div>
-        <div className="absolute -top-10 -left-10 w-20 h-20 rounded-full bg-white/15 z-0"></div>
-        
-        {/* Category tag at top right */}
-        <div className="absolute top-2 right-2 z-20">
-          <span className={`text-xs ${cardStyle.tagBg} ${cardStyle.tagText} px-2 py-0.5 rounded-full inline-flex items-center`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${statusDotColor} mr-1`}></span>
-            {status}
-          </span>
-        </div>
-        
-        {/* Card content */}
-        <div className="relative z-10 flex items-center h-full px-4 py-4">
-          {/* Left: Icon/Image */}
-          <div className="w-[50px] h-[50px] flex items-center justify-center overflow-hidden">
-            <img src={path} alt={title} className="w-10 h-10 object-contain" />
-          </div>
+  const handleNavigation = (status: string) => {
+    if (status.includes("Successful") || status.includes("Approved")) {
+      navigate("/checker/completed-transactions");
+    } else if (status.includes("Rejected")) {
+      navigate("/checker/viewall");
+    } else if (status.includes("Pending")) {
+      navigate("/checker/assign");
+    } else {
+      navigate("/checker/viewall");
+    }
+  };
 
-          {/* Right: Text Content */}
-          <div className="ml-4 flex-grow">
-            <h2 className={`text-2xl font-semibold ${cardStyle.countColor}`}>{count}</h2>
-            <p className="text-sm text-[hsl(var(--text-p))]">{title}</p>
+  return (
+    <div onClick={() => handleNavigation(status)}
+      className={`rounded-xl overflow-hidden transition-all duration-300 lg:hover:shadow-xl hover:opacity-85 h-[120px] ease-linear cursor-pointer`}>
+        <div className={`relative h-full bg-gradient-to-br ${cardStyle.gradientFrom} ${cardStyle.gradientTo} backdrop-blur-lg  shadow-md`}>
+          {/* Background accent circles */}
+          <div className="absolute -bottom-8 -right-8 w-24 h-24 rounded-full bg-white/15 z-0"></div>
+          <div className="absolute -top-10 -left-10 w-20 h-20 rounded-full bg-white/15 z-0"></div>
+          
+          {/* Category tag at top right */}
+          <div className="absolute top-2 right-2 z-20">
+            <span className={`text-xs ${cardStyle.tagBg} ${cardStyle.tagText} px-2 py-0.5 rounded-full inline-flex items-center`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${statusDotColor} mr-1`}></span>
+              {status}
+            </span>
+          </div>
+          
+          {/* Card content */}
+          <div className="relative z-10 flex items-center h-full px-4 py-4">
+            {/* Left: Icon/Image */}
+            <div className="w-[50px] h-[50px] flex items-center justify-center overflow-hidden">
+              <img src={path} alt={title} className="w-10 h-10 object-contain invert-in-dark" />
+            </div>
+
+            {/* Right: Text Content */}
+            <div className="ml-4 flex-grow">
+              <h2 className={`text-2xl font-semibold ${cardStyle.countColor}`}>{count}</h2>
+              <p className="text-sm text-[hsl(var(--text-p))]">{title}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

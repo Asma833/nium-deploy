@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import { dashboardData } from "./dashboard-card/card";
 import DashboardCard from "./dashboard-card/DashboardCards";
-
+import { usePageTitle } from "@/components/common/PageTitle";
 
 const DashboardPage = () => {
+  const { setTitle } = usePageTitle();
+  
+  useEffect(() => {
+    setTitle("Dashboard");
+  }, [setTitle]);
+  
+
+  
     return(
     <>
     <div className="px-2">
