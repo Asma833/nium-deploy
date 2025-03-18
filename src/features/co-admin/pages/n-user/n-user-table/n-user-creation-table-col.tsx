@@ -16,7 +16,6 @@ interface HandleNavigate {
   (path: string): void;
 }
 
-
 export const getUserTableColumns = (
   handleStatusChange: HandleStatusChange,
   handleNavigate: HandleNavigate
@@ -46,7 +45,7 @@ export const getUserTableColumns = (
         key: "status",
         id: "status",
         name: "Status",
-        cell: (value: boolean, row:any) => (
+        cell: (row:any) => (
           <div className="flex flex-col items-start">
             <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
             <Switch

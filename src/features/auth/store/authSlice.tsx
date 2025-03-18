@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // Defaults to localStorage
 import { User } from '../types/auth.types';
 import { PURGE } from 'redux-persist';
 
 export interface AuthState {
   user: User | null;
   accessToken: string | null;
-  refreshToken: string | null;  // Add this
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
-  accessToken: localStorage.getItem('accessToken'),
-  refreshToken: localStorage.getItem('refreshToken'),  // Add this
-  isAuthenticated: !!localStorage.getItem('accessToken'),
+  accessToken: null,
+  refreshToken: null,
+  isAuthenticated: false,
   isLoading: false,
 };
 
@@ -26,20 +28,17 @@ const authSlice = createSlice({
       const { user, accessToken, refreshToken } = action.payload;
       state.user = user;
       state.accessToken = accessToken;
-      state.refreshToken = refreshToken;  // Add this
+      state.refreshToken = refreshToken;
       state.isAuthenticated = true;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);  // Add this
-      localStorage.setItem('user', JSON.stringify(user));
+    },
+    updateAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
     },
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
-      state.refreshToken = null;  // Add this
+      state.refreshToken = null;
       state.isAuthenticated = false;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');  // Add this
-      localStorage.removeItem('user');
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -47,7 +46,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
-      // Reset state on purge
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
@@ -56,5 +54,13 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout, setLoading } = authSlice.actions;
-export default authSlice.reducer;
+// Persist Config
+const persistConfig = {
+  key: 'auth',
+  storage,
+};
+
+const persistedAuthReducer = persistReducer(persistConfig, authSlice.reducer);
+
+export const { setCredentials, updateAccessToken, logout, setLoading } = authSlice.actions;
+export default persistedAuthReducer;

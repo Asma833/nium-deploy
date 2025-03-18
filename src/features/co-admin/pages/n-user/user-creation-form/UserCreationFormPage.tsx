@@ -21,7 +21,7 @@ const useScreenSize = () => {
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
-    
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -34,10 +34,11 @@ const UserCreationFormPage = () => {
   const { id } = useParams(); // Get the user ID from URL (if available)
   const isEditMode = !!id; // Boolean flag for edit mode
   const { setTitle } = usePageTitle();
+
   useEffect(() => {
     setTitle(isEditMode ? "Edit User" : "Create User");
   }, [setTitle]);
-  const { mutate: createUser, isLoading } = useCreateUser(); // Using the create user hook
+  const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" }); // Using the create user hook
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -54,13 +55,22 @@ const UserCreationFormPage = () => {
       },
     },
   });
-  
 
-  const { handleSubmit, control, reset,watch,setValue, formState: { errors, isSubmitting } } = methods;
+  const {
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = methods;
 
-  const handleCheckboxChange = (key: "card" | "remittance" | "both", checked: boolean) => {
+  const handleCheckboxChange = (
+    key: "card" | "remittance" | "both",
+    checked: boolean
+  ) => {
     const currentValues = watch("productType"); // Get the latest state before updating
-  
+
     if (key === "both") {
       // If "Both" is checked, enable all checkboxes; otherwise, disable all
       const updatedValues = {
@@ -72,41 +82,47 @@ const UserCreationFormPage = () => {
     } else {
       // Update only the specific checkbox ("Card" or "Remittance")
       setValue(`productType.${key}`, checked, { shouldValidate: true });
-  
+
       // Get the updated values after modifying state
       const updatedValues = {
         ...currentValues,
         [key]: checked,
       };
-  
+
       // If both "Card" and "Remittance" are checked, check "Both"
       const isBothChecked = updatedValues.card && updatedValues.remittance;
       setValue("productType.both", isBothChecked, { shouldValidate: true });
-  
+
       // Force re-render using a temporary state change
-      setValue("productType", { ...updatedValues, both: isBothChecked }, { shouldValidate: true });
+      setValue(
+        "productType",
+        { ...updatedValues, both: isBothChecked },
+        { shouldValidate: true }
+      );
     }
   };
-  
-  
-  
+
   // Fetch user data if in edit mode
   useEffect(() => {
     if (isEditMode) {
       const fetchUserData = async () => {
         const userData = await new Promise<{ [key: string]: any }>((resolve) =>
-          setTimeout(() => resolve({
-            firstName: "John",
-            lastName: "Doe",
-            email: "john.doe@example.com",
-            productType: {
-              card: true,
-              remittance: false,
-              both: false,
-            },
-            password: "maker@123#",
-            confirmPassword: "maker@123#"
-          }), 1000)
+          setTimeout(
+            () =>
+              resolve({
+                firstName: "John",
+                lastName: "Doe",
+                email: "john.doe@example.com",
+                productType: {
+                  card: true,
+                  remittance: false,
+                  both: false,
+                },
+                password: "maker@123#",
+                confirmPassword: "maker@123#",
+              }),
+            1000
+          )
         );
 
         reset(userData); // Patch form values
@@ -137,9 +153,7 @@ const UserCreationFormPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="p-6 bg-white shadow-md rounded-lg max-w-full mx-auto"
       >
-        <h2 className="text-xl font-bold mb-4">
-          User
-        </h2>
+        <h2 className="text-xl font-bold mb-4">User</h2>
 
         <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
           <Spacer>
@@ -154,22 +168,27 @@ const UserCreationFormPage = () => {
             </FormFieldRow>
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
               <FieldWrapper>
-                {getController({ ...userFormConfig.fields.email, name: "email", control, errors })}
+                {getController({
+                  ...userFormConfig.fields.email,
+                  name: "email",
+                  control,
+                  errors,
+                })}
               </FieldWrapper>
               <FieldWrapper>
                 <small className="block text-xs font-semibold">
                   {userFormConfig.fields.productType.label}
                 </small>
                 <CheckboxWrapper className="flex space-x-4 items-center">
-                {getController({
-                  ...userFormConfig.fields.productType,
-                  name: "productType",
-                  control,
-                  errors,
-                  handleCheckboxChange,
-                  isMulti:true,
-                })}
-            </CheckboxWrapper>
+                  {getController({
+                    ...userFormConfig.fields.productType,
+                    name: "productType",
+                    control,
+                    errors,
+                    handleCheckboxChange,
+                    isMulti: true,
+                  })}
+                </CheckboxWrapper>
               </FieldWrapper>
             </FormFieldRow>
             <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
@@ -195,8 +214,8 @@ const UserCreationFormPage = () => {
                 ? "Updating..."
                 : "Submitting..."
               : isEditMode
-                ? "Update"
-                : "Submit"}
+              ? "Update"
+              : "Submit"}
           </button>
         </div>
       </form>
@@ -205,4 +224,3 @@ const UserCreationFormPage = () => {
 };
 
 export default UserCreationFormPage;
-
