@@ -2,7 +2,7 @@ enum FieldType {
   Text = "text",
   Email = "email",
   Password = "password",
-  Checkbox = "checkbox"
+  Checkbox = "checkbox",
 }
 
 interface FormField {
@@ -75,10 +75,9 @@ export const userFormConfig: UserFormConfig = {
       options: {
         card: { label: "Card", checked: true },
         remittance: { label: "Remittance", checked: false },
-        both: { label: "Both", checked: false }
+        both: { label: "Both", checked: false },
       },
-      isMulti:false
-    
-    }
-  }
+      isMulti: false,
+    },
+  },
 };

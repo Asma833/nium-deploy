@@ -1,100 +1,155 @@
-import { getEndpoint } from "@/core/constant/apis";
-import axios from "axios";
-import { toast } from 'sonner';
+import { getBaseUrl } from "@/core/constant/apis";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { store } from "@/store"; // Import from your existing store file
+import { logout, updateAccessToken } from "@/features/auth/store/authSlice"; // Import auth actions
 
-const API_URL = import.meta.env.VITE_ENV === 'production' 
-  ? import.meta.env.VITE_APP_API_URL_PROD 
-  : import.meta.env.VITE_APP_API_URL_DEV;
+interface RefreshTokenResponse {
+  data: {
+    accessToken: string;
+  };
+  message: string;
+}
 
+interface FailedRequest {
+  resolve: (token: string) => void;
+  reject: (error: any) => void;
+}
+
+// Create Axios instance
 const axiosInstance = axios.create({
-  baseURL: API_URL,
-  timeout: 50000, 
-  withCredentials: true,
+  baseURL: getBaseUrl() || "", // Add fallback to empty string
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
   },
 });
 
-// Add these interceptor IDs
-const requestInterceptorId = axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
+let isRefreshing = false;
+let failedQueue: FailedRequest[] = [];
+
+// Process the queue of failed requests
+const processQueue = (error: any, token: string | null) => {
+  failedQueue.forEach((request) => {
     if (token) {
+      request.resolve(token);
+    } else {
+      request.reject(error);
+    }
+  });
+  failedQueue = [];
+};
+
+// Add request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Get token from Redux store instead of cookies
+    const token = store.getState().auth.accessToken;
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error)
 );
 
-const responseInterceptorId = axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+// Add response interceptor
+axiosInstance.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
-    if (error.code === "ECONNABORTED") {
-      toast.error("Request timed out", {
-        description: "Please check your connection and try again"
-      });
-      return Promise.reject(new Error("Request timed out"));
-    }
-
+    // Handle 401 errors
     if (error.response?.status === 401 && !originalRequest._retry) {
+      console.log("🔄 Token expired, attempting to refresh...");
+
+      if (isRefreshing) {
+        console.log("🔄 Refresh already in progress, adding request to queue");
+        // Wait for the refresh process to complete
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            if (originalRequest.headers) {
+              originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            }
+            return axiosInstance(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
       originalRequest._retry = true;
-      
+      isRefreshing = true;
+
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        if (!refreshToken) {
-          throw new Error('No refresh token available');
+        // Get the current refresh token from Redux store
+        const currentRefreshToken = store.getState().auth.refreshToken;
+
+        if (!currentRefreshToken) {
+          console.error("❌ No refresh token available");
+          throw new Error("No refresh token available");
         }
 
-        // Use a new axios instance for refresh to avoid interceptor loop
-        const response = await axios.create().post(
-          `${API_URL}${getEndpoint('AUTH.REFRESH_TOKEN')}`,
-          { refreshToken },
-          {
-            withCredentials: true,
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }
+        console.log("🔄 Calling refresh token API...");
+        const refreshUrl = `${getBaseUrl()}/refresh/accessToken`;
+        console.log(`🔄 Refresh URL: ${refreshUrl}`);
+
+        // Refresh the token using GET request with query parameter
+        const response = await axios.get<RefreshTokenResponse>(refreshUrl, {
+          params: { refreshToken: currentRefreshToken },
+        });
+
+        const { accessToken } = response.data.data;
+        console.log("✅ Token refreshed successfully");
+
+        // Update Redux store with the new access token
+        store.dispatch(updateAccessToken(accessToken));
+
+        // Process the failed requests
+        processQueue(null, accessToken);
+        console.log(
+          `✅ Processed ${failedQueue.length} queued requests with new token`
         );
 
-        const { data } = response;
-
-        if (!data.accessToken || !data.refreshToken) {
-          throw new Error('Invalid token refresh response');
+        // Retry the original request with the new token
+        if (originalRequest.headers) {
+          originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         }
-
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-        
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Use window.location.replace instead of href for cleaner navigation
-        localStorage.clear();
-        window.location.replace('/login');
-        return Promise.reject(refreshError);
-      }
-    }
+        console.error("❌ Token refresh failed:", refreshError);
+        processQueue(refreshError, null);
 
-    // Handle other errors
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message);
-    } else if (error.message) {
-      toast.error(error.message);
+        // Clear tokens on refresh failure by dispatching logout action
+        store.dispatch(logout());
+
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
 
     return Promise.reject(error);
   }
 );
 
-// Add cleanup function
-export const cleanupAxiosInterceptors = () => {
-  axiosInstance.interceptors.request.eject(requestInterceptorId);
-  axiosInstance.interceptors.response.eject(responseInterceptorId);
+// Helper function to test token refresh manually
+export const testTokenRefresh = async () => {
+  try {
+    console.log("🧪 Testing token refresh flow...");
+    // Create an intentional 401 request
+    await axiosInstance.get("/test-auth-endpoint", {
+      headers: {
+        Authorization: "Bearer invalid_token_to_force_401",
+      },
+    });
+  } catch (error) {
+    console.log("🧪 Test complete - check console logs for refresh flow");
+    return {
+      refreshAttempted: true,
+      error: error,
+    };
+  }
 };
 
 export default axiosInstance;

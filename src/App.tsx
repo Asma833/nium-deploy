@@ -6,7 +6,6 @@ import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./providers/ThemeProvider";
-import { cleanupAxiosInterceptors } from './core/services/axios/axiosInstance';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from "./store";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
@@ -22,12 +21,6 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  useEffect(() => {
-    return () => {
-      // Cleanup axios interceptors on unmount
-      cleanupAxiosInterceptors();
-    };
-  }, []);
 
   return (
     <MUIProviders>

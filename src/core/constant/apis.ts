@@ -1,9 +1,9 @@
-/** API version prefix */
-// const version = '/version';
+export const getBaseUrl = () => {
+  return import.meta.env.VITE_ENV === "development"
+    ? import.meta.env.VITE_APP_API_URL_DEV
+    : import.meta.env.VITE_APP_API_URL_PROD;
+};
 
-/**
- * API Endpoints organized by domain
- */
 export const API = {
   AUTH: {
     LOGIN: `/users/login`,
@@ -39,11 +39,11 @@ export const API = {
     COMPLETED_TRANSACTIONS: {
       SEARCH_FILTER: `/checker/completed-transactions/search-filter`,
     },
-    UPDATE_INCIDENT:{
+    UPDATE_INCIDENT: {
       LIST: `/update-incident`,
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
-    }
+    },
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
