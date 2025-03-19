@@ -47,9 +47,9 @@ export const getUserTableColumns = (
         name: "Status",
         cell: (row:any) => (
           <div className="flex flex-col items-start">
-            <span className="text-sm font-medium">{row.is_active ? "Active" : "Inactive"}</span>
+            <span className="text-sm font-medium">{row?.is_active ? "Active" : "Inactive"}</span>
             <Switch
-              checked={row.is_active}
+              checked={row?.is_active}
               onCheckedChange={(checked) => handleStatusChange(row, checked)}
             />
           </div>

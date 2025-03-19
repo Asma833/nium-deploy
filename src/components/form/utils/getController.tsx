@@ -90,7 +90,7 @@ export const getController = (field: any) => {
 
   const commonProps = {
     onChange: (e: any) => {
-      console.log(`Field ${field.name} changed:`, e.target.value); // Debug log
+      console.log(`Field ${field.name} changed:`, e.target.value); 
     },
   };
 
@@ -157,6 +157,7 @@ export const getController = (field: any) => {
           label={field.label}
           baseStyle={baseStyle}
           className={baseGeneralFieldStyle}
+          placeholder={field.placeholder}
         />
       );
     case "date":

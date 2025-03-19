@@ -13,7 +13,6 @@ import { useGetApi } from "@/features/co-admin/hooks/useGetApi";
 import { User } from "@/features/auth/types/auth.types";
 import { updateStatusAPI } from "@/features/co-admin/hooks/useUpdateStatus";
 
-
 const NuserCreationTable = () => {
   const navigate = useNavigate();
   const { setTitle } = usePageTitle();
@@ -21,7 +20,12 @@ const NuserCreationTable = () => {
     setTitle("N-Users");
   }, [setTitle]);
   const [tableData, setTableData] = useState(initialData);
-  const { data: users, loading, error, fetchData } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
+  const {
+    data: users,
+    loading,
+    error,
+    fetchData,
+  } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
   // const handleStatusChange = (rowIndex: number, checked: boolean,row) => {
   //   setTableData((prevData) => {
   //     const newData = prevData.map((row, idx) =>
@@ -31,61 +35,60 @@ const NuserCreationTable = () => {
   //     return [...newData]; // Return a new array to trigger re-render
   //   });
   // };
-  
+
   const { mutate: updateStatus } = updateStatusAPI();
 
-
-
   const handleStatusChange = async (rowData: any, checked: boolean) => {
-  //  console.log("Row Data:", rowData); //Debugging log to check received data
-  
+    //  console.log("Row Data:", rowData); //Debugging log to check received data
+
     if (!rowData || !rowData.hashed_key) {
-     // console.error("Error: Row data is missing hashed_key", rowData);
+      // console.error("Error: Row data is missing hashed_key", rowData);
       return;
     }
-  
+
     const updatedRow = { ...rowData, is_active: checked };
-  
-   // console.log("Updated Row Data:", updatedRow); // Debugging log
-  
+
+    // console.log("Updated Row Data:", updatedRow); // Debugging log
+
     // Optimistically update UI
     setTableData((prevData) =>
-      prevData.map((row) => (row.hashed_key === rowData.hashed_key ? updatedRow : row))
+      prevData.map((row) =>
+        row.hashed_key === rowData.hashed_key ? updatedRow : row
+      )
     );
-  
+
     try {
       await updateStatus({
         hashed_key: updatedRow.hashed_key, //  Ensure hashed_key is being sent
         is_active: updatedRow.is_active,
       });
-      await fetchData()
+      await fetchData();
     } catch (error: any) {
       //console.error("Error updating status:", error);
-  
+
       // Revert UI if API fails
       setTableData((prevData) =>
         prevData.map((row) =>
-          row.hashed_key === rowData.hashed_key ? { ...row, is_active: !checked } : row
+          row.hashed_key === rowData.hashed_key
+            ? { ...row, is_active: !checked }
+            : row
         )
       );
-  
-      
     }
   };
-  
-  
-     const isTableFilterDynamic = false;
-     const isPaginationDynamic = false;
-   
-     // Use the dynamic pagination hook
-     const pagination = useDynamicPagination({
-       endpoint: API.NUSERS.PARTNERS_LIST,
-       initialPageSize: 10,
-       initialData,
-       dataPath: "transactions",
-       totalRecordsPath: "totalRecords",
-     });
-  
+
+  const isTableFilterDynamic = false;
+  const isPaginationDynamic = false;
+
+  // Use the dynamic pagination hook
+  const pagination = useDynamicPagination({
+    endpoint: API.NUSERS.PARTNERS_LIST,
+    initialPageSize: 10,
+    initialData,
+    dataPath: "transactions",
+    totalRecordsPath: "totalRecords",
+  });
+
   const handleCreateUser = () => {
     navigate("create-user");
   };
