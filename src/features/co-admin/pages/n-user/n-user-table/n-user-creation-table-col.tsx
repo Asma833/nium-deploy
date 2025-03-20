@@ -21,11 +21,11 @@ export const getUserTableColumns = (
   handleNavigate: HandleNavigate
 ): TableColumn[] => {
   return [
-    {
-      key: "first_name",
-      id: "first_name",
-      name: "User Name",
-    },
+    // {
+    //   key: "first_name",
+    //   id: "first_name",
+    //   name: "User Name",
+    // },
     {
       key: "email",
       id: "email",
