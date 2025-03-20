@@ -9,15 +9,14 @@ import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/checker/hooks/useGetApi";
+import axios from "axios";
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  
   useEffect(() => {
     setTitle("Assign");
   }, [setTitle]);
@@ -31,9 +30,6 @@ const AssignCreationTable = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
-
-  // const { purpose_type, transaction_type, document_type } = useGetConfig();
-  // console.log('purpose_type, transaction_type, document_type:', purpose_type, transaction_type, document_type)
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({

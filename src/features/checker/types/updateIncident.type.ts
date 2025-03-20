@@ -1,25 +1,35 @@
 export interface UpdateIncidentRequest {
-    fields: {
-      passportNumber: string;
-      cardNumber: string;
-      departureDate: string;
-      incidentNumber: string;
-      buySell: string;
-      transactionType: string;
-      eonInvoiceNumber: string;
-      comment?: string;
-      status: {
-        approve: boolean;
-        reject: boolean;
-      };
+  fields: {
+    // Original fields
+    passportNumber?: string;
+    cardNumber?: string;
+    departureDate?: string;
+    incidentNumber?: string;
+    buySell?: string;
+    transactionType?: string;
+    eonInvoiceNumber?: string;
+    comment?: string;
+    status?: {
+      approve?: boolean;
+      reject?: boolean;
     };
+    
+    // New fields based on the form we're using
+    niumId?: string;
+    cardNo?: string;
+    customerPan?: string;
+    customerName?: string;
+    bmfOrderRef?: string;
+    purpose?: string;
+    niumInvoiceNo?: string;
   }
-  
-  export interface UpdateIncidentResponse {
-    success: boolean;
-    message: string;
-  }
-  export interface UpdateGetRequestData {
-    checkerId: string;
-    transaction_type: string;
+}
+
+export interface UpdateIncidentResponse {
+  success: boolean;
+  message: string;
+}
+export interface UpdateGetRequestData {
+  checkerId: string;
+  transaction_type: string;
 }
