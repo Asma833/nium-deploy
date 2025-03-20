@@ -16,6 +16,7 @@ import { useTableSorting } from "@/components/common/dynamic-table/hooks/useTabl
 import { useTablePagination } from "@/components/common/dynamic-table/hooks/useTablePagination";
 import { Column, DynamicTableProps } from "../common-components.types";
 import { SetFilters } from "../../filter/filter.types";
+import { Button } from "@/components/ui/button";
 
 const formatDate = (date: Date | string | undefined) => {
   if (!date) return "";
@@ -72,6 +73,7 @@ export function DynamicTable<T extends Record<string, any>>({
   onRowClick,
   paginationMode,
   filter,
+  refreshAction,
   loading: externalLoading,
   renderComponents,
   onPageChange,
@@ -188,12 +190,31 @@ export function DynamicTable<T extends Record<string, any>>({
 
   return (
     <div className="space-y-4 dynamic-table-container w-full">
+      {refreshAction && refreshAction.isRefreshButtonVisible && (
+        <div className="flex items-center justify-between">
+          <Button onClick={refreshAction.onRefresh} variant="outline" size={"sm"}>
+            {refreshAction.refreshButtonText
+              ? refreshAction.refreshButtonText
+              : "Refresh Data"}
+          </Button>
+
+          <div>
+            {refreshAction.isLoading && (
+              <span className="text-blue-500">Loading data...</span>
+            )}
+            {refreshAction.hasError && (
+              <span className="text-red-500">Error loading data</span>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="flex sm:items-center justify-between w-full md:flex-row flex-col">
         {renderLeftSideActions && (
           <div className="flex-1 py-2">{renderLeftSideActions()}</div>
         )}
         {(filter || renderComponents) && (
-          <div className="w-full sm:flex-1 items-center sm:px-4 sm:py-2">
+          <div className="w-full sm:flex-1 items-center sm:py-2">
             {filter?.filterOption && (
               <div className="w-full sm:flex-1">
                 <TableSearchFilter
@@ -212,7 +233,12 @@ export function DynamicTable<T extends Record<string, any>>({
         )}
       </div>
 
-      <div className={cn("overflow-x-auto w-full", tableWrapperClass)}>
+      <div
+        className={cn(
+          "overflow-x-auto w-full bg-background",
+          tableWrapperClass
+        )}
+      >
         <div className="border rounded-lg shadow-sm overflow-clip">
           <Table className="w-full overflow-auto">
             <TableHeader className="bg-secondary">

@@ -1,113 +1,106 @@
-
-
-
-
 enum FieldType {
-    Text = "text",
-    Email = "email",
-    Password = "password",
-    Checkbox = "checkbox"
-  }
-  
-interface FormField {
-    label: string;
-    type: FieldType;
-    required: boolean;
-    placeholder: string;
-  }
-interface CheckboxField extends FormField {
-    type: FieldType.Checkbox;
-    options: Record<string, { label: string; checked: boolean }>;
-  }
-type Field = FormField | CheckboxField;
-
-type Fields = {
-  passportNumber: Field;
-  cardNumber: Field;
-  departureDate: Field;
-  incidentNumber: Field;
-  buySell: Field;
-  transactionType: Field;
-  eonInvoiceNumber: Field;
-  comment: Field;
-  status: CheckboxField;
-};
-
-interface formConfig {
-  sectionTitle: string;
-  fields: Fields;
-  tableData: { currency: string; rate: number; amount: number; }[];
+  Text = "text",
+  TextArea = "textarea",
+  Email = "email",
+  Password = "password",
+  Checkbox = "checkbox",
 }
 
-export const updateFormIncidentConfig:formConfig = {
-sectionTitle: "Transaction Form",
-  fields: {
-    passportNumber: {
-      label: "Passport Number",
+export const sectionTitle = "Transaction Form";
+
+export const updateFormIncidentConfig = {
+  basicDetails: {
+    niumId: {
+      label: "Nium Id",
+      name: "nium_order_id",
       type: FieldType.Text,
       required: true,
-      placeholder: "Enter Passport Number",
+      placeholder: "Enter Nium ID",
     },
-    
-    departureDate: {
-      label: "Departure Date",
-      type: FieldType.Text,
-      required: true,
-      placeholder: "Enter Departure Date",
-    },
-    
-    buySell: {
-      label: "Buy/Sell",
-      type: FieldType.Text,
-      required: true,
-      placeholder: "Enter Buy/Sell",
-    },
-    cardNumber: {
+    cardNo: {
       label: "Card No.",
+      name: "incidentform.cardNo",
       type: FieldType.Text,
       required: true,
       placeholder: "Enter Card Number",
     },
-    incidentNumber: {
-      label: "Incident Number",
+    customerPan: {
+      label: "Customer PAN",
+      name: "customer_pan",
       type: FieldType.Text,
       required: true,
-      placeholder: "Enter Incident Number",
+      placeholder: "Enter Customer PAN",
+    },
+    customerName: {
+      label: "Customer Name",
+      name: "customer_name",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter Customer Name",
+    },
+    bmfOrderRef: {
+      label: "BMF Order Ref",
+      name: "partner_order_id",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter BMF Order Ref",
     },
     transactionType: {
       label: "Transaction Type",
+      name: "transaction_type",
       type: FieldType.Text,
       required: true,
       placeholder: "Enter Transaction Type",
     },
-    
-    
+    purpose: {
+      label: "Purpose",
+      name: "purpose_type",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter Purpose",
+    },
+
+  },
+  buySellType: {
+    buySell: {
+      label: "Buy/Sell",
+      name: "incidentform.buySell",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter Transaction Type",
+    },
+  },
+  approveReject: {
     status: {
       label: "Status",
+      name: "incidentform.status",
       type: FieldType.Checkbox,
       required: true,
       placeholder: "",
       options: {
-        approve: { label: "Approve" ,checked:true },
-        reject: { label: "Reject",checked:false  }
-      }
+        approve: { label: "Approve", checked: true },
+        reject: { label: "Reject", checked: false },
+      },
     },
-    eonInvoiceNumber: {
-      label: "EON Invoice Number",
-      type: FieldType.Text,
+  },
+  conditionalFields: {
+    comments: {
+      label: "Comments",
+      name: "incidentform.comments",
+      type: FieldType.TextArea,
       required: true,
-      placeholder: "Enter EON Invoice Number",
+      placeholder: "Enter Comments",
     },
-    comment: {
-      label: "Comment",
-      type: FieldType.Text,
-      required: false,
-      placeholder: "Enter Comment",
+    niumInvoiceNo: {
+      label: "Invoice Number",
+      name: "incidentform.niumInvoiceNo",
+      type: FieldType.TextArea,
+      required: true,
+      placeholder: "Enter Invoice Number",
     },
   },
   tableData: [
     { currency: "USD/INR", rate: 87.84, amount: 500 },
-    { currency: "EUR/INR", rate: 95.50, amount: 300 },
-  ]
+    { currency: "EUR/INR", rate: 95.5, amount: 300 },
+  ],
 };
-

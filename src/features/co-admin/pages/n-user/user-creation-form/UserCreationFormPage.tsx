@@ -13,7 +13,7 @@ import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper
 import { useCreateUser } from "../../../hooks/useCreateUser";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useParams, useLocation } from "react-router-dom";
-import { updateAPI } from "@/features/co-admin/hooks/useUserUpdate";
+import { useUpdateAPI } from "@/features/co-admin/hooks/useUserUpdate";
 import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
 import { UserFormData } from "@/features/co-admin/types/user.type"
 const useScreenSize = () => {
@@ -41,6 +41,7 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     setTitle(isEditMode ? "Edit User" : "Create User");
   }, [setTitle]);
+  
   const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" });
 
   const methods = useForm({
@@ -68,7 +69,7 @@ const UserCreationFormPage = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-  const { mutate: updateUser } = updateAPI();
+  const { mutate: updateUser } = useUpdateAPI();
   const handleCheckboxChange = (
     key: "card" | "remittance" | "both",
     checked: boolean
@@ -131,7 +132,7 @@ const UserCreationFormPage = () => {
     if (isEditMode) {
       await updateUser({ data: formdata, productOptions, id });
     } else {
-      console.log(formdata,"formdata")
+      //console.log(formdata,"formdata")
       createUser({
         ...formdata,
         hashed_key:"",

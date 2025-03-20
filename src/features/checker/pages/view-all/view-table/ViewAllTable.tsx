@@ -1,5 +1,4 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { viewAllTableData as initialData } from "./view-all-table-value";
 import { useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
@@ -8,107 +7,141 @@ import { API } from "@/core/constant/apis";
 import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
+// import { useCurrentUser } from "@/utils/getUserFromRedux";
 
 const ViewAllTable = () => {
-   const { setTitle } = usePageTitle();
-      useEffect(() => {
-        setTitle("View All");
-      }, [setTitle]);
-      
+  const { setTitle } = usePageTitle();
+
+  useEffect(() => {
+    setTitle("View All");
+  }, [setTitle]);
+
+  const {
+    data: checkerOrdersData,
+    loading: checkerOrdersLoading,
+    error: checkerOrdersError,
+    fetchData: refreshData,
+  } = useGetCheckerOrders<{
+    message: string;
+    totalOrders: number;
+    filterApplied: string;
+    orders: any[];
+  }>("all", true);
+
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
-  // Use the dynamic pagination hook
+  // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
     initialPageSize: 10,
-    initialData,
-    dataPath: "transactions", // Adjust based on your API response structure
+    dataPath: "transactions",
     totalRecordsPath: "totalRecords",
   });
 
   const filterApi = useFilterApi({
-      endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
-      initialData,
-      // base query params if needed
-      baseQueryParams: {
-        // For example: clientId: '123'
-      },
-    });
-  
+    endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
+    baseQueryParams: {},
+  });
+
   const columns = getTransactionTableColumns();
 
-  const handleExportToCSV = () => {
-      const dataToExport = isPaginationDynamic
-        ? pagination.data
-        : isTableFilterDynamic && filterApi.data.length > 0
-        ? filterApi.data
-        : initialData;
-  
-      const exportColumns = columns.map((col) => ({
-        accessorKey: col.id,
-        header: col.name,
-      }));
-  
-      exportToCSV(dataToExport, exportColumns, "view-all");
+  // Transform checker orders data to match the table format
+  const transformOrderForTable = (order: any) => {
+    return {
+      niumId: order.nium_order_id || "N/A",
+      orderDate: new Date(order.createdAt).toLocaleString(),
+      agentId: order.partner_id || "N/A",
+      customerPan: order.customer_pan || "N/A",
+      transactionType: order.transaction_type || "N/A",
+      purposeType: order.purpose_type || "N/A",
+      esignStatus: order.e_sign_status || "N/A",
+      esignStatusCompletionDate: order.e_sign_customer_completion_date
+        ? new Date(order.e_sign_customer_completion_date).toLocaleString()
+        : "N/A",
+      vkycStatus: order.v_kyc_status || "N/A",
+      vkycCompletionDate: order.v_kyc_customer_completion_date
+        ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
+        : "N/A",
+      incidentStatus: order.incident_status ? "Yes" : "No",
+      incidentCompletionDate: order.incident_completion_date
+        ? new Date(order.incident_completion_date).toLocaleString()
+        : "N/A",
     };
-  
-  // Define transaction type options
-    const transactionTypeOptions = [
-      { label: "All Types", value: "all" },
-      { label: "Transfer", value: "transfer" },
-      { label: "Payment", value: "payment" },
-      { label: "Deposit", value: "deposit" },
-      { label: "Withdrawal", value: "withdrawal" },
-    ];
-  
-    // Define status options
-    const transactionStatusOptions = [
-      { label: "All Status", value: "all" },
-      { label: "Pending", value: "pending" },
-      { label: "Completed", value: "completed" },
-      { label: "Failed", value: "failed" },
-      { label: "Processing", value: "processing" },
-    ];
-  
-    // Load initial data when the component mounts
-    useEffect(() => {
-      if (isPaginationDynamic) {
-        pagination.loadInitialData();
-      }
-    }, [isPaginationDynamic, pagination]);
+  };
 
+  // Get the appropriate data source based on loading state and availability
+  const getTableData = () => {
+    if (checkerOrdersData && checkerOrdersData.orders) {
+      return checkerOrdersData.orders.map(transformOrderForTable);
+    }
+
+    // Fallback to other data sources
+    if (isPaginationDynamic) {
+      return pagination.data;
+    } else if (isTableFilterDynamic && filterApi.data.length > 0) {
+      return filterApi.data;
+    }
+
+    return [];
+  };
+
+  const handleExportToCSV = () => {
+    const dataToExport = getTableData();
+
+    const exportColumns = columns.map((col) => ({
+      accessorKey: col.id,
+      header: col.name,
+    }));
+
+    exportToCSV(dataToExport, exportColumns, "view-all");
+  };
+
+  // Define transaction type options
+  const transactionTypeOptions = [
+    { label: "CARD LOAD", value: "all" },
+    { label: "CARD RELOAD", value: "transfer" },
+    { label: "CARD ENCASHMENT", value: "payment" },
+    { label: "REMITTANCE", value: "deposit" },
+  ];
+
+  // Define status options
+  const purposeTypeOptions = [
+    { label: "BTQ", value: "btq" },
+    { label: "BT", value: "bt" },
+  ];
+
+  // Check for loading and error states
+  const isLoading =
+    checkerOrdersLoading || filterApi.loading || pagination.loading;
+  const hasError = checkerOrdersError || filterApi.error || pagination.error;
+
+  // Get total records
+  const totalRecords =
+    checkerOrdersData?.totalOrders || pagination.totalRecords || 0;
 
   return (
     <div className="flex flex-col">
-      <div className="mb-4 flex items-center">
-        {(filterApi.loading || pagination.loading) && (
-          <span className="text-blue-500">Loading data...</span>
-        )}
-        {(filterApi.error || pagination.error) && (
-          <span className="text-red-500">Error loading data</span>
-        )}
-      </div>
       <DynamicTable
         columns={columns}
-        data={
-          isPaginationDynamic
-            ? pagination.data
-            : isTableFilterDynamic && filterApi.data.length > 0
-            ? filterApi.data
-            : initialData
-        }
-        tableWrapperClass="bg-background p-5 rounded-md"
+        data={getTableData()}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
-        loading={filterApi.loading || pagination.loading}
+        loading={isLoading}
+        refreshAction={{
+          isRefreshButtonVisible: true,
+          onRefresh: refreshData,
+          isLoading: isLoading,
+          hasError: hasError,
+        }}
         paginationMode={isPaginationDynamic ? "dynamic" : "static"}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
             : async (_page: number, _pageSize: number) => []
         }
-        totalRecords={pagination.totalRecords}
+        totalRecords={totalRecords}
         filter={{
           filterOption: true,
           mode: isTableFilterDynamic ? "dynamic" : "static",
@@ -121,15 +154,16 @@ const ViewAllTable = () => {
             applyAction: true,
             resetAction: true,
             status: {
-              label: "Status",
-              placeholder: "Select status",
-              options: transactionStatusOptions,
+              id: "purposeType",
+              label: "Purpose Type",
+              placeholder: "Purpose Type",
+              options: purposeTypeOptions,
             },
             selects: [
               {
                 id: "transactionType",
-                label: "Type",
-                placeholder: "Select type",
+                label: "Transaction Type",
+                placeholder: "Transaction Type",
                 options: transactionTypeOptions,
               },
             ],

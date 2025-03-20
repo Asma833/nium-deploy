@@ -36,6 +36,8 @@ interface UserApiPayload {
   created_by?: string;
   updated_by?: string;
   product_ids: string[];
+  branch_id:string;
+  bank_account_id:string;
 }
 
 export const useCreateUser = ({role}: {role: string}) => {
@@ -59,10 +61,12 @@ export const useCreateUser = ({role}: {role: string}) => {
 
     // Get role ID (default to empty string if not available)
     const role_id = getRoleId(role) || "";
+    console.log('role_id:', role_id)
     const hashed_key = formData.role ? getHashedRoleId(formData.role) : undefined;
     
     return {
-      role_id,
+      // role_id,
+      role_id:"cdadd7a8-a04a-40ba-a5b3-2b1bf6d788c8",
       email: formData.email,
       first_name: formData.firstName,
       last_name: formData.lastName,
@@ -70,14 +74,16 @@ export const useCreateUser = ({role}: {role: string}) => {
       is_active: true,
       hashed_key:hashed_key || '',
       business_type: "large_enterprise",
-      product_ids
+      product_ids : ["550e8400-e29b-41d4-a716-446655440003"],
+      branch_id: "aae5704d-f397-4cfb-8994-bb0823f50cd2",
+      bank_account_id: "6d3bbdeb-6330-4e09-b661-847065296c9b"
     };
   };
 
   const { mutate, isPending, error } = useMutation<void, Error, UserCreationRequest>({
     mutationFn: async (userData: UserCreationRequest) => {
       const apiPayload = mapFormDataToApiPayload(userData);
-      console.log(apiPayload,"apiPayload")
+     // console.log(apiPayload,"apiPayload")
       await userApi.userCreation(apiPayload);
     },
     onSuccess: () => {

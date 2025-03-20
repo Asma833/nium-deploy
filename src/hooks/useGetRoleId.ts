@@ -1,5 +1,6 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useState, useEffect } from 'react';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 interface Role {
   id: string;
@@ -20,6 +21,7 @@ export const useGetRoleId = () => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const { getUserHashedKey } = useCurrentUser();
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -48,9 +50,15 @@ export const useGetRoleId = () => {
     return role?.hashed_key;
   };
 
+  // Function to get the logged-in user's hashed key
+  const getCurrentUserHashedKey = (): string | undefined => {
+    return getUserHashedKey();
+  };
+
   return {
     getRoleId,
     getHashedRoleId,
+    getCurrentUserHashedKey,
     roles,
     loading,
     error,

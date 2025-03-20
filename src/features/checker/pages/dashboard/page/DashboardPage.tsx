@@ -11,7 +11,7 @@ const DashboardPage = () => {
   }, [setTitle]);
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-3">
       <p className="font-bold">Overview</p>
       <p className="mb-4 mt-0">
         Monitor your transaction statuses and verification processes

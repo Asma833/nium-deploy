@@ -1,29 +1,32 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { TextField } from "@mui/material";
-// import { ErrorMessage } from "../error-message";
 import { cn } from "@/utils/cn";
 
-interface MaterialTextProps {
+interface MaterialTextAreaProps {
   name: string;
   label: string;
   baseStyle?: any;
   className?: string;
-  uppercase?: boolean;
+  rows?: number;
+  maxRows?: number;
+  minRows?: number;
+  placeholder?: string;
   disabled?: boolean;
   required?: boolean;
-  forcedValue?: string;
 }
 
-export const MaterialText = ({
+export const MaterialTextArea = ({
   name,
   label,
   baseStyle,
   className,
-  uppercase,
+  rows = 4,
+  maxRows,
+  minRows,
+  placeholder,
   disabled = false,
-  required = false,
-  forcedValue,
-}: MaterialTextProps) => {
+  required
+}: MaterialTextAreaProps) => {
   const { control } = useFormContext();
 
   return (
@@ -35,19 +38,18 @@ export const MaterialText = ({
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            value={(forcedValue ? forcedValue : field.value) || ""}
+            value={field.value || ""}
             label={label}
             error={!!error}
             helperText={error?.message}
             disabled={disabled}
+            multiline
             required={required}
-            onChange={(e) => {
-              const value = uppercase
-                ? e.target.value.toUpperCase()
-                : e.target.value;
-              field.onChange(value);
-            }}
-            sx={baseStyle}
+            rows={rows}
+            {...(maxRows !== undefined && { maxRows })}
+            {...(minRows !== undefined && { minRows })}
+            {...(placeholder !== undefined && { placeholder })}
+            {...(baseStyle && { sx: baseStyle })}
             className={cn(className)}
           />
         )}

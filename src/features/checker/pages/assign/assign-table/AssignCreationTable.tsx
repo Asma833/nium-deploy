@@ -8,25 +8,36 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { API } from "@/core/constant/apis";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useGetApi } from "@/features/checker/hooks/useGetApi";
+import axiosInstance from "@/core/services/axios/axiosInstance";
+import { useCurrentUser } from "@/utils/getUserFromRedux";
+// import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
-        useEffect(() => {
-          setTitle("Assign");
-        }, [setTitle]);
-  const [tableData, setTableData] = useState(
-    // Add isSelected property to all rows initialized as false
-    initialData.map((item) => ({ ...item, isSelected: false }))
-  );
+  const { getUserHashedKey } = useCurrentUser();
+  const currentUserHashedKey = getUserHashedKey();
   
+  useEffect(() => {
+    setTitle("Assign");
+  }, [setTitle]);
+  const {
+    data: assignList,
+    loading,
+    error,
+    fetchData,
+  } = useGetApi<any>("CHECKER.ASSIGN.LIST");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
+  // const { purpose_type, transaction_type, document_type } = useGetConfig();
+  // console.log('purpose_type, transaction_type, document_type:', purpose_type, transaction_type, document_type)
+
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    endpoint: API.CHECKER.ASSIGN.SEARCH_FILTER,
+    endpoint: API.CHECKER.ASSIGN.LIST,
     initialPageSize: 10,
     initialData,
     dataPath: "transactions",
@@ -35,7 +46,7 @@ const AssignCreationTable = () => {
 
   // Using the filter API hook
   const filterApi = useFilterApi({
-    endpoint: API.CHECKER.ASSIGN.SEARCH_FILTER,
+    endpoint: API.CHECKER.ASSIGN.LIST,
     initialData,
     // base query params if needed
     baseQueryParams: {
@@ -44,13 +55,6 @@ const AssignCreationTable = () => {
   });
 
   const handleSelectionChange = (rowId: string, checked: boolean) => {
-    // Update the table data to reflect the selection
-    setTableData((prevData) =>
-      prevData.map((row) =>
-        row.niumId === rowId ? { ...row, isSelected: checked } : row
-      )
-    );
-
     // Update the selected rows array
     setSelectedRows((prev) => {
       if (checked) {
@@ -69,20 +73,26 @@ const AssignCreationTable = () => {
 
     setIsSubmitting(true);
     try {
-      // Mock API call - replace with actual API endpoint in production
-      // const response = await axios.post(API.CHECKER.ASSIGN.TAKE_REQUEST, {
-      //   transactionIds: selectedRows,
-      // });
+      const response = await axiosInstance.post(
+        API.CHECKER.ASSIGN.TAKE_REQUEST,
+        {
+          orderIds: selectedRows,
+          checkerId: currentUserHashedKey,
+        }
+      );
 
       // Handle successful response
-      toast.success(
-        `Successfully assigned ${selectedRows.length} transaction(s)`
-      );
+      if (response) {
+        toast.success(
+          `Successfully assigned ${selectedRows.length} transaction(s)`
+        );
+        fetchData();
+      }
 
       // Clear selections after successful submission
-      setTableData((prevData) =>
-        prevData.map((row) => ({ ...row, isSelected: false }))
-      );
+      // setTableData((prevData) =>
+      //   prevData.map((row) => ({ ...row, isSelected: false }))
+      // );
       setSelectedRows([]);
 
       // Optionally, refetch the data to get the latest state
@@ -97,20 +107,20 @@ const AssignCreationTable = () => {
 
   const columns = getAssignCreationColumns(handleSelectionChange);
 
-  // Load initial data when the component mounts
+  //Load initial data when the component mounts
   useEffect(() => {
     if (isPaginationDynamic) {
       pagination.loadInitialData();
     }
-  }, [isPaginationDynamic, pagination]);
+  }, [fetchData, isPaginationDynamic, pagination]);
 
   return (
     <div className="flex flex-col">
       <div className="mb-4 flex items-center">
-        {(filterApi.loading || pagination.loading) && (
+        {(filterApi.loading || pagination.loading || loading) && (
           <span className="text-blue-500">Loading data...</span>
         )}
-        {(filterApi.error || pagination.error) && (
+        {(filterApi.error || pagination.error || error) && (
           <span className="text-red-500">Error loading data</span>
         )}
       </div>
@@ -119,13 +129,13 @@ const AssignCreationTable = () => {
         columns={columns}
         data={
           isPaginationDynamic
-            ? pagination.data
-            : isTableFilterDynamic && filterApi.data.length > 0
-            ? filterApi.data
-            : tableData
+            ? pagination.data ?? []
+            : isTableFilterDynamic
+            ? filterApi.data ?? []
+            : assignList ?? []
         }
         tableWrapperClass="bg-background p-5 rounded-md"
-        defaultSortColumn="niumId"
+        defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={filterApi.loading || pagination.loading || isSubmitting}
         paginationMode={isPaginationDynamic ? "dynamic" : "static"}

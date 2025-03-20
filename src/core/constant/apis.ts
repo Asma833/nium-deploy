@@ -27,11 +27,14 @@ export const API = {
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
+    CHECKER_ORDERS: `/orders/get-checker-orders`,
+    UPDATE_ORDER_DETAILS: `/orders/update-order-details`,
   },
   CHECKER: {
     ASSIGN: {
-      TAKE_REQUEST: `/checker/assign/take-request`,
-      SEARCH_FILTER: `/checker/assign/search-filter`,
+      LIST:`/orders`,
+      TAKE_REQUEST: `/orders/update-checker`,
+      SEARCH_FILTER: ``,
     },
     VIEW_ALL: {
       SEARCH_FILTER: `/checker/view-all/search-filter`,
@@ -43,6 +46,7 @@ export const API = {
       LIST: `/update-incident`,
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
+      CHECKER_ORDER:`/orders/get-checker-orders`
     },
   },
   FEATURES: {
@@ -54,6 +58,11 @@ export const API = {
     STATUS_UPDATE:`/partners`,
     UPDATE:`/partners`,
     PRODUCTS:`/products`
+  },
+  CONFIG: {
+    GET_CONFIG: `/config`,
+    GET_PURPOSE_TYPES: `/config?type=purpose_type`,
+    GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
   },
 } as const;
 

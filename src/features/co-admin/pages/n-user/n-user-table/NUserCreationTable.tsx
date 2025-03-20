@@ -20,6 +20,7 @@ const NuserCreationTable = () => {
     setTitle("N-Users");
   }, [setTitle]);
   const [tableData, setTableData] = useState(initialData);
+  
   const { data: users, loading, error, fetchData } = useGetApi<User[]>("NUSERS.PARTNERS_LIST");
   
   const { mutate: updateStatus } = updateStatusAPI();

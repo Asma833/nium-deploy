@@ -1,8 +1,8 @@
 import { Link as LinkIcon , X } from 'lucide-react';
 export const getTransactionTableColumns = (openModal: (value: string) => void) => [
     {
-      key: "niumId",
-      id: "niumId",
+      key: "nium_order_id",
+      id: "nium_order_id",
       name: "Nium ID",
       cell: (value: string) => (
         <span
@@ -14,68 +14,68 @@ export const getTransactionTableColumns = (openModal: (value: string) => void) =
       ),
     },
     {
-      key: "bmfId",
-      id: "bmfId",
+      key: "partner_order_id",
+      id: "partner_order_id",
       name: "BMF ID",
     },
     {
-      key: "orderDate",
-      id: "orderDate",
+      key: "createdAt",
+      id: "createdAt",
       name: "Order Date",
     },
     {
-      key: "customerPan",
-      id: "customerPan",
+      key: "customer_pan",
+      id: "customer_pan",
       name: "Customer PAN",
     },
     {
-      key: "transactionType",
-      id: "transactionType",
+      key: "transaction_type",
+      id: "transaction_type",
       name: "Transaction Type",
     },
+    // {
+    //   key: "fxCurrency",
+    //   id: "fxCurrency",
+    //   name: "FX Currency",
+    // },
+    // {
+    //   key: "fxValue",
+    //   id: "fxValue",
+    //   name: "FX Value",
+    // },
+    // {
+    //   key: "fxRate",
+    //   id: "fxRate",
+    //   name: "FX Rate",
+    // },
+    // {
+    //   key: "inrRate",
+    //   id: "inrRate",
+    //   name: "INR Rate",
+    // },
     {
-      key: "fxCurrency",
-      id: "fxCurrency",
-      name: "FX Currency",
-    },
-    {
-      key: "fxValue",
-      id: "fxValue",
-      name: "FX Value",
-    },
-    {
-      key: "fxRate",
-      id: "fxRate",
-      name: "FX Rate",
-    },
-    {
-      key: "inrRate",
-      id: "inrRate",
-      name: "INR Rate",
-    },
-    {
-      key: "purposeType",
-      id: "purposeType",
+      key: "purpose_type",
+      id: "purpose_type",
       name: "Purpose Type",
     },
     {
-      key: "esignStatus",
-      id: "esignStatus",
+      key: "e_sign_status",
+      id: "e_sign_status",
       name: "E-Sign Status",
     },
     {
-      key: "vkycStatus",
-      id: "vkycStatus",
+      key: "v_kyc_status",
+      id: "v_kyc_status",
       name: "VKYC Status",
     },
     {
-      key: "incidentStatus",
-      id: "incidentStatus",
+      key: "incident_status",
+      id: "incident_status",
       name: "Incident Status",
     },
     {
-      key: "documentLink",
-      id: "documentLink",
+      key: "merged_document",
+      id: "merged_document",
       name: "Document Link",
       cell: (value: string) => (
         <a href={value}>

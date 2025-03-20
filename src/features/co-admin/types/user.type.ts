@@ -7,6 +7,9 @@ export interface UserCreationRequest {
   email: string;
   password: string;
   product_ids: string[]; 
+  business_type?: string,
+  branch_id: string,
+  bank_account_id: string;
   }
   export interface UserStatusRequest {
     is_active:boolean;
