@@ -4,9 +4,8 @@ import { toast } from "sonner";
 import { UpdateGetRequestData } from "../types/updateIncident.type";
 
 export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ["updateIncident", incidentData],
-    
     queryFn: async () => {
       try {
         console.log("Fetching update incident data with:", incidentData); 
@@ -14,14 +13,14 @@ export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
         if (!response) {
           throw new Error("Invalid API response");
         }
-        return response; 
+        return response;
       } catch (error: any) {
         toast.error(error.message || "Failed to fetch incident data");
         throw error;
       }
     },
-    enabled: !!incidentData, 
-    
+    enabled: !!incidentData,
   });
- 
+
+  return { ...query, fetchData: query.refetch }; 
 };

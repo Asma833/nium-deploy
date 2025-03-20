@@ -48,7 +48,8 @@ export const API = {
       LIST: `/update-incident`,
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
-      CHECKER_ORDER:`/orders/get-checker-orders`
+      CHECKER_ORDER:`/orders/get-checker-orders`,
+      UNASSIGN:`orders/unassign-checker`
     },
   },
   FEATURES: {

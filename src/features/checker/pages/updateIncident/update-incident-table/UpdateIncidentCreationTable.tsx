@@ -84,10 +84,12 @@ const UpdateIncidentCreationTable = () => {
   };
   const handleCopyLink = (rowData: RowData): void => {
     const e_sign_link = rowData.e_sign_link;
-    
-  }
-
-  const columns = getTransactionTableColumns(openModal, handleUnassign, handleCopyLink);
+  };
+  const columns = getTransactionTableColumns(
+    openModal,
+    handleUnassign,
+    handleCopyLink
+  );
 
   return (
     <div className="">
