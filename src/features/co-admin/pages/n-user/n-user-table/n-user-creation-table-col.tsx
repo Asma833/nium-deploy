@@ -21,11 +21,11 @@ export const getUserTableColumns = (
   handleNavigate: HandleNavigate
 ): TableColumn[] => {
   return [
-    // {
-    //   key: "first_name",
-    //   id: "first_name",
-    //   name: "User Name",
-    // },
+    {
+      key: "first_name",
+      id: "first_name",
+      name: "User Name",
+    },
     {
       key: "email",
       id: "email",
@@ -75,7 +75,7 @@ export const getUserTableColumns = (
             <button
               className="p-2 rounded-md hover:bg-muted/20"
               onClick={() =>{console.log(rowData,"rowData");
-                handleNavigate(`update-user/${rowData.hashed_key}`,rowData)}}
+                handleNavigate(`update-user/${rowData.id}`,rowData)}}
             >
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>

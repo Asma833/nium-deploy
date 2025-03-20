@@ -1,12 +1,12 @@
 export interface UserCreationRequest {
   role_id:string;
   is_active:boolean;
-  hashed_key:string;
-  first_name: string;
-  last_name: string;
+  hashed_key?:string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   password: string;
-  product_ids: string[]; 
+  product_ids?: string[]; 
   business_type?: string,
   branch_id: string,
   bank_account_id: string;
