@@ -13,7 +13,7 @@ import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper
 import { useCreateUser } from "../../../hooks/useCreateUser";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useParams, useLocation } from "react-router-dom";
-import { updateAPI } from "@/features/co-admin/hooks/useUserUpdate";
+import { useUpdateAPI } from "@/features/co-admin/hooks/useUserUpdate";
 import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
 import { UserFormData } from "@/features/co-admin/types/user.type"
 const useScreenSize = () => {
@@ -69,7 +69,7 @@ const UserCreationFormPage = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-  const { mutate: updateUser } = updateAPI();
+  const { mutate: updateUser } = useUpdateAPI();
   const handleCheckboxChange = (
     key: "card" | "remittance" | "both",
     checked: boolean

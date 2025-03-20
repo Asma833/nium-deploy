@@ -11,7 +11,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/checker/hooks/useGetApi";
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import useGetConfig from "@/features/checker/hooks/useGetConfig";
+// import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();

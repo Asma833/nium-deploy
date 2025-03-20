@@ -3,12 +3,13 @@ import { getTransactionTableColumns } from "./update-incident-creation-table-col
 import { transactionTableData as initialData, transactionTableData } from "./update-incident-table-value";
 import { useEffect, useState } from "react";
 import { DialogWrapper } from "@/components/common/DialogWrapper";
-import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
+// import { UpdateIncidentForm } from "../incident-form/UpdateIncidentForm";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetUpdateIncident } from "../../../hooks/useGetUpdate";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
+import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
 
 const UpdateIncidentCreationTable = () => {
   // const [tableData,setTableData] = useState(initialData);
@@ -20,7 +21,11 @@ const UpdateIncidentCreationTable = () => {
     setTitle("Update Incident");
   }, [setTitle]);
 
-
+  // const user = JSON.parse(localStorage.getItem("user") || "");
+  // const requestData = {
+  //   checkerId: user.hashed_key,
+  //   transaction_type: "all",
+  // };
   const requestData = {
     checkerId: currentUserHashedKey || "", 
     transaction_type: "all",
@@ -32,6 +37,7 @@ const UpdateIncidentCreationTable = () => {
   console.log('data:', data)
 
   //const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
+  // const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

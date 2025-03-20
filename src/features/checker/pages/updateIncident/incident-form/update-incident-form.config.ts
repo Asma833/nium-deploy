@@ -59,28 +59,6 @@ export const updateFormIncidentConfig = {
       required: true,
       placeholder: "Enter Purpose",
     },
-    // incidentNumber: {
-    //   label: "Incident Number",
-    //   type: FieldType.Text,
-    //   required: true,
-    //   placeholder: "Enter Incident Number",
-    // },
-    // status: {
-    //   label: "Status",
-    //   type: FieldType.Checkbox,
-    //   required: true,
-    //   placeholder: "",
-    //   options: {
-    //     approve: { label: "Approve", checked: true },
-    //     reject: { label: "Reject", checked: false },
-    //   },
-    // },
-    // eonInvoiceNumber: {
-    //   label: "EON Invoice Number",
-    //   type: FieldType.Text,
-    //   required: true,
-    //   placeholder: "Enter EON Invoice Number",
-    // },
 
   },
   buySellType: {

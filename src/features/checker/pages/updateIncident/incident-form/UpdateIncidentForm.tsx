@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useUpdateIncident } from "../../../hooks/useUpdateIncident";
+// import { useUpdateIncident } from "../../../hooks/useUpdateIncident";
 import { updateIncidentFormSchema } from "./update-incident-form.schema";
 import { useState, useEffect } from "react";
 import { FormProvider } from "@/components/form/context/FormProvider";
@@ -20,6 +20,8 @@ import { MaterialText } from "@/components/form/controller/MaterialText";
 import { MaterialTextArea } from "@/components/form/controller/MaterialTextArea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import useSubmitIncidentFormData from "./useSubmitIncidentFormData";
+import { toast } from "sonner";
 
 type PropTypes = {
   formActionRight: string;
@@ -43,10 +45,14 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData } = props;
-  console.log('rowData:', rowData)
+  console.log("rowData:", rowData);
   const screenWidth = useScreenSize();
-  const { mutate: updateIncident, loading: fetchingIncidentData } =
-    useUpdateIncident();
+  
+  // const { mutate: updateIncident, loading: fetchingIncidentData } =
+  //   useUpdateIncident();
+
+
+  const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
 
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
@@ -137,7 +143,34 @@ const UpdateIncidentForm = (props: PropTypes) => {
 
   const onSubmit = (data: UpdateIncidentRequest) => {
     console.log("Update Incident:", data);
-    updateIncident(data);
+
+    // Check if bmfOrderRef is available
+    if (!data.fields.bmfOrderRef) {
+      toast.error("BMF Order Reference is required");
+      return;
+    }
+
+    // Format the data to match the expected structure
+    const formattedData = {
+      partner_order_id: data.fields.bmfOrderRef,
+      incidentform: {
+        niumInvoiceNo: data.fields.niumInvoiceNo || "",
+        comments: data.fields.comment || "",
+        status: {
+          approve: isApproved,
+          reject: isRejected,
+        },
+      },
+    };
+
+    submitIncidentFormData(formattedData, {
+      onSuccess: () => {
+        toast.success("Incident updated successfully");
+      },
+      onError: () => {
+        toast.error("Failed to update incident");
+      },
+    });
   };
 
   // const handleCheckboxChange = (key: string, checked: boolean) => {
@@ -278,12 +311,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
 
         {/* Submit Button */}
         <div className="flex justify-center bg-background">
-          <Button type="submit" disabled={fetchingIncidentData}>
-            {fetchingIncidentData ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              "Submit"
-            )}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? <Loader2 className="animate-spin" /> : "Submit"}
           </Button>
         </div>
       </form>
