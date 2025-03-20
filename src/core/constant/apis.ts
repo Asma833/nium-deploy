@@ -58,7 +58,11 @@ export const API = {
     UPDATE:`/partners`,
     PRODUCTS:`/products`
   },
-
+  CONFIG: {
+    GET_CONFIG: `/config`,
+    GET_PURPOSE_TYPES: `/config?type=purpose_type`,
+    GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
+  },
 } as const;
 
 /**

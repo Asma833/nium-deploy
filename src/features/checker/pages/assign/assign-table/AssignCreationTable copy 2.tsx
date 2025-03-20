@@ -10,30 +10,22 @@ import { API } from "@/core/constant/apis";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/checker/hooks/useGetApi";
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
-import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
-  const { getUserHashedKey } = useCurrentUser();
-  const currentUserHashedKey = getUserHashedKey();
-  
-  useEffect(() => {
-    setTitle("Assign");
-  }, [setTitle]);
-  const {
-    data: assignList,
-    loading,
-    error,
-    fetchData,
-  } = useGetApi<any>("CHECKER.ASSIGN.LIST");
+        useEffect(() => {
+          setTitle("Assign");
+        }, [setTitle]);
+  // const [tableData, setTableData] = useState(
+  //   // Add isSelected property to all rows initialized as false
+  //   initialData.map((item) => ({ ...item, isSelected: false }))
+  // );
+  //console.log(tableData)
+  const { data: assignList, loading, error, fetchData } = useGetApi<any>("CHECKER.ASSIGN.LIST");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
-
-  // const { purpose_type, transaction_type, document_type } = useGetConfig();
-  // console.log('purpose_type, transaction_type, document_type:', purpose_type, transaction_type, document_type)
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
@@ -55,6 +47,13 @@ const AssignCreationTable = () => {
   });
 
   const handleSelectionChange = (rowId: string, checked: boolean) => {
+    // Update the table data to reflect the selection
+    // setTableData((prevData) =>
+    //   prevData.map((row) =>
+    //     row.partner_order_id === rowId ? { ...row, isSelected: checked } : row
+    //   )
+    // );
+
     // Update the selected rows array
     setSelectedRows((prev) => {
       if (checked) {
@@ -73,22 +72,20 @@ const AssignCreationTable = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axiosInstance.post(
-        API.CHECKER.ASSIGN.TAKE_REQUEST,
-        {
-          orderIds: selectedRows,
-          checkerId: currentUserHashedKey,
-        }
-      );
+      const user_id = JSON.parse(localStorage.getItem('user')|| '')
+      // Mock API call - replace with actual API endpoint in production
+      const response = await axiosInstance.post(API.CHECKER.ASSIGN.TAKE_REQUEST, {
+        orderIds: selectedRows,checkerId:user_id.hashed_key
+      });
 
       // Handle successful response
-      if (response) {
+      if(response){
         toast.success(
           `Successfully assigned ${selectedRows.length} transaction(s)`
         );
-        fetchData();
+        fetchData()
       }
-
+     
       // Clear selections after successful submission
       // setTableData((prevData) =>
       //   prevData.map((row) => ({ ...row, isSelected: false }))
@@ -112,7 +109,9 @@ const AssignCreationTable = () => {
     if (isPaginationDynamic) {
       pagination.loadInitialData();
     }
-  }, [fetchData, isPaginationDynamic, pagination]);
+  }, [fetchData,isPaginationDynamic, pagination]);
+
+  
 
   return (
     <div className="flex flex-col">
@@ -123,17 +122,20 @@ const AssignCreationTable = () => {
         {(filterApi.error || pagination.error || error) && (
           <span className="text-red-500">Error loading data</span>
         )}
+        
       </div>
 
       <DynamicTable
         columns={columns}
         data={
-          isPaginationDynamic
+            isPaginationDynamic
             ? pagination.data ?? []
             : isTableFilterDynamic
             ? filterApi.data ?? []
             : assignList ?? []
-        }
+           }
+       
+       
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"

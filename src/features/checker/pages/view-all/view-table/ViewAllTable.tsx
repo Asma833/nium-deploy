@@ -1,5 +1,4 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { viewAllTableData as initialData } from "./view-all-table-value";
 import { useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
@@ -37,14 +36,12 @@ const ViewAllTable = () => {
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
     initialPageSize: 10,
-    initialData,
     dataPath: "transactions",
     totalRecordsPath: "totalRecords",
   });
 
   const filterApi = useFilterApi({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
-    initialData,
     baseQueryParams: {},
   });
 
@@ -87,7 +84,7 @@ const ViewAllTable = () => {
       return filterApi.data;
     }
 
-    return initialData;
+    return [];
   };
 
   const handleExportToCSV = () => {
@@ -103,20 +100,16 @@ const ViewAllTable = () => {
 
   // Define transaction type options
   const transactionTypeOptions = [
-    { label: "All Types", value: "all" },
-    { label: "Transfer", value: "transfer" },
-    { label: "Payment", value: "payment" },
-    { label: "Deposit", value: "deposit" },
-    { label: "Withdrawal", value: "withdrawal" },
+    { label: "CARD LOAD", value: "all" },
+    { label: "CARD RELOAD", value: "transfer" },
+    { label: "CARD ENCASHMENT", value: "payment" },
+    { label: "REMITTANCE", value: "deposit" },
   ];
 
   // Define status options
-  const transactionStatusOptions = [
-    { label: "All Status", value: "all" },
-    { label: "Pending", value: "pending" },
-    { label: "Completed", value: "completed" },
-    { label: "Failed", value: "failed" },
-    { label: "Processing", value: "processing" },
+  const purposeTypeOptions = [
+    { label: "BTQ", value: "btq" },
+    { label: "BT", value: "bt" },
   ];
 
   // Check for loading and error states
@@ -161,15 +154,16 @@ const ViewAllTable = () => {
             applyAction: true,
             resetAction: true,
             status: {
-              label: "Status",
-              placeholder: "Select status",
-              options: transactionStatusOptions,
+              id: "purposeType",
+              label: "Purpose Type",
+              placeholder: "Purpose Type",
+              options: purposeTypeOptions,
             },
             selects: [
               {
                 id: "transactionType",
-                label: "Type",
-                placeholder: "Select type",
+                label: "Transaction Type",
+                placeholder: "Transaction Type",
                 options: transactionTypeOptions,
               },
             ],

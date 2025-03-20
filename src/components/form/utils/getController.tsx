@@ -104,6 +104,8 @@ export const getController = (field: any) => {
           uppercase={field.uppercase}
           baseStyle={baseStyle}
           className={baseGeneralFieldStyle}
+          disabled={field.disabled}
+          forcedValue={field.forcedValue}
         />
       );
     case "email":

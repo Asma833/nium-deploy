@@ -191,7 +191,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
                         control,
                         errors,
                         disabled: formActionRight === "view",
-                        forcedValue: rowData?.[field.name],
                       })}
                     </FieldWrapper>
                   );

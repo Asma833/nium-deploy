@@ -4,27 +4,38 @@ import { Circle, CircleCheck } from "lucide-react";
 import { ErrorMessage } from "../error-message";
 interface MaterialCheckboxProps {
   name: string; 
-  label: string; 
+  label?: string; // Make label optional since it's not being used
   options: Record<string, { label: string }>; 
-  handleCheckboxChange: (key: string, checked: boolean) => void; // Callback function when checkbox state changes
-  isMulti: boolean; // Flag to determine if multiple selections are allowed
-  defaultSelected:{}
+  handleCheckboxChange: (key: string, checked: boolean) => void; 
+  isMulti: boolean;
+  defaultSelected?: Record<string, boolean>;
 }
 
-export const MaterialCheckbox = ({ name, options, handleCheckboxChange, isMulti,defaultSelected }: MaterialCheckboxProps) => {
+export const MaterialCheckbox = ({ 
+  name, 
+  options, 
+  handleCheckboxChange, 
+  isMulti, 
+  defaultSelected = {} 
+}: MaterialCheckboxProps) => {
   const { control, setValue, trigger } = useFormContext();
+  
+  // Ensure name is a valid string
+  const fieldName = typeof name === 'string' && name ? name : 'defaultName';
+  
   const getDefaultValues = () => {
     if (isMulti) {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, false])); // All unchecked
+      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
     } else {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, (defaultSelected as Record<string, boolean>)[key] || false])); // Only one true
+      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
     }
   };
+  
   return (
     <Controller
-      name={name}
+      name={fieldName}
       control={control}
-      defaultValue={getDefaultValues()} // Set default value dynamically
+      defaultValue={getDefaultValues()}
       render={({ field }) => (
         <div>
           <FormGroup style={{ zoom: 0.8 }}>
@@ -52,9 +63,12 @@ export const MaterialCheckbox = ({ name, options, handleCheckboxChange, isMulti,
 
                         // Update the form state
                         field.onChange(updatedValue);
-                        setValue(name, updatedValue);
+                        setValue(fieldName, updatedValue);
+                        
+                        // Call handleCheckboxChange with the key and checked state
                         handleCheckboxChange(key, checked);
-                        trigger(name);
+                        
+                        trigger(fieldName);
                       }}
                     />
                   }
@@ -63,7 +77,7 @@ export const MaterialCheckbox = ({ name, options, handleCheckboxChange, isMulti,
               );
             })}
           </FormGroup>
-            <ErrorMessage name={name} />
+          <ErrorMessage name={fieldName} />
         </div>
       )}
     />
