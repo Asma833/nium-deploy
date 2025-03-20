@@ -77,8 +77,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const {
     handleSubmit,
     control,
-    reset,
-    watch,
+    // reset,
+    // watch,
     setValue,
     formState: { errors },
   } = methods;
@@ -140,12 +140,12 @@ const UpdateIncidentForm = (props: PropTypes) => {
     updateIncident(data);
   };
 
-  const handleCheckboxChange = (key: string, checked: boolean) => {
-    methods.setValue("fields.status", {
-      ...methods.getValues("fields.status"),
-      [key]: checked,
-    });
-  };
+  // const handleCheckboxChange = (key: string, checked: boolean) => {
+  //   methods.setValue("fields.status", {
+  //     ...methods.getValues("fields.status"),
+  //     [key]: checked,
+  //   });
+  // };
 
   const handleViewDocument = () => {
     if (documentUrl) {

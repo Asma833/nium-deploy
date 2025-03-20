@@ -20,11 +20,7 @@ const UpdateIncidentCreationTable = () => {
     setTitle("Update Incident");
   }, [setTitle]);
 
-  const user = JSON.parse(localStorage.getItem("user") || "");
-  // const requestData = {
-  //   checkerId: user.hashed_key,
-  //   transaction_type: "all",
-  // };
+
   const requestData = {
     checkerId: currentUserHashedKey || "", 
     transaction_type: "all",
@@ -35,7 +31,7 @@ const UpdateIncidentCreationTable = () => {
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
   console.log('data:', data)
 
-  const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
+  //const [selectedNiumId, setSelectedNiumId] = useState<string | null>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -71,7 +67,15 @@ const UpdateIncidentCreationTable = () => {
   //   setIsModalOpen(true)
   // }, []);
 
-  const columns = getTransactionTableColumns(openModal);
+  const handleOnClick = (niumId: string) => {
+    // Define what should happen when a row is clicked
+    console.log(`Row with niumId ${niumId} clicked`);
+  };
+  const handleUnassign = () =>{
+    
+  }
+
+  const columns = getTransactionTableColumns(openModal,handleUnassign);
 
   return (
     <div className="">
@@ -87,8 +91,8 @@ const UpdateIncidentCreationTable = () => {
 
         <DynamicTable
           columns={columns}
-          data={transactionTableData}
-          // data={data && data.orders.length > 0 ? data.orders : []}
+          // data={transactionTableData}
+          data={data && data.orders.length > 0 ? data.orders : []}
           tableWrapperClass="bg-background p-5 rounded-md"
           defaultSortColumn="nium_order_id"
           defaultSortDirection="asc"
@@ -121,7 +125,7 @@ const UpdateIncidentCreationTable = () => {
             title="Update Incident"
             footerBtnText=""
             isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen }
+            setIsOpen={setIsModalOpen}
             description={selectedRowData?.nium_order_id ?? ""}
             renderContent={
               <UpdateIncidentForm 

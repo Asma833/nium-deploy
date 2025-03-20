@@ -1,5 +1,7 @@
 import { Link as LinkIcon , X } from 'lucide-react';
-export const getTransactionTableColumns = (openModal: (value: string) => void) => [
+
+
+export const getTransactionTableColumns = (openModal: (value: string) => void,handleUnassign:()=>void) => [
     {
       key: "nium_order_id",
       id: "nium_order_id",
@@ -89,7 +91,7 @@ export const getTransactionTableColumns = (openModal: (value: string) => void) =
       name: "Release",
       cell: (value: string) => (
         <a href={value}>
-          <X className="text-gray-600" />
+          <X className="text-gray-600" onClick={handleUnassign}/>
         </a>
       ),
     },

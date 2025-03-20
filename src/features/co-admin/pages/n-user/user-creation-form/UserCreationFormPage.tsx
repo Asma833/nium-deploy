@@ -132,7 +132,7 @@ const UserCreationFormPage = () => {
     if (isEditMode) {
       await updateUser({ data: formdata, productOptions, id });
     } else {
-      console.log(formdata,"formdata")
+     // console.log(formdata,"formdata")
       createUser({
         ...formdata,
         business_type: "",

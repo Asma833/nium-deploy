@@ -52,11 +52,16 @@ export const API = {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
   NUSERS: {
-    PARTNERS_LIST: `/partners`,
-    CREATE: `/partners`,
-    STATUS_UPDATE:`/partners`,
-    UPDATE:`/partners`,
-    PRODUCTS:`/products`
+    // PARTNERS_LIST: `/partners`,
+    // CREATE: `/partners`,
+    // STATUS_UPDATE:`/partners`,
+    // UPDATE:`/partners`,
+    // PRODUCTS:`/products`
+    PARTNERS_LIST: `/users`,
+    CREATE: `/users`,
+    STATUS_UPDATE:`/users`,
+    UPDATE:`/users`,
+    PRODUCTS:`/users`
   },
   CONFIG: {
     GET_CONFIG: `/config`,
