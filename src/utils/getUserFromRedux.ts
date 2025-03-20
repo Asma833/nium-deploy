@@ -67,6 +67,9 @@ export const useCurrentUser = () => {
   const getBranchId = (): string | undefined => {
     return user?.branch.id;
   };
+  const getBankAccountId = (): string | undefined => {
+    return user?.bank_account.id;
+  };
   
   return {
     user,
@@ -75,5 +78,6 @@ export const useCurrentUser = () => {
     getUserId,
     getUserEmail,
     getBranchId,
+    getBankAccountId
   };
 };

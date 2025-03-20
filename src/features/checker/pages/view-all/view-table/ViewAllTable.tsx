@@ -9,6 +9,7 @@ import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
+import { useCurrentUser } from "@/utils/getUserFromRedux";
 
 const ViewAllTable = () => {
   const { setTitle } = usePageTitle();
