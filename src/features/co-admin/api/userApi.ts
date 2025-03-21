@@ -4,8 +4,9 @@ import { UserCreationRequest, UserCreationResponse, UserRequest, UserUpdateReque
 
 export const userApi = {
   userCreation: async (userData: UserRequest): Promise<UserCreationResponse> => {
+    debugger;
     const { data } = await axiosInstance.post<UserCreationResponse>(
-      getEndpoint("NUSERS.LIST.CREATE"),
+      getEndpoint("NUSERS.USER.CREATE"),
       userData 
     );
     return data;

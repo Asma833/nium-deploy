@@ -15,11 +15,11 @@ export interface UserCreationRequest {
   business_type: string;
   created_by?: string;
   updated_by?: string;
-  productType: {
-    card: boolean;
-    remittance: boolean;
-    both: boolean;
-  };
+  // productType: {
+  //   card: boolean;
+  //   remittance: boolean;
+  //   both: boolean;
+  // };
   role?: string;
   branch_id:string;
   bank_account_id:string;
@@ -49,20 +49,20 @@ export const useCreateUser = ({role}: {role: string}) => {
    const { getBankAccountId, getBranchId } = useCurrentUser();
    console.log("getBankAccountId",role, getBankAccountId());
   // Map product types to product IDs (replace with actual IDs from your system)
-  const productMapping = {
-    card: "550e8400-e29b-41d4-a716-446655440003",
-    remittance: "550e8400-e29b-41d4-a716-446655440004"
-  };
+  // const productMapping = {
+  //   card: "550e8400-e29b-41d4-a716-446655440003",
+  //   remittance: "550e8400-e29b-41d4-a716-446655440004"
+  // };
 
   const mapFormDataToApiPayload = (formData: UserCreationRequest): UserApiPayload => {
     // Determine which product IDs to include
-    const product_ids: string[] = [];
-    if (formData.productType.card) {
-      product_ids.push(productMapping.card);
-    }
-    if (formData.productType.remittance) {
-      product_ids.push(productMapping.remittance);
-    }
+    //const product_ids: string[] = [];
+    // if (formData.productType.card) {
+    //   product_ids.push(productMapping.card);
+    // }
+    // if (formData.productType.remittance) {
+    //   product_ids.push(productMapping.remittance);
+    // }
 
     // Get role ID (default to empty string if not available)
    // const role_id = getRoleId(role) || "";
