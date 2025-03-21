@@ -9,7 +9,8 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   useEffect(() => {
-    setIsChecked(checked); // Sync with external updates
+    // Sync with external updates
+    setIsChecked(checked); 
   }, [checked]);
 
   return (

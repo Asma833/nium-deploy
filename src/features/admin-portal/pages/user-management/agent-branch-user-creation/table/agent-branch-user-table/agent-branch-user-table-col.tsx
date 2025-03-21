@@ -40,7 +40,6 @@ export const getAgentBranchUserColumn = () => [
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            console.log("View:", row);
           }}
           className="text-sm bg-[#ffdea0] border-[#e8b659] px-2 py-1"
         >

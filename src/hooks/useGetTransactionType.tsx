@@ -25,7 +25,6 @@ const useGetTransactionType = (id?: string) => {
         setTransactionTypes(response.data || []);
         setError(null);
       } catch (err) {
-        console.error('Error fetching transaction types:', err);
         setError(err instanceof Error ? err : new Error('Failed to fetch transaction types'));
       } finally {
         setLoading(false);

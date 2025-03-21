@@ -18,7 +18,7 @@ export default function CheckboxWrapper({
   error,
 }: Props) {
 
-  // console.log("error>>>>>>>>", error);
+  
   
   return (
     <div className="flex flex-col space-y-2">

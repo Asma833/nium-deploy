@@ -8,7 +8,6 @@ export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
     queryKey: ["updateIncident", incidentData],
     queryFn: async () => {
       try {
-        console.log("Fetching update incident data with:", incidentData); 
         const response = await useApi.getUpdateIncident(incidentData);
         if (!response) {
           throw new Error("Invalid API response");

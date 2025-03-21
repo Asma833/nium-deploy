@@ -41,7 +41,6 @@ const TableSearchFilter = ({
             const result = await callbacks?.onSearch?.(filters.search);
             if (setDynamicData && result) setDynamicData(result);
           } catch (error) {
-            console.error("Search error:", error);
           } finally {
             if (setLoading) setLoading(false);
           }
@@ -69,7 +68,6 @@ const TableSearchFilter = ({
           if (setDynamicData && result) setDynamicData(result);
         });
       } catch (error) {
-        console.error("Search reset error:", error);
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -120,7 +118,6 @@ const TableSearchFilter = ({
         const result = await callbacks.onFilterApply(updatedFilters);
         setDynamicData(result);
       } catch (error) {
-        console.error("Filter apply error:", error);
       } finally {
         if (setLoading) setLoading(false);
       }
@@ -158,7 +155,6 @@ const TableSearchFilter = ({
         });
         setDynamicData(result);
       } catch (error) {
-        console.error("Filter reset error:", error);
       } finally {
         if (setLoading) setLoading(false);
       }

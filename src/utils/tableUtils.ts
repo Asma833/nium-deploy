@@ -64,7 +64,6 @@ export const fetchTableData = async (
     const response = await fetch(`${api}?${new URLSearchParams(params as any)}`);
     return await response.json();
   } catch (error) {
-    console.error('Error fetching table data:', error);
     throw error;
   }
 };

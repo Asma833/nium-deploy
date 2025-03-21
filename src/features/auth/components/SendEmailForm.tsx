@@ -52,7 +52,6 @@ const SendEmailForm = () => {
 
         <div className="text-center">
           <div className="text-sm text-muted-foreground">
-            {/* Remember Password?{" "} */}
             <Link to="/login" className="text-primary">
              Back to Login
             </Link>

@@ -1,15 +1,11 @@
 export const transactionTableData = [
     {
-      isSelected: false, // For checkbox selection (can be managed dynamically)
+      isSelected: false, 
       nium_order_id: "",
       partner_order_id:"BMF001",
       createdAt: "18.02.2025",
       customer_pan: "AFJPW0198D",
       transaction_type: "Card Load",
-      // fxCurrency: "USD",
-      // fxValue: "10,000.00",
-      // fxRate: "85.20",
-      // inrRate: "8,52,000.00",
       purpose_type: "BTQ",
     },
     {
@@ -19,10 +15,6 @@ export const transactionTableData = [
       createdAt: "10.02.2025",
       customer_pan: "AHURE123R",
       transaction_type: "Card Reload",
-      // fxCurrency: "EUR",
-      // fxValue: "4,000.00",
-      // fxRate: "109.10",
-      // inrRate: "4,36,400.00",
       purpose_type: "BT",
     },
     {
@@ -32,10 +24,6 @@ export const transactionTableData = [
       createdAt: "05.01.2025",
       customerPan: "AJYOI8986E",
       transaction_type: "Encashment",
-      // fxCurrency: "CAD",
-      // fxValue: "2,000.00",
-      // fxRate: "78.20",
-      //inrRate: "1,56,400.00",
       purpose_type: "-",
     },
     {
@@ -45,10 +33,6 @@ export const transactionTableData = [
       createdAt: "28.12.2024",
       customer_pan: "BYUOW345T",
       transaction_type: "Remittance",
-      // fxCurrency: "USD",
-      // fxValue: "40,000.00",
-      // fxRate: "85.40",
-      // inrRate: "34,16,000.00",
       purpose_type: "University Fee - Self Funded",
     },
   ];

@@ -4,7 +4,7 @@ import { Circle, CircleCheck } from "lucide-react";
 import { ErrorMessage } from "../error-message";
 interface MaterialCheckboxProps {
   name: string; 
-  label?: string; // Make label optional since it's not being used
+  label?: string;
   options: Record<string, { label: string }>; 
   handleCheckboxChange: (key: string, checked: boolean) => void; 
   isMulti: boolean;

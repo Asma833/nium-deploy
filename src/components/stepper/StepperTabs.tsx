@@ -235,7 +235,6 @@ export default function StepperTabs({
             <Button 
               onClick={onNext}
               variant="contained"
-              // disabled={!isStepValid(steps[activeStep].label)}
             >
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>

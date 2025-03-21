@@ -26,7 +26,6 @@ export const AgrementDetailsStep: React.FC = () => {
         bankDetails: formValues.agreementDetails.bankDetails,
       };
       if (agreementDetails) {
-        console.log("Updating basic details in context:", agreementDetails);
         updateFormData("agreementDetails", agreementDetails);
       }
     });

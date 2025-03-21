@@ -5,7 +5,6 @@ import { publicRoutes } from "./RoutesConfig";
 import { DEFAULT_ROUTES } from "@/core/constant/routes";
 import { UserRole } from "@/features/auth/types/auth.types";
 import { RootState } from "@/store";
-// import { AdminRoutes } from "./AdminRoutes";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import { CheckerRoutes } from "./CheckerRoutes";
 import { SuperAdminRoutes } from "./SuperAdminRoutes";
@@ -26,7 +25,6 @@ export const AppRoutes = () => {
         <Route key={path} path={path} element={<Element />} />
       ))}
       <Route path="/checker/*" element={<CheckerRoutes/>} />
-      {/* <Route path="/admin/*" element={<AdminRoutes />} /> */}
       <Route path="/admin/*" element={<SuperAdminRoutes />} />
       <Route
         path="/"

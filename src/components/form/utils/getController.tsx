@@ -98,9 +98,7 @@ export const baseStyle = (field: FieldWithStyleProps) => {
 
 export const getController = (field: any) => {
   const commonProps = {
-    onChange: (e: any) => {
-      console.log(`Field ${field.name} changed:`, e.target.value);
-    },
+    onChange: (e: any) => {},
   };
 
   switch (field.type) {

@@ -29,9 +29,7 @@ const NuserCreationTable = () => {
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {
-    // Ensure rowData and id exist before proceeding
     if (!rowData || !rowData.id) {
-      console.error("Invalid rowData:", rowData);
       return;
     }
       // Make the API call to update the status

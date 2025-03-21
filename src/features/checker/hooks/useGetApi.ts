@@ -31,11 +31,6 @@ export const useGetApi = <T>(
       });
       setData(data);
     } catch (err) {
-      // More detailed error logging for authentication issues
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        //console.error("Authentication error - token issue detected");
-      }
-      
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred";
       toast.error("Error Fetching Data", {
         description: errorMessage,

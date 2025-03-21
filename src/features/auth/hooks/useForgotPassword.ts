@@ -12,7 +12,6 @@ export const useForgotPassword = () => {
     onSuccess: () => {
       navigate('/reset-password')
       toast.success('Password reset email sent successfully')
-      // Handle successful password reset request
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Sending email failed');

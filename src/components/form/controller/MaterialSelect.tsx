@@ -49,8 +49,7 @@ export const MaterialSelect = ({
         defaultValue={defaultValue}
         render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
           // Log for debugging
-          console.log(`MaterialSelect ${name} rendering with value:`, value);
-          
+        
           return (
           <FormControl fullWidth error={!!error}>
             <InputLabel>{label}</InputLabel>
@@ -58,7 +57,6 @@ export const MaterialSelect = ({
               {...field}
               value={value || ""}
               onChange={(e) => {
-                console.log(`${name} changed to:`, e.target.value);
                 onChange(e.target.value);
               }}
               label={label}

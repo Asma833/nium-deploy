@@ -27,12 +27,9 @@ const AgentRegistrationForm = () => {
   } = methods;
 
   useEffect(() => {
-    // const subscription = watch();
-    // return () => subscription.unsubscribe();
   }, [watch]);
 
   const onSubmit = async (data: any) => {
-    console.log("Submitted Data:", data);
     await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 

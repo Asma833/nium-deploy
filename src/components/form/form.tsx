@@ -63,7 +63,6 @@ const Form = <T extends FieldValues>({
 
 
   const handleResetFormClick = async () => {
-    console.log("Resetting form");
   };
 
   const extendedForm = {

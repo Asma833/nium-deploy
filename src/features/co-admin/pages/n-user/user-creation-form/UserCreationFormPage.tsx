@@ -7,7 +7,6 @@ import { FormProvider } from "@/components/form/context/FormProvider";
 import { getController } from "@/components/form/utils/getController";
 import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
 import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { useCreateUser } from "../../../hooks/useCreateUser";
@@ -47,17 +46,10 @@ const UserCreationFormPage = () => {
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      // firstName: "",
-      // lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
-      businessType: "large_enterprise", // Set the default value to match the selected option // This is initialized empty, not with the selected value
-      // productType: {
-      //   card: true,
-      //   remittance: false,
-      //   both: false,
-      // },
+      businessType: "large_enterprise"
     },
   });
 
@@ -70,61 +62,14 @@ const UserCreationFormPage = () => {
     handleSubmit,
   } = methods;
   const { mutate: updateUser } = useUpdateAPI();
-  // const handleCheckboxChange = (
-  //   key: "card" | "remittance" | "both",
-  //   checked: boolean
-  // ) => {
-  //   const currentValues = watch("productType"); // Get the latest state before updating
-
-  //   if (key === "both") {
-  //     // If "Both" is checked, enable all checkboxes; otherwise, disable all
-  //     const updatedValues = {
-  //       card: checked,
-  //       remittance: checked,
-  //       both: checked,
-  //     };
-  //     setValue("productType", updatedValues, { shouldValidate: true });
-  //   } else {
-  //     // Update only the specific checkbox ("Card" or "Remittance")
-  //     setValue(`productType.${key}`, checked, { shouldValidate: true });
-
-  //     // Get the updated values after modifying state
-  //     const updatedValues = {
-  //       ...currentValues,
-  //       [key]: checked,
-  //     };
-
-  //     // If both "Card" and "Remittance" are checked, check "Both"
-  //     const isBothChecked = updatedValues.card && updatedValues.remittance;
-  //     setValue("productType.both", isBothChecked, { shouldValidate: true });
-
-  //     // re-render using a temporary state change
-  //     setValue(
-  //       "productType",
-  //       { ...updatedValues, both: isBothChecked },
-  //       { shouldValidate: true }
-  //     );
-  //   }
-  // };
-
+  
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
-        // firstName: selectedRow.first_name || "",
-        // lastName: selectedRow.last_name || "",
         email: selectedRow.email || "",
-        // productType: {
-        //   card:
-        //     selectedRow.products?.some((p: any) => p.name === "Card") || true,
-        //   remittance:
-        //     selectedRow.products?.some((p: any) => p.name === "Remittance") ||
-        //     false,
-        //   both:
-        //     selectedRow.products?.some((p: any) => p.name === "Both") || false,
-        // },
       });
     }
-  }, [selectedRow, reset]); // Ensure `reset` runs when `selectedRow` changes
+  }, [selectedRow, reset]); 
 
 
 
@@ -132,7 +77,6 @@ const UserCreationFormPage = () => {
     if (isEditMode) {
       await updateUser({ data: formdata, productOptions, id });
     } else {
-     // console.log(formdata,"formdata")
       createUser({
         ...formdata,
         business_type: "",
@@ -151,15 +95,6 @@ const UserCreationFormPage = () => {
         {isEditMode ? "Edit User" : "Create User"}
       </h2>
         <Spacer>
-          {/* <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
-            {Object.entries(userFormConfig.fields)
-              .slice(0, 2)
-              .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
-              ))}
-          </FormFieldRow> */}
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
           <FieldWrapper>
               {getController({
@@ -181,22 +116,6 @@ const UserCreationFormPage = () => {
                 })}
               </div>
             </FieldWrapper>
-           
-            {/* <FieldWrapper>
-              <small className="block text-xs font-semibold">
-                {userFormConfig.fields.productType.label}
-              </small>
-              <CheckboxWrapper className="flex space-x-4 items-center">
-                {getController({
-                  ...userFormConfig.fields.productType,
-                  name: "productType",
-                  control,
-                  errors,
-                  handleCheckboxChange,
-                  isMulti: true,
-                })}
-              </CheckboxWrapper>
-            </FieldWrapper> */}
           </FormFieldRow>
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
             {Object.entries(userFormConfig.fields)

@@ -28,11 +28,10 @@ interface TableRow {
           </div>
         ))}
   
-        {/* Total Row - Aligned with Amount Column */}
         <div className="grid grid-cols-4 px-3 py-2 text-sm font-bold text-pink-500 border-t">
-          <span className="col-span-2"></span> {/* Empty space to align "Total" under Amount */}
+          <span className="col-span-2"></span> 
           <span className="text-left">Total</span>
-          <span>{totalCalculatedAmount.toFixed(2)}</span> {/* Display calculated total */}
+          <span>{totalCalculatedAmount.toFixed(2)}</span> 
         </div>
       </div>
     );

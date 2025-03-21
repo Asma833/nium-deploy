@@ -2,7 +2,6 @@ enum FieldType {
   Text = "text",
   Email = "email",
   Password = "password",
-  // Checkbox = "checkbox",
   Select = "select",
 }
 
@@ -14,7 +13,6 @@ interface FormField {
 }
 
 interface CheckboxField extends FormField {
-  // type: FieldType.Checkbox;
   options: Record<string, { label: string; checked: boolean }>;
   isMulti: boolean;
 }
@@ -28,12 +26,9 @@ interface SelectField extends FormField {
 type Field = FormField  | SelectField;
 
 type Fields = {
-  // firstName: Field;
-  // lastName: Field;
   email: Field;
   password: Field;
   confirmPassword: Field;
-  //productType: CheckboxField;
   businessType: any;
 };
 
@@ -45,18 +40,6 @@ interface UserFormConfig {
 export const userFormConfig: UserFormConfig = {
   sectionTitle: "Create User",
   fields: {
-    // firstName: {
-    //   label: "First Name",
-    //   type: FieldType.Text,
-    //   required: true,
-    //   placeholder: "Enter First Name",
-    // },
-    // lastName: {
-    //   label: "Last Name",
-    //   type: FieldType.Text,
-    //   required: true,
-    //   placeholder: "Enter Last Name",
-    // },
     email: {
       label: "Email",
       type: FieldType.Email,
@@ -85,18 +68,6 @@ export const userFormConfig: UserFormConfig = {
       required: true,
       placeholder: "Confirm Password",
     },
-    // productType: {
-    //   label: "Product Type",
-    //   type: FieldType.Checkbox,
-    //   required: true,
-    //   placeholder: "",
-    //   options: {
-    //     card: { label: "Card", checked: true },
-    //     remittance: { label: "Remittance", checked: false },
-    //     both: { label: "Both", checked: false },
-    //   },
-    //   isMulti: false,
-    // },
     
   },
 };

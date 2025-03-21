@@ -56,7 +56,6 @@ export const getAgentProfileCreationColumn = () => [
         <button
           onClick={(e) => {
             e.stopPropagation();
-            console.log("Edit:", row);
           }}
           className="p-2"
         >
@@ -65,7 +64,6 @@ export const getAgentProfileCreationColumn = () => [
         <button
           onClick={(e) => {
             e.stopPropagation();
-            console.log("View:", row);
           }}
           className="p-2"
         >

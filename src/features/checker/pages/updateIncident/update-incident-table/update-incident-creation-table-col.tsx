@@ -4,12 +4,11 @@ import {
   determinePurposeType,
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
-import { Link as LinkIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
-  handleCopyLink: (rowData: any) => void
 ) => [
   {
     key: "nium_order_id",
@@ -20,7 +19,6 @@ export const getTransactionTableColumns = (
         className="text-pink-600 cursor-pointer"
         onClick={() => {
           openModal(rowData);
-          console.log("rowData: getTransactionTableColumns", rowData);
         }}
       >
         {rowData.nium_order_id}
@@ -49,26 +47,6 @@ export const getTransactionTableColumns = (
     cell: (_: unknown, rowData: any) =>
       determineTransactionType(rowData.transaction_type),
   },
-  // {
-  //   key: "fxCurrency",
-  //   id: "fxCurrency",
-  //   name: "FX Currency",
-  // },
-  // {
-  //   key: "fxValue",
-  //   id: "fxValue",
-  //   name: "FX Value",
-  // },
-  // {
-  //   key: "fxRate",
-  //   id: "fxRate",
-  //   name: "FX Rate",
-  // },
-  // {
-  //   key: "inrRate",
-  //   id: "inrRate",
-  //   name: "INR Rate",
-  // },
   {
     key: "purpose_type",
     id: "purpose_type",
@@ -95,28 +73,28 @@ export const getTransactionTableColumns = (
     key: "e_sign_link",
     id: "e_sign_link",
     name: "E Sign Link",
-    cell:  (_: unknown, rowData: any) => (
-      <button onClick={() => {handleCopyLink(rowData)}}  >
-        <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
-      </button>
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
     ),
   },
   {
     key: "merged_document",
     id: "merged_document",
     name: "Merged Document",
-    cell:  (_: unknown, rowData: any) => (
-      <button onClick={() => {handleCopyLink(rowData)}}  >
-        <SignLinkButton copyLinkUrl={rowData.merged_document.url} buttonText={"Document"} />
-      </button>
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
     ),
   },
   {
     key: "release",
     id: "release",
     name: "Release",
-    cell: (_: unknown, rowData: any) => ( 
-      <Button onClick={() => handleUnassign(rowData)} className="flex items-center" size={"sm"}>
+    cell: (_: unknown, rowData: any) => (
+      <Button
+        onClick={() => handleUnassign(rowData)}
+        className="flex items-center"
+        size={"sm"}
+      >
         <X className="text-white cursor-pointer" size={20} />
         Unassign
       </Button>

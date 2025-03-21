@@ -5,7 +5,7 @@ import { authApi } from "../api/authApi";
 import { setCredentials } from "../store/authSlice";
 import { DEFAULT_ROUTES } from "../../../core/constant/routes";
 import { toast } from "sonner";
-import { LoginResponse } from "../types/auth.types"; // Updated import
+import { LoginResponse } from "../types/auth.types";
 import type { LoginCredentials } from "../api/authApi"; 
 
 
@@ -20,10 +20,6 @@ export const useLogin = () => {
   >({
     mutationFn: authApi.loginUser,
     onSuccess: (data) => {
-      //  Store tokens in localStorage
-      localStorage.setItem("accessToken", data.access_token);
-      localStorage.setItem("refreshToken", data.refresh_token);
-
       // Store user info in Redux
       dispatch(setCredentials({ 
         user: data.user, 

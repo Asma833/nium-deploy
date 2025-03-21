@@ -25,7 +25,6 @@ const useGetPurposeName = (id?: string) => {
         setPurposeTypes(response.data || []);
         setError(null);
       } catch (err) {
-        console.error('Error fetching purpose types:', err);
         setError(err instanceof Error ? err : new Error('Failed to fetch purpose types'));
       } finally {
         setLoading(false);
@@ -50,6 +49,3 @@ const useGetPurposeName = (id?: string) => {
 
 export default useGetPurposeName;
 
-
-// const { purposeName, loading: purposeLoading } = useGetPurposeName('603e51b68ffd0e2ad8a8dfcdad7f9dd3m8eao94v');
-// const { transactionType, loading: transactionLoading } = useGetTransactionType('603e51b68ffd0e2ad8a8dfcdad7f9dd3m8eao94v');

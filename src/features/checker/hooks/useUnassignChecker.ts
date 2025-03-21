@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
 import { toast } from "sonner";
 
 interface UnassignCheckerParams {
@@ -21,12 +20,10 @@ const useUnassignChecker = () => {
     },
     onSuccess: (data) => {
       toast.success("Checker unassigned successfully");
-      console.log("Checker unassigned successfully:", data);
       queryClient.invalidateQueries({ queryKey: ["updateIncident"] });
     },
     onError: (error) => {
       toast.error("Failed to unassign checker");
-      console.error("Error unassigning checker:", error);
     },
   });
 

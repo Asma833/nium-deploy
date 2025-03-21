@@ -52,9 +52,7 @@ export function DialogWrapper({
         </DialogTrigger>
       )}
      
-      {/* <DialogContent  className={cn("max-w-sm sm:max-w-md", className)}> */}
       <DialogContent  className={cn("sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto", className)}>
-         {/* Close Button at Top Right */}
          <button
           className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
           onClick={() => setIsOpen(false)}

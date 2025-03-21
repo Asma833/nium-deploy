@@ -10,7 +10,6 @@ export const copyToClipboard = async (text: string, message: string = "Copied to
     await navigator.clipboard.writeText(text);
     toast.success(message);
   } catch (error) {
-    console.error("Failed to copy to clipboard:", error);
     toast.error("Failed to copy to clipboard");
   }
 };

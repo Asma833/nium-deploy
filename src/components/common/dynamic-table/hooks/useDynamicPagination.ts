@@ -7,14 +7,6 @@ interface PaginationParams {
   [key: string]: any; // Additional filter parameters
 }
 
-// interface PaginationResponse<T> {
-//   data: T[];
-//   totalRecords: number;
-//   page: number;
-//   pageSize: number;
-//   totalPages: number;
-// }
-
 interface UseDynamicPaginationOptions {
   endpoint: string;
   initialPageSize?: number;

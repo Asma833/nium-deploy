@@ -26,12 +26,9 @@ export const MaterialRadioGroup = <T extends FieldValues>({
       <Controller
         name={name}
         render={({ field }) => {
-          console.log("field:", field);
           return (
             <RadioGroup {...field}>
               {Object.entries(options).map(([value, option]) => {
-                console.log('value:>>>>', value)
-                console.log("option:>>>>", option);
                 return (
                   <FormControlLabel
                     key={value}

@@ -24,7 +24,6 @@ export const BasicDetailsStep: React.FC = () => {
       // Get the nested basicDetails object directly
       const basicDetailsData = formValues.basicDetails;
       if (basicDetailsData) {
-        console.log("Updating basic details in context:", basicDetailsData);
         updateFormData("basicDetails", basicDetailsData);
       }
     });

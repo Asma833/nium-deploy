@@ -42,11 +42,3 @@ export const useNotification = () => {
   };
 };
 
-/*
-usage:
-------
-success({ 
-  message: "Operation successful", 
-  description: "Your data has been saved" 
-});
-*/

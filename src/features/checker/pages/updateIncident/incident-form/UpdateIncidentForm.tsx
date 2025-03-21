@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useUpdateIncident } from "../../../hooks/useUpdateIncident";
 import { updateIncidentFormSchema } from "./update-incident-form.schema";
 import { useState, useEffect } from "react";
 import { FormProvider } from "@/components/form/context/FormProvider";
@@ -14,7 +13,6 @@ import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { updateFormIncidentConfig } from "../incident-form/update-incident-form.config";
-// import ExchangeRateDetails from "./ExchangeRateDetails";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { Loader2 } from "lucide-react";
@@ -66,7 +64,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  console.log("isFormValid:", isFormValid);
 
   // State to track if we should show the buy/sell field
   const [showBuySell, setShowBuySell] = useState(true);
@@ -150,11 +147,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   useEffect(() => {
     if (rowData) {
       const buySellValue = determineBuySell(rowData.transaction_type);
-      console.log("rowData.transaction_type:", rowData.transaction_type);
-
       const purposeTypeText = determinePurposeType(rowData.purpose_type);
-      console.log("rowData.purpose_type:", rowData.purpose_type);
-
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
 
@@ -267,7 +260,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
         await submitIncidentFormData(formattedData, {
           onSuccess: () => {
             toast.success("Incident updated successfully");
-            resetFormValues(); // Reset form after successful submission
+            resetFormValues(); 
             setIsModalOpen(false); // Ensure this runs after successful submission
           },
           onError: (error) => {
@@ -276,7 +269,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
         });
       })();
     } catch (error) {
-      console.error("Form submission error:", error);
       toast.error("Form submission failed. Please check your inputs.");
     }
   };

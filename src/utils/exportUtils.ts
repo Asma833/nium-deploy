@@ -1,6 +1,5 @@
 // Note: Run `npm install --save-dev @types/file-saver` to fix TypeScript errors
 import { toast } from "sonner";
-// Import xlsx and file-saver properly at the top level
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -20,8 +19,6 @@ export const exportToCSV = <T extends Record<string, any>>(
       toast.error("No data available to export");
       return;
     }
-
-    console.log("Data to export:", data); // Debug log
 
     // Create a simple array of objects containing only the necessary properties
     const flattenedData = data.map((row) => {
@@ -43,8 +40,6 @@ export const exportToCSV = <T extends Record<string, any>>(
       return rowData;
     });
 
-    console.log("Flattened data:", flattenedData); // Debug log
-
     // Create CSV headers and content
     const headers = Object.keys(flattenedData[0]);
     let csvContent = headers.join(",") + "\n";
@@ -59,8 +54,6 @@ export const exportToCSV = <T extends Record<string, any>>(
     });
 
     // For debug purposes, show the CSV content in console
-    console.log("CSV Content preview:", csvContent.substring(0, 500));
-
     // Create file and download
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -73,7 +66,6 @@ export const exportToCSV = <T extends Record<string, any>>(
 
     toast.success("CSV exported successfully");
   } catch (error) {
-    console.error("Error exporting CSV:", error);
     toast.error("Failed to export CSV. Please try again.");
   }
 };
@@ -142,7 +134,6 @@ export const exportToExcel = <T extends Record<string, any>>(
 
     toast.success("Excel file exported successfully");
   } catch (error) {
-    console.error("Error exporting Excel file:", error);
     toast.error("Failed to export Excel file. Please try again.");
   }
 };

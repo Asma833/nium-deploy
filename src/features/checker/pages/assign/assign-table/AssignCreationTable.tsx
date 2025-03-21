@@ -15,7 +15,7 @@ const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  
+
   useEffect(() => {
     setTitle("Assign");
   }, [setTitle]);
@@ -30,7 +30,6 @@ const AssignCreationTable = () => {
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
-
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.ASSIGN.LIST,
@@ -42,8 +41,7 @@ const AssignCreationTable = () => {
   // Using the filter API hook
   const filterApi = useFilterApi({
     endpoint: API.CHECKER.ASSIGN.LIST,
-    baseQueryParams: {
-    },
+    baseQueryParams: {},
   });
 
   const handleSelectionChange = (rowId: string, checked: boolean) => {
@@ -81,16 +79,8 @@ const AssignCreationTable = () => {
         fetchData();
       }
 
-      // Clear selections after successful submission
-      // setTableData((prevData) =>
-      //   prevData.map((row) => ({ ...row, isSelected: false }))
-      // );
       setSelectedRows([]);
-
-      // Optionally, refetch the data to get the latest state
-      // filterApi.refreshData();
     } catch (error) {
-      console.error("Error taking request:", error);
       toast.error("Failed to take request. Please try again.");
     } finally {
       setIsSubmitting(false);

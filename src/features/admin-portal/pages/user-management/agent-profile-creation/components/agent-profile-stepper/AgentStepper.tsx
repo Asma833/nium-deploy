@@ -63,7 +63,6 @@ const AgentStepperContent = () => {
   // Add debug logging for form changes
   useEffect(() => {
     const subscription = methods.watch((data) => {
-      console.log("Form data changed:", data);
     });
     return () => subscription.unsubscribe();
   }, [methods, methods.watch]);
@@ -72,20 +71,16 @@ const AgentStepperContent = () => {
 
   const handleNext = async () => {
     const currentValues = methods.getValues();
-    console.log("Current form values:", currentValues);
-
+   
     const isValid = await methods.trigger();
     if (!isValid) {
-      console.log("Form validation failed");
       return;
     }
 
     if (activeStep === steps.length - 1) {
       try {
         await saveFormData();
-        console.log("Form saved successfully");
       } catch (error) {
-        console.error("Error saving form:", error);
       }
       return;
     }

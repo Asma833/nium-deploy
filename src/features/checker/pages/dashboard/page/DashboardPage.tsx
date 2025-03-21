@@ -5,19 +5,10 @@ import { useGetDashCardMetrics } from "@/features/checker/hooks/useGetDashCardMa
 
 export const Dashboard: React.FC = () => {
   const { data: metrics, isLoading, error } = useGetDashCardMetrics();
-  console.log("error:==>", error);
-
+ 
   // Generate dashboard items using the fetched metrics
   const dashboardItems = createDashboardData(metrics);
 
-  // if (isLoading) {
-  //   return <div>Loading dashboard data...</div>;
-  // }
-
-  // if (error) {
-  //   console.error("Error loading dashboard data:", error);
-  //   return <div>Error loading dashboard data. Please try again later.</div>;
-  // }
 
   return (
     <>

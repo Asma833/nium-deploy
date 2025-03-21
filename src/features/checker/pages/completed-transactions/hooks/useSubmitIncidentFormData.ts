@@ -18,7 +18,6 @@ const useSubmitIncidentFormData = () => {
   const { mutate, isPending, isError, isSuccess, error, data } = useMutation({
     mutationFn: async (formData: IncidentFormData) => {
       const payload = formData;
-      console.log("payload:", payload);
       const response = await axiosInstance.post(
         API.ORDERS.UPDATE_ORDER_DETAILS,
         payload
@@ -26,10 +25,8 @@ const useSubmitIncidentFormData = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      console.log("Incident form submitted successfully:", data);
     },
     onError: (error) => {
-      console.error("Error submitting incident form:", error);
     },
   });
 

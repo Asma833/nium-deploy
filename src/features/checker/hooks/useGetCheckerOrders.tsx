@@ -43,11 +43,8 @@ export const useGetCheckerOrders = <T = any>(
 
       setData(data);
     } catch (err) {
-      console.error(`Error fetching checker orders:`, err);
-
       // More detailed error logging for authentication issues
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.error("Authentication error - token issue detected");
       }
 
       const errorMessage =
@@ -61,11 +58,10 @@ export const useGetCheckerOrders = <T = any>(
     }
   }, [userHashedKey]);
 
-  // Functions to change transaction type and fetch data again
+  // fetch data again
   const changeTransactionType = useCallback((newType: TransactionType) => {
     return () => {
       setTransactionType(newType);
-      // We'll rely on the effect to trigger the fetch
     };
   }, []);
 
