@@ -31,18 +31,18 @@ export const getUserTableColumns = (
       id: "email",
       name: "Email",
     },
-    {
-      key: "productType",
-      id: "productType",
-      name: "Product Type",
-      cell: (_, row: any) => (
-        <span>
-          {row.products && row.products.length > 0
-            ? row.products.map((product: any) => product.name).join(", ")
-            : "No Products"}
-        </span>
-      ),
-    },
+    // {
+    //   key: "productType",
+    //   id: "productType",
+    //   name: "Product Type",
+    //   cell: (_, row: any) => (
+    //     <span>
+    //       {row.products && row.products.length > 0
+    //         ? row.products.map((product: any) => product.name).join(", ")
+    //         : "No Products"}
+    //     </span>
+    //   ),
+    // },
     {
       key: "createdAt",
       id: "createdAt",
