@@ -83,22 +83,6 @@ export const updateFormIncidentConfig = {
       },
     },
   },
-  conditionalFields: {
-    comments: {
-      label: "Comments",
-      name: "incidentform.comments",
-      type: FieldType.TextArea,
-      required: true,
-      placeholder: "Enter Comments",
-    },
-    niumInvoiceNo: {
-      label: "Invoice Number",
-      name: "incidentform.niumInvoiceNo",
-      type: FieldType.TextArea,
-      required: true,
-      placeholder: "Enter Invoice Number",
-    },
-  },
   tableData: [
     { currency: "USD/INR", rate: 87.84, amount: 500 },
     { currency: "EUR/INR", rate: 95.5, amount: 300 },
