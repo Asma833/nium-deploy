@@ -59,6 +59,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   
   // State to track if we should show the buy/sell field
@@ -80,7 +81,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
         eonInvoiceNumber: "",
         comment: "",
         status: { approve: true, reject: false },
-        niumInvoiceNo: "",
+        niumInvoiceNumber: "",
       },
     },
   });
@@ -109,7 +110,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
         eonInvoiceNumber: "",
         comment: "",
         status: { approve: true, reject: false },
-        niumInvoiceNo: "",
+        niumInvoiceNumber: "",
       },
     });
     setIsApproved(true);
@@ -141,13 +142,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
   // Populate form with row data when available
   useEffect(() => {
     if (rowData) {
-      // Determine the buy/sell value based on transaction type ID
       const buySellValue = determineBuySell(rowData.transaction_type);
-     
-      // Determine the purpose type text based on the purpose_type ID
       const purposeTypeText = determinePurposeType(rowData.purpose_type);
-    
-      // Update showBuySell state based on transaction type
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
 
@@ -158,16 +154,16 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
         transactionType: rowData.transaction_type || "",
-        purpose: purposeTypeText || "", 
-        buySell: buySellValue || "Buy", 
+        purpose: purposeTypeText || "",
+        buySell: buySellValue || "",
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
-        comment: rowData.comment || "",
+        // comment: rowData.comment || "",
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNo: rowData.nium_invoice_number || "",
+        // niumInvoiceNo: rowData.nium_invoice_number || "",
       };
 
       Object.entries(mappedData).forEach(([key, value]) => {
@@ -185,6 +181,39 @@ const UpdateIncidentForm = (props: PropTypes) => {
     }
   }, [rowData, methods]);
 
+  // Add validation check whenever relevant form values change
+  useEffect(() => {
+    const comment = methods.getValues("fields.comment");
+    const niumInvoiceNumber = methods.getValues("fields.niumInvoiceNumber");
+
+    let valid = true;
+
+    if (isApproved && !niumInvoiceNumber) {
+      valid = false;
+    }
+
+    if (isRejected && !comment) {
+      valid = false;
+    }
+
+    setIsFormValid(valid);
+  }, [isApproved, isRejected, methods]);
+
+  // Update watch for form values
+  const [comment, niumInvoiceNumber] = methods.watch([
+    "fields.comment",
+    "fields.niumInvoiceNumber",
+  ]);
+
+  // Update validation whenever these values change
+  useEffect(() => {
+    const valid = !!(
+      (isApproved && niumInvoiceNumber) ||
+      (isRejected && comment)
+    );
+    setIsFormValid(valid);
+  }, [isApproved, isRejected, comment, niumInvoiceNumber]);
+
   const handleRowCols = () => {
     return screenWidth < 768 ? 1 : 3;
   };
@@ -193,11 +222,21 @@ const UpdateIncidentForm = (props: PropTypes) => {
     try {
       await handleSubmit(async (data) => {
         const { fields } = data;
+
+        if (fields) {
+          if (fields?.status?.approve && !fields.niumInvoiceNumber) {
+            toast.error(
+              "Nium Invoice Number is required when approving an incident"
+            );
+            return;
+          }
+        }
+
         const formattedData = {
           partner_order_id: fields.bmfOrderRef || "",
           checker_id: getUserHashedKey() || "",
           nium_invoice_number: fields?.status?.approve
-            ? fields.niumInvoiceNo || ""
+            ? fields.niumInvoiceNumber || ""
             : "",
           incident_checker_comments: fields.comment || "",
           incident_status: fields?.status?.approve ? true : false,
@@ -369,19 +408,30 @@ const UpdateIncidentForm = (props: PropTypes) => {
           </FormFieldRow>
 
           <FormFieldRow rowCols={2}>
-            <FormFieldRow>
+            <FormFieldRow className="flex-1">
               <MaterialTextArea
                 name="fields.comment"
                 label="Comment"
                 required={isRejected}
+                className="w-full rounded-lg"
+                error={
+                  isRejected && !comment
+                    ? "Comment is required when rejecting"
+                    : ""
+                }
               />
             </FormFieldRow>
-            <FormFieldRow>
+            <FormFieldRow className="flex-1">
               {showNiumInvoice && (
                 <MaterialText
-                  name="fields.niumInvoiceNo"
+                  name="fields.niumInvoiceNumber"
                   label="Nium Invoice Number"
                   required={isApproved}
+                  error={
+                    isApproved && !niumInvoiceNumber
+                      ? "Nium Invoice Number is required when approving"
+                      : ""
+                  }
                 />
               )}
             </FormFieldRow>

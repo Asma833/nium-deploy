@@ -242,7 +242,9 @@ const TableSearchFilter = ({
               <Select value={localStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                   <SelectValue
-                    placeholder={status.placeholder || "Select status"}
+                    placeholder={
+                      status.placeholder || `Select ${status.label}`
+                    }
                   />
                 </SelectTrigger>
                 <SelectContent>

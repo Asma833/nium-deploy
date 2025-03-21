@@ -13,6 +13,7 @@ interface MaterialTextAreaProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  error? : any;
 }
 
 export const MaterialTextArea = ({
@@ -25,7 +26,8 @@ export const MaterialTextArea = ({
   minRows,
   placeholder,
   disabled = false,
-  required
+  required,
+  error
 }: MaterialTextAreaProps) => {
   const { control } = useFormContext();
 

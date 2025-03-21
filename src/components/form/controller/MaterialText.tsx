@@ -11,6 +11,7 @@ interface MaterialTextProps {
   disabled?: boolean;
   required?: boolean;
   forcedValue?: string;
+  error? : any;
 }
 
 export const MaterialText = ({
@@ -22,6 +23,7 @@ export const MaterialText = ({
   disabled = false,
   required = false,
   forcedValue,
+  error
 }: MaterialTextProps) => {
   const { control } = useFormContext();
 

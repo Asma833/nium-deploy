@@ -3,7 +3,8 @@ export const ROUTES = {
     LOGIN: '/login',
     FORGET_PASSWORD: '/forget-password',
     SEND_PASSWORD_RESET: '/send-password-reset-link',
-    RESET_LINK_CONFIRMATION: '/reset-link-confirmation'
+    RESET_LINK_CONFIRMATION: '/reset-link-confirmation',
+    RESET_PASSWORD: '/reset-password'
   },
   ADMIN: {
     DASHBOARD: '/dashboard',

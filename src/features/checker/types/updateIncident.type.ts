@@ -21,7 +21,7 @@ export interface UpdateIncidentRequest {
     customerName?: string;
     bmfOrderRef?: string;
     purpose?: string;
-    niumInvoiceNo?: string;
+    niumInvoiceNumber?: string;
   }
 }
 
