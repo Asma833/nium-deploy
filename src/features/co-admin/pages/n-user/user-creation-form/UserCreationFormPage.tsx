@@ -14,7 +14,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useParams, useLocation } from "react-router-dom";
 import { useUpdateAPI } from "@/features/co-admin/hooks/useUserUpdate";
 import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
-import { UserFormData } from "@/features/co-admin/types/user.type"
+import { UserFormData } from "@/features/co-admin/types/user.type";
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -28,6 +28,18 @@ const useScreenSize = () => {
   return screenWidth;
 };
 
+interface UserApiPayload {
+  role_id: string;
+  email: string;
+  password: string;
+  is_active: boolean;
+  business_type: string;
+  created_by?: string;
+  updated_by?: string;
+  branch_id: string;
+  bank_account_id: string;
+}
+
 const UserCreationFormPage = () => {
   const screenWidth = useScreenSize();
   const { productOptions } = useProductOptions();
@@ -40,8 +52,6 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     setTitle(isEditMode ? "Edit User" : "Create User");
   }, [setTitle]);
-  
-  const { mutate: createUser, isLoading } = useCreateUser({ role: "checker" });
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -49,7 +59,7 @@ const UserCreationFormPage = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      businessType: "large_enterprise"
+      businessType: "large_enterprise",
     },
   });
 
@@ -61,42 +71,49 @@ const UserCreationFormPage = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
+
+  const { mutate: createUser, isLoading } = useCreateUser(
+    { role: "checker" },
+    {
+      onUserCreateSuccess: (data) => {
+        console.log(data);
+        reset({});
+      },
+    }
+  );
+
   const { mutate: updateUser } = useUpdateAPI();
-  
+
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
         email: selectedRow.email || "",
       });
     }
-  }, [selectedRow, reset]); 
+  }, [selectedRow, reset]);
 
-
-
-  const handleFormSubmit = handleSubmit(async (formdata:UserFormData) => {
+  const handleFormSubmit = handleSubmit(async (formdata: UserFormData) => {
     if (isEditMode) {
       await updateUser({ data: formdata, productOptions, id });
     } else {
       createUser({
         ...formdata,
         business_type: "",
-        branch_id:"",
+        branch_id: "",
         bank_account_id: "",
       });
     }
   });
-  
+
   return (
     <FormProvider methods={methods}>
-     
-
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
-      <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? "Edit User" : "Create User"}
-      </h2>
+        <h2 className="text-xl font-bold mb-4">
+          {isEditMode ? "Edit User" : "Create User"}
+        </h2>
         <Spacer>
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
-          <FieldWrapper>
+            <FieldWrapper>
               {getController({
                 ...userFormConfig.fields.email,
                 name: "email",
@@ -126,7 +143,6 @@ const UserCreationFormPage = () => {
                 </FieldWrapper>
               ))}
           </FormFieldRow>
-          
         </Spacer>
       </FormContentWrapper>
 
