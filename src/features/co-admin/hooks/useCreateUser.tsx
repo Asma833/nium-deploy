@@ -53,7 +53,7 @@ export const useCreateUser = ({role}: {role: string}) => {
       toast.success("User created successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || "User creation failed");
+      toast.error(error.message === 'Request failed with status code 409' ? 'Email already exist': error.message|| "User creation failed");
     }
   });
 
