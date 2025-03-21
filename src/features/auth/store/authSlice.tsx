@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // Defaults to localStorage
+import storage from 'redux-persist/lib/storage'; 
 import { User } from '../types/auth.types';
 import { PURGE } from 'redux-persist';
 

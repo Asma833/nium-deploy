@@ -1,89 +1,144 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/core/routes/constants";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useChangePassword } from "../hooks/useChangePassword";
-import { Link, useSearchParams } from "react-router-dom";
-import {
-  changePasswordSchema,
-  ChangePasswordSchema,
-} from "../schemas/changePassword.schema";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+import axiosInstance from "@/core/services/axios/axiosInstance";
+import { API } from "@/core/constant/apis";
 
-const ChangePasswordForm = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  const [searchParams] = useSearchParams();
+interface ChangePasswordFormProps {
+  token?: string;
+  isResetPassword?: boolean;
+}
 
-  const token = searchParams.get("token") || "";
+const formSchema = (isResetPassword: boolean) => z.object({
+  ...(isResetPassword ? {} : {
+    currentPassword: z.string().min(1, "Current password is required"),
+  }),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password")
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
 
-  const { mutate, isLoading } = useChangePassword();
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ 
+  token, 
+  isResetPassword = false 
+}) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const form = useForm<ChangePasswordSchema>({
-    resolver: zodResolver(changePasswordSchema),
+  type FormValues = {
+    currentPassword?: string;
+    password: string;
+    confirmPassword: string;
+  };
+  
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema(isResetPassword)),
     defaultValues: {
-      newPassword: "",
+      ...(isResetPassword ? {} : { currentPassword: "" }),
+      password: "",
       confirmPassword: "",
-      token: token,
     },
   });
 
-  const handleChangePassword = (values: ChangePasswordSchema) => {
-    mutate({
-      newPassword: values.newPassword,
-      confirmPassword: values.confirmPassword,
-      token: token,
-    });
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setLoading(true);
+      
+      if (isResetPassword && token) {
+        // Prepare payload for reset password
+        const resetPayload = {
+          token,
+          newPassword: values.password,
+          confirmPassword: values.confirmPassword
+        };
+        
+        // Make API call to reset password
+        await axiosInstance.post(`${API.AUTH.CHANGE_PASSWORD}`, resetPayload);
+        
+        toast({
+          title: "Success",
+          description: "Password has been reset successfully!"
+        });
+        navigate(ROUTES.AUTH.LOGIN);
+      } else {
+        
+        console.log("Changing password for logged in user");
+        toast({
+          title: "Success",
+          description: "Password changed successfully!"
+        });
+      }
+    } catch (error) {
+      console.error("Password change error:", error);
+      
+      let errorMessage = "Failed to change password. Please try again.";
+      if (axios.isAxiosError(error) && error.response) {
+        // Extract error message from API response if available
+        errorMessage = error.response.data?.message || errorMessage;
+      }
+      
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: errorMessage
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleChangePassword)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {!isResetPassword && (
+          <FormField
+            control={form.control}
+            name="currentPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Current Password</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="password" 
+                    placeholder="Enter current password" 
+                    {...field} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <FormField
           control={form.control}
-          name="newPassword"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <div className="relative">
-                  <Input
-                    {...field}
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter new password"
-                    autoComplete="off"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-accent-foreground"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </button>
-                </div>
+                <Input 
+                  type="password" 
+                  placeholder="Enter new password" 
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Confirm Password Field */}
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -91,47 +146,23 @@ const ChangePasswordForm = () => {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <div className="relative">
-                  <Input
-                    {...field}
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm new password"
-                    autoComplete="off"
-                  />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-accent-foreground"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-5 w-5 text-muted-foreground" />
-                    )}
-                  </button>
-                </div>
+                <Input 
+                  type="password" 
+                  placeholder="Confirm your password" 
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="text-center">
-          <div className="text-sm text-muted-foreground">
-            <Link to="/login" className="text-primary">
-              Back to Login
-            </Link>
-          </div>
-        </div>
-        {/* Submit Button */}
-        <Button type="submit" disabled={isLoading} className="w-full">
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Changing Password...
-            </>
-          ) : (
-            "Change Password"
-          )}
+
+        <Button 
+          type="submit" 
+          className="w-full"
+          disabled={loading}
+        >
+          {loading ? "Processing..." : (isResetPassword ? "Reset Password" : "Change Password")}
         </Button>
       </form>
     </Form>
