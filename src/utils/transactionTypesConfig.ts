@@ -17,7 +17,7 @@ export const transactionTypeMapping = [
   {
     id: "ab95d0f45758e4bff3e0ba916d30d80am8eaomge",
     text: "REMITTANCE",
-    buySell: null, // Don't show for this type
+    buySell: null,
   },
 ];
 

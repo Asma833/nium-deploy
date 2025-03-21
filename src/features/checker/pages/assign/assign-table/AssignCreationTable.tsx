@@ -1,6 +1,5 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
 import { getAssignCreationColumns } from "./assign-creation-table-col";
-import { transactionTableData as initialData } from "./assign-table-value";
 import { useState, useEffect } from "react";
 import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
@@ -11,8 +10,6 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { useGetApi } from "@/features/checker/hooks/useGetApi";
 import axiosInstance from "@/core/services/axios/axiosInstance";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import useGetConfig from "@/features/checker/hooks/useGetConfig";
-// import useGetConfig from "@/features/checker/hooks/useGetConfig";
 
 const AssignCreationTable = () => {
   const { setTitle } = usePageTitle();
@@ -33,14 +30,11 @@ const AssignCreationTable = () => {
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
-  // const { purpose_type, transaction_type, document_type } = useGetConfig();
-  // console.log('purpose_type, transaction_type, document_type:', purpose_type, transaction_type, document_type)
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.ASSIGN.LIST,
     initialPageSize: 10,
-    initialData,
     dataPath: "transactions",
     totalRecordsPath: "totalRecords",
   });
@@ -48,10 +42,7 @@ const AssignCreationTable = () => {
   // Using the filter API hook
   const filterApi = useFilterApi({
     endpoint: API.CHECKER.ASSIGN.LIST,
-    initialData,
-    // base query params if needed
     baseQueryParams: {
-      // For example: clientId: '123'
     },
   });
 
@@ -135,7 +126,6 @@ const AssignCreationTable = () => {
             ? filterApi.data ?? []
             : assignList ?? []
         }
-        tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={filterApi.loading || pagination.loading || isSubmitting}

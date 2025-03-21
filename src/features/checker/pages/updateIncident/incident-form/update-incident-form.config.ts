@@ -10,6 +10,13 @@ export const sectionTitle = "Transaction Form";
 
 export const updateFormIncidentConfig = {
   basicDetails: {
+    cardNo: {
+      label: "Card No.",
+      name: "cardNo",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter Card Number",
+    },
     niumId: {
       label: "Nium Id",
       name: "nium_order_id",
@@ -17,13 +24,7 @@ export const updateFormIncidentConfig = {
       required: true,
       placeholder: "Enter Nium ID",
     },
-    cardNo: {
-      label: "Card No.",
-      name: "incidentform.cardNo",
-      type: FieldType.Text,
-      required: true,
-      placeholder: "Enter Card Number",
-    },
+
     customerPan: {
       label: "Customer PAN",
       name: "customer_pan",
@@ -59,7 +60,6 @@ export const updateFormIncidentConfig = {
       required: true,
       placeholder: "Enter Purpose",
     },
-
   },
   buySellType: {
     buySell: {

@@ -107,7 +107,6 @@ const UpdateIncidentCreationTable = () => {
           columns={columns}
           // data={transactionTableData}
           data={data && data.orders.length > 0 ? data.orders : []}
-          tableWrapperClass="bg-background p-5 rounded-md"
           defaultSortColumn="nium_order_id"
           defaultSortDirection="asc"
           loading={pagination.loading}

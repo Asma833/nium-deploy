@@ -8,6 +8,7 @@ import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
+import { purposeTypeOptions, transactionTypeOptions } from "@/features/checker/config/tableFiltersConfig";
 // import { useCurrentUser } from "@/utils/getUserFromRedux";
 
 const ViewAllTable = () => {
@@ -98,19 +99,7 @@ const ViewAllTable = () => {
     exportToCSV(dataToExport, exportColumns, "view-all");
   };
 
-  // Define transaction type options
-  const transactionTypeOptions = [
-    { label: "CARD LOAD", value: "all" },
-    { label: "CARD RELOAD", value: "transfer" },
-    { label: "CARD ENCASHMENT", value: "payment" },
-    { label: "REMITTANCE", value: "deposit" },
-  ];
 
-  // Define status options
-  const purposeTypeOptions = [
-    { label: "BTQ", value: "btq" },
-    { label: "BT", value: "bt" },
-  ];
 
   // Check for loading and error states
   const isLoading =
@@ -153,17 +142,17 @@ const ViewAllTable = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
-            status: {
-              id: "purposeType",
-              label: "Purpose Type",
-              placeholder: "Purpose Type",
-              options: purposeTypeOptions,
-            },
             selects: [
+              {
+                id: "purposeType",
+                label: "Purpose Type",
+                placeholder: "---Select---",
+                options: purposeTypeOptions,
+              },
               {
                 id: "transactionType",
                 label: "Transaction Type",
-                placeholder: "Transaction Type",
+                placeholder: "---Select---",
                 options: transactionTypeOptions,
               },
             ],

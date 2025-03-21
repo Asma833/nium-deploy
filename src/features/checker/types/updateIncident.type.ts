@@ -16,7 +16,6 @@ export interface UpdateIncidentRequest {
     
     // New fields based on the form we're using
     niumId?: string;
-    cardNo?: string;
     customerPan?: string;
     customerName?: string;
     bmfOrderRef?: string;

@@ -105,8 +105,8 @@
 .MuiPickersCalendarHeader-label {
   @apply text-foreground;
 }
-.MuiInputBase-input.Mui-disabled{
-  background-color: rgb(238, 238, 238)
+.MuiInputBase-input.Mui-disabled {
+  background-color: rgb(238, 238, 238);
 }
 .MuiPickersArrowSwitcher-button {
   @apply text-muted-foreground;
@@ -127,8 +127,12 @@
   flex-direction: column;
 }
 
-.fieldWrapper  .MuiFormControl-root{
+.fieldWrapper .MuiFormControl-root {
   width: 100%;
 }
 
-
+@media (max-width: 768px) {
+  .formFieldRow {
+    flex-direction: column;
+  }
+}

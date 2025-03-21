@@ -2,7 +2,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Suspense } from "react";
 import { AppRoutes } from "./core/routes/AppRoutes";
 import LoadingFallback from "./components/loader/LoadingFallback";
-import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./providers/ThemeProvider";
@@ -10,6 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from "./store";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import { MUIProviders } from './providers/MUIProviders';
+import { Toaster } from "./components/ui/sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {

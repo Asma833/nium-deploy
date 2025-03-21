@@ -4,9 +4,7 @@ import * as z from "zod";
 export const updateIncidentFormSchema = z.object({
   fields: z
     .object({
-      // Include all fields from the type definition
       niumId: z.string().optional(),
-      cardNo: z.string().optional(),
       customerPan: z.string().optional(),
       customerName: z.string().optional(),
       bmfOrderRef: z.string().optional(),
@@ -20,6 +18,7 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
+            console.log("value:", value);
             // If fields.status.reject is true, then comment is required
             return true; // We'll do the validation separately based on UI state
           },
@@ -36,6 +35,7 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
+            console.log("value:", value);
             // If fields.status.approve is true, then niumInvoiceNo is required
             return true; // We'll do the validation separately based on UI state
           },
@@ -52,14 +52,10 @@ export const updateIncidentFormSchema = z.object({
     .refine(
       (data) => {
         if (data.status.approve && !data.status.reject) {
-          toast.error(
-            "Nium Invoice Number is required when approving an incident"
-          );
           return !!data.niumInvoiceNumber;
         }
         // If reject is selected, comment is required
         if (data.status.reject && !data.status.approve) {
-          toast.error("Comments is required when rejecting an incident");
           return !!data.comment;
         }
         return true;

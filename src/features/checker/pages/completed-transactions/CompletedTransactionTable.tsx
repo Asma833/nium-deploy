@@ -10,6 +10,10 @@ import { getTransactionTableColumns } from "./completed-transaction-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
+import {
+  purposeTypeOptions,
+  transactionTypeOptions,
+} from "../../config/tableFiltersConfig";
 
 const CompletedTransactionTable = () => {
   const { setTitle } = usePageTitle();
@@ -104,24 +108,6 @@ const CompletedTransactionTable = () => {
     exportToCSV(dataToExport, exportColumns, "completed-transactions");
   };
 
-  // Define transaction type options
-  const transactionTypeOptions = [
-    { label: "All Types", value: "all" },
-    { label: "Transfer", value: "transfer" },
-    { label: "Payment", value: "payment" },
-    { label: "Deposit", value: "deposit" },
-    { label: "Withdrawal", value: "withdrawal" },
-  ];
-
-  // Define status options
-  const transactionStatusOptions = [
-    { label: "All Status", value: "all" },
-    { label: "Pending", value: "pending" },
-    { label: "Completed", value: "completed" },
-    { label: "Failed", value: "failed" },
-    { label: "Processing", value: "processing" },
-  ];
-
   // Check for loading and error states
   const isLoading =
     checkerOrdersLoading || filterApi.loading || pagination.loading;
@@ -163,16 +149,18 @@ const CompletedTransactionTable = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
-            status: {
-              label: "Status",
-              placeholder: "Select status",
-              options: transactionStatusOptions,
-            },
+
             selects: [
               {
+                id: "purposeType",
+                label: "Purpose Type",
+                placeholder: "---Select---",
+                options: purposeTypeOptions,
+              },
+              {
                 id: "transactionType",
-                label: "Type",
-                placeholder: "Select type",
+                label: "Transaction Type",
+                placeholder: "---Select---",
                 options: transactionTypeOptions,
               },
             ],

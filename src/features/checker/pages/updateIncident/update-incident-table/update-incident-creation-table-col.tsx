@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { SignLinkButton } from "@/features/e-sign/components/SignLinkButton";
 import {
   determinePurposeType,
@@ -96,8 +97,17 @@ export const getTransactionTableColumns = (
     name: "E Sign Link",
     cell:  (_: unknown, rowData: any) => (
       <button onClick={() => {handleCopyLink(rowData)}}  >
-        {/* <LinkIcon className="text-gray-500 cursor-pointer" /> */}
-        <SignLinkButton e_sign_link={rowData.e_sign_link} />
+        <SignLinkButton copyLinkUrl={rowData.e_sign_link} buttonText={"E Sign"} />
+      </button>
+    ),
+  },
+  {
+    key: "merged_document",
+    id: "merged_document",
+    name: "Merged Document",
+    cell:  (_: unknown, rowData: any) => (
+      <button onClick={() => {handleCopyLink(rowData)}}  >
+        <SignLinkButton copyLinkUrl={rowData.merged_document.url} buttonText={"Document"} />
       </button>
     ),
   },
@@ -105,10 +115,11 @@ export const getTransactionTableColumns = (
     key: "release",
     id: "release",
     name: "Release",
-    cell: (_: unknown, rowData: any) => (
-      <button onClick={() => handleUnassign(rowData)}>
-        <X className="text-gray-600 cursor-pointer" />
-      </button>
+    cell: (_: unknown, rowData: any) => ( 
+      <Button onClick={() => handleUnassign(rowData)} className="flex items-center" size={"sm"}>
+        <X className="text-white cursor-pointer" size={20} />
+        Unassign
+      </Button>
     ),
   },
 ];

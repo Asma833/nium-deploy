@@ -4,13 +4,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateIncidentFormSchema } from "./update-incident-form.schema";
 import { useState, useEffect } from "react";
 import { FormProvider } from "@/components/form/context/FormProvider";
-import { getController } from "@/components/form/utils/getController";
+import {
+  baseGeneralFieldStyle,
+  baseStyle,
+  getController,
+} from "@/components/form/utils/getController";
 import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
 import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
 import Spacer from "@/components/form/wrapper/Spacer";
 import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
 import { updateFormIncidentConfig } from "../incident-form/update-incident-form.config";
-import ExchangeRateDetails from "./ExchangeRateDetails";
+// import ExchangeRateDetails from "./ExchangeRateDetails";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 import { Loader2 } from "lucide-react";
@@ -20,15 +24,15 @@ import { MaterialText } from "@/components/form/controller/MaterialText";
 import { MaterialTextArea } from "@/components/form/controller/MaterialTextArea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import useSubmitIncidentFormData from "./useSubmitIncidentFormData";
+import useSubmitIncidentFormData from "../../completed-transactions/hooks/useSubmitIncidentFormData";
 import { toast } from "sonner";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import { transactionTypeMapping } from "@/utils/transactionTypesConfig";
 import {
   determineBuySell,
   determinePurposeType,
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
+import { FormHelperText } from "@mui/material";
 
 type PropTypes = {
   formActionRight: string;
@@ -39,6 +43,7 @@ type PropTypes = {
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const { setTitle } = usePageTitle();
+
   useEffect(() => {
     setTitle("Update Incident");
   }, [setTitle]);
@@ -53,7 +58,6 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
-  console.log("rowData:===>", rowData);
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -62,10 +66,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-
-  // Transaction type to Buy/Sell mapping
-
-  // Function to determine buy/sell based on transaction type
+  console.log("isFormValid:", isFormValid);
 
   // State to track if we should show the buy/sell field
   const [showBuySell, setShowBuySell] = useState(true);
@@ -75,7 +76,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
     defaultValues: {
       fields: {
         niumId: "",
-        cardNo: "",
         customerPan: "",
         customerName: "",
         bmfOrderRef: "",
@@ -97,14 +97,16 @@ const UpdateIncidentForm = (props: PropTypes) => {
     setValue,
     reset,
     formState: { errors },
+    setError,
+    clearErrors,
   } = methods;
+  console.log("errors===>", errors);
 
   // Function to reset form to initial state
   const resetFormValues = () => {
     reset({
       fields: {
         niumId: "",
-        cardNo: "",
         customerPan: "",
         customerName: "",
         bmfOrderRef: "",
@@ -158,7 +160,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
 
       const mappedData = {
         niumId: rowData.nium_order_id || "",
-        cardNo: rowData.card_number || "",
         customerPan: rowData.customer_pan || "",
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
@@ -200,9 +201,10 @@ const UpdateIncidentForm = (props: PropTypes) => {
     if (isApproved && !niumInvoiceNumber) {
       valid = false;
     }
-
     if (isRejected && !comment) {
       valid = false;
+    } else {
+      clearErrors("fields.comment");
     }
 
     setIsFormValid(valid);
@@ -228,18 +230,29 @@ const UpdateIncidentForm = (props: PropTypes) => {
   };
 
   const handleFormSubmit = async () => {
+    if (isApproved && !niumInvoiceNumber) {
+      setError("fields.niumInvoiceNumber", {
+        type: "required",
+        message: "Nium Invoice Number is required when approving an incident",
+      });
+      return;
+    } else {
+      clearErrors("fields.niumInvoiceNumber");
+    }
+
+    if (isRejected && !comment) {
+      setError("fields.comment", {
+        type: "required",
+        message: "Comment is required when rejecting an incident",
+      });
+      return;
+    } else {
+      clearErrors("fields.comment");
+    }
+
     try {
       await handleSubmit(async (data) => {
         const { fields } = data;
-
-        if (fields) {
-          if (fields?.status?.approve && !fields.niumInvoiceNumber) {
-            toast.error(
-              "Nium Invoice Number is required when approving an incident"
-            );
-            return;
-          }
-        }
 
         const formattedData = {
           partner_order_id: fields.bmfOrderRef || "",
@@ -278,7 +291,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const handleApproveChange = (checked: boolean) => {
     setIsApproved(checked);
     if (checked) {
-      setIsRejected(false); // Uncheck reject when approve is checked
+      // Uncheck reject when approve is checked
+      setIsRejected(false);
     }
   };
 
@@ -286,7 +300,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const handleRejectChange = (checked: boolean) => {
     setIsRejected(checked);
     if (checked) {
-      setIsApproved(false); // Uncheck approve when reject is checked
+      // Uncheck approve when reject is checked
+      setIsApproved(false);
     }
   };
 
@@ -315,8 +330,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
                   </FieldWrapper>
                 );
               })}
-          </FormFieldRow>
-          <FormFieldRow rowCols={handleRowCols()}>
             {Object.entries(updateFormIncidentConfig.basicDetails)
               .slice(5, 6)
               .map(([name, field]) => {
@@ -359,25 +372,18 @@ const UpdateIncidentForm = (props: PropTypes) => {
                   </FieldWrapper>
                 );
               })}
-          </FormFieldRow>
-          {/* buy/sell */}
-          {showBuySell && (
-            <FormFieldRow rowCols={handleRowCols()}>
-              <FieldWrapper
-                id="buy-sell"
-                className={cn(
-                  "w-full",
-                  errors.fields?.buySell ? "mb-8" : "mb-2"
-                )}
-              >
+            {showBuySell && (
+              <FieldWrapper className={cn("w-full mb-2")}>
                 <MaterialText
+                  className={cn(baseGeneralFieldStyle, "w-full")}
                   name="fields.buySell"
                   label="Transaction Mode"
-                  disabled={true} // Always disabled since it's determined by transaction type
+                  disabled={true}
+                  baseStyle={baseStyle({})}
                 />
               </FieldWrapper>
-            </FormFieldRow>
-          )}
+            )}
+          </FormFieldRow>
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
@@ -391,7 +397,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
             </Button>
           </FormFieldRow>
 
-          {/* Replace the CheckboxWrapper with shadcn Checkbox components */}
           <FormFieldRow rowCols={handleRowCols()}>
             <div className="flex items-center space-x-8">
               <div className="flex items-center space-x-2">
@@ -414,6 +419,9 @@ const UpdateIncidentForm = (props: PropTypes) => {
                   Reject
                 </Label>
               </div>
+              <FormHelperText error={!!errors.fields?.status}>
+                {errors.fields?.status?.message}
+              </FormHelperText>
             </div>
           </FormFieldRow>
 
@@ -424,11 +432,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
                 label="Comment"
                 required={isRejected}
                 className="w-full rounded-lg"
-                error={
-                  isRejected && !comment
-                    ? "Comment is required when rejecting"
-                    : ""
-                }
               />
             </FormFieldRow>
             <FormFieldRow className="flex-1">
@@ -437,11 +440,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
                   name="fields.niumInvoiceNumber"
                   label="Nium Invoice Number"
                   required={isApproved}
-                  error={
-                    isApproved && !niumInvoiceNumber
-                      ? "Nium Invoice Number is required when approving"
-                      : ""
-                  }
+                  className="w-full rounded-lg"
+                  baseStyle={baseStyle({})}
                 />
               )}
             </FormFieldRow>
@@ -449,7 +449,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
         </Spacer>
       </FormContentWrapper>
 
-      {/* Submit Button */}
       <div className="flex justify-center bg-background">
         <Button disabled={isPending} onClick={handleFormSubmit}>
           {isPending ? <Loader2 className="animate-spin" /> : "Submit"}

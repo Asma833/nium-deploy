@@ -6,11 +6,20 @@ import { MaterialEmail } from "@/components/form/controller/MaterialEmail";
 import { MaterialFile } from "@/components/form/controller/MaterialFile";
 import { MaterialCheckbox } from "@/components/form/controller/MaterialCheckbox";
 import { MaterialNumber } from "@/components/form/controller/MaterialNumber";
-import  MaterialPassword  from "@/components/form/controller/MaterialPassword";
+import MaterialPassword from "@/components/form/controller/MaterialPassword";
 
-export const getController = (field: any) => {
+interface FieldWithStyleProps {
+  height?: string;
+  error?: boolean;
+}
+
+export const baseGeneralFieldStyle =
+  "bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-md text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))]";
+
+export const baseStyle = (field: FieldWithStyleProps) => {
   const fieldHeight = field.height || "45px";
-  const baseStyle = {
+
+  return {
     height: fieldHeight,
     color: "hsl(var(--foreground))",
     "& .MuiInputBase-input": {
@@ -78,19 +87,19 @@ export const getController = (field: any) => {
       },
     },
     ...(field.error && {
-      '& .MuiOutlinedInput-root': {
-        '& fieldset': {
-          borderColor: 'hsl(var(--destructive))',
+      "& .MuiOutlinedInput-root": {
+        "& fieldset": {
+          borderColor: "hsl(var(--destructive))",
         },
       },
     }),
   };
-  const baseGeneralFieldStyle =
-    "bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-md text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))]";
+};
 
+export const getController = (field: any) => {
   const commonProps = {
     onChange: (e: any) => {
-      console.log(`Field ${field.name} changed:`, e.target.value); 
+      console.log(`Field ${field.name} changed:`, e.target.value);
     },
   };
 
@@ -102,7 +111,7 @@ export const getController = (field: any) => {
           name={field.name}
           label={field.label}
           uppercase={field.uppercase}
-          baseStyle={baseStyle}
+          baseStyle={baseStyle(field)}
           className={baseGeneralFieldStyle}
           disabled={field.disabled}
           forcedValue={field.forcedValue}
@@ -114,7 +123,7 @@ export const getController = (field: any) => {
           {...commonProps}
           name={field.name}
           label={field.label}
-          baseStyle={baseStyle}
+          baseStyle={baseStyle(field)}
           className={baseGeneralFieldStyle}
         />
       );
@@ -124,7 +133,7 @@ export const getController = (field: any) => {
           {...commonProps}
           name={field.name}
           label={field.label}
-          baseStyle={baseStyle}
+          baseStyle={baseStyle(field)}
           className={baseGeneralFieldStyle}
         />
       );
@@ -149,7 +158,7 @@ export const getController = (field: any) => {
           defaultSelected={field.defaultSelected}
         />
       );
-      
+
     case "select":
       return (
         <MaterialSelect
@@ -157,7 +166,7 @@ export const getController = (field: any) => {
           name={field.name}
           options={field.options}
           label={field.label}
-          baseStyle={baseStyle}
+          baseStyle={baseStyle(field)}
           className={baseGeneralFieldStyle}
           placeholder={field.placeholder}
         />
@@ -168,7 +177,7 @@ export const getController = (field: any) => {
           {...commonProps}
           name={field.name}
           label={field.label}
-          baseStyle={baseStyle}
+          baseStyle={baseStyle(field)}
           className={baseGeneralFieldStyle}
           error={field.error}
         />
@@ -182,17 +191,17 @@ export const getController = (field: any) => {
           options={field.options}
         />
       );
-      case "password":
-      return <MaterialPassword 
-      {...commonProps} 
-      name={field.name} 
-      label={field.label} 
-      baseStyle={baseStyle} 
-      className={baseGeneralFieldStyle} 
-      />;
+    case "password":
+      return (
+        <MaterialPassword
+          {...commonProps}
+          name={field.name}
+          label={field.label}
+          baseStyle={baseStyle(field)}
+          className={baseGeneralFieldStyle}
+        />
+      );
     default:
       return null;
   }
 };
-
-
