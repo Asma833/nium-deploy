@@ -15,7 +15,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <div
-        className={`fixed lg:static top-0 left-0 w-48 h-full bg-white shadow-md transition-transform transform 
+        className={`fixed lg:static top-0 left-0 w-28 h-full bg-white shadow-md transition-transform transform 
         ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-64"
         } lg:translate-x-0 z-50`}
@@ -26,7 +26,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
       <Header
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        className="fixed top-0 w-full lg:left-48 lg:w-[calc(100%-12rem)]  bg-background shadow-md"
+        className="fixed top-0 w-full lg:left-28 lg:w-[calc(100%-7rem)]  bg-background shadow-md"
       />
       <main
         className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto"

@@ -1,11 +1,19 @@
 import { lazy } from "react";
 import { ROUTES } from "../constants";
+import { checkerComponents } from "./checker.routes";
 
 const superAdminComponents = {
-    User: lazy(() => import("@/features/co-admin/pages/n-user/n-user-table/NUserCreationTable")),
-    UserCreation : lazy(()=> import("@/features/co-admin/pages/n-user/user-creation-form/page")),
-    UpdateUser : lazy(()=> import("@/features/co-admin/pages/n-user/user-creation-form/page"))
-  }
+  User: lazy(
+    () =>
+      import("@/features/co-admin/pages/n-user/n-user-table/NUserCreationTable")
+  ),
+  UserCreation: lazy(
+    () => import("@/features/co-admin/pages/n-user/user-creation-form/page")
+  ),
+  UpdateUser: lazy(
+    () => import("@/features/co-admin/pages/n-user/user-creation-form/page")
+  ),
+};
 export const superAdminRoutes = [
   {
     path: ROUTES.SUPERADMIN.NUSER,
@@ -20,10 +28,15 @@ export const superAdminRoutes = [
     permission: "view_dashboard",
   },
   {
+    path: ROUTES.CHECKER.VIEWALL,
+    element: checkerComponents.ViewAll,
+    roles: ["checker", "co-admin"],
+    permission: "view_dashboard",
+  },
+  {
     path: ROUTES.SUPERADMIN.UPDATEUSER,
     element: superAdminComponents.UpdateUser,
     roles: ["maker", "co-admin"],
     permission: "view_dashboard",
-  }
- 
-]
+  },
+];

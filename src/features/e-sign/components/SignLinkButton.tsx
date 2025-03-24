@@ -19,7 +19,6 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
   return (
     <Button onClick={handleCopyLink} variant="outline" size="sm">
       <LinkIcon className="text-gray-500 cursor-pointer" />
-      Copy
     </Button>
   );
 };
