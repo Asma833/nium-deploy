@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { userApi } from "../api/userApi"; // Ensure the correct import
 import { toast } from "sonner";
+import { partnerApi } from "../api/partnerApi";
 
 export const useProductOptions = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["productOptions"], // Unique query key
     queryFn: async () => {
-      const response = await userApi.getProducts();
+      const response = await partnerApi.getProducts();
       return response; 
     },
   });

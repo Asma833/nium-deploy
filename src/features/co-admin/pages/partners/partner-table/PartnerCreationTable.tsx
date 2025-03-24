@@ -1,6 +1,6 @@
 import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getUserTableColumns } from "./n-user-creation-table-col";
-import { userTableData as initialData } from "./user-table-value";
+import { getUserTableColumns } from "./partner-creation-table-col";
+import { userTableData as initialData } from "./partner-table-value";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
@@ -10,13 +10,14 @@ import { API } from "@/core/constant/apis";
 import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useUpdateStatusAPI } from "@/features/co-admin/hooks/useUserUpdateStatus";
-import { useGetUserApi } from "@/features/co-admin/hooks/useGetUser";
+import { useGetPartnersApi } from "@/features/co-admin/hooks/useGetPartners";
+import { usePartnerStatusUpdateAPI } from "@/features/co-admin/hooks/usePartnerUpdateStatus";
 
-const NuserCreationTable = () => {
+const PartnerCreationTable = () => {
   const navigate = useNavigate();
   const { setTitle } = usePageTitle();
   useEffect(() => {
-    setTitle("N-Users");
+    setTitle("PARTNERS");
   }, [setTitle]);
   const [tableData] = useState(initialData);
 
@@ -24,17 +25,17 @@ const NuserCreationTable = () => {
     data: users = [],
     loading,
     error
-  } = useGetUserApi("NUSERS.USER.LIST");
+  } = useGetPartnersApi("NUSERS.PARTNERS.LIST");
 
-  const { mutate: updateStatus } = useUpdateStatusAPI();
+  const { mutate: updateStatus } = usePartnerStatusUpdateAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {
-    if (!rowData || !rowData.id) {
+    if (!rowData || !rowData.hashed_key) {
       return;
     }
       // Make the API call to update the status
       await updateStatus({
-        hashed_key: rowData.id,
+        hashed_key: rowData.hashed_key,
         is_active: checked,
       });
   };
@@ -45,7 +46,7 @@ const NuserCreationTable = () => {
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    endpoint: API.NUSERS.USER.LIST,
+    endpoint: API.NUSERS.PARTNERS.LIST,
     initialPageSize: 10,
     initialData,
     dataPath: "transactions",
@@ -53,14 +54,14 @@ const NuserCreationTable = () => {
   });
 
   const handleCreateUser = () => {
-    navigate("create-user");
+    navigate("create-partner");
   };
 
   const handleNavigate = (path: string, rowData: string) => {
     navigate(path, { state: { selectedRow: rowData } });
   };
   const filterApi = useFilterApi({
-    endpoint: API.NUSERS.USER.LIST,
+    endpoint: API.NUSERS.PARTNERS.LIST,
     initialData,
     // base query params if needed
     baseQueryParams: {
@@ -122,4 +123,4 @@ const NuserCreationTable = () => {
   );
 };
 
-export default NuserCreationTable;
+export default PartnerCreationTable;

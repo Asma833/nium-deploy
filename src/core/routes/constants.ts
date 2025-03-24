@@ -23,9 +23,12 @@ export const ROUTES = {
     UPDATE_INCIDENT: '/update-incident',
     COMPLETEDTRANSACTIONS: '/completed-transactions'
   },
-  SUPERADMIN:{
+  COADMIN:{
     NUSER: '/users',
     CREATEUSER:'/users/create-user',
-    UPDATEUSER:'/users/update-user/:id'
+    UPDATEUSER:'/users/update-user/:id',
+    PARTNER: '/partners',
+    CREATEPARTNER:'/partners/create-partner',
+    UPDATEPARTNER:'/partners/update-partner/:id'
   }
 } as const;

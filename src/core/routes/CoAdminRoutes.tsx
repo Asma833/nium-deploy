@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { superAdminRoutes } from "./RoutesConfig";
+import { coAdminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import Layout from "@/features/co-admin/components/CoAdminLayout";
@@ -8,7 +8,7 @@ export const CoAdminRoutes = () => {
   return (
     
     <Routes>
-    {superAdminRoutes.map(({ path, element: Element, roles, permission }) => (
+    {coAdminRoutes.map(({ path, element: Element, roles, permission }) => (
       <Route
         key={path}
         path={path}
