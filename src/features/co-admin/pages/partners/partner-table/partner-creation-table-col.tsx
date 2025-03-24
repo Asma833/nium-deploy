@@ -54,7 +54,7 @@ export const getUserTableColumns = (
         name: "Status",
         cell: (_,row:any) => {
           return (
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-center">
               <Switch
                 checked={row?.is_active}
                 onCheckedChange={(checked) => {handleStatusChange(row, checked)}}
@@ -70,7 +70,7 @@ export const getUserTableColumns = (
       name: "Action",
       cell: (_,rowData:any) => {
         return(
-          <div className="flex gap-2">
+          <div className="flex flex-col items-center">
             <button
               className="p-2 rounded-md hover:bg-muted/20"
               onClick={() =>{console.log(rowData,"rowData");
