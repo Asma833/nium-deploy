@@ -7,7 +7,7 @@ import { UserRole } from "@/features/auth/types/auth.types";
 import { RootState } from "@/store";
 import NotFoundPage from "@/components/common/NotFoundPage";
 import { CheckerRoutes } from "./CheckerRoutes";
-import { SuperAdminRoutes } from "./SuperAdminRoutes";
+import { CoAdminRoutes } from "./CoAdminRoutes";
 
 export const AppRoutes = () => {
   const selectUser = useMemo(
@@ -25,7 +25,7 @@ export const AppRoutes = () => {
         <Route key={path} path={path} element={<Element />} />
       ))}
       <Route path="/checker/*" element={<CheckerRoutes/>} />
-      <Route path="/admin/*" element={<SuperAdminRoutes />} />
+      <Route path="/admin/*" element={<CoAdminRoutes />} />
       <Route
         path="/"
         element={<Navigate to={getDefaultRoute(user?.role.name)} replace />}

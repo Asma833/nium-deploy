@@ -4,11 +4,11 @@ import Header from "@/components/layout/side-navigaion/HeaderNav";
 import { ReactNode } from "react";
 import SideNavigation from "./side-navigation/SideNav";
 
-interface SuperAdminLayoutProps {
+interface CoAdminLayoutProps {
   children: ReactNode;
 }
 
-const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
+const CoAdminLayout = ({ children }: CoAdminLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
  
   return (
@@ -32,4 +32,4 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   );
 };
 
-export default SuperAdminLayout;
+export default CoAdminLayout;

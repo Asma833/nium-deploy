@@ -2,9 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import { superAdminRoutes } from "./RoutesConfig";
 import { ProtectedRoute } from "./ProtectedRoute";
 import NotFoundPage from "@/components/common/NotFoundPage";
-import Layout from "@/features/co-admin/components/SuperAdminLayout";
+import Layout from "@/features/co-admin/components/CoAdminLayout";
 
-export const SuperAdminRoutes = () => {
+export const CoAdminRoutes = () => {
   return (
     
     <Routes>
