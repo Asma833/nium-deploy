@@ -10,6 +10,13 @@ import { persistor, store } from "./store";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import { MUIProviders } from './providers/MUIProviders';
 import { Toaster } from "./components/ui/sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +33,7 @@ const App = () => {
     <MUIProviders>
       <ThemeProvider>
         <Provider store={store}>
+          <TooltipProvider>
           <PersistGate loading={<LoadingFallback />} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
               <BrowserRouter>
@@ -38,6 +46,7 @@ const App = () => {
               </BrowserRouter>
             </QueryClientProvider>
           </PersistGate>
+          </TooltipProvider>
         </Provider>
       </ThemeProvider>
     </MUIProviders>

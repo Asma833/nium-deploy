@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
   };
 
   return (
-    <aside className="bg-background h-screen shadow-lg fixed top-0 left-0 flex flex-col transition-all z-30 w-48">
+    <aside className="bg-[--sidenav-bg] h-screen shadow-lg fixed top-0 left-0 flex flex-col transition-all z-30 w-28">
       {/* Sidebar Logo */}
       <Logo className="invert-in-dark ml-4 mb-1 mt-4" />
 
@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                 <a
                   onClick={() => item.path && handleNavigation(item.path, item.title)}
                   className={cn(
-                   "flex items-center gap-2 pl-2 my-2 w-full rounded-md cursor-pointer transition-colors text-sm",
+                   "flex items-center text-center flex-col gap-2 my-2 w-full rounded-md cursor-pointer transition-colors text-[12px]",
                    activeItem === item.title ? "bg-primary text-white hover:bg-gray-200 hover:text-black" : "hover:bg-muted/20"
                  ,item.title.length > 16 ? "py-1" : "py-3")}
                 >

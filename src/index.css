@@ -11,6 +11,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
     --primary: 328 100% 50%; /* #fd0194 */
+    --primary-100: 328 100% 20%;
     --primary-light: 328 100% 95%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 13% 98%; /* #f9fafc */
@@ -33,9 +34,13 @@
     --radius: 0.5rem;
     --text-p: 5 0% 43%;
     --filter-bg: #e9e9e9;
+    --table-bg: #ffffff;
+    --table-header: #f3f3f3;
+    --table-border: #f0f0f0;
+    --sidenav-bg: #f9fafc;
   }
   .dark {
-    --background: 0 0% 3.9%;
+    --background: 0 0% 14.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 10%;
     --card-foreground: 0 0% 98%;
@@ -64,6 +69,10 @@
     --text-p: 5 0% 100%;
     --filter-bg: #585858;
     --filter-fg: #cecece;
+    --table-bg: #464646;
+    --table-header: #000000;
+    --table-border: #000000;
+    --sidenav-bg: #353535;
   }
 }
 
@@ -135,4 +144,43 @@
   .formFieldRow {
     flex-direction: column;
   }
+}
+
+html[class="dark"] {
+  .MuiDateCalendar-root {
+    color: white;
+  }
+  .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
+    color: white;
+  }
+}
+/* Dark mode styles for MUI components */
+.dark .MuiDateCalendar-root {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiPickersDay-root {
+  color: hsl(var(--foreground));
+}
+.dark .MuiDayCalendar-weekDayLabel {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiInputBase-input.Mui-disabled {
+  background-color: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
+}
+
+.dark .MuiPickersArrowSwitcher-button {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiPickersDay-root.Mui-selected {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }

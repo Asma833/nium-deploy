@@ -13,7 +13,7 @@ export const Dashboard: React.FC = () => {
   return (
     <>
       {error && <span className="text-red-500">{error ? "Something went wrong" : ""}</span>}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {dashboardItems.map((item) => (
           <DashboardCard
             key={item.id}

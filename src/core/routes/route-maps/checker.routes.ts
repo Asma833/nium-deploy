@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { ROUTES } from "../constants";
 
-const checkerComponents = {
+export const checkerComponents = {
     Dashboard: lazy(() => import("@/features/checker/pages/dashboard/page/DashboardPage")),
     Assign: lazy(() => import("@/features/checker/pages/assign/assign-table/AssignCreationTable")),
     

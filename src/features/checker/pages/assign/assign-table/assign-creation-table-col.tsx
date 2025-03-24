@@ -7,7 +7,7 @@ export const getAssignCreationColumns = (
     key: "select",
     id: "select",
     name: "Select",
-    className: "50px",
+    className: "min-w-0 p-2",
     cell: (value: any, row: any) => (
       <input
         type="checkbox"

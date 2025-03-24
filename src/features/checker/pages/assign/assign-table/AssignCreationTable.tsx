@@ -98,14 +98,14 @@ const AssignCreationTable = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-4 flex items-center">
+      {/* <div className="mb-4 flex items-center">
         {(filterApi.loading || pagination.loading || loading) && (
           <span className="text-blue-500">Loading data...</span>
         )}
         {(filterApi.error || pagination.error || error) && (
           <span className="text-red-500">Error loading data</span>
         )}
-      </div>
+      </div> */}
 
       <DynamicTable
         columns={columns}
@@ -118,7 +118,9 @@ const AssignCreationTable = () => {
         }
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
-        loading={filterApi.loading || pagination.loading || isSubmitting}
+        loading={
+          filterApi.loading || pagination.loading || isSubmitting || loading
+        }
         paginationMode={isPaginationDynamic ? "dynamic" : "static"}
         onPageChange={
           isPaginationDynamic

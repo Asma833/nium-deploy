@@ -192,7 +192,11 @@ export function DynamicTable<T extends Record<string, any>>({
     <div className="space-y-4 dynamic-table-container w-full">
       {refreshAction && refreshAction.isRefreshButtonVisible && (
         <div className="flex items-center justify-between">
-          <Button onClick={refreshAction.onRefresh} variant="outline" size={"sm"}>
+          <Button
+            onClick={refreshAction.onRefresh}
+            variant="outline"
+            size={"sm"}
+          >
             {refreshAction.refreshButtonText
               ? refreshAction.refreshButtonText
               : "Refresh Data"}
@@ -235,19 +239,19 @@ export function DynamicTable<T extends Record<string, any>>({
 
       <div
         className={cn(
-          "overflow-x-auto w-full bg-background",
+          "overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm",
           tableWrapperClass
         )}
       >
-        <div className="border rounded-lg shadow-sm overflow-clip">
-          <Table className="w-full overflow-auto">
-            <TableHeader className="bg-secondary">
-              <TableRow>
+        <div className="border border-[--table-border]  overflow-clip">
+          <Table className="odz-table w-full overflow-auto">
+            <TableHeader className="bg-[--table-header]">
+              <TableRow className="odz-table-row">
                 {columns.map((col: Column<T>) => (
                   <TableHead
                     key={col.id}
                     className={cn(
-                      "min-w-40",
+                      "min-w-40 odz-th border-r-2 border-[--table-border] text-center",
                       col.sortable && "cursor-pointer",
                       col.className
                     )}
@@ -263,28 +267,35 @@ export function DynamicTable<T extends Record<string, any>>({
                 ))}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="odz-table-body">
               {!loading ? (
                 paginatedData.length > 0 ? (
                   paginatedData.map((row, idx) => (
                     <TableRow
                       key={idx}
                       className={cn(
+                        "odz-table-row",
                         onRowClick && "cursor-pointer hover:bg-gray-50"
                       )}
                       onClick={() => onRowClick?.(row)}
                     >
                       {columns.map((col: Column<T>) => (
-                        <TableCell key={`${idx}-${col.key}`}>
+                        <TableCell
+                          className="odz-table-cell border-r-2 border-[--table-border] text-center"
+                          key={`${idx}-${col.key}`}
+                        >
                           {getCellContent(row, col)}
                         </TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length}>
-                      <div className="flex items-center justify-center space-x-2 py-20 text-primary">
+                  <TableRow className="odz-table-row">
+                    <TableCell
+                      className="odz-table-cell"
+                      colSpan={columns.length}
+                    >
+                      <div className="odz-table-cell-inner flex items-center justify-center space-x-2 py-20 text-primary">
                         <FileX2 size="20px" />
                         <div className="not-data-found-w">Data Not Found</div>
                       </div>
@@ -292,8 +303,11 @@ export function DynamicTable<T extends Record<string, any>>({
                   </TableRow>
                 )
               ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length}>
+                <TableRow className="odz-table-row">
+                  <TableCell
+                    className="odz-table-cell"
+                    colSpan={columns.length}
+                  >
                     <TableDataLoader />
                   </TableCell>
                 </TableRow>

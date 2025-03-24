@@ -31,6 +31,7 @@ import {
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
 import { FormHelperText } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PropTypes = {
   formActionRight: string;
@@ -64,6 +65,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const queryClient = useQueryClient();
 
   // State to track if we should show the buy/sell field
   const [showBuySell, setShowBuySell] = useState(true);
@@ -260,8 +262,9 @@ const UpdateIncidentForm = (props: PropTypes) => {
         await submitIncidentFormData(formattedData, {
           onSuccess: () => {
             toast.success("Incident updated successfully");
-            resetFormValues(); 
+            resetFormValues();
             setIsModalOpen(false); // Ensure this runs after successful submission
+            queryClient.invalidateQueries({ queryKey: ["updateIncident"] });
           },
           onError: (error) => {
             toast.error(error?.message || "Failed to update incident");
