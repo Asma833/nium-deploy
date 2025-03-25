@@ -7,12 +7,10 @@ import { API } from "@/core/constant/apis";
 import { getTransactionTableColumns } from "./view-all-table-col";
 import { exportToCSV } from "@/utils/exportUtils";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
 import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from "@/features/checker/config/tableFiltersConfig";
-import { useGetOrders } from "@/features/checker/hooks/useGetOrders";
 import useGetAllOrders from "@/features/co-admin/hooks/useGetAllOrders";
 
 const ViewAllTable = () => {
@@ -23,12 +21,13 @@ const ViewAllTable = () => {
   }, [setTitle]);
 
   const {
-    data: checkerOrdersData,
-    loading: checkerOrdersLoading,
-    error: checkerOrdersError,
+    data: viewAllData,
+    loading: viewAllLoading,
+    error: viewAllError,
     fetchData: refreshData,
   } = useGetAllOrders();
-  console.log("checkerOrdersData", checkerOrdersData);
+
+  console.log("checkerOrdersData", viewAllData);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -74,8 +73,8 @@ const ViewAllTable = () => {
 
   // Get the appropriate data source based on loading state and availability
   const getTableData = () => {
-    if (checkerOrdersData && checkerOrdersData.orders) {
-      return checkerOrdersData.orders.map(transformOrderForTable);
+    if (viewAllData && viewAllData.orders) {
+      return viewAllData.orders.map(transformOrderForTable);
     }
 
     // Fallback to other data sources
@@ -100,19 +99,17 @@ const ViewAllTable = () => {
   };
 
   // Check for loading and error states
-  const isLoading =
-    checkerOrdersLoading || filterApi.loading || pagination.loading;
-  const hasError = checkerOrdersError || filterApi.error || pagination.error;
+  const isLoading = viewAllLoading || filterApi.loading || pagination.loading;
+  const hasError = viewAllError || filterApi.error || pagination.error;
 
   // Get total records
-  const totalRecords =
-    checkerOrdersData?.totalOrders || pagination.totalRecords || 0;
+  const totalRecords = viewAllData?.totalOrders || pagination.totalRecords || 0;
 
   return (
     <div className="flex flex-col">
       <DynamicTable
         columns={columns}
-        data={getTableData()}
+        data={viewAllData}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
