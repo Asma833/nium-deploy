@@ -50,7 +50,8 @@ export const API = {
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
       CHECKER_ORDER:`/orders/get-checker-orders`,
-      UNASSIGN:`orders/unassign-checker`
+      UNASSIGN:`orders/unassign-checker`,
+      REGENERATE_ESIGN_LINK:`/ekyc/generate-e-sign`,
     },
   },
   FEATURES: {

@@ -13,6 +13,7 @@ import { useGetUpdateIncident } from "../../../hooks/useGetUpdate";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
 import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
 import useUnassignChecker from "@/features/checker/hooks/useUnassignChecker";
+import { useSendEsignLink} from "@/features/checker/hooks/useSendEsignLink";
 
 interface RowData {
   nium_order_id: string;
@@ -27,8 +28,9 @@ const UpdateIncidentCreationTable = () => {
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
-
-  useEffect(() => {
+  const { mutate: sendEsignLink } =  useSendEsignLink();
+ 
+   useEffect(() => {
     setTitle("Update Incident");
   }, [setTitle]);
 
@@ -70,8 +72,11 @@ const UpdateIncidentCreationTable = () => {
       unassignChecker(rowData.partner_order_id, currentUserHashedKey);
     }
   };
-
-  const columns = getTransactionTableColumns(openModal, handleUnassign);
+  const handleRegenerateEsignLink = (rowData: RowData): void => {
+    sendEsignLink({partner_order_id:rowData.partner_order_id});
+    // console.log("Regenerate Esign Link", rowData);
+  }
+  const columns = getTransactionTableColumns(openModal,handleUnassign,handleRegenerateEsignLink);
 
   return (
     <div className="">

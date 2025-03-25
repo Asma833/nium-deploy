@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { userApi } from "../api/userApi";
 import { toast } from "sonner";
 import { UserStatusRequest } from "../types/user.type";
 import { partnerApi } from "../api/partnerApi";

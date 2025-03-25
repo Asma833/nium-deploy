@@ -5,10 +5,12 @@ import {
   determineTransactionType,
 } from "@/utils/getTransactionConfigTypes";
 import { X } from "lucide-react";
+import { Share2 } from "lucide-react";
 
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
-  handleUnassign: (rowData: any) => void
+  handleUnassign: (rowData: any) => void,
+  handleRegeneratedEsignLink: (rowData: any) => void
 ) => [
   {
     key: "nium_order_id",
@@ -106,17 +108,34 @@ export const getTransactionTableColumns = (
       />
     ),
   },
+  // {
+  //   key: "merged_document",
+  //   id: "merged_document",
+  //   name: "Merged Document",
+  //   className: "min-w-0 max-w-[100px]",
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       copyLinkUrl={rowData.e_sign_link}
+  //       buttonText={"E Sign"}
+  //       tooltipText={"Copy Merged Doc Link"}
+  //     />
+  //   ),
+  // },
   {
-    key: "merged_document",
-    id: "merged_document",
-    name: "Merged Document",
+    key: "generateLink",
+    id: "generateLink",
+    name: "Generate Esign Link",
     className: "min-w-0 max-w-[100px]",
     cell: (_: unknown, rowData: any) => (
-      <SignLinkButton
-        copyLinkUrl={rowData.e_sign_link}
-        buttonText={"E Sign"}
-        tooltipText={"Copy Merged Doc Link"}
-      />
+      <Button
+      onClick={() => handleRegeneratedEsignLink(rowData)
+      }
+      className="flex items-center justify-center mx-auto"
+      size={"sm"}
+      disabled={rowData?.incident_status || rowData?.incident_status === null}
+    >
+      <Share2 className="text-white cursor-pointer"  size={20} />
+    </Button>
     ),
   },
   {

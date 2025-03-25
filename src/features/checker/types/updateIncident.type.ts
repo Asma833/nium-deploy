@@ -32,3 +32,6 @@ export interface UpdateGetRequestData {
   checkerId: string;
   transaction_type: string;
 }
+export interface EsignLinkRequest {
+  partner_order_id:string;
+}
