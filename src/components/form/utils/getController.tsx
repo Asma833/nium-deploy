@@ -7,6 +7,7 @@ import { MaterialFile } from "@/components/form/controller/MaterialFile";
 import { MaterialCheckbox } from "@/components/form/controller/MaterialCheckbox";
 import { MaterialNumber } from "@/components/form/controller/MaterialNumber";
 import MaterialPassword from "@/components/form/controller/MaterialPassword";
+import { MaterialTextArea } from "../controller/MaterialTextArea";
 
 interface FieldWithStyleProps {
   height?: string;
@@ -113,6 +114,17 @@ export const getController = (field: any) => {
           className={baseGeneralFieldStyle}
           disabled={field.disabled}
           forcedValue={field.forcedValue}
+        />
+      );
+    case "textarea":
+      return (
+        <MaterialTextArea
+          {...commonProps}
+          name={field.name}
+          label={field.label}
+          disabled={field.disabled}
+          forcedValue={field.forcedValue}
+          className="w-full"
         />
       );
     case "email":

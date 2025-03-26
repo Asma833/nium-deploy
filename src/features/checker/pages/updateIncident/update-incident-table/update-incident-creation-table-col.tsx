@@ -15,6 +15,7 @@ const NiumOrderID = ({
   rowData: any;
   openModal: (value: string) => void;
 }) => {
+  
   const isNuimOrderIdActive__esign =
     rowData?.is_esign_required === true &&
     rowData?.is_v_kyc_required === false &&
