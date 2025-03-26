@@ -57,6 +57,7 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
+  console.log('rowData: UpdateIncidentForm', rowData)
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -148,7 +149,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
   useEffect(() => {
     if (rowData) {
       const buySellValue = determineBuySell(rowData.transaction_type);
-      const purposeTypeText = determinePurposeType(rowData.purpose_type);
+      // const purposeTypeText = determinePurposeType(rowData.purpose_type);
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
 
@@ -157,8 +158,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerPan: rowData.customer_pan || "",
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
-        transactionType: rowData.transaction_type.id || "",
-        purpose: purposeTypeText || "",
+        transactionType: rowData.transaction_type.text || "",
+        purpose: rowData.purpose_type.text || "",
         buySell: buySellValue || "",
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
@@ -339,9 +340,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue: determineTransactionType(
-                        rowData?.[field.name]
-                      ),
+                      forcedValue:  rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );
@@ -361,7 +360,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue: determinePurposeType(rowData?.[field.name]),
+                      forcedValue:rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );

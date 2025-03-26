@@ -38,7 +38,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            "text-gray-500  hover:bg-black hover:text-white disabled:bg-gray-200 disabled:text-gray-500",
+            "text-gray-500  hover:bg-black hover:text-white disabled:bg-gray-200 disabled:text-gray-500 ",
             className
           )}
         >

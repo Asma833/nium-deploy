@@ -1,17 +1,44 @@
 import { Button } from "@/components/ui/button";
 import { SignLinkButton } from "@/features/e-sign/components/SignLinkButton";
 import {
-  determinePurposeType,
-  determineTransactionType,
-} from "@/utils/getTransactionConfigTypes";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { X } from "lucide-react";
-import { Share2 } from "lucide-react";
+import { ExternalLink, RefreshCcwDot, X } from "lucide-react";
+
+const NiumOrderID = ({
+  rowData,
+  openModal,
+}: {
+  rowData: any;
+  openModal: (value: string) => void;
+}) => {
+
+
+  const isNuimOrderIdDisabled = rowData?.e_sign_status === "not generated" || rowData?.e_sign_status === "pending"
+  // const isNuimOrderIdActive = rowData?.e_sign_status === "not generated" || rowData?.e_sign_status === "pending"
+  
+  
+  return (
+    <button
+      className="text-pink-600 cursor-pointer underline flex items-center justify-center gap-1 disabled:opacity-50"
+      onClick={() => {
+        openModal(rowData);
+      }}
+      disabled={isNuimOrderIdDisabled}
+    >
+      {rowData.nium_order_id}
+      <ExternalLink
+        size={15}
+        className="mr-2"
+        style={{ display: isNuimOrderIdDisabled ? "none" : "block" }}
+      />
+    </button>
+  );
+};
+
 export const getTransactionTableColumns = (
   openModal: (value: string) => void,
   handleUnassign: (rowData: any) => void,
@@ -23,14 +50,7 @@ export const getTransactionTableColumns = (
     name: "Nium ID",
     className: "min-w-0",
     cell: (_: unknown, rowData: any) => (
-      <span
-        className="text-pink-600 cursor-pointer"
-        onClick={() => {
-          openModal(rowData);
-        }}
-      >
-        {rowData.nium_order_id}
-      </span>
+      <NiumOrderID rowData={rowData} openModal={openModal} />
     ),
   },
   {
@@ -151,13 +171,15 @@ export const getTransactionTableColumns = (
           <TooltipTrigger asChild>
             <Button
               onClick={() => handleRegeneratedEsignLink(rowData)}
-              className="flex items-center justify-center mx-auto"
+              className="flex items-center justify-center mx-auto text-white  disabled:bg-gray-200 disabled:text-gray-500"
               size={"sm"}
               disabled={
-                rowData?.incident_status || rowData?.incident_status === null || rowData?.incident_status === undefined
+                rowData?.incident_status ||
+                rowData?.incident_status === null ||
+                rowData?.incident_status === undefined
               }
             >
-              <Share2 className="text-white cursor-pointer" size={20} />
+              <RefreshCcwDot className="cursor-pointer" size={20} />
             </Button>
           </TooltipTrigger>
           <TooltipContent className="bg-gray-400">
@@ -167,19 +189,19 @@ export const getTransactionTableColumns = (
       </TooltipProvider>
     ),
   },
-  {
-    key: "generateEsign",
-    id: "generateEsign",
-    name: "Generate E Sign",
-    className: "min-w-0 max-w-[100px]",
-    cell: (_: unknown, rowData: any) => (
-      <SignLinkButton
-        copyLinkUrl={rowData.e_sign_link}
-        buttonText={"E Sign"}
-        tooltipText={"Copy Merged Doc Link"}
-      />
-    ),
-  },
+  // {
+  //   key: "generateEsign",
+  //   id: "generateEsign",
+  //   name: "Generate E Sign",
+  //   className: "min-w-0 max-w-[100px]",
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       copyLinkUrl={rowData.e_sign_link}
+  //       buttonText={"E Sign"}
+  //       tooltipText={"Copy Merged Doc Link"}
+  //     />
+  //   ),
+  // },
   {
     key: "release",
     id: "release",

@@ -12,6 +12,7 @@ export const HEADER_KEYS = {
   PARTNER_ID: String(import.meta.env.VITE_PARTNER_ID || ''),
   API_KEY: String(import.meta.env.VITE_API_KEY || ''),
 };
+
 export const API = {
   AUTH: {
     LOGIN: `/users/login`,
