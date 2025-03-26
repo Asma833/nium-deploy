@@ -10,8 +10,6 @@ export const usePartnerUpdateAPI = () => {
  
   const { mutate, isPending, error } = useMutation({
     mutationFn: async ({ data, productOptions }: any) => {
-      console.log(productOptions,"productOptions")
-      debugger;
       const payload = {
         email: data.email,
         first_name: data.firstName,

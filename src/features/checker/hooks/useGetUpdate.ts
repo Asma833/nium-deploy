@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useApi } from "../api/useApi";
+import { updateIncidentApi } from "../api/updateIncidentApi";
 import { toast } from "sonner";
 import { UpdateGetRequestData } from "../types/updateIncident.type";
 
@@ -8,7 +8,7 @@ export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
     queryKey: ["updateIncident", incidentData],
     queryFn: async () => {
       try {
-        const response = await useApi.getUpdateIncident(incidentData);
+        const response = await updateIncidentApi.getUpdateIncident(incidentData);
         if (!response) {
           throw new Error("Invalid API response");
         }

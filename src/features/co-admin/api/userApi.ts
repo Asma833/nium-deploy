@@ -1,45 +1,51 @@
 import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API, getEndpoint } from "@/core/constant/apis";
-import { UserCreationRequest, UserCreationResponse, UserRequest, UserUpdateRequest } from "../types/user.type";
+import { API } from "@/core/constant/apis";
+import {
+  UserCreationRequest,
+  UserCreationResponse,
+  UserRequest,
+  UserUpdateRequest,
+} from "../types/user.type";
 
 export const userApi = {
-  userCreation: async (userData: UserRequest): Promise<UserCreationResponse> => {
+  userCreation: async (
+    userData: UserRequest
+  ): Promise<UserCreationResponse> => {
     const { data } = await axiosInstance.post<UserCreationResponse>(
-      // getEndpoint("NUSERS.USER.CREATE"),
       API.NUSERS.USER.CREATE,
-      userData 
+      userData
     );
     return data;
   },
-  userStatusUpdate: async (userData: UserCreationRequest): Promise<UserUpdateRequest> => {
-    const { hashed_key, ...updateData } = userData; 
+  userStatusUpdate: async (
+    userData: UserCreationRequest
+  ): Promise<UserUpdateRequest> => {
+    const { hashed_key, ...updateData } = userData;
 
     const { data } = await axiosInstance.put<UserUpdateRequest>(
-     API.NUSERS.USER.STATUS_UPDATE + `/${hashed_key}`, 
-      updateData 
+      API.NUSERS.USER.STATUS_UPDATE + `/${hashed_key}`,
+      updateData
     );
 
     return data;
-},
-userUpdate: async (userData: UserCreationRequest): Promise<UserUpdateRequest> => {
-  const { hashed_key, ...updateData } = userData; 
+  },
+  userUpdate: async (
+    userData: UserCreationRequest
+  ): Promise<UserUpdateRequest> => {
+    const { hashed_key, ...updateData } = userData;
 
-  const { data } = await axiosInstance.put<UserUpdateRequest>(
-    // `${getEndpoint("NUSERS.USER.UPDATE")}/${hashed_key}`, 
-    API.NUSERS.USER.UPDATE + `/${hashed_key}`,
-    updateData 
-  );
+    const { data } = await axiosInstance.put<UserUpdateRequest>(
+      API.NUSERS.USER.UPDATE + `/${hashed_key}`,
+      updateData
+    );
 
-  return data;
-},
+    return data;
+  },
 
-
-getProducts: async () => {
-  const { data } = await axiosInstance.get<UserCreationResponse>(
-    // getEndpoint("NUSERS.USER.PRODUCTS")
-    API.NUSERS.USER.PRODUCTS
-  );
-  return data; 
-},
-
+  getProducts: async () => {
+    const { data } = await axiosInstance.get<UserCreationResponse>(
+      API.NUSERS.USER.PRODUCTS
+    );
+    return data;
+  },
 };
