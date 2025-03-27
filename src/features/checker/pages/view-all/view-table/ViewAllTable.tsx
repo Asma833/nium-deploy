@@ -43,10 +43,10 @@ const ViewAllTable = () => {
     totalRecordsPath: "totalRecords",
   });
 
-  const filterApi = useFilterApi({
-    endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
-    baseQueryParams: {},
-  });
+  // const filterApi = useFilterApi({
+  //   endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
+  //   baseQueryParams: {},
+  // });
 
   const columns = getTransactionTableColumns();
 
@@ -75,23 +75,27 @@ const ViewAllTable = () => {
   };
 
   // Get the appropriate data source based on loading state and availability
-  const getTableData = () => {
-    if (checkerOrdersData && checkerOrdersData.orders) {
-      return checkerOrdersData.orders.map(transformOrderForTable);
-    }
+  // const getTableData = () => {
+  //   if (checkerOrdersData && checkerOrdersData.orders) {
+  //     return checkerOrdersData.orders.map(transformOrderForTable);
+  //   }
 
-    // Fallback to other data sources
-    if (isPaginationDynamic) {
-      return pagination.data;
-    } else if (isTableFilterDynamic && filterApi.data.length > 0) {
-      return filterApi.data;
-    }
+  //   if (isPaginationDynamic) {
+  //     return pagination.data;
+  //   } else if (isTableFilterDynamic && filterApi.data.length > 0) {
+  //     return filterApi.data;
+  //   }
+  //   if (isPaginationDynamic) {
+  //     return pagination.data;
+  //   } else if (isTableFilterDynamic && filterApi.data.length > 0) {
+  //     return filterApi.data;
+  //   }
 
-    return [];
-  };
+  //   return [];
+  // };
 
   const handleExportToCSV = () => {
-    const dataToExport = getTableData();
+    const dataToExport = checkerOrdersData?.orders?.map(transformOrderForTable) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -102,9 +106,11 @@ const ViewAllTable = () => {
   };
 
   // Check for loading and error states
-  const isLoading =
-    checkerOrdersLoading || filterApi.loading || pagination.loading;
-  const hasError = checkerOrdersError || filterApi.error || pagination.error;
+  const isLoading = checkerOrdersLoading || pagination.loading;
+  const hasError = checkerOrdersError || pagination.error;
+  // const isLoading =
+  //   checkerOrdersLoading || filterApi.loading || pagination.loading;
+  // const hasError = checkerOrdersError || filterApi.error || pagination.error;
 
   // Get total records
   const totalRecords =
@@ -114,7 +120,7 @@ const ViewAllTable = () => {
     <div className="flex flex-col">
       <DynamicTable
         columns={columns}
-        data={getTableData()}
+        data={checkerOrdersData?.orders?.map(transformOrderForTable) || []}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
@@ -124,7 +130,8 @@ const ViewAllTable = () => {
           isLoading: isLoading,
           hasError: hasError,
         }}
-        paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+        // paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+        paginationMode={"static"}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -133,7 +140,8 @@ const ViewAllTable = () => {
         totalRecords={totalRecords}
         filter={{
           filterOption: true,
-          mode: isTableFilterDynamic ? "dynamic" : "static",
+          // mode: isTableFilterDynamic ? "dynamic" : "static",
+          mode: "static",
           dateFilterColumn: "orderDate",
           statusFilerColumn: "status",
           roleFilerColumn: "role",
@@ -158,15 +166,15 @@ const ViewAllTable = () => {
             ],
           },
           // Dynamic callbacks - API functions
-          dynamicCallbacks: isTableFilterDynamic
-            ? {
-                onSearch: filterApi.search,
-                onDateRangeChange: filterApi.filterByDateRange,
-                onStatusChange: filterApi.filterByStatus,
-                onSelectChange: filterApi.filterBySelect,
-                onFilterApply: filterApi.applyFilters,
-              }
-            : undefined,
+          // dynamicCallbacks: isTableFilterDynamic
+          //   ? {
+          //       onSearch: filterApi.search,
+          //       onDateRangeChange: filterApi.filterByDateRange,
+          //       onStatusChange: filterApi.filterByStatus,
+          //       onSelectChange: filterApi.filterBySelect,
+          //       onFilterApply: filterApi.applyFilters,
+          //     }
+          //   : undefined,
         }}
       />
       <div className="flex justify-center sm:justify-start mt-4 gap-3">

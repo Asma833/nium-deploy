@@ -8,8 +8,10 @@ const coAdminComponents = {
     UpdateUser : lazy(()=> import("@/features/co-admin/pages/n-user/user-creation-form/page")),
     Partner: lazy(() => import("@/features/co-admin/pages/partners/partner-table/PartnerCreationTable")),
     PartnerCreation : lazy(()=> import("@/features/co-admin/pages/partners/partner-creation-form/page")),
-    UpdatePartner : lazy(()=> import("@/features/co-admin/pages/partners/partner-creation-form/page"))
+    UpdatePartner : lazy(()=> import("@/features/co-admin/pages/partners/partner-creation-form/page")),
+    ViewAll: lazy(() => import("@/features/co-admin/pages/view-all/view-table/ViewAllTable")),
   }
+  
 export const coAdminRoutes = [
   {
     path: ROUTES.COADMIN.NUSER,
@@ -36,8 +38,8 @@ export const coAdminRoutes = [
     permission: "view_dashboard",
   },
    {
-      path: ROUTES.CHECKER.VIEWALL,
-      element: checkerComponents.ViewAll,
+      path: ROUTES.COADMIN.VIEWALL,
+      element: coAdminComponents.ViewAll,
       roles: ["checker", "co-admin"],
       permission: "view_dashboard",
     },

@@ -80,6 +80,22 @@ export const updateFormIncidentConfig = {
       },
     },
   },
+  checkFeedInput: {
+    comment: {
+      label: "Comment",
+      name: "fields.comment",
+      type: FieldType.TextArea,
+      required: true,
+      placeholder: "Enter Comment",
+    },
+    niumInvoiceNo: {
+      label: "Nium Invoice No",
+      name: "fields.niumInvoiceNumber",
+      type: FieldType.Text,
+      required: true,
+      placeholder: "Enter Nium Invoice No",
+    },
+  },
   tableData: [
     { currency: "USD/INR", rate: 87.84, amount: 500 },
     { currency: "EUR/INR", rate: 95.5, amount: 300 },

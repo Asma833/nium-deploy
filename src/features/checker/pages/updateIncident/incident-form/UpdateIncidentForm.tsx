@@ -19,17 +19,12 @@ import { Loader2 } from "lucide-react";
 import { UpdateIncidentRequest } from "@/features/checker/types/updateIncident.type";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { MaterialText } from "@/components/form/controller/MaterialText";
-import { MaterialTextArea } from "@/components/form/controller/MaterialTextArea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import useSubmitIncidentFormData from "../../completed-transactions/hooks/useSubmitIncidentFormData";
 import { toast } from "sonner";
 import { useCurrentUser } from "@/utils/getUserFromRedux";
-import {
-  determineBuySell,
-  determinePurposeType,
-  determineTransactionType,
-} from "@/utils/getTransactionConfigTypes";
+import { determineBuySell } from "@/utils/getTransactionConfigTypes";
 import { FormHelperText } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -57,6 +52,7 @@ const useScreenSize = () => {
 
 const UpdateIncidentForm = (props: PropTypes) => {
   const { formActionRight, rowData, setIsModalOpen } = props;
+  console.log("rowData: UpdateIncidentForm", rowData);
   const screenWidth = useScreenSize();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -97,9 +93,10 @@ const UpdateIncidentForm = (props: PropTypes) => {
     reset,
     formState: { errors },
     setError,
+    getValues,
     clearErrors,
   } = methods;
-  
+
   // Function to reset form to initial state
   const resetFormValues = () => {
     reset({
@@ -126,9 +123,10 @@ const UpdateIncidentForm = (props: PropTypes) => {
   };
 
   // Reset form when modal is closed
+  // This cleanup function runs when the component unmounts
+
   useEffect(() => {
     return () => {
-      // This cleanup function runs when the component unmounts
       resetFormValues();
     };
   }, []);
@@ -148,7 +146,6 @@ const UpdateIncidentForm = (props: PropTypes) => {
   useEffect(() => {
     if (rowData) {
       const buySellValue = determineBuySell(rowData.transaction_type);
-      const purposeTypeText = determinePurposeType(rowData.purpose_type);
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
 
@@ -157,21 +154,27 @@ const UpdateIncidentForm = (props: PropTypes) => {
         customerPan: rowData.customer_pan || "",
         customerName: rowData.customer_name || "",
         bmfOrderRef: rowData.partner_order_id || "",
-        transactionType: rowData.transaction_type.id || "",
-        purpose: purposeTypeText || "",
+        transactionType: rowData.transaction_type.text || "",
+        purpose: rowData.purpose_type.text || "",
         buySell: buySellValue || "",
         incidentNumber: rowData.incident_number || "",
         eonInvoiceNumber: rowData.eon_invoice_number || "",
-        // comment: rowData.comment || "",
+        comment: rowData.incident_checker_comments || "",
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        // niumInvoiceNo: rowData.nium_invoice_number || "",
+        niumInvoiceNumber: rowData.nium_invoice_number || "", // Changed from niumInvoiceNo to niumInvoiceNumber
       };
 
+      // Set values using appropriate field paths
       Object.entries(mappedData).forEach(([key, value]) => {
-        setValue(`fields.${key}` as any, value);
+        if (key === "comment" || key === "niumInvoiceNumber") {
+          // These fields are directly under 'fields'
+          setValue(`fields.${key}`, value);
+        } else {
+          setValue(`fields.${key}` as any, value);
+        }
       });
 
       // Set document URL if available
@@ -224,6 +227,8 @@ const UpdateIncidentForm = (props: PropTypes) => {
   };
 
   const handleFormSubmit = async () => {
+    const values = getValues();
+    console.log("values:", values);
     if (isApproved && !niumInvoiceNumber) {
       setError("fields.niumInvoiceNumber", {
         type: "required",
@@ -339,9 +344,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue: determineTransactionType(
-                        rowData?.[field.name]
-                      ),
+                      forcedValue: rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );
@@ -361,7 +364,7 @@ const UpdateIncidentForm = (props: PropTypes) => {
                       control,
                       errors,
                       disabled: formActionRight === "view",
-                      forcedValue: determinePurposeType(rowData?.[field.name]),
+                      forcedValue: rowData?.[field.name].text,
                     })}
                   </FieldWrapper>
                 );
@@ -421,23 +424,21 @@ const UpdateIncidentForm = (props: PropTypes) => {
 
           <FormFieldRow rowCols={2}>
             <FormFieldRow className="flex-1">
-              <MaterialTextArea
-                name="fields.comment"
-                label="Comment"
-                required={isRejected}
-                className="w-full rounded-lg"
-              />
+              {getController({
+                ...updateFormIncidentConfig.checkFeedInput.comment,
+                control,
+                errors,
+                name: "fields.comment",
+              })}
             </FormFieldRow>
             <FormFieldRow className="flex-1">
-              {showNiumInvoice && (
-                <MaterialText
-                  name="fields.niumInvoiceNumber"
-                  label="Nium Invoice Number"
-                  required={isApproved}
-                  className="w-full rounded-lg"
-                  baseStyle={baseStyle({})}
-                />
-              )}
+              {showNiumInvoice &&
+                getController({
+                  ...updateFormIncidentConfig.checkFeedInput.niumInvoiceNo,
+                  control,
+                  errors,
+                  name: "fields.niumInvoiceNumber",
+                })}
             </FormFieldRow>
           </FormFieldRow>
         </Spacer>

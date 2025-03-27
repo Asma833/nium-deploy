@@ -18,5 +18,5 @@ export const useSendEsignLink  = () => {
     }
   });
 
-  return { mutate, isLoading: isPending, error };
+  return { mutate, isSendEsignLinkLoading: isPending, error };
 };

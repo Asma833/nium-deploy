@@ -28,7 +28,7 @@ const UpdateIncidentCreationTable = () => {
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
-  const { mutate: sendEsignLink } =  useSendEsignLink();
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } =  useSendEsignLink();
  
    useEffect(() => {
     setTitle("Update Incident");
@@ -76,7 +76,7 @@ const UpdateIncidentCreationTable = () => {
     sendEsignLink({partner_order_id:rowData.partner_order_id});
     // console.log("Regenerate Esign Link", rowData);
   }
-  const columns = getTransactionTableColumns(openModal,handleUnassign,handleRegenerateEsignLink);
+  const columns = getTransactionTableColumns(openModal,handleUnassign,handleRegenerateEsignLink, isSendEsignLinkLoading);
 
   return (
     <div className="">

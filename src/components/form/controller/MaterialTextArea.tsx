@@ -14,6 +14,7 @@ interface MaterialTextAreaProps {
   disabled?: boolean;
   required?: boolean;
   error? : any;
+  forcedValue?: string;
 }
 
 export const MaterialTextArea = ({
@@ -27,6 +28,7 @@ export const MaterialTextArea = ({
   placeholder,
   disabled = false,
   required,
+  forcedValue,
   error
 }: MaterialTextAreaProps) => {
   const { control } = useFormContext();
@@ -40,7 +42,7 @@ export const MaterialTextArea = ({
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            value={field.value || ""}
+            value={(forcedValue ? forcedValue : field.value) || ""}
             label={label}
             error={!!error}
             helperText={error?.message}
