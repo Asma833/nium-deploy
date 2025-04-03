@@ -107,7 +107,7 @@ const NuserCreationTable = () => {
         filter={{
           filterOption: true,
           mode: isTableFilterDynamic ? "dynamic" : "static",
-          rederFilerOptions: {
+          renderFilterOptions: {
             search: true,
           },
           // Dynamic callbacks - API functions

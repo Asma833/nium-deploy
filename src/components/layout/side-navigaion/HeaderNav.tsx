@@ -9,7 +9,7 @@ import { toTitleCase } from "@/utils/textFormater";
 interface HeaderProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isOpen: boolean) => void;
-  className: string;
+  className?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
         className
       )}
     >
-      <div className="sm:px-6 lg:px-8 flex items-center h-16">
+      <div className="sm:px-6 lg:px-6 flex items-center h-16">
         <button
           className="lg:hidden p-2"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}

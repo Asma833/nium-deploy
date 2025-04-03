@@ -24,7 +24,7 @@ const TableSearchFilter = ({
   setLoading,
   setDynamicData,
 }: TableSearchFilterProps) => {
-  const { search, dateRange, status, selects } = filterConfig.rederFilerOptions;
+  const { search, dateRange, status, selects } = filterConfig.renderFilterOptions;
   const mode = filterConfig.mode || "static";
   const callbacks = filterConfig.dynamicCallbacks;
 
@@ -289,8 +289,8 @@ const TableSearchFilter = ({
                 </Select>
               </div>
             ))}
-          {filterConfig.rederFilerOptions.applyAction &&
-            filterConfig.rederFilerOptions.resetAction &&
+          {filterConfig.renderFilterOptions.applyAction &&
+            filterConfig.renderFilterOptions.resetAction &&
             (onFilter || onReset) && (
               <div className="flex justify-end gap-2">
                 {onFilter && (

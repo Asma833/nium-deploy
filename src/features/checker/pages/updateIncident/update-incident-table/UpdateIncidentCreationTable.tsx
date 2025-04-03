@@ -108,7 +108,7 @@ const UpdateIncidentCreationTable = () => {
             filterOption: true,
             dateFilterColumn: "createdAt",
             mode: isTableFilterDynamic ? "dynamic" : "static",
-            rederFilerOptions: {
+            renderFilterOptions: {
               search: true,
               dateRange: true,
               applyAction: true,

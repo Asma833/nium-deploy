@@ -43,7 +43,7 @@ export interface DynamicFilterCallbacks<T = any> {
 export interface FilterConfig {
   filterOption: boolean;
   mode?: FilterMode;
-  rederFilerOptions: RenderFilterOptions;
+  renderFilterOptions: RenderFilterOptions;
   dynamicCallbacks?: DynamicFilterCallbacks;
 }
 

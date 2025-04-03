@@ -30,7 +30,7 @@ const AgentProfileCreationTable = () => {
           dateFilterColumn: "requestRaiseDate",
           statusFilerColumn: "status",
           roleFilerColumn: "role",
-          rederFilerOptions: {
+          renderFilterOptions: {
             search: true,
           },
         }}

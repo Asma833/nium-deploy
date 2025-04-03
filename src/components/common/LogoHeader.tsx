@@ -3,8 +3,6 @@ import Logo from "../logo/logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { CommonProps } from "./common-components.types";
 
-
-
 const LogoHeader = ({ className }: CommonProps) => {
   return (
     <div

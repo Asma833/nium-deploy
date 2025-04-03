@@ -145,7 +145,7 @@ const ViewAllTable = () => {
           dateFilterColumn: "orderDate",
           statusFilerColumn: "status",
           roleFilerColumn: "role",
-          rederFilerOptions: {
+          renderFilterOptions: {
             search: true,
             dateRange: true,
             applyAction: true,

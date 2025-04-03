@@ -6,16 +6,16 @@ import {
   FileX,
   FileClock,
 } from "lucide-react";
-import transactionReceived from "../../../../../../assets/images/transaction-received.png";
-import transactionApproved from "../../../../../../assets/images/transaction-approved.png";
-import transactionRejected from "../../../../../../assets/images/transaction-rejected.png";
-import transactionPending from "../../../../../../assets/images/transaction-pending.png";
-import vkycCompleted from "../../../../../../assets/images/vkyc-completed.png";
-import vkycRejected from "../../../../../../assets/images/vkyc-rejected.png";
-import vkycPending from "../../../../../../assets/images/vkyc-pending.png";
-import esignCompleted from "../../../../../../assets/images/esign-completed.png";
-import esignRejected from "../../../../../../assets/images/esign-rejected.png";
-import esignPending from "../../../../../../assets/images/esign-pending.png";
+import transactionReceived from "../../../../../../assets/images/transaction-received.svg";
+import transactionApproved from "../../../../../../assets/images/transaction-approved.svg";
+import transactionRejected from "../../../../../../assets/images/transaction-rejected.svg";
+import transactionPending from "../../../../../../assets/images/transaction-pending.svg";
+import vkycCompleted from "../../../../../../assets/images/vkyc-completed.svg";
+import vkycRejected from "../../../../../../assets/images/vkyc-rejected.svg";
+import vkycPending from "../../../../../../assets/images/vkyc-pending.svg";
+import esignCompleted from "../../../../../../assets/images/esign-completed.svg";
+import esignRejected from "../../../../../../assets/images/esign-rejected.svg";
+import esignPending from "../../../../../../assets/images/esign-pending.svg";
 import { DashboardMetrics } from "@/features/checker/hooks/useGetDashboardCardMatrics";
 
 export interface DashboardItem {
