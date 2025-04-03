@@ -24,7 +24,7 @@ const AssignCreationTable = () => {
     loading,
     error,
     fetchData,
-  } = useGetApi<any>("CHECKER.ASSIGN.LIST");
+  } = useGetApi(API.CHECKER.ASSIGN.LIST);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
