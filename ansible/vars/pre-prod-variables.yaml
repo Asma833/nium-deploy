@@ -1,0 +1,8 @@
+# VPC Variables
+vpc_id: "vpc-0a82255c1ea3246a2"
+cluster_name: "niumforex-ecs-cluster"
+
+# Application Variables
+app_name: "forex-agent-portal-frontend"
+secret_arn: ""
+react_app_env: "pre-prod"
