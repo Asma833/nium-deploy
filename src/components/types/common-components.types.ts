@@ -18,7 +18,7 @@ export type TablePaginationProps = {
   setPageSize: (size: number) => void;
   setCurrentPage: (page: number) => void;
   filteredDataLength: number;
-  paginationMode?: "static" | "dynamic"; // Make paginationMode optional
+  paginationMode?: 'static' | 'dynamic'; // Make paginationMode optional
   onPageChange?: any;
   totalRecords?: number;
 };
@@ -33,7 +33,7 @@ export type ImageProps = {
   width?: number;
   height?: number;
   className?: string;
-  loading?: "lazy" | "eager";
+  loading?: 'lazy' | 'eager';
 };
 
 export type Column<_T> = {
@@ -53,10 +53,10 @@ export interface DynamicTableProps<T> {
   initialPageSize?: number;
   pageSizeOption?: number[];
   defaultSortColumn?: keyof T | string;
-  defaultSortDirection?: "asc" | "desc";
+  defaultSortDirection?: 'asc' | 'desc';
   onRowClick?: (row: T) => void;
   filter?: any;
-  paginationMode?: "static" | "dynamic";
+  paginationMode?: 'static' | 'dynamic';
   loading?: boolean;
   renderComponents?: JSX.Element;
   onPageChange?: (page: number, pageSize: number) => Promise<T[]>;
@@ -70,7 +70,7 @@ export interface DynamicTableProps<T> {
   };
 }
 
-export type IconType = "default" | "upload" | "download";
+export type IconType = 'default' | 'upload' | 'download';
 
 export type DialogWrapperProps = {
   triggerBtnText: string;
@@ -90,6 +90,11 @@ export type DialogWrapperProps = {
 };
 
 export type DashboardContentWrapperProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+export type GeneralWrapperProps = {
   children: React.ReactNode;
   className?: string;
 };

@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema } from "./partner-form.schema";
-import { userFormConfig } from "./partner-form-config";
-import { FormProvider } from "@/components/form/context/FormProvider";
-import { getController } from "@/components/form/utils/getController";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
-import Spacer from "@/components/form/wrapper/Spacer";
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useCreatePartner } from "@/features/co-admin/hooks/useCreatePartners";
-import { usePartnerUpdateAPI } from "@/features/co-admin/hooks/usePartnerUpdate"
-import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
-import { PartnerFormData } from "@/features/co-admin/types/partner.type";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userSchema } from './partner-form.schema';
+import { userFormConfig } from './partner-form-config';
+import { FormProvider } from '@/components/form/context/FormProvider';
+import { getController } from '@/components/form/utils/getController';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
+import CheckboxWrapper from '@/components/form/wrapper/CheckboxWrapper';
+import Spacer from '@/components/form/wrapper/Spacer';
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { useParams, useLocation } from 'react-router-dom';
+import { useCreatePartner } from '@/features/co-admin/hooks/useCreatePartners';
+import { usePartnerUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdate';
+import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
+import { PartnerFormData } from '@/features/co-admin/types/partner.type';
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -23,8 +23,8 @@ const useScreenSize = () => {
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return screenWidth;
@@ -40,25 +40,26 @@ const PartnerCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
   useEffect(() => {
-    setTitle(isEditMode ? "Edit Partner" : "Create Partner");
+    setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
   }, [setTitle]);
-  const { mutate: createPartner, isLoading } = useCreatePartner( { role: "checker" },
+  const { mutate: createPartner, isLoading } = useCreatePartner(
+    { role: 'checker' },
     {
       onUserCreateSuccess: (data) => {
-        console.log(data);
         reset({});
       },
-    });
+    }
+  );
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      businessType: "large_enterprise", // Set the default value to match the selected option // This is initialized empty, not with the selected value
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      businessType: 'large_enterprise',
       productType: {
         card: true,
         remittance: false,
@@ -78,19 +79,19 @@ const PartnerCreationFormPage = () => {
   } = methods;
   const { mutate: updatePartner } = usePartnerUpdateAPI();
   const handleCheckboxChange = (
-    key: "card" | "remittance" | "both",
+    key: 'card' | 'remittance' | 'both',
     checked: boolean
   ) => {
-    const currentValues = watch("productType"); // Get the latest state before updating
+    const currentValues = watch('productType'); // Get the latest state before updating
 
-    if (key === "both") {
+    if (key === 'both') {
       // If "Both" is checked, enable all checkboxes; otherwise, disable all
       const updatedValues = {
         card: checked,
         remittance: checked,
         both: checked,
       };
-      setValue("productType", updatedValues, { shouldValidate: true });
+      setValue('productType', updatedValues, { shouldValidate: true });
     } else {
       // Update only the specific checkbox ("Card" or "Remittance")
       setValue(`productType.${key}`, checked, { shouldValidate: true });
@@ -103,11 +104,11 @@ const PartnerCreationFormPage = () => {
 
       // If both "Card" and "Remittance" are checked, check "Both"
       const isBothChecked = updatedValues.card && updatedValues.remittance;
-      setValue("productType.both", isBothChecked, { shouldValidate: true });
+      setValue('productType.both', isBothChecked, { shouldValidate: true });
 
       // re-render using a temporary state change
       setValue(
-        "productType",
+        'productType',
         { ...updatedValues, both: isBothChecked },
         { shouldValidate: true }
       );
@@ -117,29 +118,29 @@ const PartnerCreationFormPage = () => {
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
-        firstName: selectedRow.first_name || "",
-        lastName: selectedRow.last_name || "",
-        email: selectedRow.email || "",
+        firstName: selectedRow.first_name || '',
+        lastName: selectedRow.last_name || '',
+        email: selectedRow.email || '',
         productType: {
           card:
-            selectedRow.products?.some((p: any) => p.name === "Card") || false,
+            selectedRow.products?.some((p: any) => p.name === 'Card') || false,
           remittance:
-            selectedRow.products?.some((p: any) => p.name === "Remittance") ||
+            selectedRow.products?.some((p: any) => p.name === 'Remittance') ||
             false,
           both:
-            selectedRow.products?.some((p: any) => p.name === "Both") || false,
+            selectedRow.products?.some((p: any) => p.name === 'Both') || false,
         },
       });
     }
   }, [selectedRow, reset]); // Ensure `reset` runs when `selectedRow` changes
 
- const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
+  const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
     if (isEditMode) {
-      await updatePartner({ data:formdata, productOptions });
+      await updatePartner({ data: formdata, productOptions });
     } else {
       createPartner({
         ...formdata,
-        hashed_key: ""
+        hashed_key: '',
       });
     }
   });
@@ -147,7 +148,7 @@ const PartnerCreationFormPage = () => {
   return (
     <FormProvider methods={methods}>
       <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? "Edit User" : "Create User"}
+        {isEditMode ? 'Edit User' : 'Create User'}
       </h2>
 
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
@@ -165,7 +166,7 @@ const PartnerCreationFormPage = () => {
             <FieldWrapper>
               {getController({
                 ...userFormConfig.fields.email,
-                name: "email",
+                name: 'email',
                 control,
                 errors,
               })}
@@ -177,7 +178,7 @@ const PartnerCreationFormPage = () => {
               <CheckboxWrapper className="flex space-x-4 items-center">
                 {getController({
                   ...userFormConfig.fields.productType,
-                  name: "productType",
+                  name: 'productType',
                   control,
                   errors,
                   handleCheckboxChange,
@@ -186,7 +187,7 @@ const PartnerCreationFormPage = () => {
               </CheckboxWrapper>
             </FieldWrapper>
           </FormFieldRow>
-         
+
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-2">
             {Object.entries(userFormConfig.fields)
               .slice(3, 5)
@@ -202,14 +203,13 @@ const PartnerCreationFormPage = () => {
                 {getController({
                   ...userFormConfig.fields.businessType,
                   label:
-                    userFormConfig.fields.businessType.label || "Business Type",
-                  name: "businessType",
+                    userFormConfig.fields.businessType.label || 'Business Type',
+                  name: 'businessType',
                   control,
                   errors,
                 })}
               </div>
             </FieldWrapper>
-         
           </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
@@ -223,18 +223,14 @@ const PartnerCreationFormPage = () => {
         >
           {isSubmitting || isLoading
             ? isEditMode
-              ? "Updating..."
-              : "Submitting..."
+              ? 'Updating...'
+              : 'Submitting...'
             : isEditMode
-            ? "Update"
-            : "Submit"}
+              ? 'Update'
+              : 'Submit'}
         </button>
       </div>
     </FormProvider>
   );
 };
- export default PartnerCreationFormPage;
-
-
-
-
+export default PartnerCreationFormPage;

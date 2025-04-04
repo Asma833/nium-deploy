@@ -1,15 +1,15 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getAgentProfileCreationColumn } from "./agent-profile-creation-table-col";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getAgentProfileCreationColumn } from './agent-profile-creation-table-col';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const AgentProfileCreationTable = () => {
   const navigate = useNavigate();
   const columns = getAgentProfileCreationColumn();
 
   const handleCreateUser = () => {
-    navigate("create-new-agent");
+    navigate('create-new-agent');
   };
 
   return (
@@ -21,15 +21,15 @@ const AgentProfileCreationTable = () => {
         defaultSortColumn="agentCode"
         renderLeftSideActions={() => (
           <Button onClick={handleCreateUser} className="bg-primary text-white">
-            {" "}
+            {' '}
             <PlusIcon /> Create Agent Profile
           </Button>
         )}
         filter={{
           filterOption: true,
-          dateFilterColumn: "requestRaiseDate",
-          statusFilerColumn: "status",
-          roleFilerColumn: "role",
+          dateFilterColumn: 'requestRaiseDate',
+          statusFilerColumn: 'status',
+          roleFilerColumn: 'role',
           renderFilterOptions: {
             search: true,
           },

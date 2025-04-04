@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ImageProps } from "./common-components.types";
+import { useState } from 'react';
+import { ImageProps } from '../types/common-components.types';
 
 const Image: React.FC<ImageProps> = ({
   src,

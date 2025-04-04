@@ -1,5 +1,5 @@
-import Image from "../common/Image";
-import logoUrl from "@/assets/images/nium-logo.svg";
+import Image from '../common/Image';
+import logoUrl from '@/assets/images/nium-logo.svg';
 
 type Props = {
   width?: number;

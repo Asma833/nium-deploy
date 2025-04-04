@@ -26,27 +26,31 @@ interface FilterApiResponse<T> {
  * @param initialData - Optional initial data to use when no filters are applied
  * @param baseQueryParams - Optional base query parameters to include in all requests
  */
-export function useFilterApi<T = any>({ 
-  endpoint, 
-  initialData = [], 
-  baseQueryParams = {} 
+export function useFilterApi<T = any>({
+  endpoint,
+  initialData = [],
+  baseQueryParams = {},
 }: UseFilterApiProps): FilterApiResponse<T> {
   const [data, setData] = useState<T[]>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   // Helper function to make API calls
-  const fetchFilteredData = async (params: Record<string, any>): Promise<T[]> => {
+  const fetchFilteredData = async (
+    params: Record<string, any>
+  ): Promise<T[]> => {
     setLoading(true);
     setError(null);
 
     try {
       // Combine base query params with the specific filter params
       const queryParams = { ...baseQueryParams, ...params };
-      
-      const response = await axiosInstance.get(endpoint, { params: queryParams });
+
+      const response = await axiosInstance.get(endpoint, {
+        params: queryParams,
+      });
       const result = response.data;
-      
+
       setData(result);
       return result;
     } catch (err: any) {
@@ -140,6 +144,6 @@ export function useFilterApi<T = any>({
     filterByStatus,
     filterBySelect,
     applyFilters,
-    resetFilters
+    resetFilters,
   };
 }

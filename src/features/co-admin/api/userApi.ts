@@ -1,11 +1,11 @@
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
 import {
   UserCreationRequest,
   UserCreationResponse,
   UserRequest,
   UserUpdateRequest,
-} from "../types/user.type";
+} from '../types/user.type';
 
 export const userApi = {
   userCreation: async (

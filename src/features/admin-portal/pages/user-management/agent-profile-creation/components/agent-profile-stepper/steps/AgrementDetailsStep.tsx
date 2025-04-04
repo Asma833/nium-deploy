@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import { agreementDetails } from "../config/agent-profile-form-config";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import { getController } from "@/components/form/utils/getController";
-import Spacer from "@/components/form/wrapper/Spacer";
-import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
-import { useAgentForm } from "../../../context/agent-form-context";
+import React, { useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
+import { agreementDetails } from '../config/agent-profile-form-config';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
+import { getController } from '@/components/form/utils/getController';
+import Spacer from '@/components/form/wrapper/Spacer';
+import CheckboxWrapper from '@/components/form/wrapper/CheckboxWrapper';
+import { useAgentForm } from '../../../context/agent-form-context';
 
 export const AgrementDetailsStep: React.FC = () => {
   const { updateFormData } = useAgentForm();
@@ -26,14 +26,14 @@ export const AgrementDetailsStep: React.FC = () => {
         bankDetails: formValues.agreementDetails.bankDetails,
       };
       if (agreementDetails) {
-        updateFormData("agreementDetails", agreementDetails);
+        updateFormData('agreementDetails', agreementDetails);
       }
     });
 
     // Initial update
     const initialValues = getValues();
     if (initialValues.basicDetails) {
-      updateFormData("basicDetails", initialValues.basicDetails);
+      updateFormData('basicDetails', initialValues.basicDetails);
     }
 
     return () => subscription.unsubscribe();

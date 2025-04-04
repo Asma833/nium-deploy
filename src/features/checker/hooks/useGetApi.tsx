@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { getEndpoint } from "@/core/constant/apis";
-import { toast } from "sonner";
+import { useState, useEffect, useCallback } from 'react';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { getEndpoint } from '@/core/constant/apis';
+import { toast } from 'sonner';
 
 interface FetchState {
   data: any | null;
@@ -19,28 +19,31 @@ export const useGetApi = (
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async (queryParams?: Record<string, any>) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const url = getEndpoint(endpointKey);
-      const response = await axiosInstance.get(url, {
-        params: queryParams || params,
-      });
-      setData(response.data);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
+  const fetchData = useCallback(
+    async (queryParams?: Record<string, any>) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const url = getEndpoint(endpointKey);
+        const response = await axiosInstance.get(url, {
+          params: queryParams || params,
+        });
+        setData(response.data);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : 'An unknown error occurred';
 
-      toast.error("Error Fetching Data", {
-        description: errorMessage,
-      });
+        toast.error('Error Fetching Data', {
+          description: errorMessage,
+        });
 
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [endpointKey, params]);
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [endpointKey, params]
+  );
 
   useEffect(() => {
     if (autoFetch) {

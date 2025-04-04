@@ -9,39 +9,46 @@ export interface NavItem {
   dropdown?: DropdownItem[];
 }
 
-const userPrefix = "/admin";
-
+const userPrefix = '/admin';
 
 export const AdminNavItems = [
-  { title: "Dashboard", path: `${userPrefix}/dashboard` },
+  { title: 'Dashboard', path: `${userPrefix}/dashboard` },
   {
-    title: "User Management",
+    title: 'User Management',
     dropdown: [
-      { title: "N-User", path: `${userPrefix}/n-user`, description: "Create, Update, Delete N-User" },
-      { title: "Agent Profile Creation", path: `${userPrefix}/user-management/agent-profile-creation`, description: "Create, Update, Delete Agent Profile" },
       {
-        title: "Agent Branch User Creation",
+        title: 'N-User',
+        path: `${userPrefix}/n-user`,
+        description: 'Create, Update, Delete N-User',
+      },
+      {
+        title: 'Agent Profile Creation',
+        path: `${userPrefix}/user-management/agent-profile-creation`,
+        description: 'Create, Update, Delete Agent Profile',
+      },
+      {
+        title: 'Agent Branch User Creation',
         path: `${userPrefix}/user-management/agent-branch-user-creation`,
-        description: "Create, Update, Delete Agent Branch User",
+        description: 'Create, Update, Delete Agent Branch User',
       },
     ],
   },
   {
-    title: "Master",
+    title: 'Master',
     dropdown: [
-      { title: "Rate Master", path: `${userPrefix}/master/rate-margin` },
-      { title: "Purpose Master", path: `${userPrefix}/master/purpose-master` },
-      { title: "TCS Master", path: `${userPrefix}/master/tcs-master` },
+      { title: 'Rate Master', path: `${userPrefix}/master/rate-margin` },
+      { title: 'Purpose Master', path: `${userPrefix}/master/purpose-master` },
+      { title: 'TCS Master', path: `${userPrefix}/master/tcs-master` },
     ],
   },
   {
-    title: "Commission",
+    title: 'Commission',
     dropdown: [
-      { title: "Structure", path: `${userPrefix}/commission-structure` },
-      { title: "Payment", path: `${userPrefix}/commission-payment` },
+      { title: 'Structure', path: `${userPrefix}/commission-structure` },
+      { title: 'Payment', path: `${userPrefix}/commission-payment` },
     ],
   },
-  { title: "Support", path: `${userPrefix}/support` },
-  { title: "Create Company", path: `${userPrefix}/create-company` },
-  { title: "Agent Report", path: `${userPrefix}/agent-report` },
+  { title: 'Support', path: `${userPrefix}/support` },
+  { title: 'Create Company', path: `${userPrefix}/create-company` },
+  { title: 'Agent Report', path: `${userPrefix}/agent-report` },
 ];

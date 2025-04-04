@@ -1,9 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { userApi } from "../api/userApi";
-import { toast } from "sonner";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
-import { UserFormData } from "../types/user.type";
-import { useEffect } from "react";
+import { useMutation } from '@tanstack/react-query';
+import { userApi } from '../api/userApi';
+import { toast } from 'sonner';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { UserFormData } from '../types/user.type';
+import { useEffect } from 'react';
 
 // Form data structure
 export interface UserCreationRequest {
@@ -42,13 +42,13 @@ export const useCreateUser = (
     formData: UserCreationRequest
   ): UserApiPayload => {
     return {
-      role_id: "bcbfc72e-54cc-4f67-9110-342c6570b062",
+      role_id: 'bcbfc72e-54cc-4f67-9110-342c6570b062',
       email: formData.email,
       password: formData.password,
       is_active: true,
-      business_type: "large_enterprise",
-      branch_id: getBranchId() || "",
-      bank_account_id: getBankAccountId() || "",
+      business_type: 'large_enterprise',
+      branch_id: getBranchId() || '',
+      bank_account_id: getBankAccountId() || '',
     };
   };
 
@@ -63,17 +63,17 @@ export const useCreateUser = (
       return apiPayload;
     },
     onSuccess: (data: UserApiPayload) => {
-      toast.success("User created successfully");
+      toast.success('User created successfully');
       onUserCreateSuccess(data);
     },
     onError: (error: Error) => {
       toast.error(
-        error.message === "Request failed with status code 409"
-          ? "Email already exist"
-          : error.message || "User creation failed"
+        error.message === 'Request failed with status code 409'
+          ? 'Email already exist'
+          : error.message || 'User creation failed'
       );
     },
   });
 
-  return { mutate, isLoading: isPending, error};
+  return { mutate, isLoading: isPending, error };
 };

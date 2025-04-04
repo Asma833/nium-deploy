@@ -1,6 +1,6 @@
-import React from "react";
-import "./form-layout.css";
-import { cn } from "@/utils/cn";
+import React from 'react';
+import '../styles/form-layout.css';
+import { cn } from '@/utils/cn';
 
 type Props = {
   children: React.ReactNode;
@@ -18,12 +18,12 @@ const FormFieldRow = ({
   wrapperClassName,
 }: Props) => {
   return (
-    <div className={cn("flex flex-col gap-3", className)}>
-      {groupName && <div className="font-bold pt-3">{groupName}</div> }
+    <div className={cn('flex flex-col gap-3', className)}>
+      {groupName && <div className="font-bold pt-3">{groupName}</div>}
       <div
         className={cn(
-          "formFieldRow",
-          rowCols ? `row-cols-${rowCols}` : "",
+          'formFieldRow',
+          rowCols ? `row-cols-${rowCols}` : '',
           wrapperClassName
         )}
       >

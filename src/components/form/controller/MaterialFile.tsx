@@ -1,6 +1,6 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { Button } from "@mui/material";
-import { Upload } from "lucide-react";
+import { Controller, useFormContext } from 'react-hook-form';
+import { Button } from '@mui/material';
+import { Upload } from 'lucide-react';
 
 interface MaterialFileProps {
   name: string;
@@ -15,7 +15,7 @@ export const MaterialFile = ({ name, label, className }: MaterialFileProps) => {
     <Controller
       name={name}
       control={control}
-      defaultValue={null}  // Add default value
+      defaultValue={null} // Add default value
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <div>
           <Button
@@ -30,11 +30,15 @@ export const MaterialFile = ({ name, label, className }: MaterialFileProps) => {
               hidden
               onChange={(e) => {
                 const file = e.target.files?.[0] || null;
-                onChange(file);  // Handle null case
+                onChange(file); // Handle null case
               }}
             />
           </Button>
-          {error && <p className="text-[hsl(var(--destructive))] text-sm mt-1">{error.message}</p>}
+          {error && (
+            <p className="text-[hsl(var(--destructive))] text-sm mt-1">
+              {error.message}
+            </p>
+          )}
         </div>
       )}
     />

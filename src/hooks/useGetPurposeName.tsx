@@ -25,7 +25,11 @@ const useGetPurposeName = (id?: string) => {
         setPurposeTypes(response.data || []);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch purpose types'));
+        setError(
+          err instanceof Error
+            ? err
+            : new Error('Failed to fetch purpose types')
+        );
       } finally {
         setLoading(false);
       }
@@ -35,17 +39,16 @@ const useGetPurposeName = (id?: string) => {
   }, []);
 
   // Find the purpose name if ID is provided
-  const purposeName = id 
-    ? purposeTypes.find(item => item.id === id)?.text || null
+  const purposeName = id
+    ? purposeTypes.find((item) => item.id === id)?.text || null
     : null;
 
-  return { 
+  return {
     purposeName,
     purposeTypes,
     loading,
-    error
+    error,
   };
 };
 
 export default useGetPurposeName;
-

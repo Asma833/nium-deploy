@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 /**
  * Capitalizes the first letter of a string
@@ -9,7 +9,7 @@ import _ from "lodash";
  * capitalizeFirstLetter(null) // returns ''
  */
 export function capitalizeFirstLetter(str: string | null | undefined): string {
-  return str ? _.capitalize(str.trim()) : "";
+  return str ? _.capitalize(str.trim()) : '';
 }
 
 /**
@@ -46,7 +46,7 @@ export function slugify(text: string): string {
 export function truncate(
   str: string,
   length: number,
-  ending: string = "..."
+  ending: string = '...'
 ): string {
   return _.truncate(str, { length, omission: ending });
 }
@@ -59,7 +59,7 @@ export function truncate(
  * removeSpecialCharacters('Hello! @World#') // returns 'Hello World'
  */
 export function removeSpecialCharacters(str: string): string {
-  return _.deburr(str).replace(/[^a-zA-Z0-9 ]/g, "");
+  return _.deburr(str).replace(/[^a-zA-Z0-9 ]/g, '');
 }
 
 /**
@@ -70,10 +70,10 @@ export function removeSpecialCharacters(str: string): string {
  * formatPhoneNumber('1234567890') // returns '(123) 456-7890'
  */
 export function formatPhoneNumber(phone: string): string {
-  const cleaned = phone.replace(/\D/g, "");
+  const cleaned = phone.replace(/\D/g, '');
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
   if (match) {
-    return "(" + match[1] + ") " + match[2] + "-" + match[3];
+    return '(' + match[1] + ') ' + match[2] + '-' + match[3];
   }
   return phone;
 }

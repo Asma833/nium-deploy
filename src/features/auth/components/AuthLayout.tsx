@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import LogoHeader from "@/components/common/LogoHeader";
+import { useEffect, useState } from 'react';
+import LogoHeader from '@/components/common/LogoHeader';
 
 interface AuthLayoutProps {
   children: React.ReactNode;

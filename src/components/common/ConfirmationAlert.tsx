@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./alert-dialog";
+} from '../ui/alert-dialog';
 
 interface ConfirmationAlertProps {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export function ConfirmationAlert({
   isLoading = false,
 }: ConfirmationAlertProps) {
   return (
-    <AlertDialog >
+    <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent className="bg-card max-w-sm sm:max-w-md">
         <AlertDialogHeader>
@@ -35,12 +35,9 @@ export function ConfirmationAlert({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-            onClick={onConfirm}
-            disabled={isLoading}
-            >
-            {isLoading ? "Loading..." : "Continue"}
-            </AlertDialogAction>
+          <AlertDialogAction onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? 'Loading...' : 'Continue'}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

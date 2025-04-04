@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Bell, Power, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/utils/cn";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Power, Menu } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/utils/cn';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,11 +11,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { HeaderProps } from "./navigation.types";
-import { MobileNav } from "./MobileNav";
-import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
-import { useActiveMenu } from "@/hooks/useActiveMenu";
+} from '@/components/ui/navigation-menu';
+import { HeaderProps } from './navigation.types';
+import { MobileNav } from './MobileNav';
+import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
+import { useActiveMenu } from '@/hooks/useActiveMenu';
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                       <>
                         <NavigationMenuTrigger
                           className={cn(
-                            activeItem === item.title && "text-primary"
+                            activeItem === item.title && 'text-primary'
                           )}
                         >
                           {item.title}
@@ -69,9 +69,9 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                               <li key={dropIdx}>
                                 <NavigationMenuLink
                                   className={cn(
-                                    "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground  focus:text-accent-foreground",
+                                    'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground  focus:text-accent-foreground',
                                     activeDropdownItem === dropItem.title &&
-                                      "bg-accent"
+                                      'bg-accent'
                                   )}
                                   onClick={() =>
                                     handleNavigation(
@@ -99,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                       <NavigationMenuLink
                         className={cn(
                           navigationMenuTriggerStyle(),
-                          activeItem === item.title && "text-primary"
+                          activeItem === item.title && 'text-primary'
                         )}
                         onClick={() =>
                           item.path && handleNavigation(item.path, item.title)

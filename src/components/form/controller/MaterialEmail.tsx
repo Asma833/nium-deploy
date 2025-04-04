@@ -1,5 +1,5 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { Controller, useFormContext } from 'react-hook-form';
+import { TextField } from '@mui/material';
 
 interface MaterialEmailProps {
   name: string;
@@ -8,20 +8,28 @@ interface MaterialEmailProps {
   className?: string;
 }
 
-export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEmailProps) => {
+export const MaterialEmail = ({
+  name,
+  label,
+  baseStyle,
+  className,
+}: MaterialEmailProps) => {
   const { control } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue=""  // Add default value
-      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
+      defaultValue="" // Add default value
+      render={({
+        field: { value, onChange, ...field },
+        fieldState: { error },
+      }) => (
         <TextField
           {...field}
-          value={value ?? ''}  // Ensure value is never undefined
+          value={value ?? ''} // Ensure value is never undefined
           onChange={(e) => {
-            onChange(e.target.value || '');  // Handle empty string case
+            onChange(e.target.value || ''); // Handle empty string case
           }}
           type="email"
           label={label}

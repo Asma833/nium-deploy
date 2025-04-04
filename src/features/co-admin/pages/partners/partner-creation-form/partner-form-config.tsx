@@ -1,9 +1,9 @@
 enum FieldType {
-  Text = "text",
-  Email = "email",
-  Password = "password",
-  Checkbox = "checkbox",
-  Select = "select",
+  Text = 'text',
+  Email = 'email',
+  Password = 'password',
+  Checkbox = 'checkbox',
+  Select = 'select',
 }
 
 interface FormField {
@@ -43,57 +43,57 @@ interface UserFormConfig {
 }
 
 export const userFormConfig: UserFormConfig = {
-  sectionTitle: "Create User",
+  sectionTitle: 'Create User',
   fields: {
     firstName: {
-      label: "First Name",
+      label: 'First Name',
       type: FieldType.Text,
       required: true,
-      placeholder: "Enter First Name",
+      placeholder: 'Enter First Name',
     },
     lastName: {
-      label: "Last Name",
+      label: 'Last Name',
       type: FieldType.Text,
       required: true,
-      placeholder: "Enter Last Name",
+      placeholder: 'Enter Last Name',
     },
     email: {
-      label: "Email",
+      label: 'Email',
       type: FieldType.Email,
       required: true,
-      placeholder: "Enter Email",
+      placeholder: 'Enter Email',
     },
     password: {
-      label: "Password",
+      label: 'Password',
       type: FieldType.Password,
       required: true,
-      placeholder: "Enter Password",
+      placeholder: 'Enter Password',
     },
     confirmPassword: {
-      label: "Confirm Password",
+      label: 'Confirm Password',
       type: FieldType.Password,
       required: true,
-      placeholder: "Confirm Password",
+      placeholder: 'Confirm Password',
     },
     productType: {
-      label: "Product Type",
+      label: 'Product Type',
       type: FieldType.Checkbox,
       required: true,
-      placeholder: "",
+      placeholder: '',
       options: {
-        card: { label: "Card", checked: true },
-        remittance: { label: "Remittance", checked: false },
-        both: { label: "Both", checked: false },
+        card: { label: 'Card', checked: true },
+        remittance: { label: 'Remittance', checked: false },
+        both: { label: 'Both', checked: false },
       },
       isMulti: false,
     },
     businessType: {
-      label: "Business Type",
+      label: 'Business Type',
       type: FieldType.Text,
-      placeholder: "Select Business Type",
+      placeholder: 'Select Business Type',
       required: true,
       options: {
-        large_enterprise: { label: "Large Enterprise", selected: true },
+        large_enterprise: { label: 'Large Enterprise', selected: true },
       },
       isMulti: false,
     },

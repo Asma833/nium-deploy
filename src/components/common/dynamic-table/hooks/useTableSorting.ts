@@ -5,8 +5,12 @@ export function useTableSorting<T>(
   defaultSortColumn?: string,
   defaultSortDirection: 'asc' | 'desc' = 'asc'
 ) {
-  const [sortColumn, setSortColumn] = useState<string | undefined>(defaultSortColumn);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(defaultSortDirection);
+  const [sortColumn, setSortColumn] = useState<string | undefined>(
+    defaultSortColumn
+  );
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(
+    defaultSortDirection
+  );
 
   const sortedData = useMemo(() => {
     if (!sortColumn || !Array.isArray(data)) return data;
@@ -22,20 +26,20 @@ export function useTableSorting<T>(
       if (bValue === undefined || bValue === null) return -1;
 
       if (aValue instanceof Date && bValue instanceof Date) {
-        return sortDirection === "asc"
+        return sortDirection === 'asc'
           ? aValue.getTime() - bValue.getTime()
           : bValue.getTime() - aValue.getTime();
       }
 
       const comparison = aValue < bValue ? -1 : 1;
-      return sortDirection === "asc" ? comparison : -comparison;
+      return sortDirection === 'asc' ? comparison : -comparison;
     });
   }, [data, sortColumn, sortDirection]);
 
   const toggleSort = (columnId: string) => {
     setSortColumn(columnId);
     setSortDirection(
-      sortColumn === columnId && sortDirection === "asc" ? "desc" : "asc"
+      sortColumn === columnId && sortDirection === 'asc' ? 'desc' : 'asc'
     );
   };
 
@@ -43,6 +47,6 @@ export function useTableSorting<T>(
     sortedData,
     sortColumn,
     sortDirection,
-    toggleSort
+    toggleSort,
   };
 }

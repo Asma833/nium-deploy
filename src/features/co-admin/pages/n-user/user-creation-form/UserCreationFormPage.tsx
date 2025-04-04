@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema } from "./user-form.schema";
-import { userFormConfig } from "./user-form-config";
-import { FormProvider } from "@/components/form/context/FormProvider";
-import { getController } from "@/components/form/utils/getController";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import Spacer from "@/components/form/wrapper/Spacer";
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import { useCreateUser } from "../../../hooks/useCreateUser";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useParams, useLocation } from "react-router-dom";
-import { useUpdateAPI } from "@/features/co-admin/hooks/useUserUpdate";
-import { useProductOptions } from "@/features/co-admin/hooks/useProductOptions";
-import { UserFormData } from "@/features/co-admin/types/user.type";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userSchema } from './user-form.schema';
+import { userFormConfig } from './user-form-config';
+import { FormProvider } from '@/components/form/context/FormProvider';
+import { getController } from '@/components/form/utils/getController';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
+import Spacer from '@/components/form/wrapper/Spacer';
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
+import { useCreateUser } from '../../../hooks/useCreateUser';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { useParams, useLocation } from 'react-router-dom';
+import { useUpdateAPI } from '@/features/co-admin/hooks/useUserUpdate';
+import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
+import { UserFormData } from '@/features/co-admin/types/user.type';
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return screenWidth;
@@ -50,16 +50,16 @@ const UserCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
   useEffect(() => {
-    setTitle(isEditMode ? "Edit User" : "Create User");
+    setTitle(isEditMode ? 'Edit User' : 'Create User');
   }, [setTitle]);
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      businessType: "large_enterprise",
+      email: '',
+      password: '',
+      confirmPassword: '',
+      businessType: 'large_enterprise',
     },
   });
 
@@ -73,10 +73,9 @@ const UserCreationFormPage = () => {
   } = methods;
 
   const { mutate: createUser, isLoading } = useCreateUser(
-    { role: "checker" },
+    { role: 'checker' },
     {
       onUserCreateSuccess: (data) => {
-        console.log(data);
         reset({});
       },
     }
@@ -87,7 +86,7 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
-        email: selectedRow.email || "",
+        email: selectedRow.email || '',
       });
     }
   }, [selectedRow, reset]);
@@ -98,9 +97,9 @@ const UserCreationFormPage = () => {
     } else {
       createUser({
         ...formdata,
-        business_type: "",
-        branch_id: "",
-        bank_account_id: "",
+        business_type: '',
+        branch_id: '',
+        bank_account_id: '',
       });
     }
   });
@@ -109,14 +108,14 @@ const UserCreationFormPage = () => {
     <FormProvider methods={methods}>
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
         <h2 className="text-xl font-bold mb-4">
-          {isEditMode ? "Edit User" : "Create User"}
+          {isEditMode ? 'Edit User' : 'Create User'}
         </h2>
         <Spacer>
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
             <FieldWrapper>
               {getController({
                 ...userFormConfig.fields.email,
-                name: "email",
+                name: 'email',
                 control,
                 errors,
               })}
@@ -126,8 +125,8 @@ const UserCreationFormPage = () => {
                 {getController({
                   ...userFormConfig.fields.businessType,
                   label:
-                    userFormConfig.fields.businessType.label || "Business Type",
-                  name: "businessType",
+                    userFormConfig.fields.businessType.label || 'Business Type',
+                  name: 'businessType',
                   control,
                   errors,
                 })}
@@ -155,11 +154,11 @@ const UserCreationFormPage = () => {
         >
           {isSubmitting || isLoading
             ? isEditMode
-              ? "Updating..."
-              : "Submitting..."
+              ? 'Updating...'
+              : 'Submitting...'
             : isEditMode
-            ? "Update"
-            : "Submit"}
+              ? 'Update'
+              : 'Submit'}
         </button>
       </div>
     </FormProvider>

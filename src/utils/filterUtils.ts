@@ -1,11 +1,13 @@
-import { SetFilters } from "@/components/filter/filter.types";
+import { SetFilters } from '@/components/filter/filter.types';
 
 /**
  * Creates filter parameters for API requests
  * @param filters - The filters object
  * @returns An object with API-compatible filter parameters
  */
-export const createFilterParams = (filters: SetFilters): Record<string, any> => {
+export const createFilterParams = (
+  filters: SetFilters
+): Record<string, any> => {
   const params: Record<string, any> = {};
 
   // Add search term if present
@@ -54,21 +56,21 @@ export const filterBySearchTerm = <T extends Record<string, any>>(
   searchableFields?: (keyof T)[]
 ): T[] => {
   if (!searchTerm) return data;
-  
+
   const lowercaseTerm = searchTerm.toLowerCase();
-  
-  return data.filter(item => {
+
+  return data.filter((item) => {
     // If searchableFields are specified, only search those fields
     if (searchableFields?.length) {
-      return searchableFields.some(field => {
+      return searchableFields.some((field) => {
         const value = item[field];
         if (value === undefined || value === null) return false;
         return String(value).toLowerCase().includes(lowercaseTerm);
       });
     }
-    
+
     // Otherwise search all fields
-    return Object.values(item).some(value => {
+    return Object.values(item).some((value) => {
       if (value === undefined || value === null) return false;
       return String(value).toLowerCase().includes(lowercaseTerm);
     });
@@ -90,19 +92,19 @@ export const filterByDateRange = <T extends Record<string, any>>(
   toDate?: Date
 ): T[] => {
   if (!fromDate && !toDate) return data;
-  
-  return data.filter(item => {
+
+  return data.filter((item) => {
     const itemDate = item[dateField] ? new Date(item[dateField]) : null;
     if (!itemDate) return false;
-    
+
     if (fromDate && itemDate < fromDate) return false;
-    
+
     if (toDate) {
       const endOfDay = new Date(toDate);
       endOfDay.setHours(23, 59, 59, 999);
       if (itemDate > endOfDay) return false;
     }
-    
+
     return true;
   });
 };
@@ -120,6 +122,6 @@ export const filterByFieldValue = <T extends Record<string, any>>(
   value: string
 ): T[] => {
   if (value === 'all' || !value) return data;
-  
-  return data.filter(item => item[field] === value);
+
+  return data.filter((item) => item[field] === value);
 };

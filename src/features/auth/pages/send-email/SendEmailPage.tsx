@@ -1,5 +1,5 @@
-import AuthLayout from "../../components/AuthLayout";
-import SendEmailForm from "../../components/SendEmailForm";
+import AuthLayout from '../../components/AuthLayout';
+import SendEmailForm from '../../components/SendEmailForm';
 
 const SendEmailPage = () => {
   return (

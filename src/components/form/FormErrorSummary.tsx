@@ -1,9 +1,11 @@
-import { Alert, List, ListItem } from "@mui/material";
-import { FieldValues } from "react-hook-form";
-import { useFormContext } from "./context/form-context";
+import { Alert, List, ListItem } from '@mui/material';
+import { FieldValues } from 'react-hook-form';
+import { useFormContext } from './context/form-context';
 
 export const FormErrorSummary = () => {
-  const { formState: { errors } } = useFormContext<FieldValues>();
+  const {
+    formState: { errors },
+  } = useFormContext<FieldValues>();
   const errorMessages = Object.values(errors)
     .map((error) => error?.message as string)
     .filter(Boolean);

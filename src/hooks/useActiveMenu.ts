@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
-import { useLocation } from "react-router-dom";
-import { NavItem } from "@/components/layout/navigation/navigation.types";
+import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
+import { NavItem } from '@/components/layout/navigation/navigation.types';
 
 export const useActiveMenu = (navItems: NavItem[]) => {
   const location = useLocation();
-  const [activeItem, setActiveItem] = useState<string>("");
+  const [activeItem, setActiveItem] = useState<string>('');
   const [activeDropdownItem, setActiveDropdownItem] = useState<string | null>(
     null
   );
@@ -22,7 +22,7 @@ export const useActiveMenu = (navItems: NavItem[]) => {
           }
         }
       }
-      return { main: "", dropdown: null };
+      return { main: '', dropdown: null };
     },
     [navItems]
   );

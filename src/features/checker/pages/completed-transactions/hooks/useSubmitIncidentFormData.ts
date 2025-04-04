@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
+import { useMutation } from '@tanstack/react-query';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 // Define the proper type for the form data
 interface IncidentFormData {
@@ -24,10 +24,8 @@ const useSubmitIncidentFormData = () => {
       );
       return response.data;
     },
-    onSuccess: (data) => {
-    },
-    onError: (error) => {
-    },
+    onSuccess: (data) => {},
+    onError: (error) => {},
   });
 
   return {

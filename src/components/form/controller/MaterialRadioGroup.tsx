@@ -1,13 +1,13 @@
-import { Controller, FieldValues, Path } from "react-hook-form";
+import { Controller, FieldValues, Path } from 'react-hook-form';
 import {
   FormControl,
   FormControlLabel,
   FormLabel,
   Radio,
   RadioGroup,
-} from "@mui/material";
-import { ErrorMessage } from "../error-message";
-import { Circle, CircleCheck } from "lucide-react";
+} from '@mui/material';
+import { ErrorMessage } from '../ErrorMessage';
+import { Circle, CircleCheck } from 'lucide-react';
 
 type MaterialRadioGroupProps<T extends FieldValues> = {
   name: Path<T>;
@@ -35,10 +35,10 @@ export const MaterialRadioGroup = <T extends FieldValues>({
                     value={value}
                     control={
                       <Radio
-                        icon={<Circle size={"20"} />}
-                        checked={field.value === value }
+                        icon={<Circle size={'20'} />}
+                        checked={field.value === value}
                         checkedIcon={
-                          <CircleCheck className="text-primary" size={"20"} />
+                          <CircleCheck className="text-primary" size={'20'} />
                         }
                       />
                     }

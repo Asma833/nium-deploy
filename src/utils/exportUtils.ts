@@ -1,5 +1,5 @@
 // Note: Run `npm install --save-dev @types/file-saver` to fix TypeScript errors
-import { toast } from "sonner";
+import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -12,11 +12,11 @@ import { saveAs } from 'file-saver';
 export const exportToCSV = <T extends Record<string, any>>(
   data: T[],
   columns: { accessorKey?: string; header?: string }[],
-  filename: string = "exported-data"
+  filename: string = 'exported-data'
 ) => {
   try {
     if (!data || data.length === 0) {
-      toast.error("No data available to export");
+      toast.error('No data available to export');
       return;
     }
 
@@ -31,10 +31,10 @@ export const exportToCSV = <T extends Record<string, any>>(
           const key = col.accessorKey as string;
           const header = col.header as string;
           // Safely access potentially nested properties
-          const value = key.includes(".")
-            ? key.split(".").reduce((obj, path) => obj?.[path], row)
+          const value = key.includes('.')
+            ? key.split('.').reduce((obj, path) => obj?.[path], row)
             : row[key as keyof typeof row];
-          rowData[header] = value !== undefined ? value : "";
+          rowData[header] = value !== undefined ? value : '';
         });
 
       return rowData;
@@ -42,31 +42,34 @@ export const exportToCSV = <T extends Record<string, any>>(
 
     // Create CSV headers and content
     const headers = Object.keys(flattenedData[0]);
-    let csvContent = headers.join(",") + "\n";
+    let csvContent = headers.join(',') + '\n';
 
     // Add rows
     flattenedData.forEach((row) => {
       const values = headers.map((header) => {
-        const value = row[header]?.toString() || "";
-        return value.includes(",") ? `"${value.replace(/"/g, '""')}"` : value;
+        const value = row[header]?.toString() || '';
+        return value.includes(',') ? `"${value.replace(/"/g, '""')}"` : value;
       });
-      csvContent += values.join(",") + "\n";
+      csvContent += values.join(',') + '\n';
     });
 
     // For debug purposes, show the CSV content in console
     // Create file and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `${filename}-${new Date().toISOString().split("T")[0]}.csv`);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute(
+      'download',
+      `${filename}-${new Date().toISOString().split('T')[0]}.csv`
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    toast.success("CSV exported successfully");
+    toast.success('CSV exported successfully');
   } catch (error) {
-    toast.error("Failed to export CSV. Please try again.");
+    toast.error('Failed to export CSV. Please try again.');
   }
 };
 
@@ -83,13 +86,13 @@ export const exportToCSV = <T extends Record<string, any>>(
 export const exportToExcel = <T extends Record<string, any>>(
   data: T[],
   columns: { accessorKey?: string; header?: string }[],
-  filename: string = "exported-data",
-  sheetName: string = "Data"
+  filename: string = 'exported-data',
+  sheetName: string = 'Data'
 ) => {
   try {
     // No need to use require() anymore since we import at the top
     if (!data || data.length === 0) {
-      toast.error("No data available to export");
+      toast.error('No data available to export');
       return;
     }
 
@@ -102,8 +105,8 @@ export const exportToExcel = <T extends Record<string, any>>(
         .forEach((col) => {
           const key = col.accessorKey as string;
           const header = col.header as string;
-          exportRow[header] = key.includes(".")
-            ? key.split(".").reduce((obj, path) => obj?.[path], row)
+          exportRow[header] = key.includes('.')
+            ? key.split('.').reduce((obj, path) => obj?.[path], row)
             : row[key as keyof typeof row];
         });
 
@@ -119,21 +122,21 @@ export const exportToExcel = <T extends Record<string, any>>(
 
     // Generate buffer
     const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+      bookType: 'xlsx',
+      type: 'array',
     });
 
     // Create blob and save file
     const fileData = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
     saveAs(
       fileData,
-      `${filename}-${new Date().toISOString().split("T")[0]}.xlsx`
+      `${filename}-${new Date().toISOString().split('T')[0]}.xlsx`
     );
 
-    toast.success("Excel file exported successfully");
+    toast.success('Excel file exported successfully');
   } catch (error) {
-    toast.error("Failed to export Excel file. Please try again.");
+    toast.error('Failed to export Excel file. Please try again.');
   }
 };

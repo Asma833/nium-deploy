@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Utility function to generate unique field names
 const generateFieldName = (section: string, field: string) =>
@@ -11,7 +11,7 @@ interface FormField {
   required?: boolean;
   options?:
     | Array<{ value: string; label: string }>
-    | { [key: string]: { label?: string , checked?: boolean}  };
+    | { [key: string]: { label?: string; checked?: boolean } };
   validation?: z.ZodType<any>;
   uppercase?: boolean;
   defaultValue?: any;
@@ -19,142 +19,142 @@ interface FormField {
 
 export const defaultFormValues = {
   basicDetails: {
-    name: "",
-    typeOfOrganization: "",
+    name: '',
+    typeOfOrganization: '',
     agreementExpiryDate: null,
     dateOfBirth: null,
-    pan: "",
-    gst: "",
-    gstState: "",
-    agentCode: "",
-    agentType: "cashAndCarry",
+    pan: '',
+    gst: '',
+    gstState: '',
+    agentCode: '',
+    agentType: 'cashAndCarry',
   },
   agreementDetails: {
     bankDetails: {
-      bankName: "",
-      accountNumber: "",
-      accountHolderName: "",
-      ifscCode: "",
-      document: "",
+      bankName: '',
+      accountNumber: '',
+      accountHolderName: '',
+      ifscCode: '',
+      document: '',
       agreementDate: null,
     },
     adminDetails: {
-      name: "",
-      email: "",
-      mobileNo: "",
-      product: ["card"],
+      name: '',
+      email: '',
+      mobileNo: '',
+      product: ['card'],
     },
   },
   commission: {
-    commissionType: "",
+    commissionType: '',
   },
   charges: {
-    commissionType: "",
+    commissionType: '',
   },
   adminDetails: {
     basicDetails: {
-      hoBranchName: "",
-      address: "",
-      status: "active",
+      hoBranchName: '',
+      address: '',
+      status: 'active',
     },
     agentAdminDetails: {
-      name: "",
-      email: "",
-      branch: "",
-      role: "",
-      status: "active",
-      configurationStatus: "active",
+      name: '',
+      email: '',
+      branch: '',
+      role: '',
+      status: 'active',
+      configurationStatus: 'active',
     },
   },
 };
 
 export const basicDetails: Record<string, FormField> = {
   name: {
-    name: "basicDetails.name",
-    label: "Name",
-    type: "text",
+    name: 'basicDetails.name',
+    label: 'Name',
+    type: 'text',
     required: true,
-    defaultValue: "",
+    defaultValue: '',
   },
   typeOfOrganization: {
-    name: "basicDetails.typeOfOrganization",
-    label: "Type of Organization",
-    type: "select",
+    name: 'basicDetails.typeOfOrganization',
+    label: 'Type of Organization',
+    type: 'select',
     required: true,
-    defaultValue: "",
+    defaultValue: '',
     options: {
-      partnership: { label: "Partnership" },
-      proprietorship: { label: "Proprietorship" },
-      privateLimited: { label: "Private Limited" },
-      publicLimited: { label: "Public Limited" },
+      partnership: { label: 'Partnership' },
+      proprietorship: { label: 'Proprietorship' },
+      privateLimited: { label: 'Private Limited' },
+      publicLimited: { label: 'Public Limited' },
     },
   },
   agreementExpiryDate: {
-    name: "basicDetails.agreementExpiryDate",
-    label: "Agreement Expiry Date",
-    type: "date",
+    name: 'basicDetails.agreementExpiryDate',
+    label: 'Agreement Expiry Date',
+    type: 'date',
     required: true,
   },
   dateOfBirth: {
-    name: "basicDetails.dateOfBirth",
-    label: "Date of Birth",
-    type: "date",
+    name: 'basicDetails.dateOfBirth',
+    label: 'Date of Birth',
+    type: 'date',
     required: true,
-    defaultValue: "",
+    defaultValue: '',
   },
   pan: {
-    name: "basicDetails.pan",
-    label: "PAN",
-    type: "text",
+    name: 'basicDetails.pan',
+    label: 'PAN',
+    type: 'text',
     required: true,
     uppercase: true,
     validation: z
       .string()
-      .nonempty("PAN is required")
+      .nonempty('PAN is required')
       .refine((val) => val === val.toUpperCase(), {
-        message: "PAN must be uppercase",
+        message: 'PAN must be uppercase',
       }),
   },
   gst: {
-    name: "basicDetails.gst",
-    label: "GST",
-    type: "text",
+    name: 'basicDetails.gst',
+    label: 'GST',
+    type: 'text',
     required: true,
     uppercase: true,
     validation: z
       .string()
-      .nonempty("GST is required")
+      .nonempty('GST is required')
       .refine((val) => val === val.toUpperCase(), {
-        message: "GST must be uppercase",
+        message: 'GST must be uppercase',
       }),
   },
   gstState: {
-    name: "basicDetails.gstState",
-    label: "GST State",
-    type: "select",
+    name: 'basicDetails.gstState',
+    label: 'GST State',
+    type: 'select',
     required: true,
-    defaultValue: "",
+    defaultValue: '',
     options: {
-      maharashtra: { label: "Maharashtra" },
-      gujarat: { label: "Gujarat" },
-      karnataka: { label: "Karnataka" },
-      delhi: { label: "Delhi" },
+      maharashtra: { label: 'Maharashtra' },
+      gujarat: { label: 'Gujarat' },
+      karnataka: { label: 'Karnataka' },
+      delhi: { label: 'Delhi' },
     },
   },
   agentCode: {
-    name: "basicDetails.agentCode",
-    label: "Agent Code",
-    type: "text",
+    name: 'basicDetails.agentCode',
+    label: 'Agent Code',
+    type: 'text',
     required: true,
   },
   agentType: {
-    name: "basicDetails.agentType",
-    label: "Agent Type",
-    type: "radio",
+    name: 'basicDetails.agentType',
+    label: 'Agent Type',
+    type: 'radio',
     required: false,
     options: {
-      cashAndCarry: { label: "Cash & Carry", checked: true },
-      largeEnterprise: { label: "Large Enterprise",  checked: false },
+      cashAndCarry: { label: 'Cash & Carry', checked: true },
+      largeEnterprise: { label: 'Large Enterprise', checked: false },
     },
   },
 };
@@ -162,77 +162,77 @@ export const basicDetails: Record<string, FormField> = {
 export const agreementDetails = {
   bankDetails: {
     bankName: {
-      name: "agreementDetails.bankDetails.bankName",
-      label: "Bank Name",
-      type: "text",
+      name: 'agreementDetails.bankDetails.bankName',
+      label: 'Bank Name',
+      type: 'text',
       required: true,
-      defaultValue: "",
+      defaultValue: '',
     },
     accountNumber: {
-      name: "agreementDetails.bankDetails.accountNumber",
-      label: "Account Number",
-      type: "number",
+      name: 'agreementDetails.bankDetails.accountNumber',
+      label: 'Account Number',
+      type: 'number',
       required: true,
     },
     accountHolderName: {
-      name: "agreementDetails.bankDetails.accountHolderName",
-      label: "Account Holder Name",
-      type: "text",
+      name: 'agreementDetails.bankDetails.accountHolderName',
+      label: 'Account Holder Name',
+      type: 'text',
       required: true,
     },
     ifscCode: {
-      name: "agreementDetails.bankDetails.ifscCode",
-      label: "IFSC Code",
-      type: "text",
+      name: 'agreementDetails.bankDetails.ifscCode',
+      label: 'IFSC Code',
+      type: 'text',
       required: true,
     },
     document: {
-      name: "agreementDetails.bankDetails.document",
-      label: "Document",
-      type: "select",
+      name: 'agreementDetails.bankDetails.document',
+      label: 'Document',
+      type: 'select',
       required: true,
-      defaultValue: "",
+      defaultValue: '',
       options: {
-        aadhar: { label: "Aadhar" },
-        pan: { label: "PAN" },
-        drivingLicense: { label: "Driving License" },
+        aadhar: { label: 'Aadhar' },
+        pan: { label: 'PAN' },
+        drivingLicense: { label: 'Driving License' },
       },
     },
     agreementDate: {
-      name: "agreementDetails.bankDetails.agreementDate",
-      label: "Agreement Date",
-      type: "date",
-      defaultValue: "",
+      name: 'agreementDetails.bankDetails.agreementDate',
+      label: 'Agreement Date',
+      type: 'date',
+      defaultValue: '',
     },
   },
   adminDetails: {
     name: {
-      name: "agreementDetails.adminDetails.name",
-      label: "Name",
-      type: "text",
+      name: 'agreementDetails.adminDetails.name',
+      label: 'Name',
+      type: 'text',
       required: true,
     },
     email: {
-      name: "agreementDetails.adminDetails.email",
-      label: "Email",
-      type: "email",
+      name: 'agreementDetails.adminDetails.email',
+      label: 'Email',
+      type: 'email',
       required: true,
     },
     mobileNo: {
-      name: "agreementDetails.adminDetails.mobileNo",
-      label: "Mobile Number",
-      type: "number",
+      name: 'agreementDetails.adminDetails.mobileNo',
+      label: 'Mobile Number',
+      type: 'number',
       required: true,
     },
     product: {
-      name: "agreementDetails.adminDetails.product",
-      label: "Configuration: Products",
-      type: "checkbox",
+      name: 'agreementDetails.adminDetails.product',
+      label: 'Configuration: Products',
+      type: 'checkbox',
       required: true,
       options: {
-        card: { label: "Card", checked: true },
-        currency: { label: "Currency", checked: false },
-        remittance: { label: "Remittance", checked: false },
+        card: { label: 'Card', checked: true },
+        currency: { label: 'Currency', checked: false },
+        remittance: { label: 'Remittance', checked: false },
       },
     },
   },
@@ -240,28 +240,28 @@ export const agreementDetails = {
 
 export const commission = {
   commissionType: {
-    name: generateFieldName("commission", "commissionType"),
-    label: "Commission Type",
-    type: "radio",
+    name: generateFieldName('commission', 'commissionType'),
+    label: 'Commission Type',
+    type: 'radio',
     required: true,
     options: {
-      fixed: { label: "Fixed" },
-      variable: { label: "Variable" },
-      hybrid: { label: "Hybrid" },
+      fixed: { label: 'Fixed' },
+      variable: { label: 'Variable' },
+      hybrid: { label: 'Hybrid' },
     },
   },
 };
 
 export const charges = {
   commissionType: {
-    name: generateFieldName("charges", "commissionType"),
-    label: "Charges",
-    type: "radio",
+    name: generateFieldName('charges', 'commissionType'),
+    label: 'Charges',
+    type: 'radio',
     required: true,
     options: {
-      fixed: { label: "Fixed" },
-      variable: { label: "Variable" },
-      hybrid: { label: "Hybrid" },
+      fixed: { label: 'Fixed' },
+      variable: { label: 'Variable' },
+      hybrid: { label: 'Hybrid' },
     },
   },
 };
@@ -269,78 +269,78 @@ export const charges = {
 export const adminDetails = {
   basicDetails: {
     hoBranchName: {
-      name: generateFieldName("adminDetails.basicDetails", "hoBranchName"),
-      label: "HO Branch Name",
-      type: "text",
+      name: generateFieldName('adminDetails.basicDetails', 'hoBranchName'),
+      label: 'HO Branch Name',
+      type: 'text',
       required: true,
     },
     address: {
-      name: generateFieldName("adminDetails.basicDetails", "address"),
-      label: "Address",
-      type: "text",
+      name: generateFieldName('adminDetails.basicDetails', 'address'),
+      label: 'Address',
+      type: 'text',
       required: true,
     },
     status: {
-      name: generateFieldName("adminDetails.basicDetails", "status"),
-      label: "Status",
-      type: "radio",
+      name: generateFieldName('adminDetails.basicDetails', 'status'),
+      label: 'Status',
+      type: 'radio',
       required: true,
       options: {
-        active: { label: "Active", checked: true },
-        inactive: { label: "Inactive", checked: false },
+        active: { label: 'Active', checked: true },
+        inactive: { label: 'Inactive', checked: false },
       },
     },
   },
   agentAdminDetails: {
     name: {
-      name: generateFieldName("adminDetails.agentAdminDetails", "name"),
-      label: "Name",
-      type: "text",
+      name: generateFieldName('adminDetails.agentAdminDetails', 'name'),
+      label: 'Name',
+      type: 'text',
       required: true,
     },
     email: {
-      name: generateFieldName("adminDetails.agentAdminDetails", "email"),
-      label: "Email",
-      type: "email",
+      name: generateFieldName('adminDetails.agentAdminDetails', 'email'),
+      label: 'Email',
+      type: 'email',
       required: true,
     },
     branch: {
-      name: generateFieldName("adminDetails.agentAdminDetails", "branch"),
-      label: "Branch",
-      type: "text",
+      name: generateFieldName('adminDetails.agentAdminDetails', 'branch'),
+      label: 'Branch',
+      type: 'text',
       required: true,
     },
     role: {
-      name: generateFieldName("adminDetails.agentAdminDetails", "role"),
-      label: "Role",
-      type: "select",
+      name: generateFieldName('adminDetails.agentAdminDetails', 'role'),
+      label: 'Role',
+      type: 'select',
       required: true,
       options: {
-        admin: { label: "Admin" },
-        user: { label: "User" },
+        admin: { label: 'Admin' },
+        user: { label: 'User' },
       },
     },
     status: {
-      name: generateFieldName("adminDetails.agentAdminDetails", "status"),
-      label: "Status",
-      type: "radio",
+      name: generateFieldName('adminDetails.agentAdminDetails', 'status'),
+      label: 'Status',
+      type: 'radio',
       required: true,
       options: {
-        active: { label: "Active", checked: true },
-        inactive: { label: "Inactive", checked: false },
+        active: { label: 'Active', checked: true },
+        inactive: { label: 'Inactive', checked: false },
       },
     },
     configurationStatus: {
       name: generateFieldName(
-        "adminDetails.agentAdminDetails",
-        "configurationStatus"
+        'adminDetails.agentAdminDetails',
+        'configurationStatus'
       ),
-      label: "Configuration Status",
-      type: "radio",
+      label: 'Configuration Status',
+      type: 'radio',
       required: true,
       options: {
-        active: { label: "Active", checked: true },
-        inactive: { label: "Inactive", checked: false },
+        active: { label: 'Active', checked: true },
+        inactive: { label: 'Inactive', checked: false },
       },
     },
   },
@@ -353,15 +353,15 @@ export const getFieldsByType = (type: string) => {
 export const validationSchema = z
   .object({
     basicDetails: z.object({
-      name: z.string().min(1, "Name is required"),
-      typeOfOrganization: z.string().min(1, "required"),
+      name: z.string().min(1, 'Name is required'),
+      typeOfOrganization: z.string().min(1, 'required'),
       agreementExpiryDate: z.date().optional(),
       dateOfBirth: z.date().optional(),
       pan: z.string(),
       gst: z.string(),
       gstState: z.string(),
       agentCode: z.string(),
-      agentType: z.string().min(1, "required"),
+      agentType: z.string().min(1, 'required'),
     }),
     agreementDetails: z.object({
       bankDetails: z.object({
@@ -374,5 +374,3 @@ export const validationSchema = z
     // ...other validation rules
   })
   .partial();
-
-  

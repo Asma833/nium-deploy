@@ -1,6 +1,6 @@
-import { Img } from "react-image";
-import { Loader2 } from "lucide-react";
-import { cn } from "@/utils/cn";
+import { Img } from 'react-image';
+import { Loader2 } from 'lucide-react';
+import { cn } from '@/utils/cn';
 
 interface ImageProps extends React.ComponentProps<typeof Img> {
   wrapperClassName?: string;
@@ -14,12 +14,12 @@ const Image = ({
   ...props
 }: ImageProps) => {
   return (
-    <div className={cn("relative", wrapperClassName)}>
+    <div className={cn('relative', wrapperClassName)}>
       <Img
         loader={
           <div
             className={cn(
-              "flex items-center justify-center w-full h-full",
+              'flex items-center justify-center w-full h-full',
               loaderClassName
             )}
           >

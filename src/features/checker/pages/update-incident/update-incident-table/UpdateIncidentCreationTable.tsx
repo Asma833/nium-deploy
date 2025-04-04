@@ -1,19 +1,15 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getTransactionTableColumns } from "./update-incident-creation-table-col";
-import {
-  transactionTableData as initialData,
-  transactionTableData,
-} from "./update-incident-table-value";
-import { useEffect, useState } from "react";
-import { DialogWrapper } from "@/components/common/DialogWrapper";
-import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useGetUpdateIncident } from "../../../hooks/useGetUpdate";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
-import UpdateIncidentForm from "../incident-form/UpdateIncidentForm";
-import useUnassignChecker from "@/features/checker/hooks/useUnassignChecker";
-import { useSendEsignLink} from "@/features/checker/hooks/useSendEsignLink";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getTransactionTableColumns } from './update-incident-creation-table-col';
+import { useEffect, useState } from 'react';
+import { DialogWrapper } from '@/components/common/DialogWrapper';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
+import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 
 interface RowData {
   nium_order_id: string;
@@ -28,32 +24,32 @@ const UpdateIncidentCreationTable = () => {
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
-  const { mutate: sendEsignLink, isSendEsignLinkLoading } =  useSendEsignLink();
- 
-   useEffect(() => {
-    setTitle("Update Incident");
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+
+  useEffect(() => {
+    setTitle('Update Incident');
   }, [setTitle]);
 
   const requestData = {
-    checkerId: currentUserHashedKey || "",
-    transaction_type: "all",
+    checkerId: currentUserHashedKey || '',
+    transaction_type: 'all',
   };
 
   // Fetch data using the updated hook
   const { data, isLoading, error } = useGetUpdateIncident(requestData);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
   // Use the dynamic pagination hook
   const pagination = useDynamicPagination({
-    endpoint: "",
+    endpoint: '',
     initialPageSize: 10,
-    initialData,
-    dataPath: "transactions",
-    totalRecordsPath: "totalRecords",
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   const openModal = (rowData: any) => {
@@ -62,8 +58,7 @@ const UpdateIncidentCreationTable = () => {
   };
 
   const filterApi = useFilterApi({
-    endpoint: "",
-    initialData,
+    endpoint: '',
     baseQueryParams: {},
   });
 
@@ -72,14 +67,32 @@ const UpdateIncidentCreationTable = () => {
       unassignChecker(rowData.partner_order_id, currentUserHashedKey);
     }
   };
+
   const handleRegenerateEsignLink = (rowData: RowData): void => {
-    sendEsignLink({partner_order_id:rowData.partner_order_id});
-    // console.log("Regenerate Esign Link", rowData);
-  }
-  const columns = getTransactionTableColumns(openModal,handleUnassign,handleRegenerateEsignLink, isSendEsignLinkLoading);
+    setLoadingOrderId(rowData.nium_order_id);
+    sendEsignLink(
+      { partner_order_id: rowData.partner_order_id },
+      {
+        onSuccess: () => {
+          setLoadingOrderId('');
+        },
+        onError: () => {
+          setLoadingOrderId('');
+        },
+      }
+    );
+  };
+
+  const columns = getTransactionTableColumns(
+    openModal,
+    handleUnassign,
+    handleRegenerateEsignLink,
+    isSendEsignLinkLoading,
+    loadingOrderId
+  );
 
   return (
-    <div className="">
+    <div>
       <div className="flex flex-col">
         <div className="mb-4 flex items-center">
           {(filterApi.loading || pagination.loading || isLoading) && (
@@ -96,23 +109,22 @@ const UpdateIncidentCreationTable = () => {
           defaultSortColumn="nium_order_id"
           defaultSortDirection="asc"
           loading={pagination.loading}
-          paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+          paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
           onPageChange={
             isPaginationDynamic
               ? pagination.handlePageChange
               : async (_page: number, _pageSize: number) => []
           }
           totalRecords={pagination.totalRecords}
-          
           filter={{
             filterOption: true,
-            dateFilterColumn: "createdAt",
-            mode: isTableFilterDynamic ? "dynamic" : "static",
+            dateFilterColumn: 'createdAt',
+            mode: isTableFilterDynamic ? 'dynamic' : 'static',
             renderFilterOptions: {
               search: true,
               dateRange: true,
               applyAction: true,
-              resetAction: true
+              resetAction: true,
             },
             // Dynamic callbacks - API functions
             dynamicCallbacks: isTableFilterDynamic
@@ -130,7 +142,7 @@ const UpdateIncidentCreationTable = () => {
             footerBtnText=""
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
-            description={selectedRowData?.nium_order_id ?? ""}
+            description={selectedRowData?.nium_order_id ?? ''}
             renderContent={
               <UpdateIncidentForm
                 formActionRight="view"

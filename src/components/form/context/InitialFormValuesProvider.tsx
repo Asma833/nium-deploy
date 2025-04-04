@@ -1,5 +1,5 @@
-import React, { ReactNode, useState, useCallback } from "react";
-import { InitialFormValuesContext } from "./initial-form-values-context";
+import React, { ReactNode, useState, useCallback } from 'react';
+import { InitialFormValuesContext } from './initial-form-values-context';
 
 interface InitialFormValuesProviderProps {
   children: ReactNode;
@@ -7,29 +7,29 @@ interface InitialFormValuesProviderProps {
 
 export type FormValues = Record<string, any>;
 
-export const InitialFormValuesProvider: React.FC<InitialFormValuesProviderProps> = ({
-  children,
-}) => {
+export const InitialFormValuesProvider: React.FC<
+  InitialFormValuesProviderProps
+> = ({ children }) => {
   const [initialFormValues, setFormValues] = useState<FormValues>({});
 
   const setInitialValues = useCallback((newValues: FormValues) => {
     setFormValues((prev) => {
       const stringifiedPrev = JSON.stringify(prev);
       const stringifiedNew = JSON.stringify(newValues);
-      
+
       if (stringifiedPrev === stringifiedNew) {
         return prev;
       }
-      
+
       return newValues;
     });
   }, []);
 
   return (
-    <InitialFormValuesContext.Provider 
-      value={{ 
-        initialFormValues, 
-        setInitialValues 
+    <InitialFormValuesContext.Provider
+      value={{
+        initialFormValues,
+        setInitialValues,
       }}
     >
       {children}

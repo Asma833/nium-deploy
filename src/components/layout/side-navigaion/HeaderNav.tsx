@@ -1,10 +1,10 @@
-import React from "react";
-import { Menu, Bell, Power } from "lucide-react";
-import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
-import { ThemeToggle } from "@/components/common/ThemeToggle";
-import { cn } from "@/utils/cn";
-import useGetCurrentUser from "@/hooks/useGetCurrentUser";
-import { toTitleCase } from "@/utils/textFormater";
+import React from 'react';
+import { Menu, Bell, Power } from 'lucide-react';
+import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { cn } from '@/utils/cn';
+import useGetCurrentUser from '@/hooks/useGetCurrentUser';
+import { toTitleCase } from '@/utils/textFormater';
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({
           className="lg:hidden p-2"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
-          {isSidebarOpen ? "" : <Menu className="w-6 h-6" />}
+          {isSidebarOpen ? '' : <Menu className="w-6 h-6" />}
         </button>
 
         {/* Spacer to push icons to the right */}

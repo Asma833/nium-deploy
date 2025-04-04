@@ -5,11 +5,13 @@ A modern React-based web portal for NIUM agents built with TypeScript and Vite.
 ## Features
 
 - **State Management**
+
   - Redux Toolkit for global state management
   - React Hook Form for efficient form handling
   - React Query for server state management
 
 - **UI/UX**
+
   - Responsive Shadcn and Material-UI components
   - Light/Dark mode support
   - Accessibility compliance
@@ -110,8 +112,10 @@ VITE_ENV=development
 ## Support
 
 Contact the development team through:
+
 - Slack: #nium-support
 - Email: dev-support@nium.com
+
 ````
 
 ## Expanding the ESLint configuration
@@ -155,3 +159,4 @@ export default tseslint.config({
   },
 })
 ```
+````

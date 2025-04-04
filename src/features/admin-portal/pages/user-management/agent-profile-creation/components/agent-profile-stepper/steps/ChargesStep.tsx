@@ -1,9 +1,9 @@
-import { getController } from "@/components/form/utils/getController";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import Spacer from "@/components/form/wrapper/Spacer";
-import { charges } from "../config/agent-profile-form-config";
+import { getController } from '@/components/form/utils/getController';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import Spacer from '@/components/form/wrapper/Spacer';
+import { charges } from '../config/agent-profile-form-config';
 
 const ChargesStep = () => {
   return (

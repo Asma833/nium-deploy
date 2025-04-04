@@ -13,7 +13,9 @@ interface TransactionTypeItem {
  * @returns Object containing found transaction type text and loading state
  */
 const useGetTransactionType = (id?: string) => {
-  const [transactionTypes, setTransactionTypes] = useState<TransactionTypeItem[]>([]);
+  const [transactionTypes, setTransactionTypes] = useState<
+    TransactionTypeItem[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -21,11 +23,17 @@ const useGetTransactionType = (id?: string) => {
     const fetchTransactionTypes = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get(API.CONFIG.GET_TRANSACTION_TYPES);
+        const response = await axiosInstance.get(
+          API.CONFIG.GET_TRANSACTION_TYPES
+        );
         setTransactionTypes(response.data || []);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch transaction types'));
+        setError(
+          err instanceof Error
+            ? err
+            : new Error('Failed to fetch transaction types')
+        );
       } finally {
         setLoading(false);
       }
@@ -35,15 +43,15 @@ const useGetTransactionType = (id?: string) => {
   }, []);
 
   // Find the transaction name if ID is provided
-  const transactionType = id 
-    ? transactionTypes.find(item => item.id === id)?.text || null
+  const transactionType = id
+    ? transactionTypes.find((item) => item.id === id)?.text || null
     : null;
 
-  return { 
+  return {
     transactionType,
     transactionTypes,
     loading,
-    error
+    error,
   };
 };
 

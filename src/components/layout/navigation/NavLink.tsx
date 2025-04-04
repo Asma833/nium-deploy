@@ -19,9 +19,10 @@ export const NavLink: React.FC<NavLinkProps> = ({
     >
       <button
         className={`px-3 py-2 rounded-md text-sm flex items-center gap-1 transition-colors
-          ${isItemActive(item) 
-            ? 'text-foreground font-semibold' 
-            : 'text-muted-foreground hover:text-foreground'
+          ${
+            isItemActive(item)
+              ? 'text-foreground font-semibold'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         onClick={() => onNavItemClick(item)}
       >
@@ -37,11 +38,17 @@ export const NavLink: React.FC<NavLinkProps> = ({
                 key={idx}
                 className={`block w-full text-left px-4 py-2 text-sm hover:bg-muted/20
                   ${
-                    activeDropdownItem === dropdownItem.title 
-                      ? 'text-foreground font-semibold bg-muted/10' 
+                    activeDropdownItem === dropdownItem.title
+                      ? 'text-foreground font-semibold bg-muted/10'
                       : 'text-muted-foreground'
                   }`}
-                onClick={() => onDropdownItemClick(item.title, dropdownItem.title, dropdownItem.path)}
+                onClick={() =>
+                  onDropdownItemClick(
+                    item.title,
+                    dropdownItem.title,
+                    dropdownItem.path
+                  )
+                }
               >
                 {dropdownItem.title}
               </button>

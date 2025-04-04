@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
 interface InitialFormValuesContext {
   initialFormValues: Record<string, any>;
@@ -6,13 +6,13 @@ interface InitialFormValuesContext {
 }
 
 export const InitialFormValuesContext = createContext<
-InitialFormValuesContext | undefined
+  InitialFormValuesContext | undefined
 >(undefined);
 
 export const useInitialFormValues = () => {
   const context = useContext(InitialFormValuesContext);
   if (context === undefined) {
-    throw new Error("useFormValues must be used within a FormValuesProvider");
+    throw new Error('useInitialFormValues must be used within a FormValuesProvider');
   }
   return context;
 };

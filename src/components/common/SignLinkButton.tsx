@@ -1,13 +1,13 @@
-import React from "react";
-import { LinkIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { copyToClipboard } from "@/utils/clipboard";
-import { cn } from "@/utils/cn";
+import React from 'react';
+import { LinkIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { copyToClipboard } from '@/utils/clipboard';
+import { cn } from '@/utils/cn';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 interface SignLinkButtonProps {
   copyLinkUrl: string;
@@ -37,7 +37,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            "text-gray-500  hover:bg-black hover:text-white disabled:bg-gray-200 disabled:text-gray-500 ",
+            'text-gray-500  hover:bg-black hover:text-white disabled:bg-gray-200 disabled:text-gray-500 ',
             className
           )}
         >

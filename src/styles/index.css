@@ -151,7 +151,7 @@
   }
 }
 
-html[class="dark"] {
+html[class='dark'] {
   .MuiDateCalendar-root {
     color: white;
   }

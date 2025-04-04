@@ -1,13 +1,13 @@
-import { cn } from "@/utils/cn";
-import Logo from "../logo/logo";
-import { ThemeToggle } from "./ThemeToggle";
-import { CommonProps } from "./common-components.types";
+import { cn } from '@/utils/cn';
+import Logo from '../logo/Logo';
+import { ThemeToggle } from './ThemeToggle';
+import { CommonProps } from '../types/common-components.types';
 
 const LogoHeader = ({ className }: CommonProps) => {
   return (
     <div
       className={cn(
-        "w-full h-[80px] flex justify-between items-center p-4",
+        'w-full h-[80px] flex justify-between items-center p-4',
         className
       )}
     >

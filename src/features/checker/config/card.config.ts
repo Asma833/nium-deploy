@@ -5,24 +5,24 @@ import {
   FileCheck2,
   FileX,
   FileClock,
-} from "lucide-react";
-import transactionReceived from "../../../../../../assets/images/transaction-received.svg";
-import transactionApproved from "../../../../../../assets/images/transaction-approved.svg";
-import transactionRejected from "../../../../../../assets/images/transaction-rejected.svg";
-import transactionPending from "../../../../../../assets/images/transaction-pending.svg";
-import vkycCompleted from "../../../../../../assets/images/vkyc-completed.svg";
-import vkycRejected from "../../../../../../assets/images/vkyc-rejected.svg";
-import vkycPending from "../../../../../../assets/images/vkyc-pending.svg";
-import esignCompleted from "../../../../../../assets/images/esign-completed.svg";
-import esignRejected from "../../../../../../assets/images/esign-rejected.svg";
-import esignPending from "../../../../../../assets/images/esign-pending.svg";
-import { DashboardMetrics } from "@/features/checker/hooks/useGetDashboardCardMatrics";
+} from 'lucide-react';
+import transactionReceived from '@/assets/icons/transaction-received.svg';
+import transactionApproved from '@/assets/icons/transaction-approved.svg';
+import transactionRejected from '@/assets/icons/transaction-rejected.svg';
+import transactionPending from '@/assets/icons/transaction-pending.svg';
+import vkycCompleted from '@/assets/icons/vkyc-completed.svg';
+import vkycRejected from '@/assets/icons/vkyc-rejected.svg';
+import vkycPending from '@/assets/icons/vkyc-pending.svg';
+import esignCompleted from '@/assets/icons/esign-completed.svg';
+import esignRejected from '@/assets/icons/esign-rejected.svg';
+import esignPending from '@/assets/icons/esign-pending.svg';
+import { DashboardMetrics } from '@/features/checker/hooks/useGetDashboardCardMatrics';
 
 export interface DashboardItem {
   id: number;
   title: string;
   count: number;
-  icon: React.ComponentType; 
+  icon: React.ComponentType;
   path: string;
   status: string;
 }
@@ -42,84 +42,86 @@ export const apiDummyData: DashboardMetrics = {
 };
 
 // Create dashboard data based on metrics from API
-export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): DashboardItem[] => [
+export const createDashboardData = (
+  metrics: DashboardMetrics = apiDummyData
+): DashboardItem[] => [
   {
     id: 1,
-    title: "Transaction Received",
+    title: 'Transaction Received',
     count: metrics.transactionReceived,
-    status: "Received",
+    status: 'Received',
     icon: FileCheck2,
     path: transactionReceived,
   },
   {
     id: 2,
-    title: "Transaction Approved",
+    title: 'Transaction Approved',
     count: metrics.transactionApproved,
-    status: "Approved",
+    status: 'Approved',
     icon: CheckCircle,
     path: transactionApproved,
   },
   {
     id: 3,
-    title: "Transaction Rejected",
+    title: 'Transaction Rejected',
     count: metrics.transactionRejected,
-    status: "Rejected",
+    status: 'Rejected',
     icon: XCircle,
     path: transactionRejected,
   },
   {
     id: 4,
-    title: "Transaction Pending",
+    title: 'Transaction Pending',
     count: metrics.transactionPending,
-    status: "Pending",
+    status: 'Pending',
     icon: MoreHorizontal,
     path: transactionPending,
   },
   {
     id: 5,
-    title: "VKYC Completed",
+    title: 'VKYC Completed',
     count: metrics.vkycCompleted,
-    status: "Completed",
+    status: 'Completed',
     icon: FileCheck2,
     path: vkycCompleted,
   },
   {
     id: 6,
-    title: "VKYC Pending",
+    title: 'VKYC Pending',
     count: metrics.vkycPending,
-    status: "Pending",
+    status: 'Pending',
     icon: FileClock,
     path: vkycRejected,
   },
   {
     id: 7,
-    title: "VKYC Rejected",
+    title: 'VKYC Rejected',
     count: metrics.vkycRejected,
-    status: "Rejected",
+    status: 'Rejected',
     icon: FileX,
     path: vkycPending,
   },
   {
     id: 8,
-    title: "Esign Completed",
+    title: 'Esign Completed',
     count: metrics.esignCompleted,
-    status: "Completed",
+    status: 'Completed',
     icon: FileCheck2,
     path: esignCompleted,
   },
   {
     id: 9,
-    title: "Esign Pending",
+    title: 'Esign Pending',
     count: metrics.esignPending,
-    status: "Pending",
+    status: 'Pending',
     icon: FileClock,
     path: esignRejected,
   },
   {
     id: 10,
-    title: "Esign Rejected",
+    title: 'Esign Rejected',
     count: metrics.esignRejected,
-    status: "Rejected",
+    status: 'Rejected',
     icon: FileX,
     path: esignPending,
   },

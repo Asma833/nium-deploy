@@ -1,5 +1,4 @@
-import { toast } from "sonner";
-import * as z from "zod";
+import * as z from 'zod';
 
 export const updateIncidentFormSchema = z.object({
   fields: z
@@ -18,12 +17,12 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
-            console.log("value:", value);
+            console.log('value:', value);
             // If fields.status.reject is true, then comment is required
             return true; // We'll do the validation separately based on UI state
           },
           {
-            message: "Comment is required when rejecting an incident",
+            message: 'Comment is required when rejecting an incident',
           }
         ),
       status: z.object({
@@ -35,13 +34,13 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
-           // console.log("value:", value);
+            console.log("value:", value);
             // If fields.status.approve is true, then niumInvoiceNo is required
             return true; // We'll do the validation separately based on UI state
           },
           {
             message:
-              "Nium Invoice Number is required when approving an incident",
+              'Nium Invoice Number is required when approving an incident',
           }
         ),
 
@@ -61,8 +60,8 @@ export const updateIncidentFormSchema = z.object({
         return true;
       },
       {
-        message: "Required fields are missing",
-        path: ["status"],
+        message: 'Required fields are missing',
+        path: ['status'],
       }
     ),
 });

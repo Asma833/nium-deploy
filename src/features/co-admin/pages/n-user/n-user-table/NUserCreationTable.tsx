@@ -1,30 +1,30 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getUserTableColumns } from "./n-user-creation-table-col";
-import { userTableData as initialData } from "./user-table-value";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { API } from "@/core/constant/apis";
-import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useUpdateStatusAPI } from "@/features/co-admin/hooks/useUserUpdateStatus";
-import { useGetUserApi } from "@/features/co-admin/hooks/useGetUser";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getUserTableColumns } from './n-user-creation-table-col';
+import { userTableData as initialData } from './user-table-value';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
+import { API } from '@/core/constant/apis';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { useUpdateStatusAPI } from '@/features/co-admin/hooks/useUserUpdateStatus';
+import { useGetUserApi } from '@/features/co-admin/hooks/useGetUser';
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
   const { setTitle } = usePageTitle();
   useEffect(() => {
-    setTitle("N-Users");
+    setTitle('N-Users');
   }, [setTitle]);
   const [tableData] = useState(initialData);
 
   const {
     data: users = [],
     loading,
-    error
-  } = useGetUserApi("NUSERS.USER.LIST");
+    error,
+  } = useGetUserApi('NUSERS.USER.LIST');
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
@@ -32,14 +32,13 @@ const NuserCreationTable = () => {
     if (!rowData || !rowData.id) {
       return;
     }
-      // Make the API call to update the status
-      await updateStatus({
-        hashed_key: rowData.id,
-        is_active: checked,
-      });
+    // Make the API call to update the status
+    await updateStatus({
+      hashed_key: rowData.id,
+      is_active: checked,
+    });
   };
-  
-  
+
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
@@ -48,12 +47,12 @@ const NuserCreationTable = () => {
     endpoint: API.NUSERS.USER.LIST,
     initialPageSize: 10,
     initialData,
-    dataPath: "transactions",
-    totalRecordsPath: "totalRecords",
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   const handleCreateUser = () => {
-    navigate("create-user");
+    navigate('create-user');
   };
 
   const handleNavigate = (path: string, rowData: string) => {
@@ -92,12 +91,12 @@ const NuserCreationTable = () => {
             onClick={handleCreateUser}
             className="bg-primary text-white px-4"
           >
-            {" "}
+            {' '}
             <PlusIcon /> Create User
           </Button>
         )}
         loading={pagination.loading ?? loading}
-        paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -106,7 +105,7 @@ const NuserCreationTable = () => {
         totalRecords={pagination.totalRecords}
         filter={{
           filterOption: true,
-          mode: isTableFilterDynamic ? "dynamic" : "static",
+          mode: isTableFilterDynamic ? 'dynamic' : 'static',
           renderFilterOptions: {
             search: true,
           },
