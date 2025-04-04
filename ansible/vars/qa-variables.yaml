@@ -4,5 +4,5 @@ cluster_name: "niumforex-ecs-cluster"
 
 # Application Variables
 app_name: "qa-nium-forex-agent-portal-fe"
-secret_arn: ""
+secret_arn: "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
 react_app_env: "qa"
