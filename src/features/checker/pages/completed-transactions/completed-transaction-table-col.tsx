@@ -49,7 +49,7 @@ export const getTransactionTableColumns = () => [
           ? formatDate(rowData?.esignStatusCompletionDate)
           : null}
       </span>
-    )
+    ),
   },
   {
     key: 'vkycStatus',
@@ -66,7 +66,7 @@ export const getTransactionTableColumns = () => [
           ? formatDate(rowData?.esignStatusCompletionDate)
           : null}
       </span>
-    )
+    ),
   },
   {
     key: 'incidentStatus',

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import Logo from '@/components/logo/Logo';
+import Logo from '@/components/logo/logo';
 
 interface SidebarProps {
   navItems: NavItem[];

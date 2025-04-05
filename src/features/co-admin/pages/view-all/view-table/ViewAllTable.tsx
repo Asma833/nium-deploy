@@ -22,7 +22,6 @@ const ViewAllTable = () => {
     fetchData: refreshData,
   } = useGetAllOrders();
 
-
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
@@ -30,7 +29,6 @@ const ViewAllTable = () => {
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
-
 
   const columns = getTransactionTableColumns();
 

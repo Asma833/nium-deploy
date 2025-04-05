@@ -1,5 +1,5 @@
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
 
 type QueryConfig<T> = {
   endpoint: string;
@@ -20,7 +20,7 @@ export const useGetData = <T,>({
   endpoint,
   id,
   queryKey,
-  dataPath = "",
+  dataPath = '',
   enabled = true,
 }: QueryConfig<T>): QueryResult<T> => {
   const { data, isLoading, error, refetch } = useQuery({
@@ -35,7 +35,10 @@ export const useGetData = <T,>({
         return response.data;
       }
 
-      return dataPath.split(".").reduce((obj, key) => obj?.[key], response.data) ?? null;
+      return (
+        dataPath.split('.').reduce((obj, key) => obj?.[key], response.data) ??
+        null
+      );
     },
     enabled: enabled && (!id || !!id),
   });

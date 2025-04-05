@@ -12,7 +12,9 @@ export const InitialFormValuesContext = createContext<
 export const useInitialFormValues = () => {
   const context = useContext(InitialFormValuesContext);
   if (context === undefined) {
-    throw new Error('useInitialFormValues must be used within a FormValuesProvider');
+    throw new Error(
+      'useInitialFormValues must be used within a FormValuesProvider'
+    );
   }
   return context;
 };

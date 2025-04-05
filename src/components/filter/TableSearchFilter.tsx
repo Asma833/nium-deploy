@@ -151,8 +151,8 @@ const TableSearchFilter = ({
     if (onFilter) await onFilter();
 
     if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
-      const result = await executeAsyncOperation(() =>
-        callbacks?.onFilterApply?.(updatedFilters) ?? Promise.resolve([])
+      const result = await executeAsyncOperation(
+        () => callbacks?.onFilterApply?.(updatedFilters) ?? Promise.resolve([])
       );
       if (result) setDynamicData(result);
     }
@@ -187,8 +187,8 @@ const TableSearchFilter = ({
     if (onReset) onReset();
 
     if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
-      const result = await executeAsyncOperation(() =>
-        callbacks?.onFilterApply?.(resetFilters) ?? Promise.resolve([])
+      const result = await executeAsyncOperation(
+        () => callbacks?.onFilterApply?.(resetFilters) ?? Promise.resolve([])
       );
       if (result) setDynamicData(result);
     }
@@ -204,18 +204,29 @@ const TableSearchFilter = ({
   ]);
 
   return (
-    <div className="flex flex-col gap-3 w-full" role="search" aria-label="Table filter controls">
+    <div
+      className="flex flex-col gap-3 w-full"
+      role="search"
+      aria-label="Table filter controls"
+    >
       <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
         <div className="flex items-end gap-2 flex-wrap">
           {dateRange && (
             <>
               <div className="flex items-start flex-col">
-                <span id="from-date-label" className="text-sm whitespace-nowrap text-gray-500">
+                <span
+                  id="from-date-label"
+                  className="text-sm whitespace-nowrap text-gray-500"
+                >
                   From Date
                 </span>
                 <DatePicker
-                  value={localDateRange.from ? dayjs(localDateRange.from) : null}
-                  onChange={(date) => handleDateChange('from', date?.toDate() || null)}
+                  value={
+                    localDateRange.from ? dayjs(localDateRange.from) : null
+                  }
+                  onChange={(date) =>
+                    handleDateChange('from', date?.toDate() || null)
+                  }
                   slotProps={{
                     textField: {
                       size: 'small',
@@ -240,12 +251,17 @@ const TableSearchFilter = ({
                 />
               </div>
               <div className="flex items-start flex-col">
-                <span id="to-date-label" className="text-sm whitespace-nowrap text-gray-500">
+                <span
+                  id="to-date-label"
+                  className="text-sm whitespace-nowrap text-gray-500"
+                >
                   To Date
                 </span>
                 <DatePicker
                   value={localDateRange.to ? dayjs(localDateRange.to) : null}
-                  onChange={(date) => handleDateChange('to', date?.toDate() || null)}
+                  onChange={(date) =>
+                    handleDateChange('to', date?.toDate() || null)
+                  }
                   slotProps={{
                     textField: {
                       size: 'small',
