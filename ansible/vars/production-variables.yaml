@@ -9,7 +9,7 @@ react_app_env: 'production'
 
 container_port: 3000
 tg_port: 80 # This should be the port where your target group listens
-tg_health_check_path: '/'
+tg_health_check_path: '/login'
 
 # Scaling Variables
 desired_count: 2

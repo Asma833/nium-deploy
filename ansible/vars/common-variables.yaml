@@ -1,11 +1,11 @@
 # Container Variables
 alb_listener_port: 80
-tg_port: 80
+tg_port: 3000
 tg_unhealthy_threshold_count: 2
 tg_healthy_threshold_count: 2
 tg_health_check_timeout: 120
 tg_health_check_interval: 300
-tg_health_check_path: '/'
+tg_health_check_path: '/login'
 
 # Application Variables
 app_image: '{{ AWS_ECR_ID }}.dkr.ecr.ap-south-1.amazonaws.com/nium-forex-agent-portal-fe:{{ RELEASE_TAG }}'
