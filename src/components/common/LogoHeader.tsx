@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn';
-import Logo from '../logo/logo';
 import { ThemeToggle } from './ThemeToggle';
 import { CommonProps } from '../types/common-components.types';
+import Logo from '@/components/logo/Logo';
 
 const LogoHeader = ({ className }: CommonProps) => {
   return (

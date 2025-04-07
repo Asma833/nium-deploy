@@ -1,4 +1,4 @@
-import { initialState } from "./reducers/stepperReducer";
+import { initialState } from './reducers/stepperReducer';
 
 export interface StepperStyles {
   active: string;
@@ -52,7 +52,6 @@ export interface StepperProviderProps {
   steps: { id: string; label: string }[]; // Adjust the shape of steps as needed
   onComplete: (data: any) => Promise<void>; // Adjust the type of data as needed
 }
-
 
 export interface StepperContextType {
   state: typeof initialState;

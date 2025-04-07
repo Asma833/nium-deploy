@@ -62,7 +62,7 @@ const CompletedTransactionTable = () => {
     if (checkerOrdersData && checkerOrdersData.orders) {
       return checkerOrdersData.orders.map(transformOrderForTable);
     }
-    
+
     return [];
   };
 

@@ -40,4 +40,3 @@ export const updateIncidentApi = {
     return data;
   },
 };
-
