@@ -47,7 +47,6 @@ pipeline {
                               cat temp_secrets.json | jq -r 'to_entries[] | select(.key | startswith("VITE_")) | "\\(.key)=\\(.value)"' > .env
                             """
 
-                            // Optional: verify contents
                             sh "cat .env"
                         }
                     }
