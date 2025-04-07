@@ -19,25 +19,25 @@ export const formatDate = (dateString?: string | null): string => {
   return format(date, 'dd/MM/yyyy');
 };
 
-export const format2Date = (timestamp: Date | string): string => {
+export const formatToDateString  = (timestamp: Date | string): string => {
   const date = new Date(timestamp);
   return format(date, 'dd-MM-yyyy');
 };
 
 export const isStartAndEndDateValid = (
-  date1: string | Date,
-  date2: string | Date
+  startDate: string | Date,
+  endDate: string | Date
 ): { isError: boolean; message: string } => {
-  const date1Obj = new Date(date1);
-  const date2Obj = new Date(date2);
+  const parsedStartDate = new Date(startDate);
+  const parsedEndDate = new Date(endDate);
 
-  if (!date1Obj || !date2Obj) {
+  if (!parsedStartDate || !parsedEndDate) {
     return {
       isError: true,
       message: 'Invalid date format',
     };
   }
-  if (date1Obj > date2Obj)
+  if (parsedStartDate > parsedEndDate)
     return {
       isError: true,
       message: 'Start date should be less than End date',
@@ -48,3 +48,5 @@ export const isStartAndEndDateValid = (
     message: '',
   };
 };
+
+

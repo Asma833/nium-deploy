@@ -105,16 +105,26 @@ const TableSearchFilter = ({
     handleSearchClear,
   ]);
 
+ 
   const handleDateChange = useCallback(
     (key: 'from' | 'to', date: Date | null) => {
-      setLocalDateRange((prev: typeof filters.dateRange) => ({
-        ...prev,
-        [key]: date || undefined,
-      }));
+      setLocalDateRange((prev) => {
+        const updated = { ...prev, [key]: date ?? undefined };
+  
+        if (
+          updated.from &&
+          updated.to &&
+          dayjs(updated.from).isAfter(dayjs(updated.to), 'day')
+        ) {
+          updated.to = undefined; // Only clear "to" if "from" becomes greater
+        }
+  
+        return updated;
+      });
     },
     []
   );
-
+  
   const handleStatusChange = useCallback(
     (value: string) => {
       if (status?.options?.some((option) => option.value === value)) {
@@ -246,6 +256,9 @@ const TableSearchFilter = ({
                 <DatePicker
                   value={localDateRange.to ? dayjs(localDateRange.to) : null}
                   onChange={(date) => handleDateChange('to', date?.toDate() || null)}
+                  shouldDisableDate={(day) =>
+                    !!localDateRange.from && day.isBefore(dayjs(localDateRange.from), 'day')
+                  }
                   slotProps={{
                     textField: {
                       size: 'small',
