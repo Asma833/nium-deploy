@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 0 0% 0%; /* #000000 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 328 100% 50%; /* #fd0194 */
+    --primary-100: 328 100% 20%;
+    --primary-light: 328 100% 95%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 13% 98%; /* #f9fafc */
+    --optional: 100 0% 79%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 45%; /* #747474 */
+    --muted-foreground: 0 0% 45%;
+    --accent: 220 13% 98%; /* #f9fafc */
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 85%;
+    --input: 0 0% 75%;
+    --ring: 328 100% 50%; /* #fd0194 */
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --text-p: 5 0% 43%;
+    --filter-bg: #e9e9e9;
+    --table-bg: #ffffff;
+    --table-header: #f3f3f3;
+    --table-border: #f0f0f0;
+    --sidenav-bg: #f9fafc;
+  }
+  .dark {
+    --background: 0 0% 14.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --optional: 64 0% 19%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 328 100% 50%; /* #fd0194 */
+    --primary-light: 328 100% 10%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 328 100% 50%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 50%;
+    --ring: 328 100% 50%; /* #fd0194 */
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --text-p: 5 0% 100%;
+    --filter-bg: #585858;
+    --filter-fg: #cecece;
+    --table-bg: #464646;
+    --table-header: #000000;
+    --table-border: #000000;
+    --sidenav-bg: #353535;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.dashboard-card {
+  @apply rounded-xl overflow-hidden transition-all duration-300 
+    lg:hover:shadow-xl hover:opacity-85 h-[120px] ease-linear;
+}
+
+.MuiStepper-root .Mui-completed.stepper-btn {
+  @apply bg-primary/50;
+}
+
+.MuiStepper-root .MuiStepLabel-label.Mui-active,
+.MuiStepper-root .MuiStepLabel-label.Mui-completed {
+  @apply text-white;
+}
+
+/* Date Picker Calendar Styles */
+.MuiDateCalendar-root {
+  @apply bg-background text-foreground;
+}
+
+.MuiPickersDay-root {
+  @apply text-foreground;
+}
+
+.MuiPickersDay-root.Mui-selected {
+  @apply bg-primary text-primary-foreground;
+}
+
+.MuiDayCalendar-weekDayLabel {
+  @apply text-muted-foreground;
+}
+
+.MuiPickersCalendarHeader-label {
+  @apply text-foreground;
+}
+.MuiInputBase-input.Mui-disabled {
+  background-color: rgb(238, 238, 238);
+}
+.MuiPickersArrowSwitcher-button {
+  @apply text-muted-foreground;
+}
+.MuiButtonBase-root.MuiButton-root {
+  border-radius: 6px;
+}
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+  background: hsl(var(--primary));
+}
+
+.formFieldRow .items-direction-row .MuiFormGroup-root {
+  display: flex;
+  flex-direction: row;
+}
+.formFieldRow .items-direction-col .MuiFormGroup-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldWrapper .MuiFormControl-root {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .formFieldRow {
+    flex-direction: column;
+  }
+}
+
+html[class='dark'] {
+  .MuiDateCalendar-root {
+    color: white;
+  }
+  .MuiDateCalendar-root.MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
+    color: white;
+  }
+}
+/* Dark mode styles for MUI components */
+.dark .MuiDateCalendar-root {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiPickersDay-root {
+  color: hsl(var(--foreground));
+}
+.dark .MuiDayCalendar-weekDayLabel {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiInputBase-input.Mui-disabled {
+  background-color: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
+}
+
+.dark .MuiPickersArrowSwitcher-button {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiButtonBase-root.MuiPickersDay-root.MuiPickersDay-dayWithMargin {
+  color: hsl(var(--foreground));
+}
+
+.dark .MuiPickersDay-root.Mui-selected {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}

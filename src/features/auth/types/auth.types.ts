@@ -1,17 +1,17 @@
 export enum Role {
-  ADMIN = "admin",
-  CO_ADMIN = "co-admin",
-  MAKER = "maker",
-  CHECKER = "checker",
+  ADMIN = 'admin',
+  CO_ADMIN = 'co-admin',
+  MAKER = 'maker',
+  CHECKER = 'checker',
 }
 
 export type Permission =
-  | "view_dashboard"
-  | "manage_agents"
-  | "view_transactions"
-  | "approve_transactions";
+  | 'view_dashboard'
+  | 'manage_agents'
+  | 'view_transactions'
+  | 'approve_transactions';
 
-export type UserRole = "admin" | "co-admin" | "maker" | "checker";
+export type UserRole = 'admin' | 'co-admin' | 'maker' | 'checker';
 
 export interface User {
   id: string;

@@ -7,13 +7,17 @@ interface UseTakeRequestProps {
   onError?: (error: any) => void;
 }
 
-export function useTakeRequest({ endpoint, onSuccess, onError }: UseTakeRequestProps) {
+export function useTakeRequest({
+  endpoint,
+  onSuccess,
+  onError,
+}: UseTakeRequestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const takeRequest = async (transactionIds: string[]) => {
     if (transactionIds.length === 0) {
-      const err = new Error("No transactions selected");
+      const err = new Error('No transactions selected');
       setError(err);
       onError?.(err);
       return;
@@ -24,9 +28,9 @@ export function useTakeRequest({ endpoint, onSuccess, onError }: UseTakeRequestP
 
     try {
       const response = await axios.post(endpoint, {
-        transactionIds
+        transactionIds,
       });
-      
+
       onSuccess?.(response.data);
       return response.data;
     } catch (err: any) {
@@ -41,6 +45,6 @@ export function useTakeRequest({ endpoint, onSuccess, onError }: UseTakeRequestP
   return {
     takeRequest,
     isSubmitting,
-    error
+    error,
   };
 }

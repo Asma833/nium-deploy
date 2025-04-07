@@ -1,36 +1,43 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { Circle, CircleCheck } from "lucide-react";
-import { ErrorMessage } from "../error-message";
+import { Controller, useFormContext } from 'react-hook-form';
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { Circle, CircleCheck } from 'lucide-react';
+import { ErrorMessage } from '../ErrorMessage';
 interface MaterialCheckboxProps {
-  name: string; 
+  name: string;
   label?: string;
-  options: Record<string, { label: string }>; 
-  handleCheckboxChange: (key: string, checked: boolean) => void; 
+  options: Record<string, { label: string }>;
+  handleCheckboxChange: (key: string, checked: boolean) => void;
   isMulti: boolean;
   defaultSelected?: Record<string, boolean>;
 }
 
-export const MaterialCheckbox = ({ 
-  name, 
-  options, 
-  handleCheckboxChange, 
-  isMulti, 
-  defaultSelected = {} 
+export const MaterialCheckbox = ({
+  name,
+  options,
+  handleCheckboxChange,
+  isMulti,
+  defaultSelected = {},
 }: MaterialCheckboxProps) => {
   const { control, setValue, trigger } = useFormContext();
-  
+
   // Ensure name is a valid string
   const fieldName = typeof name === 'string' && name ? name : 'defaultName';
-  
+
   const getDefaultValues = () => {
     if (isMulti) {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
+      return Object.fromEntries(
+        Object.keys(options).map((key) => [key, false])
+      );
     } else {
-      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
+      return Object.fromEntries(
+        Object.keys(options).map((key) => [
+          key,
+          defaultSelected?.[key] || false,
+        ])
+      );
     }
   };
-  
+
   return (
     <Controller
       name={fieldName}
@@ -49,7 +56,9 @@ export const MaterialCheckbox = ({
                     <Checkbox
                       checked={isChecked}
                       icon={<Circle size={20} />}
-                      checkedIcon={<CircleCheck className="text-primary" size={20} />}
+                      checkedIcon={
+                        <CircleCheck className="text-primary" size={20} />
+                      }
                       onChange={(e) => {
                         const checked = e.target.checked;
                         let updatedValue = { ...field.value, [key]: checked };
@@ -57,17 +66,20 @@ export const MaterialCheckbox = ({
                         // If single selection, uncheck all others when a new one is selected
                         if (!isMulti) {
                           updatedValue = Object.fromEntries(
-                            Object.keys(options).map((k) => [k, k === key ? checked : false])
+                            Object.keys(options).map((k) => [
+                              k,
+                              k === key ? checked : false,
+                            ])
                           );
                         }
 
                         // Update the form state
                         field.onChange(updatedValue);
                         setValue(fieldName, updatedValue);
-                        
+
                         // Call handleCheckboxChange with the key and checked state
                         handleCheckboxChange(key, checked);
-                        
+
                         trigger(fieldName);
                       }}
                     />

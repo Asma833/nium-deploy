@@ -1,16 +1,12 @@
 export const getBaseUrl = () => {
-  return import.meta.env.VITE_ENV === "development"
+  return import.meta.env.VITE_ENV === 'development'
     ? import.meta.env.VITE_APP_API_URL_DEV
     : import.meta.env.VITE_APP_API_URL_PROD;
 };
 
-// export const HEADER_KEYS =  {
-// PARTNER_ID: String(import.meta.env.PARTNER_ID),
-// API_KEY:String(import.meta.env.API_KEY)
-// };
 export const HEADER_KEYS = {
-  PARTNER_ID: String(import.meta.env.VITE_PARTNER_ID || ''),
-  API_KEY: String(import.meta.env.VITE_API_KEY || ''),
+  PARTNER_ID: import.meta.env.VITE_PARTNER_ID,
+  API_KEY: import.meta.env.VITE_API_KEY,
 };
 
 export const API = {
@@ -18,11 +14,11 @@ export const API = {
     LOGIN: `/users/login`,
     LOGOUT: `/auth/logout`,
     REGISTER: `/auth/register`,
-    REFRESH_TOKEN: `/auth/refresh-token`,
     FORGOT_PASSWORD: `/users/forgot-password`,
     RESET_PASSWORD: `/auth/reset-password`,
     VERIFY_EMAIL: `/auth/verify-email`,
     CHANGE_PASSWORD: `/users/reset-password`,
+    REFRESH_TOKEN: `/refresh/accessToken`,
   },
   USER: {
     GET_PROFILE: `/users/profile`,
@@ -43,7 +39,7 @@ export const API = {
   },
   CHECKER: {
     ASSIGN: {
-      LIST:`/orders/unassigned-orders`,
+      LIST: `/orders/unassigned-orders`,
       TAKE_REQUEST: `/orders/update-checker`,
       SEARCH_FILTER: ``,
     },
@@ -57,29 +53,29 @@ export const API = {
       LIST: `/update-incident`,
       UPDATE: (id: string) => `/update-incident/${id}`,
       SEARCH_FILTER: `/update-incident/search-filter`,
-      CHECKER_ORDER:`/orders/get-checker-orders`,
-      UNASSIGN:`orders/unassign-checker`,
-      REGENERATE_ESIGN_LINK:`/ekyc/generate-e-sign`,
+      CHECKER_ORDER: `/orders/get-checker-orders`,
+      UNASSIGN: `orders/unassign-checker`,
+      REGENERATE_ESIGN_LINK: `/ekyc/generate-e-sign`,
     },
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
   NUSERS: {
-    PARTNERS:{
+    PARTNERS: {
       LIST: `/partners`,
       CREATE: `/partners`,
-      STATUS_UPDATE:`/partners`,
-      UPDATE:`/partners`,
-      PRODUCTS:`/products`
+      STATUS_UPDATE: `/partners`,
+      UPDATE: `/partners`,
+      PRODUCTS: `/products`,
     },
-    USER:{
+    USER: {
       LIST: `/users`,
       CREATE: `/users`,
-      STATUS_UPDATE:`/users`,
-      UPDATE:`/users`,
-      PRODUCTS:`/users`
-    }
+      STATUS_UPDATE: `/users`,
+      UPDATE: `/users`,
+      PRODUCTS: `/users`,
+    },
   },
   CONFIG: {
     GET_CONFIG: `/config`,
@@ -93,5 +89,5 @@ export const API = {
  * Usage: getEndpoint('AUTH.LOGIN')
  */
 export function getEndpoint(path: string): string {
-  return path.split(".").reduce((obj: any, key: string) => obj[key], API);
+  return path.split('.').reduce((obj: any, key: string) => obj[key], API);
 }

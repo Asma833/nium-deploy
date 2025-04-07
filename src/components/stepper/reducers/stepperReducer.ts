@@ -1,4 +1,4 @@
-import { FormState } from '../types/stepper.types';
+import { FormState } from '../stepper.types';
 
 export type StepperAction =
   | { type: 'NEXT_STEP' }
@@ -8,6 +8,8 @@ export type StepperAction =
   | { type: 'SET_ERROR'; payload: Record<string, string> }
   | { type: 'UPDATE_DATA'; payload: Record<string, any> };
 
+// Define or import the FormState type
+
 export const initialState: FormState = {
   currentStep: 0,
   isSubmitting: false,
@@ -16,7 +18,10 @@ export const initialState: FormState = {
   data: {},
 };
 
-export const stepperReducer = (state: FormState, action: StepperAction): FormState => {
+export const stepperReducer = (
+  state: FormState,
+  action: StepperAction
+): FormState => {
   switch (action.type) {
     case 'NEXT_STEP':
       return {

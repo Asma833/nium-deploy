@@ -1,23 +1,22 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { useEffect } from "react";
-import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { Button } from "@/components/ui/button";
-import { API } from "@/core/constant/apis";
-import { getTransactionTableColumns } from "./view-all-table-col";
-import { exportToCSV } from "@/utils/exportUtils";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import useGetCheckerOrders from "@/features/checker/hooks/useGetCheckerOrders";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { useEffect } from 'react';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { Button } from '@/components/ui/button';
+import { API } from '@/core/constant/apis';
+import { getTransactionTableColumns } from './view-all-table-col';
+import { exportToCSV } from '@/utils/exportUtils';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import {
   purposeTypeOptions,
   transactionTypeOptions,
-} from "@/features/checker/config/tableFiltersConfig";
+} from '@/features/checker/config/table-filter.config';
 
 const ViewAllTable = () => {
   const { setTitle } = usePageTitle();
 
   useEffect(() => {
-    setTitle("View All");
+    setTitle('View All');
   }, [setTitle]);
 
   const {
@@ -30,7 +29,7 @@ const ViewAllTable = () => {
     totalOrders: number;
     filterApplied: string;
     orders: any[];
-  }>("all", true);
+  }>('all', true);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -39,8 +38,8 @@ const ViewAllTable = () => {
   const pagination = useDynamicPagination({
     endpoint: API.CHECKER.VIEW_ALL.SEARCH_FILTER,
     initialPageSize: 10,
-    dataPath: "transactions",
-    totalRecordsPath: "totalRecords",
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   // const filterApi = useFilterApi({
@@ -53,24 +52,24 @@ const ViewAllTable = () => {
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      niumId: order.nium_order_id || "-",
+      niumId: order.nium_order_id || '-',
       orderDate: new Date(order.createdAt).toLocaleString(),
-      agentId: order.partner_id || "-",
-      customerPan: order.customer_pan || "-",
-      transactionType: order.transaction_type.text || "-",
-      purposeType: order.purpose_type.text || "-",
-      esignStatus: order.e_sign_status || "-",
+      agentId: order.partner_id || '-',
+      customerPan: order.customer_pan || '-',
+      transactionType: order.transaction_type.text || '-',
+      purposeType: order.purpose_type.text || '-',
+      esignStatus: order.e_sign_status || '-',
       esignStatusCompletionDate: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
-        : "-",
-      vkycStatus: order.v_kyc_status || "-",
+        : '-',
+      vkycStatus: order.v_kyc_status || '-',
       vkycCompletionDate: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
-        : "-",
-      incidentStatus: order.incident_status ? "Yes" : "No",
+        : '-',
+      incidentStatus: order.incident_status ? 'Yes' : 'No',
       incidentCompletionDate: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
-        : "-",
+        : '-',
     };
   };
 
@@ -95,14 +94,15 @@ const ViewAllTable = () => {
   // };
 
   const handleExportToCSV = () => {
-    const dataToExport = checkerOrdersData?.orders?.map(transformOrderForTable) || [];
+    const dataToExport =
+      checkerOrdersData?.orders?.map(transformOrderForTable) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
       header: col.name,
     }));
 
-    exportToCSV(dataToExport, exportColumns, "view-all");
+    exportToCSV(dataToExport, exportColumns, 'view-all');
   };
 
   // Check for loading and error states
@@ -131,7 +131,7 @@ const ViewAllTable = () => {
           hasError: hasError,
         }}
         // paginationMode={isPaginationDynamic ? "dynamic" : "static"}
-        paginationMode={"static"}
+        paginationMode={'static'}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -141,26 +141,26 @@ const ViewAllTable = () => {
         filter={{
           filterOption: true,
           // mode: isTableFilterDynamic ? "dynamic" : "static",
-          mode: "static",
-          dateFilterColumn: "orderDate",
-          statusFilerColumn: "status",
-          roleFilerColumn: "role",
-          rederFilerOptions: {
+          mode: 'static',
+          dateFilterColumn: 'orderDate',
+          statusFilerColumn: 'status',
+          roleFilerColumn: 'role',
+          renderFilterOptions: {
             search: true,
             dateRange: true,
             applyAction: true,
             resetAction: true,
             selects: [
               {
-                id: "purposeType",
-                label: "Purpose Type",
-                placeholder: "---Select---",
+                id: 'purposeType',
+                label: 'Purpose Type',
+                placeholder: '---Select---',
                 options: purposeTypeOptions,
               },
               {
-                id: "transactionType",
-                label: "Transaction Type",
-                placeholder: "---Select---",
+                id: 'transactionType',
+                label: 'Transaction Type',
+                placeholder: '---Select---',
                 options: transactionTypeOptions,
               },
             ],

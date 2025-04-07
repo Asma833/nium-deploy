@@ -1,10 +1,10 @@
-import React from "react";
-import "./form-layout.css";
-import { cn } from "@/utils/cn";
+import React from 'react';
+import '../styles/form-layout.css';
+import { cn } from '@/utils/cn';
 
 type PropsType = {
   id?: string;
-  children:React.ReactNode;
+  children: React.ReactNode;
   className?: string;
   rowCols?: number | string;
   flexdirection?: string;
@@ -14,25 +14,23 @@ type PropsType = {
 const FieldWrapper = ({
   id,
   children,
-  className = "",
+  className = '',
   flexdirection,
   error,
   ...props
 }: PropsType) => {
   return (
     <div
-    {...props}
+      {...props}
       className={cn(
-        "fieldWrapper",
+        'fieldWrapper',
         className,
-        flexdirection ? "flex-"+flexdirection  : "flex-col"
+        flexdirection ? 'flex-' + flexdirection : 'flex-col'
       )}
     >
       {children}
       {error && (
-        <span className="text-sm text-[hsl(var(--destructive))]" >
-          {error}
-        </span>
+        <span className="text-sm text-[hsl(var(--destructive))]">{error}</span>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
-import { cn } from "@/utils/cn";
-import FormHelperText from "@mui/material/FormHelperText";
+import { cn } from '@/utils/cn';
+import FormHelperText from '@mui/material/FormHelperText';
 
 type Props = {
   children: React.ReactNode;
@@ -17,14 +17,11 @@ export default function CheckboxWrapper({
   className,
   error,
 }: Props) {
-
-  
-  
   return (
     <div className="flex flex-col space-y-2">
       <div
         className={cn(
-          "flex flex-row items-direction-row items-center space-x-2",
+          'flex flex-row items-direction-row items-center space-x-2',
           className
         )}
       >

@@ -1,4 +1,4 @@
-import LogoutWrapper from "@/features/auth/components/LogoutWrapper";
+import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
 
 function NotFoundPage() {
   return (

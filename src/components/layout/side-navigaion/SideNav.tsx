@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/utils/cn";
-import Logo from "@/components/logo/logo";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
+import { cn } from '@/utils/cn';
+import Logo from '@/components/logo/Logo';
 
 interface SidebarProps {
   navItems: NavItem[];
@@ -15,14 +15,18 @@ interface NavItem {
   dropdown?: { title: string; path: string }[];
 }
 
-const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => void }> = ({ navItems, setIsSidebarOpen }) => {
+const Sidebar: React.FC<
+  SidebarProps & { setIsSidebarOpen: (open: boolean) => void }
+> = ({ navItems, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
-    const currentItem = navItems.find((item) => item.path === location.pathname);
+    const currentItem = navItems.find(
+      (item) => item.path === location.pathname
+    );
     if (currentItem) {
       setActiveItem(currentItem.title);
     }
@@ -51,17 +55,26 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                   {/* Dropdown Toggle */}
                   <div
                     className={cn(
-                     "flex items-center justify-between w-full pl-5 py-3 my-2 rounded-md cursor-pointer transition-colors",
-                 openDropdown === item.title ? "bg-black text-white" : "hover:bg-muted/20",
-                  openDropdown === item.title && "hover:bg-gray-200 hover:text-black"
-                )}
-                    onClick={() => setOpenDropdown(openDropdown === item.title ? null : item.title)}
+                      'flex items-center justify-between w-full pl-5 py-3 my-2 rounded-md cursor-pointer transition-colors',
+                      openDropdown === item.title
+                        ? 'bg-black text-white'
+                        : 'hover:bg-muted/20',
+                      openDropdown === item.title &&
+                        'hover:bg-gray-200 hover:text-black'
+                    )}
+                    onClick={() =>
+                      setOpenDropdown(
+                        openDropdown === item.title ? null : item.title
+                      )
+                    }
                   >
                     <span className="flex items-center gap-2 text-sm">
                       {item.icon && <item.icon className="h-5 w-5" />}
                       {item.title}
                     </span>
-                    <ChevronDown className={`w-4 h-4 transform transition-transform ${openDropdown === item.title ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`w-4 h-4 transform transition-transform ${openDropdown === item.title ? 'rotate-180' : ''}`}
+                    />
                   </div>
 
                   {/* Dropdown Menu */}
@@ -70,8 +83,13 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                       {item.dropdown.map((subItem, subIdx) => (
                         <li key={subIdx} className="list-none">
                           <a
-                            onClick={() => handleNavigation(subItem.path, subItem.title)}
-                            className={cn("block pl-5 py-2 text-sm rounded-md hover:bg-muted/20 cursor-pointer",item.title.length > 16 ? "py-1" : "py-3")}
+                            onClick={() =>
+                              handleNavigation(subItem.path, subItem.title)
+                            }
+                            className={cn(
+                              'block pl-5 py-2 text-sm rounded-md hover:bg-muted/20 cursor-pointer',
+                              item.title.length > 16 ? 'py-1' : 'py-3'
+                            )}
                           >
                             {subItem.title}
                           </a>
@@ -82,13 +100,18 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
                 </>
               ) : (
                 <a
-                  onClick={() => item.path && handleNavigation(item.path, item.title)}
+                  onClick={() =>
+                    item.path && handleNavigation(item.path, item.title)
+                  }
                   className={cn(
-                   "flex items-center text-center flex-col gap-2 my-2 w-full rounded-md cursor-pointer transition-colors text-[12px]",
-                   activeItem === item.title ? "bg-primary text-white hover:bg-gray-200 hover:text-black" : "hover:bg-muted/20"
-                 ,item.title.length > 16 ? "py-1" : "py-3")}
+                    'flex items-center text-center flex-col gap-2 my-2 w-full rounded-md cursor-pointer transition-colors text-[12px]',
+                    activeItem === item.title
+                      ? 'bg-primary text-white hover:bg-gray-200 hover:text-black'
+                      : 'hover:bg-muted/20',
+                    item.title.length > 16 ? 'py-1' : 'py-3'
+                  )}
                 >
-                  {item.icon && <item.icon className="h-5 w-5"/>} {item.title}
+                  {item.icon && <item.icon className="h-5 w-5" />} {item.title}
                 </a>
               )}
             </li>
@@ -100,4 +123,3 @@ const Sidebar: React.FC<SidebarProps & { setIsSidebarOpen: (open: boolean) => vo
 };
 
 export default Sidebar;
-

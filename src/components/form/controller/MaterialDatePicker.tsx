@@ -1,6 +1,6 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import { Controller, useFormContext } from 'react-hook-form';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 interface MaterialDatePickerProps {
   name: string;
@@ -22,9 +22,9 @@ export const MaterialDatePicker = ({
   const mergedStyles = {
     ...baseStyle,
     ...(error && {
-      "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-          borderColor: "hsl(var(--destructive))",
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'hsl(var(--destructive))',
         },
       },
     }),

@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
-import { toast } from "sonner";
-import axios from "axios";
-import { useCurrentUser } from "@/utils/getUserFromRedux";
+import { useState, useEffect, useCallback, useRef } from 'react';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
-type TransactionType = "all" | "completed";
+type TransactionType = 'all' | 'completed';
 
 export const useGetAllOrders = <T = any,>(
-  initialTransactionType: TransactionType = "all",
+  initialTransactionType: TransactionType = 'all',
   autoFetch: boolean = true
 ) => {
   const [data, setData] = useState<T | null>(null);
@@ -29,7 +29,7 @@ export const useGetAllOrders = <T = any,>(
   // Function to fetch data with GET request
   const fetchData = useCallback(async () => {
     if (!userHashedKey) {
-      setError("User hash key not available");
+      setError('User hash key not available');
       setLoading(false);
       return;
     }
@@ -44,12 +44,12 @@ export const useGetAllOrders = <T = any,>(
     } catch (err) {
       // More detailed error logging for authentication issues
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.log("Unauthorized");
+        console.log('Unauthorized');
       }
 
       const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      toast.error("Error Fetching Checker Orders", {
+        err instanceof Error ? err.message : 'An unknown error occurred';
+      toast.error('Error Fetching Checker Orders', {
         description: errorMessage,
       });
       setError(errorMessage);

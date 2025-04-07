@@ -1,5 +1,5 @@
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
-import { ReactNode } from 'react'
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ReactNode } from 'react';
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -9,8 +9,13 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="light" enableSystem {...props}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      {...props}
+    >
       {children}
     </NextThemesProvider>
-  )
+  );
 }

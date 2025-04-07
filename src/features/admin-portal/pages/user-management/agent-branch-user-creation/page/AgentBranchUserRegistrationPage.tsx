@@ -1,4 +1,4 @@
-import AgentRegistrationForm from "../agent-branch-form/AgentRegistrationForm";
+import AgentRegistrationForm from '../agent-branch-form/AgentRegistrationForm';
 
 const AgentBranchUserRegistrationPage = () => {
   return <AgentRegistrationForm />;

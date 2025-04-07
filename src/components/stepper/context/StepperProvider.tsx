@@ -1,7 +1,7 @@
-import React, { useReducer, useCallback } from "react";
-import { StepperProviderProps } from "../types/stepper.types";
-import { stepperReducer, initialState } from "../reducers/stepperReducer";
-import { StepperContext } from "./stepper-context";
+import React, { useReducer, useCallback } from 'react';
+import { stepperReducer, initialState } from '../reducers/stepperReducer';
+import { StepperContext } from './stepper-context';
+import { StepperProviderProps } from '../stepper.types';
 
 export const StepperProvider: React.FC<StepperProviderProps> = ({
   children,
@@ -12,30 +12,30 @@ export const StepperProvider: React.FC<StepperProviderProps> = ({
 
   const goToNextStep = useCallback(async () => {
     if (state.currentStep === steps.length - 1) {
-      dispatch({ type: "SET_SUBMITTING", payload: true });
+      dispatch({ type: 'SET_SUBMITTING', payload: true });
       try {
         await onComplete(state.data);
       } catch (error) {
         dispatch({
-          type: "SET_ERROR",
-          payload: { submit: "Form submission failed" },
+          type: 'SET_ERROR',
+          payload: { submit: 'Form submission failed' },
         });
       } finally {
-        dispatch({ type: "SET_SUBMITTING", payload: false });
+        dispatch({ type: 'SET_SUBMITTING', payload: false });
       }
       return;
     }
 
-    dispatch({ type: "NEXT_STEP" });
+    dispatch({ type: 'NEXT_STEP' });
   }, [state.currentStep, state.data, steps.length, onComplete]);
 
   const goToPrevStep = useCallback(() => {
-    dispatch({ type: "PREV_STEP" });
+    dispatch({ type: 'PREV_STEP' });
   }, []);
 
   const setStepValid = useCallback((stepId: string, isValid: boolean) => {
     dispatch({
-      type: "SET_STEP_VALID",
+      type: 'SET_STEP_VALID',
       payload: { stepId, isValid },
     });
   }, []);

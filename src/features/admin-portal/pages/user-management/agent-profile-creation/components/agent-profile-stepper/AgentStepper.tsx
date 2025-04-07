@@ -1,44 +1,44 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   defaultFormValues,
   validationSchema,
-} from "./config/agent-profile-form-config";
-import { BasicDetailsStep } from "./steps/BasicDetailsStep";
-import { AgentFormProvider } from "../../context/AgentFormProvider";
-import { FormProvider } from "../../../../../../../components/form/context/FormProvider";
-import { useEffect, useState } from "react";
-import StepperTabs from "@/components/stepper/StepperTabs";
-import { AgrementDetailsStep } from "./steps/AgrementDetailsStep";
-import { useAgentForm } from "../../context/agent-form-context";
-import { useInitialFormValues } from "@/components/form/context/initial-form-values-context";
-import { InitialFormValuesProvider } from "@/components/form/context/InitialFormValuesProvider";
+} from './config/agent-profile-form-config';
+import { BasicDetailsStep } from './steps/BasicDetailsStep';
+import { AgentFormProvider } from '../../context/AgentFormProvider';
+import { FormProvider } from '../../../../../../../components/form/context/FormProvider';
+import { useEffect, useState } from 'react';
+import StepperTabs from '@/components/stepper/StepperTabs';
+import { AgrementDetailsStep } from './steps/AgrementDetailsStep';
+import { useAgentForm } from '../../context/agent-form-context';
+import { useInitialFormValues } from '@/components/form/context/initial-form-values-context';
+import { InitialFormValuesProvider } from '@/components/form/context/InitialFormValuesProvider';
 
 const steps = [
   {
-    label: "Basic Details",
+    label: 'Basic Details',
     content: <BasicDetailsStep />,
     validation: true,
   },
   {
-    label: "Agreement Details",
+    label: 'Agreement Details',
     content: <AgrementDetailsStep />,
     validation: true,
   },
   {
-    label: "Commission",
+    label: 'Commission',
     content: <BasicDetailsStep />,
   },
   {
-    label: "Charges",
+    label: 'Charges',
     content: <BasicDetailsStep />,
   },
   {
-    label: "Admin Details",
+    label: 'Admin Details',
     content: <BasicDetailsStep />,
   },
   {
-    label: "Document Upload",
+    label: 'Document Upload',
     optional: true,
     content: <BasicDetailsStep />,
   },
@@ -55,15 +55,14 @@ const AgentStepperContent = () => {
   }, [setInitialValues]);
 
   const methods = useForm({
-    mode: "onChange",
+    mode: 'onChange',
     resolver: zodResolver(validationSchema),
     defaultValues: isInitialValuesSet ? initialFormValues : defaultFormValues,
   });
 
   // Add debug logging for form changes
   useEffect(() => {
-    const subscription = methods.watch((data) => {
-    });
+    const subscription = methods.watch((data) => {});
     return () => subscription.unsubscribe();
   }, [methods, methods.watch]);
 
@@ -71,7 +70,7 @@ const AgentStepperContent = () => {
 
   const handleNext = async () => {
     const currentValues = methods.getValues();
-   
+
     const isValid = await methods.trigger();
     if (!isValid) {
       return;
@@ -80,8 +79,7 @@ const AgentStepperContent = () => {
     if (activeStep === steps.length - 1) {
       try {
         await saveFormData();
-      } catch (error) {
-      }
+      } catch (error) {}
       return;
     }
 

@@ -1,10 +1,10 @@
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import Spacer from "@/components/form/wrapper/Spacer";
-import { adminDetails } from "../config/agent-profile-form-config";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
-import { getController } from "@/components/form/utils/getController";
-import CheckboxWrapper from "@/components/form/wrapper/CheckboxWrapper";
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import Spacer from '@/components/form/wrapper/Spacer';
+import { adminDetails } from '../config/agent-profile-form-config';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
+import { getController } from '@/components/form/utils/getController';
+import CheckboxWrapper from '@/components/form/wrapper/CheckboxWrapper';
 
 const AdminDetailsStep = () => {
   return (

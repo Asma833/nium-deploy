@@ -1,14 +1,13 @@
-
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getAgentBranchUserColumn } from "./agent-branch-user-table-col";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getAgentBranchUserColumn } from './agent-branch-user-table-col';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const AgentBranchUserTable = () => {
   const columns = getAgentBranchUserColumn();
   const navigate = useNavigate();
   const handleCreateUser = () => {
-    navigate("/admin/user-management/agent-branch-user-registration");
+    navigate('/admin/user-management/agent-branch-user-registration');
   };
 
   return (
@@ -19,7 +18,7 @@ const AgentBranchUserTable = () => {
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="requestId"
         renderLeftSideActions={() => (
-          <Button 
+          <Button
             onClick={handleCreateUser}
             className="flex items-center gap-2"
           >
@@ -29,10 +28,10 @@ const AgentBranchUserTable = () => {
         )}
         filter={{
           filterOption: true,
-          dateFilterColumn: "requestRaiseDate",
-          statusFilerColumn: "status",
-          roleFilerColumn: "role",
-          rederFilerOptions: {
+          dateFilterColumn: 'requestRaiseDate',
+          statusFilerColumn: 'status',
+          roleFilerColumn: 'role',
+          renderFilterOptions: {
             search: true,
           },
         }}

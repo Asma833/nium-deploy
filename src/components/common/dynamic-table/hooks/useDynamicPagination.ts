@@ -22,7 +22,7 @@ export function useDynamicPagination<T = any>({
   additionalParams = {},
   initialData = [],
   dataPath = 'data',
-  totalRecordsPath = 'totalRecords'
+  totalRecordsPath = 'totalRecords',
 }: UseDynamicPaginationOptions) {
   const [data, setData] = useState<T[]>(initialData);
   const [loading, setLoading] = useState(false);
@@ -39,16 +39,20 @@ export function useDynamicPagination<T = any>({
     try {
       // Combine pagination params with additional params
       const queryParams = { ...params, ...additionalParams };
-      
-      const response = await axiosInstance.get(endpoint, { params: queryParams });
-      
+
+      const response = await axiosInstance.get(endpoint, {
+        params: queryParams,
+      });
+
       // Extract data and pagination info
       const responseData = extractValueFromPath(response.data, dataPath) || [];
-      const responseTotalRecords = extractValueFromPath(response.data, totalRecordsPath) || responseData.length;
-      
+      const responseTotalRecords =
+        extractValueFromPath(response.data, totalRecordsPath) ||
+        responseData.length;
+
       setData(responseData);
       setTotalRecords(responseTotalRecords);
-      
+
       return responseData;
     } catch (err: any) {
       setError(err);
@@ -65,7 +69,10 @@ export function useDynamicPagination<T = any>({
   }
 
   // Handle page change
-  const handlePageChange = async (page: number, size: number = pageSize): Promise<T[]> => {
+  const handlePageChange = async (
+    page: number,
+    size: number = pageSize
+  ): Promise<T[]> => {
     setCurrentPage(page);
     return await fetchData({ page, pageSize: size });
   };
@@ -100,6 +107,6 @@ export function useDynamicPagination<T = any>({
       // Update additional params and refetch
       Object.assign(additionalParams, params);
       return fetchData({ page: 1, pageSize });
-    }
+    },
   };
 }

@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import AdminHeader from "./header/AdminHeader";
-import LogoHeader from "@/components/common/LogoHeader";
-import DashboardContentWrapper from "@/components/common/DashboardContentWrapper";
+import { ReactNode } from 'react';
+import AdminHeader from './header/AdminHeader';
+import LogoHeader from '@/components/common/LogoHeader';
+import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   return (

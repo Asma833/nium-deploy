@@ -26,15 +26,18 @@ export interface RenderFilterOptions {
   dateRange?: boolean;
   status?: StatusConfig;
   selects?: SelectConfig[];
-  applyAction: boolean,
-  resetAction: boolean,
+  applyAction: boolean;
+  resetAction: boolean;
 }
 
-export type FilterMode = "static" | "dynamic";
+export type FilterMode = 'static' | 'dynamic';
 
 export interface DynamicFilterCallbacks<T = any> {
   onSearch?: (term: string) => Promise<T[]>;
-  onDateRangeChange?: (from: Date | undefined, to: Date | undefined) => Promise<T[]>;
+  onDateRangeChange?: (
+    from: Date | undefined,
+    to: Date | undefined
+  ) => Promise<T[]>;
   onStatusChange?: (status: string) => Promise<T[]>;
   onSelectChange?: (id: string, value: string) => Promise<T[]>;
   onFilterApply?: (filters: SetFilters) => Promise<T[]>;
@@ -43,22 +46,27 @@ export interface DynamicFilterCallbacks<T = any> {
 export interface FilterConfig {
   filterOption: boolean;
   mode?: FilterMode;
-  rederFilerOptions: RenderFilterOptions;
+  renderFilterOptions: RenderFilterOptions;
   dynamicCallbacks?: DynamicFilterCallbacks;
 }
+
+import React from 'react';
 
 export interface SetFilters {
   search: string;
   status: string;
   role: string;
-  dateRange: DateRange;
+  dateRange: {
+    from: Date | undefined;
+    to: Date | undefined;
+  };
   customFilterValues: Record<string, string>;
 }
 
 export interface TableSearchFilterProps {
   filters: SetFilters;
   filterConfig: FilterConfig;
-  setFilters: (filters: SetFilters) => void;
+  setFilters: React.Dispatch<React.SetStateAction<SetFilters>>;
   onFilter?: () => void;
   onReset?: () => void;
   setLoading?: (loading: boolean) => void;

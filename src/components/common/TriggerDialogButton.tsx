@@ -1,29 +1,24 @@
-import { Button } from "../ui/button";
-import { Download, Loader2, PlusIcon, UploadIcon } from "lucide-react";
-import { TriggerDialogButtonProps } from './common-components.types';
+import { Button } from '../ui/button';
+import { Download, Loader2, PlusIcon, UploadIcon } from 'lucide-react';
+import { TriggerDialogButtonProps } from '../types/common-components.types';
 
 export default function TriggerDialogButton({
   text,
   className,
-  iconType = "default",
+  iconType = 'default',
   isLoading = false,
 }: TriggerDialogButtonProps) {
   const icon =
-    iconType === "default" ? (
+    iconType === 'default' ? (
       <PlusIcon />
-    ) : iconType === "upload" ? (
+    ) : iconType === 'upload' ? (
       <UploadIcon />
-    ) : iconType === "download" ? (
+    ) : iconType === 'download' ? (
       <Download />
     ) : null;
 
-
-
   return (
-    <Button
-      className={className}
-      disabled={isLoading}
-    >
+    <Button className={className} disabled={isLoading}>
       {isLoading ? <Loader2 className="animate-spin" /> : icon}
       {text}
     </Button>

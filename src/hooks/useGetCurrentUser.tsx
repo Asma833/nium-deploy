@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
 interface User {
   id?: string;
@@ -21,13 +21,13 @@ interface RootState {
 
 const useGetCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  
-  return { 
+
+  return {
     role: user?.role?.name,
     userName: user?.fullName,
     userEmail: user?.email,
     userId: user?.id,
-   };
+  };
 };
 
 export default useGetCurrentUser;

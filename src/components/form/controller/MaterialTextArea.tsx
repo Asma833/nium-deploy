@@ -1,11 +1,12 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { TextField } from "@mui/material";
-import { cn } from "@/utils/cn";
+import { Controller, useFormContext } from 'react-hook-form';
+import { TextField } from '@mui/material';
+import { cn } from '@/utils/cn';
+import React from 'react';
 
 interface MaterialTextAreaProps {
   name: string;
   label: string;
-  baseStyle?: any;
+  baseStyle?: React.CSSProperties;
   className?: string;
   rows?: number;
   maxRows?: number;
@@ -13,7 +14,7 @@ interface MaterialTextAreaProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
-  error? : any;
+  error?: any;
   forcedValue?: string;
 }
 
@@ -29,7 +30,7 @@ export const MaterialTextArea = ({
   disabled = false,
   required,
   forcedValue,
-  error
+  error,
 }: MaterialTextAreaProps) => {
   const { control } = useFormContext();
 
@@ -42,18 +43,18 @@ export const MaterialTextArea = ({
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            value={(forcedValue ? forcedValue : field.value) || ""}
+            value={(forcedValue ? forcedValue : field.value) || ''}
             label={label}
             error={!!error}
             helperText={error?.message}
             disabled={disabled}
             multiline
-            required={required}
+            required={required ?? false}
             rows={rows}
             {...(maxRows !== undefined && { maxRows })}
             {...(minRows !== undefined && { minRows })}
             {...(placeholder !== undefined && { placeholder })}
-            {...(baseStyle && { sx: baseStyle })}
+            {...(baseStyle && { style: baseStyle })}
             className={cn(className)}
           />
         )}

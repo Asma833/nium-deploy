@@ -47,30 +47,30 @@ interface RootState {
 
 export const useCurrentUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  
+
   const getUserHashedKey = (): string | undefined => {
     return user?.hashed_key;
   };
-  
+
   const getUserRole = (): string | undefined => {
     return user?.role.name;
   };
-  
+
   const getUserId = (): string | undefined => {
     return user?.id;
   };
-  
+
   const getUserEmail = (): string | undefined => {
     return user?.email;
   };
-  
+
   const getBranchId = (): string | undefined => {
     return user?.branch.id;
   };
   const getBankAccountId = (): string | undefined => {
     return user?.bank_account.id;
   };
-  
+
   return {
     user,
     getUserHashedKey,
@@ -78,6 +78,6 @@ export const useCurrentUser = () => {
     getUserId,
     getUserEmail,
     getBranchId,
-    getBankAccountId
+    getBankAccountId,
   };
 };

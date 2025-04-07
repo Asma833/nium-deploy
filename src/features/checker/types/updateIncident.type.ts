@@ -13,7 +13,7 @@ export interface UpdateIncidentRequest {
       approve?: boolean;
       reject?: boolean;
     };
-    
+
     // New fields based on the form we're using
     niumId?: string;
     customerPan?: string;
@@ -21,7 +21,7 @@ export interface UpdateIncidentRequest {
     bmfOrderRef?: string;
     purpose?: string;
     niumInvoiceNumber?: string;
-  }
+  };
 }
 
 export interface UpdateIncidentResponse {
@@ -33,5 +33,5 @@ export interface UpdateGetRequestData {
   transaction_type: string;
 }
 export interface EsignLinkRequest {
-  partner_order_id:string;
+  partner_order_id: string;
 }

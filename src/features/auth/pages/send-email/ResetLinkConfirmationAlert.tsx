@@ -1,6 +1,6 @@
-import { CircleCheckBigIcon } from "lucide-react";
-import AuthLayout from "../../components/AuthLayout";
-import { Link } from "react-router";
+import { CircleCheckBigIcon } from 'lucide-react';
+import AuthLayout from '../../components/AuthLayout';
+import { Link } from 'react-router';
 
 const ResetLinkConfirmationAlert = () => {
   return (
@@ -13,7 +13,7 @@ const ResetLinkConfirmationAlert = () => {
           </h1>
           <p className="text-gray-500 mt-2">
             A password reset link has been sent to your email address. Please
-            check your inbox and follow the instructions.{"  "}
+            check your inbox and follow the instructions.{'  '}
             <Link to="/login" className="text-primary underline">
               Login
             </Link>

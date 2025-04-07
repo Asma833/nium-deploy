@@ -1,8 +1,8 @@
 enum FieldType {
-  Text = "text",
-  Email = "email",
-  Password = "password",
-  Select = "select",
+  Text = 'text',
+  Email = 'email',
+  Password = 'password',
+  Select = 'select',
 }
 
 interface FormField {
@@ -23,7 +23,7 @@ interface SelectField extends FormField {
   isMulti: boolean;
 }
 
-type Field = FormField  | SelectField;
+type Field = FormField | SelectField;
 
 type Fields = {
   email: Field;
@@ -38,36 +38,35 @@ interface UserFormConfig {
 }
 
 export const userFormConfig: UserFormConfig = {
-  sectionTitle: "Create User",
+  sectionTitle: 'Create User',
   fields: {
     email: {
-      label: "Email",
+      label: 'Email',
       type: FieldType.Email,
       required: true,
-      placeholder: "Enter Email",
+      placeholder: 'Enter Email',
     },
     businessType: {
-      label: "Business Type",
+      label: 'Business Type',
       type: FieldType.Text,
-      placeholder: "Select Business Type",
+      placeholder: 'Select Business Type',
       required: true,
       options: {
-        large_enterprise: { label: "Large Enterprise", selected: true },
+        large_enterprise: { label: 'Large Enterprise', selected: true },
       },
       isMulti: false,
     },
     password: {
-      label: "Password",
+      label: 'Password',
       type: FieldType.Password,
       required: true,
-      placeholder: "Enter Password",
+      placeholder: 'Enter Password',
     },
     confirmPassword: {
-      label: "Confirm Password",
+      label: 'Confirm Password',
       type: FieldType.Password,
       required: true,
-      placeholder: "Confirm Password",
+      placeholder: 'Confirm Password',
     },
-    
   },
 };

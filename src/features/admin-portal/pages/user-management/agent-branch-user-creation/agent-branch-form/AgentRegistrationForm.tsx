@@ -1,21 +1,21 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { agentSchema } from "../agent-branch-form/agent-registration-form.schema";
-import { agentFormConfig } from "../agent-branch-form/agent-registration-config";
-import { FormProvider } from "@/components/form/context/FormProvider";
-import { getController } from "@/components/form/utils/getController";
-import FormFieldRow from "@/components/form/wrapper/FormFieldRow";
-import FieldWrapper from "@/components/form/wrapper/FieldWrapper";
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { agentSchema } from '../agent-branch-form/agent-registration-form.schema';
+import { agentFormConfig } from '../agent-branch-form/agent-registration-config';
+import { FormProvider } from '@/components/form/context/FormProvider';
+import { getController } from '@/components/form/utils/getController';
+import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
+import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 
-import Spacer from "@/components/form/wrapper/Spacer";
-import { FormContentWrapper } from "@/components/form/wrapper/FormContentWrapper";
+import Spacer from '@/components/form/wrapper/Spacer';
+import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 
 const AgentRegistrationForm = () => {
   const methods = useForm({
     resolver: zodResolver(agentSchema),
     defaultValues: Object.fromEntries(
-      Object.keys(agentFormConfig.fields).map((key) => [key, ""])
+      Object.keys(agentFormConfig.fields).map((key) => [key, ''])
     ),
   });
 
@@ -26,8 +26,7 @@ const AgentRegistrationForm = () => {
     formState: { errors, isSubmitting },
   } = methods;
 
-  useEffect(() => {
-  }, [watch]);
+  useEffect(() => {}, [watch]);
 
   const onSubmit = async (data: any) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -45,13 +44,13 @@ const AgentRegistrationForm = () => {
 
         <FormContentWrapper>
           <Spacer>
-          <FormFieldRow rowCols={4} >
-            {Object.entries(agentFormConfig.fields).map(([name, field]) => (
+            <FormFieldRow rowCols={4}>
+              {Object.entries(agentFormConfig.fields).map(([name, field]) => (
                 <FieldWrapper>
-                  {getController({ ...field, name, control, errors})}
+                  {getController({ ...field, name, control, errors })}
                 </FieldWrapper>
-            ))}
-             </FormFieldRow>
+              ))}
+            </FormFieldRow>
           </Spacer>
         </FormContentWrapper>
 
@@ -64,7 +63,7 @@ const AgentRegistrationForm = () => {
             className="bg-primary text-white px-4 py-2 rounded-md"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </form>

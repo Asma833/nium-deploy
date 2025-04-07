@@ -1,5 +1,5 @@
-import { Edit } from "lucide-react";
-import Switch from "@/components/ui/switch";
+import { Edit } from 'lucide-react';
+import Switch from '@/components/ui/switch';
 
 interface TableColumn {
   key: string;
@@ -22,19 +22,19 @@ export const getUserTableColumns = (
 ): TableColumn[] => {
   return [
     {
-      key: "email",
-      id: "email",
-      name: "Email",
+      key: 'email',
+      id: 'email',
+      name: 'Email',
     },
     {
-      key: "createdAt",
-      id: "createdAt",
-      name: "Creation Date",
+      key: 'createdAt',
+      id: 'createdAt',
+      name: 'Creation Date',
     },
     {
-      key: "status",
-      id: "status",
-      name: "Status",
+      key: 'status',
+      id: 'status',
+      name: 'Status',
       cell: (_, row: any) => {
         return (
           <div className="flex flex-col items-center">
@@ -50,9 +50,9 @@ export const getUserTableColumns = (
     },
 
     {
-      key: "actions",
-      id: "actions",
-      name: "Action",
+      key: 'actions',
+      id: 'actions',
+      name: 'Action',
       cell: (_, rowData: any) => {
         return (
           <div className="flex flex-col items-center">

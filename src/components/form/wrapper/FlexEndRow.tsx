@@ -1,5 +1,5 @@
-import { cn } from "@/utils/cn";
-import React from "react";
+import { cn } from '@/utils/cn';
+import React from 'react';
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +7,9 @@ type Props = {
 };
 
 const FlexEndRow = ({ children, className }: Props) => {
-  return <div className={cn("flex justify-end w-full", className)}>{children}</div>;
+  return (
+    <div className={cn('flex justify-end w-full', className)}>{children}</div>
+  );
 };
 
 export default FlexEndRow;

@@ -1,31 +1,28 @@
-import { DynamicTable } from "@/components/common/dynamic-table/DynamicTable";
-import { getUserTableColumns } from "./partner-creation-table-col";
-import { userTableData as initialData } from "./partner-table-value";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useFilterApi } from "@/components/common/dynamic-table/hooks/useFilterApi";
-import { API } from "@/core/constant/apis";
-import { useDynamicPagination } from "@/components/common/dynamic-table/hooks/useDynamicPagination";
-import { usePageTitle } from "@/hooks/usePageTitle";
-import { useUpdateStatusAPI } from "@/features/co-admin/hooks/useUserUpdateStatus";
-import { useGetPartnersApi } from "@/features/co-admin/hooks/useGetPartners";
-import { usePartnerStatusUpdateAPI } from "@/features/co-admin/hooks/usePartnerUpdateStatus";
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getUserTableColumns } from './partner-creation-table-col';
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { PlusIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
+import { API } from '@/core/constant/apis';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { useGetPartnersApi } from '@/features/co-admin/hooks/useGetPartners';
+import { usePartnerStatusUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdateStatus';
 
 const PartnerCreationTable = () => {
   const navigate = useNavigate();
   const { setTitle } = usePageTitle();
   useEffect(() => {
-    setTitle("PARTNERS");
+    setTitle('PARTNERS');
   }, [setTitle]);
-  const [tableData] = useState(initialData);
 
   const {
     data: users = [],
     loading,
-    error
-  } = useGetPartnersApi("NUSERS.PARTNERS.LIST");
+    error,
+  } = useGetPartnersApi('NUSERS.PARTNERS.LIST');
 
   const { mutate: updateStatus } = usePartnerStatusUpdateAPI();
 
@@ -33,14 +30,13 @@ const PartnerCreationTable = () => {
     if (!rowData || !rowData.hashed_key) {
       return;
     }
-      // Make the API call to update the status
-      await updateStatus({
-        hashed_key: rowData.hashed_key,
-        is_active: checked,
-      });
+    // Make the API call to update the status
+    await updateStatus({
+      hashed_key: rowData.hashed_key,
+      is_active: checked,
+    });
   };
-  
-  
+
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
 
@@ -48,13 +44,12 @@ const PartnerCreationTable = () => {
   const pagination = useDynamicPagination({
     endpoint: API.NUSERS.PARTNERS.LIST,
     initialPageSize: 10,
-    initialData,
-    dataPath: "transactions",
-    totalRecordsPath: "totalRecords",
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   const handleCreateUser = () => {
-    navigate("create-partner");
+    navigate('create-partner');
   };
 
   const handleNavigate = (path: string, rowData: string) => {
@@ -62,7 +57,6 @@ const PartnerCreationTable = () => {
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.PARTNERS.LIST,
-    initialData,
     // base query params if needed
     baseQueryParams: {
       // For example: clientId: '123'
@@ -84,7 +78,7 @@ const PartnerCreationTable = () => {
       </div>
       <DynamicTable
         columns={columns}
-        data={users && users.length > 0 ? users : tableData}
+        data={users || []}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
@@ -93,12 +87,12 @@ const PartnerCreationTable = () => {
             onClick={handleCreateUser}
             className="bg-primary text-white px-4"
           >
-            {" "}
+            {' '}
             <PlusIcon /> Create User
           </Button>
         )}
         loading={pagination.loading ?? loading}
-        paginationMode={isPaginationDynamic ? "dynamic" : "static"}
+        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -107,8 +101,8 @@ const PartnerCreationTable = () => {
         totalRecords={pagination.totalRecords}
         filter={{
           filterOption: true,
-          mode: isTableFilterDynamic ? "dynamic" : "static",
-          rederFilerOptions: {
+          mode: isTableFilterDynamic ? 'dynamic' : 'static',
+          renderFilterOptions: {
             search: true,
           },
           // Dynamic callbacks - API functions

@@ -1,7 +1,7 @@
-import React from "react";
-import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
-import { ErrorBoundaryProps } from "./error-boundary.types";
-import FallbackPage from "../common/FallbackPage";
+import React from 'react';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundaryProps } from './error-boundary.types';
+import FallbackPage from '../common/FallbackPage';
 
 const DefaultFallback: React.FC = () => <FallbackPage />;
 

@@ -1,11 +1,10 @@
+const userPrefix = '/admin';
 
-const userPrefix = "/admin";
-
-import { LayoutDashboard, ClipboardList, User, Eye } from "lucide-react";
+import { LayoutDashboard, ClipboardList, User, Eye } from 'lucide-react';
 
 export const SideNavItems = [
-  { title: "N-User", path: `${userPrefix}/users`, icon: LayoutDashboard },
-  { title: "Partners", path: `${userPrefix}/partners`, icon: User },
-  { title: "Reports", path: `${userPrefix}/reports`, icon: ClipboardList }, 
-  { title: "View All", path: `${userPrefix}/viewall`, icon: Eye }, 
+  { title: 'N-User', path: `${userPrefix}/users`, icon: LayoutDashboard },
+  { title: 'Partners', path: `${userPrefix}/partners`, icon: User },
+  { title: 'Reports', path: `${userPrefix}/reports`, icon: ClipboardList },
+  { title: 'View All', path: `${userPrefix}/viewall`, icon: Eye },
 ];

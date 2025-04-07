@@ -1,36 +1,48 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/core/routes/constants";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { API } from "@/core/constant/apis";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/core/constant/routePaths';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { useToast } from '@/hooks/use-toast';
+import axios from 'axios';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
 
 interface ChangePasswordFormProps {
   token?: string;
   isResetPassword?: boolean;
 }
 
-const formSchema = (isResetPassword: boolean) => z.object({
-  ...(isResetPassword ? {} : {
-    currentPassword: z.string().min(1, "Current password is required"),
-  }),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(1, "Please confirm your password")
-}).refine(data => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const formSchema = (isResetPassword: boolean) =>
+  z
+    .object({
+      ...(isResetPassword
+        ? {}
+        : {
+            currentPassword: z.string().min(1, 'Current password is required'),
+          }),
+      password: z.string().min(8, 'Password must be at least 8 characters'),
+      confirmPassword: z.string().min(1, 'Please confirm your password'),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ['confirmPassword'],
+    });
 
-const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ 
-  token, 
-  isResetPassword = false 
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
+  token,
+  isResetPassword = false,
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -41,57 +53,56 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
     password: string;
     confirmPassword: string;
   };
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema(isResetPassword)),
     defaultValues: {
-      ...(isResetPassword ? {} : { currentPassword: "" }),
-      password: "",
-      confirmPassword: "",
+      ...(isResetPassword ? {} : { currentPassword: '' }),
+      password: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = async (values: FormValues) => {
     try {
       setLoading(true);
-      
+
       if (isResetPassword && token) {
         // Prepare payload for reset password
         const resetPayload = {
           token,
           newPassword: values.password,
-          confirmPassword: values.confirmPassword
+          confirmPassword: values.confirmPassword,
         };
-        
+
         // Make API call to reset password
         await axiosInstance.post(`${API.AUTH.CHANGE_PASSWORD}`, resetPayload);
-        
+
         toast({
-          title: "Success",
-          description: "Password has been reset successfully!"
+          title: 'Success',
+          description: 'Password has been reset successfully!',
         });
         navigate(ROUTES.AUTH.LOGIN);
       } else {
-        
-        console.log("Changing password for logged in user");
+        console.log('Changing password for logged in user');
         toast({
-          title: "Success",
-          description: "Password changed successfully!"
+          title: 'Success',
+          description: 'Password changed successfully!',
         });
       }
     } catch (error) {
-      console.error("Password change error:", error);
-      
-      let errorMessage = "Failed to change password. Please try again.";
+      console.error('Password change error:', error);
+
+      let errorMessage = 'Failed to change password. Please try again.';
       if (axios.isAxiosError(error) && error.response) {
         // Extract error message from API response if available
         errorMessage = error.response.data?.message || errorMessage;
       }
-      
+
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorMessage
+        variant: 'destructive',
+        title: 'Error',
+        description: errorMessage,
       });
     } finally {
       setLoading(false);
@@ -109,10 +120,10 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
               <FormItem>
                 <FormLabel>Current Password</FormLabel>
                 <FormControl>
-                  <Input 
-                    type="password" 
-                    placeholder="Enter current password" 
-                    {...field} 
+                  <Input
+                    type="password"
+                    placeholder="Enter current password"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
@@ -128,10 +139,10 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input 
-                  type="password" 
-                  placeholder="Enter new password" 
-                  {...field} 
+                <Input
+                  type="password"
+                  placeholder="Enter new password"
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -146,10 +157,10 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input 
-                  type="password" 
-                  placeholder="Confirm your password" 
-                  {...field} 
+                <Input
+                  type="password"
+                  placeholder="Confirm your password"
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -157,12 +168,12 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
           )}
         />
 
-        <Button 
-          type="submit" 
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? "Processing..." : (isResetPassword ? "Reset Password" : "Change Password")}
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading
+            ? 'Processing...'
+            : isResetPassword
+              ? 'Reset Password'
+              : 'Change Password'}
         </Button>
       </form>
     </Form>

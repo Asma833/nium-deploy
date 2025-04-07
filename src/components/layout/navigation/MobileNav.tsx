@@ -1,14 +1,14 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { cn } from "@/utils/cn";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/utils/cn';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { MobileNavProps } from "./navigation.types";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { MobileNavProps } from './navigation.types';
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   navItems,
@@ -19,9 +19,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 }) => {
   return (
     <motion.div
-      initial={{ x: "-100%", opacity: 0 }}
+      initial={{ x: '-100%', opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: "-100%", opacity: 0 }}
+      exit={{ x: '-100%', opacity: 0 }}
       transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
       className="fixed left-0 top-0 h-full w-[280px] pt-5 z-50 md:hidden overflow-hidden bg-background border-r shadow-lg"
     >
@@ -45,8 +45,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               <AccordionItem key={idx} value={item.title}>
                 <AccordionTrigger
                   className={cn(
-                    "px-6 py-2",
-                    activeItem === item.title && "text-primary font-medium"
+                    'px-6 py-2',
+                    activeItem === item.title && 'text-primary font-medium'
                   )}
                 >
                   {item.title}
@@ -58,9 +58,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         key={dropIdx}
                         variant="ghost"
                         className={cn(
-                          "justify-start px-2",
+                          'justify-start px-2',
                           activeDropdownItem === dropItem.title &&
-                            "text-primary font-medium bg-accent"
+                            'text-primary font-medium bg-accent'
                         )}
                         onClick={() =>
                           onNavigation(
@@ -81,8 +81,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 key={idx}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start px-6 py-2",
-                  activeItem === item.title && "text-primary font-medium"
+                  'w-full justify-start px-6 py-2',
+                  activeItem === item.title && 'text-primary font-medium'
                 )}
                 onClick={() => item.path && onNavigation(item.path, item.title)}
               >

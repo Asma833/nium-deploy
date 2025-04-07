@@ -29,7 +29,9 @@ export const useGetRoleId = () => {
         const response = await axiosInstance.get('/roles');
         setRoles(response.data);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch roles'));
+        setError(
+          err instanceof Error ? err : new Error('Failed to fetch roles')
+        );
       } finally {
         setLoading(false);
       }
@@ -40,13 +42,17 @@ export const useGetRoleId = () => {
 
   // Function to get role ID by name
   const getRoleId = (roleName: string): string | undefined => {
-    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    const role = roles.find(
+      (r) => r.name.toLowerCase() === roleName.toLowerCase()
+    );
     return role?.id;
   };
 
   // Function to get hashed role key by name
   const getHashedRoleId = (roleName: string): string | undefined => {
-    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
+    const role = roles.find(
+      (r) => r.name.toLowerCase() === roleName.toLowerCase()
+    );
     return role?.hashed_key;
   };
 

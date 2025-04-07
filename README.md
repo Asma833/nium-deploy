@@ -5,11 +5,13 @@ A modern React-based web portal for NIUM agents built with TypeScript and Vite.
 ## Features
 
 - **State Management**
+
   - Redux Toolkit for global state management
   - React Hook Form for efficient form handling
   - React Query for server state management
 
 - **UI/UX**
+
   - Responsive Shadcn and Material-UI components
   - Light/Dark mode support
   - Accessibility compliance
@@ -64,6 +66,29 @@ src/
 └── utils/         # Utility functions
 ```
 
+## Naming Conventions
+
+We follow strict naming conventions to maintain consistency throughout the codebase:
+
+### Files
+
+- **Components**: `PascalCase.tsx` (e.g., `Button.tsx`, `UserProfile.tsx`)
+- **Custom Hooks**: `camelCase.ts` (e.g., `useAuth.ts`, `useFetch.ts`)
+- **Type Definitions**: `kebab-case.types.ts` (e.g., `user-profile.types.ts`)
+- **Utilities/Helpers**: `camelCase.ts` (e.g., `formatDate.ts`, `stringUtils.ts`)
+- **Style Files**: `camelCase.ts` (e.g., `buttonStyles.ts`)
+- **Constants**: `camelCase.ts` (e.g., `apiEndpoints.ts`)
+- **Configuration Files**: `kebab-case.config.ts` (e.g., `api-client.config.ts`)
+- **Schemas**: `camelCase.schema.ts` (e.g., `userSchema.schema.ts`)
+- **Shadcn UI Components**: `kebab-case.tsx`
+- **Shadcn Utilities**: `kebab-case.ts`
+
+### Folders
+
+All folders use `kebab-case` (e.g., `user-profiles`, `form-components`)
+
+For more details, refer to `src/config/naming-convention.config.ts`
+
 ## Development
 
 ```bash
@@ -110,9 +135,9 @@ VITE_ENV=development
 ## Support
 
 Contact the development team through:
+
 - Slack: #nium-support
 - Email: dev-support@nium.com
-````
 
 ## Expanding the ESLint configuration
 
@@ -129,7 +154,7 @@ export default tseslint.config({
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
 - Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
@@ -138,7 +163,7 @@ export default tseslint.config({
 
 ```js
 // eslint.config.js
-import react from 'eslint-plugin-react'
+import react from 'eslint-plugin-react';
 
 export default tseslint.config({
   // Set the react version
@@ -153,5 +178,5 @@ export default tseslint.config({
     ...react.configs.recommended.rules,
     ...react.configs['jsx-runtime'].rules,
   },
-})
+});
 ```

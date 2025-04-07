@@ -1,14 +1,14 @@
-import Grid from "@mui/material/Grid2";
-import { d } from "@/utils/dictionary";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ReactNode } from 'react';
+import Grid from '@mui/material/Grid2';
+import { ZodSchema } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   ButtonProps,
   IconButton,
   IconButtonProps,
   Typography,
-} from "@mui/material";
-import { ReactNode } from "react";
+} from '@mui/material';
 import {
   DefaultValues,
   FieldValues,
@@ -16,10 +16,10 @@ import {
   SubmitHandler,
   useForm,
   UseFormProps,
-} from "react-hook-form";
-import { ZodSchema } from "zod";
-import { FormProvider } from "react-hook-form";
-import { RotateCcw, ShieldAlert } from "lucide-react";
+  FormProvider,
+} from 'react-hook-form';
+import { RotateCcw, ShieldAlert } from 'lucide-react';
+import { d } from '@/utils/dictionary';
 
 type FormProps<T extends FieldValues> = {
   children: ReactNode;
@@ -33,7 +33,7 @@ type FormProps<T extends FieldValues> = {
     formContainerProps?: Partial<typeof Grid>;
   };
   showResetButton?: boolean;
-  mode?: UseFormProps<T>["mode"];
+  mode?: UseFormProps<T>['mode'];
   submitButtonText?: string;
   values?: Partial<T>;
   defaultValues?: Partial<T>;
@@ -48,7 +48,7 @@ const Form = <T extends FieldValues>({
   onError,
   slotProps,
   showResetButton = true,
-  mode = "all",
+  mode = 'all',
   values,
   defaultValues,
   submitButtonText,
@@ -61,8 +61,8 @@ const Form = <T extends FieldValues>({
     resolver: zodResolver(schema),
   });
 
-
   const handleResetFormClick = async () => {
+    form.reset(defaultValues as DefaultValues<T>);
   };
 
   const extendedForm = {
@@ -82,9 +82,9 @@ const Form = <T extends FieldValues>({
         {title && (
           <Grid
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
             }}
             size={{ xs: 12 }}
           >

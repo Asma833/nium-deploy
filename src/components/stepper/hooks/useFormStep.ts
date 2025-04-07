@@ -2,8 +2,15 @@ import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { StepValidationSchema } from '../../../features/admin-portal/pages/user-management/agent-profile-creation/types/form.types';
 
-export const useFormStep = (stepId: string, validationSchema?: StepValidationSchema) => {
-  const { trigger, getValues, formState: { errors } } = useFormContext();
+export const useFormStep = (
+  stepId: string,
+  validationSchema?: StepValidationSchema
+) => {
+  const {
+    trigger,
+    getValues,
+    formState: { errors },
+  } = useFormContext();
 
   const validateStep = useCallback(async () => {
     if (!validationSchema) return true;
@@ -20,10 +27,10 @@ export const useFormStep = (stepId: string, validationSchema?: StepValidationSch
     } catch (error) {
       return false;
     }
-  }, [stepId, validationSchema, trigger, getValues, errors]);
+  }, [stepId, validationSchema, trigger, getValues]);
 
   return {
     validateStep,
-    stepErrors: errors,
+    stepErrors: errors?.[stepId] || {},
   };
 };

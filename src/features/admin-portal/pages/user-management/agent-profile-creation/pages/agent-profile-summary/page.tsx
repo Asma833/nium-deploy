@@ -1,4 +1,4 @@
-import AgentProfileCreationTable from "./agent-profile-creation-table/AgentProfileCreationTable";
+import AgentProfileCreationTable from './agent-profile-creation-table/AgentProfileCreationTable';
 
 const AgentProfileCreationPage = () => {
   return <AgentProfileCreationTable />;

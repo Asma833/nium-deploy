@@ -1,6 +1,6 @@
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { ChangePasswordResponse, LoginResponse } from "../types/auth.types";
-import { getEndpoint } from "@/core/constant/apis";
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { ChangePasswordResponse, LoginResponse } from '../types/auth.types';
+import { getEndpoint } from '@/core/constant/apis';
 
 export interface LoginCredentials {
   email: string;
@@ -9,7 +9,7 @@ export interface LoginCredentials {
 export interface ChangePasswordRequest {
   newPassword: string;
   confirmPassword: string;
-  token:string;
+  token: string;
 }
 
 export const authApi = {
@@ -26,7 +26,8 @@ export const authApi = {
       throw new Error('Invalid login response');
     }
 
-    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.access_token}`;
+    axiosInstance.defaults.headers.common['Authorization'] =
+      `Bearer ${data.access_token}`;
     return data;
   },
   logoutUser: async (): Promise<void> => {
@@ -35,8 +36,15 @@ export const authApi = {
   forgotPassword: async (email: string): Promise<void> => {
     await axiosInstance.post(getEndpoint('AUTH.FORGOT_PASSWORD'), { email });
   },
-  changePassword: async ({newPassword, confirmPassword,token }: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
-    const { data } = await axiosInstance.post(getEndpoint("AUTH.CHANGE_PASSWORD"), {newPassword, confirmPassword,token });
+  changePassword: async ({
+    newPassword,
+    confirmPassword,
+    token,
+  }: ChangePasswordRequest): Promise<ChangePasswordResponse> => {
+    const { data } = await axiosInstance.post(
+      getEndpoint('AUTH.CHANGE_PASSWORD'),
+      { newPassword, confirmPassword, token }
+    );
     return data;
   },
 };

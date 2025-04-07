@@ -22,7 +22,6 @@ export interface NavLinkProps {
   ) => void;
 }
 
-
 export interface MobileNavProps {
   navItems: NavItem[];
   activeItem: string;

@@ -1,9 +1,9 @@
-import { useState } from "react";
-import DashboardContentWrapper from "@/components/common/DashboardContentWrapper";
-import CheckerSideNavigation from "./side-navigation/CheckerSideNav";
-import Header from "@/components/layout/side-navigaion/HeaderNav";
-import { ReactNode } from "react";
-import PageTitle from "@/components/layout/titles/PageTitle";
+import { useState } from 'react';
+import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
+import CheckerSideNavigation from './side-navigation/CheckerSideNav';
+import Header from '@/components/layout/side-navigaion/HeaderNav';
+import { ReactNode } from 'react';
+import PageTitle from '@/components/layout/titles/PageTitle';
 
 interface CheckerLayoutProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
       <div
         className={`fixed lg:static top-0 left-0 w-28 h-full bg-white shadow-md transition-transform transform 
         ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-64"
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
         } lg:translate-x-0 z-50`}
       >
         <CheckerSideNavigation setIsSidebarOpen={setIsSidebarOpen} />

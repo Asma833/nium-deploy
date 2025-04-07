@@ -1,10 +1,18 @@
-import { FormProvider as RHFFormProvider } from "react-hook-form";
+import {
+  FormProvider as RHFFormProvider,
+  UseFormReturn,
+  FieldValues,
+} from 'react-hook-form';
+import { ReactNode } from 'react';
 
-export const FormProvider: React.FC<{ methods: any; children: React.ReactNode }> = ({ 
-  methods, 
-  children 
-}) => (
-  <RHFFormProvider {...methods}>
-    {children}
-  </RHFFormProvider>
+interface FormProviderProps<T extends FieldValues> {
+  methods: UseFormReturn<T>;
+  children: ReactNode;
+}
+
+export const FormProvider = <T extends FieldValues>({
+  methods,
+  children,
+}: FormProviderProps<T>) => (
+  <RHFFormProvider {...methods}>{children}</RHFFormProvider>
 );

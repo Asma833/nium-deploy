@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -7,24 +7,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { cn } from "@/utils/cn";
-import { Download, Loader2, PlusIcon, UploadIcon, X } from "lucide-react";
-import { DialogWrapperProps } from './common-components.types';
+} from '@/components/ui/dialog';
+import { cn } from '@/utils/cn';
+import { Download, Loader2, PlusIcon, UploadIcon, X } from 'lucide-react';
+import { DialogWrapperProps } from '../types/common-components.types';
 
-type IconType = "default" | "upload" | "download";
+type IconType = 'default' | 'upload' | 'download';
 
 export function DialogWrapper({
   isOpen = false,
   setIsOpen = () => {},
   triggerBtnText,
   renderContent,
-  title = "Edit Profile",
+  title = 'Edit Profile',
   description,
   showFooter = true,
   showHeader = true,
   isLoading,
-  iconType = "default",
+  iconType = 'default',
   triggerBtnClassName,
   className,
   onSave,
@@ -45,15 +45,20 @@ export function DialogWrapper({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {triggerBtnText && (
         <DialogTrigger asChild>
-        <Button className={triggerBtnClassName} disabled={isLoading}>
-          {isLoading ? <Loader2 className="animate-spin" /> : icon}
-          {triggerBtnText}
-        </Button>
+          <Button className={triggerBtnClassName} disabled={isLoading}>
+            {isLoading ? <Loader2 className="animate-spin" /> : icon}
+            {triggerBtnText}
+          </Button>
         </DialogTrigger>
       )}
-     
-      <DialogContent  className={cn("sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto", className)}>
-         <button
+
+      <DialogContent
+        className={cn(
+          'sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto',
+          className
+        )}
+      >
+        <button
           className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
           onClick={() => setIsOpen(false)}
         >
@@ -72,18 +77,20 @@ export function DialogWrapper({
 
         {showFooter && (
           <DialogFooter className="sm:justify-center">
-            {
-              triggerBtnText && (
-                <Button onClick={()=>{onSave?.()}} disabled={isLoading}>
+            {triggerBtnText && onSave && (
+              <Button
+                onClick={() => {
+                  onSave();
+                }}
+                disabled={isLoading}
+              >
                 {isLoading ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  footerBtnText || "Save"
+                  footerBtnText || 'Save'
                 )}
               </Button>
-              )
-            }
-           
+            )}
           </DialogFooter>
         )}
       </DialogContent>

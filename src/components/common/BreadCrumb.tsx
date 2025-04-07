@@ -1,5 +1,5 @@
-import { Fragment } from "react/jsx-runtime";
-import { useLocation } from "react-router-dom";
+import { Fragment } from 'react/jsx-runtime';
+import { useLocation } from 'react-router-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,17 +7,17 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { cn } from "@/utils/cn";
+} from '@/components/ui/breadcrumb';
+import { cn } from '@/utils/cn';
 
 export default function BreadCrumb({ className }: { className?: string }) {
   const location = useLocation();
-  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const pathSegments = location.pathname.split('/').filter(Boolean);
 
   return (
     <div
       className={cn(
-        "flex w-full pb-4 sticky top-[70px] bg-secondary z-2",
+        'flex w-full pb-4 sticky top-[70px] bg-secondary z-2',
         className
       )}
     >
@@ -27,7 +27,7 @@ export default function BreadCrumb({ className }: { className?: string }) {
             <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
           </BreadcrumbItem>
           {pathSegments.map((segment, index) => {
-            const to = `/${pathSegments.slice(0, index + 1).join("/")}`;
+            const to = `/${pathSegments.slice(0, index + 1).join('/')}`;
             const isLast = index === pathSegments.length - 1;
 
             return (

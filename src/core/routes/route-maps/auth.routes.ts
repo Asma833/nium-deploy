@@ -1,5 +1,5 @@
-import { lazy } from "react";
-import { ROUTES } from "../constants";
+import { lazy } from 'react';
+import { ROUTES } from '../../constant/routePaths';
 
 // prettier-ignore
 const authComponents = {
@@ -14,26 +14,26 @@ export const publicRoutes = [
   {
     path: ROUTES.AUTH.LOGIN,
     element: authComponents.Login,
-    roles: ["*"],
+    roles: ['*'],
   },
   {
     path: ROUTES.AUTH.FORGET_PASSWORD,
     element: authComponents.ResetPasswordPage,
-    roles: ["*"],
+    roles: ['*'],
   },
   {
     path: ROUTES.AUTH.SEND_PASSWORD_RESET,
     element: authComponents.SendEmail,
-    roles: ["*"],
+    roles: ['*'],
   },
   {
     path: ROUTES.AUTH.RESET_LINK_CONFIRMATION,
     element: authComponents.ResetConfirmation,
-    roles: ["*"],
+    roles: ['*'],
   },
   {
     path: ROUTES.AUTH.RESET_PASSWORD,
     element: authComponents.ResetPassword,
-    roles: ["*"],
+    roles: ['*'],
   },
 ];

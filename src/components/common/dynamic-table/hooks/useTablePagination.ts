@@ -27,6 +27,6 @@ export function useTablePagination<T>(
     currentPage,
     pageSize,
     setPageSize,
-    setCurrentPage
+    setCurrentPage,
   };
 }
