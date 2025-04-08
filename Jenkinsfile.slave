@@ -19,7 +19,6 @@ pipeline {
         string(name: 'REPO', defaultValue: 'nium-forex-agent-portal-frontend.git')
         string(name: 'APP_NAME', defaultValue: 'nium-forex-agent-portal-fe')
         booleanParam(name: 'SONAR', defaultValue: false)
-        string(name: 'SECRET_NAME', defaultValue: 'arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC', description: 'AWS Secrets Manager secret name')
     }
     stages {
         stage("Running CI") {
@@ -30,7 +29,16 @@ pipeline {
                 stage('Fetch Environment Secrets') {
                     steps {
                         script {
-                            def secretName = "${params.SECRET_NAME}"
+                            
+                            // Read the secret name from config file based on selected ENV
+                            def secretName = sh(
+                                script: """
+                                cat jenkins-config.json | jq -r '.["${params.ENV}"].SECRET_NAME'
+                                """,
+                                returnStdout: true
+                            ).trim()
+
+                            echo "Using secret: ${secretName}"
                             
                             // Fetch secrets from AWS Secrets Manager
                             def secretString = sh(
