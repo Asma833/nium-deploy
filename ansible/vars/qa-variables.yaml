@@ -1,8 +1,8 @@
 # VPC Variables
-vpc_id: "vpc-0a0f7c8a41d5e1b4b"
-cluster_name: "niumforex-ecs-cluster"
+vpc_id: 'vpc-0a0f7c8a41d5e1b4b'
+cluster_name: 'niumforex-ecs-cluster'
 
 # Application Variables
-app_name: "qa-nium-forex-agent-portal-fe"
-secret_arn: "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
-react_app_env: "qa"
+app_name: 'qa-nium-forex-agent-portal-fe'
+secret_arn: 'arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC'
+react_app_env: 'qa'

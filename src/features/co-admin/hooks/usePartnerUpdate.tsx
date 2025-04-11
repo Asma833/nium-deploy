@@ -23,8 +23,8 @@ export const usePartnerUpdateAPI = () => {
       // For updates, if no new password is provided, we'll use a placeholder
       // The backend should ignore password updates when this value is used
       const DEFAULT_UPDATE_PASSWORD = 'NO_PASSWORD_UPDATE';
-      
-      const hashedValue = data.password 
+
+      const hashedValue = data.password
         ? await hashPassword(data.password)
         : DEFAULT_UPDATE_PASSWORD;
 
@@ -43,7 +43,7 @@ export const usePartnerUpdateAPI = () => {
         branch_id: getBranchId() || '',
         bank_account_id: getBankAccountId() || '',
       };
-      
+
       return await partnerApi.PartnerUpdate(payload);
     },
     onSuccess: () => {

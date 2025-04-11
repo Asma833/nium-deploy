@@ -71,7 +71,6 @@ export interface PartnerApiPayload {
   product_ids: string[];
 }
 
-
 export interface UserCreationRequest {
   firstName: string;
   lastName: string;

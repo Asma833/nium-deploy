@@ -55,7 +55,9 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
 
       // Handle 401 errors
       if (error.response?.status === 401) {
-        const errorMessage = (error.response?.data as { message?: string })?.message || 'Unauthorized';
+        const errorMessage =
+          (error.response?.data as { message?: string })?.message ||
+          'Unauthorized';
 
         // If the error is due to invalid credentials, reject immediately
         if (originalRequest.url === API.AUTH.LOGIN) {
@@ -99,7 +101,8 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
             processQueue(null, accessToken);
 
             if (originalRequest.headers) {
-              originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+              originalRequest.headers['Authorization'] =
+                `Bearer ${accessToken}`;
             }
             return axiosInstance(originalRequest);
           } catch (refreshError) {

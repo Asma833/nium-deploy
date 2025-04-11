@@ -19,7 +19,7 @@ export const formatDate = (dateString?: string | null): string => {
   return format(date, 'dd/MM/yyyy');
 };
 
-export const formatToDateString  = (timestamp: Date | string): string => {
+export const formatToDateString = (timestamp: Date | string): string => {
   const date = new Date(timestamp);
   return format(date, 'dd-MM-yyyy');
 };
@@ -48,5 +48,3 @@ export const isStartAndEndDateValid = (
     message: '',
   };
 };
-
-

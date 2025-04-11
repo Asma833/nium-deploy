@@ -34,7 +34,7 @@ const LoginForm = () => {
     const hashedPassword = await hashPassword(values.password);
     mutate({
       ...values,
-      password: hashedPassword
+      password: hashedPassword,
     });
   };
 

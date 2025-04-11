@@ -43,7 +43,11 @@ const PartnerCreationFormPage = () => {
     setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
   }, [setTitle, isEditMode]);
 
-  const { mutate: createPartner, isLoading: isCreating, error: createError } = useCreatePartner(
+  const {
+    mutate: createPartner,
+    isLoading: isCreating,
+    error: createError,
+  } = useCreatePartner(
     { role: 'checker' },
     {
       onUserCreateSuccess: () => {
@@ -54,7 +58,11 @@ const PartnerCreationFormPage = () => {
     }
   );
 
-  const { mutate: updatePartner, isLoading: isUpdating, error: updateError } = usePartnerUpdateAPI();
+  const {
+    mutate: updatePartner,
+    isLoading: isUpdating,
+    error: updateError,
+  } = usePartnerUpdateAPI();
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -87,35 +95,43 @@ const PartnerCreationFormPage = () => {
     checked: boolean
   ) => {
     const currentValues = watch('productType');
-    
+
     if (key === 'both') {
-      setValue('productType', {
-        card: checked,
-        remittance: checked,
-        both: checked,
-      }, { shouldValidate: true });
+      setValue(
+        'productType',
+        {
+          card: checked,
+          remittance: checked,
+          both: checked,
+        },
+        { shouldValidate: true }
+      );
       return;
     }
-    
+
     // For card/remittance, set 'both' to true only if both are checked
     const updatedValues = {
       ...currentValues,
       [key]: checked,
-      both: (key === 'card' && checked && currentValues.remittance) || 
-            (key === 'remittance' && checked && currentValues.card),
+      both:
+        (key === 'card' && checked && currentValues.remittance) ||
+        (key === 'remittance' && checked && currentValues.card),
     };
-    
+
     setValue('productType', updatedValues, { shouldValidate: true });
   };
 
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       const productTypeValues = {
-        card: selectedRow.products?.some((p: any) => p.name === 'Card') || false,
-        remittance: selectedRow.products?.some((p: any) => p.name === 'Remittance') || false,
+        card:
+          selectedRow.products?.some((p: any) => p.name === 'Card') || false,
+        remittance:
+          selectedRow.products?.some((p: any) => p.name === 'Remittance') ||
+          false,
         both: false,
       };
-      
+
       reset({
         firstName: selectedRow.first_name || '',
         lastName: selectedRow.last_name || '',
@@ -137,13 +153,13 @@ const PartnerCreationFormPage = () => {
       }
 
       if (isEditMode) {
-        await updatePartner({ 
+        await updatePartner({
           data: {
             ...formdata,
             isActive: selectedRow?.is_active ?? true,
             role: selectedRow?.role_id,
-          }, 
-          productOptions 
+          },
+          productOptions,
         });
       } else {
         await createPartner({
@@ -226,7 +242,7 @@ const PartnerCreationFormPage = () => {
                   name: 'businessType',
                   control,
                   errors,
-                  disabled: true
+                  disabled: true,
                 })}
               </div>
             </FieldWrapper>

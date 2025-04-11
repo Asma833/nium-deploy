@@ -8,7 +8,7 @@
   "pre-prod": {
     "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
   },
-  "production":  {
+  "production": {
     "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
   }
 }

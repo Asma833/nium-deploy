@@ -8,13 +8,12 @@ import { UserApiPayload, UserCreationRequest } from '../types/partner.type';
 
 // Form data structure
 
-
 export const useCreatePartner = (
   { role }: { role: string },
   {
     onUserCreateSuccess,
     productOptions,
-  }: { 
+  }: {
     onUserCreateSuccess?: (data: UserApiPayload) => void;
     productOptions?: Array<{ id: string; name: string }>;
   }
@@ -22,15 +21,28 @@ export const useCreatePartner = (
   const { getHashedRoleId } = useGetRoleId();
   const { hashPassword } = usePasswordHash();
 
+  const productMapping = {
+    card: '550e8400-e29b-41d4-a716-446655440003',
+    remittance: '550e8400-e29b-41d4-a716-446655440004',
+  };
+
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
     const hashedValue = await hashPassword(formData.password);
-    const product_ids = mapProductTypeToIds(formData.productType, productOptions);
-    
+
     const hashed_key = formData.role
       ? getHashedRoleId(formData.role)
       : undefined;
+
+    // Determine which product IDs to include
+    const product_ids: string[] = [];
+    if (formData.productType.card) {
+      product_ids.push(productMapping.card);
+    }
+    if (formData.productType.remittance) {
+      product_ids.push(productMapping.remittance);
+    }
 
     return {
       role_id: 'cdadd7a8-a04a-40ba-a5b3-2b1bf6d788c8', // TODO: Make this dynamic

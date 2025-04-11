@@ -14,14 +14,13 @@ export const useProductOptions = () => {
       const response = await partnerApi.getProducts();
       // Transform the response to match the expected format
       if (Array.isArray(response)) {
-        return response
-          .filter((product): product is ProductOption => {
-            const isValid = 'id' in product && 'name' in product;
-            if (!isValid) {
-              console.warn('Invalid product format in API response:', product);
-            }
-            return isValid;
-          });
+        return response.filter((product): product is ProductOption => {
+          const isValid = 'id' in product && 'name' in product;
+          if (!isValid) {
+            console.warn('Invalid product format in API response:', product);
+          }
+          return isValid;
+        });
       }
       // If response is not an array, return empty array
       console.warn('Unexpected API response format:', response);
@@ -30,7 +29,11 @@ export const useProductOptions = () => {
   });
 
   if (error) {
-    toast.error(error instanceof Error ? error.message : 'Failed to fetch product options.');
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : 'Failed to fetch product options.'
+    );
   }
 
   return { productOptions: data || [], isLoading, error };

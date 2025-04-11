@@ -43,7 +43,6 @@ export const useCreateUser = (
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-
     const hashedValue = await hashPassword(formData.password);
 
     return {

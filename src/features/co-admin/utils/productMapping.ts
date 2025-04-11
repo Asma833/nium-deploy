@@ -3,11 +3,14 @@ export const PRODUCT_IDS = {
   remittance: '550e8400-e29b-41d4-a716-446655440004',
 } as const;
 
-export const mapProductTypeToIds = (productType: {
-  card: boolean;
-  remittance: boolean;
-  both: boolean;
-}, productOptions?: Array<{ id: string; name: string }>) => {
+export const mapProductTypeToIds = (
+  productType: {
+    card: boolean;
+    remittance: boolean;
+    both: boolean;
+  },
+  productOptions?: Array<{ id: string; name: string }>
+) => {
   if (productOptions) {
     // If product options are provided, use dynamic mapping
     return Object.keys(productType)
