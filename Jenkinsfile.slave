@@ -40,8 +40,8 @@ pipeline {
                     }
                     steps {
                         sh "echo Sonar Scanning"
-                        sh 'npm install sonarqube-scanner@2.9.1'
-                        sh 'npm run analyse -- -Dproject.settings=./sonar-project.global.properties'
+                        sh 'npm install sonarqube-scanner@4.3.0'
+                        sh 'npm run analyse -- -Dproject.settings=./sonar-project.properties'
                     }
                 }
                 
