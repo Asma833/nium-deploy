@@ -175,7 +175,6 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
-
   // We need to track filter operations separately
   const [lastFiltered, setLastFiltered] = useState<number>(0);
 
