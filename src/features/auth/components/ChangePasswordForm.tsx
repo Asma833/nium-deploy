@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import * as z from 'zod';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
 import { ROUTES } from '@/core/constant/routePaths';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,10 +16,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { useToast } from '@/hooks/use-toast';
-import axios from 'axios';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
 
@@ -46,7 +46,6 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   type FormValues = {
     currentPassword?: string;
@@ -78,17 +77,10 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
         // Make API call to reset password
         await axiosInstance.post(`${API.AUTH.CHANGE_PASSWORD}`, resetPayload);
 
-        toast({
-          title: 'Success',
-          description: 'Password has been reset successfully!',
-        });
+        toast.success('Password has been reset successfully!');
         navigate(ROUTES.AUTH.LOGIN);
       } else {
-        console.log('Changing password for logged in user');
-        toast({
-          title: 'Success',
-          description: 'Password changed successfully!',
-        });
+        toast.success('Password changed successfully!');
       }
     } catch (error) {
       console.error('Password change error:', error);
@@ -98,12 +90,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
         // Extract error message from API response if available
         errorMessage = error.response.data?.message || errorMessage;
       }
-
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: errorMessage,
-      });
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

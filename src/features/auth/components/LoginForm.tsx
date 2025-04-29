@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -34,7 +34,7 @@ const LoginForm = () => {
     const hashedPassword = await hashPassword(values.password);
     mutate({
       ...values,
-      password: hashedPassword,
+      // password: hashedPassword,
     });
   };
 

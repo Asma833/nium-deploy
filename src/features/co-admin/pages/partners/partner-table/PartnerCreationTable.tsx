@@ -24,6 +24,7 @@ const PartnerCreationTable = () => {
     error,
   } = useGetPartnersApi('NUSERS.PARTNERS.LIST');
 
+
   const { mutate: updateStatus } = usePartnerStatusUpdateAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {

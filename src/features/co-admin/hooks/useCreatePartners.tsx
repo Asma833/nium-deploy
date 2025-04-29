@@ -5,11 +5,12 @@ import useGetRoleId from '@/hooks/useGetRoleId';
 import usePasswordHash from '@/hooks/usePasswordHash';
 import { mapProductTypeToIds } from '../utils/productMapping';
 import { UserApiPayload, UserCreationRequest } from '../types/partner.type';
+import { useGetProducts } from '@/hooks/useGetProducts';
 
 // Form data structure
 
 export const useCreatePartner = (
-  { role }: { role: string },
+  roleCode: string,
   {
     onUserCreateSuccess,
     productOptions,
@@ -18,13 +19,11 @@ export const useCreatePartner = (
     productOptions?: Array<{ id: string; name: string }>;
   }
 ) => {
-  const { getHashedRoleId } = useGetRoleId();
+  const { getHashedRoleId, getRoleId } = useGetRoleId();
   const { hashPassword } = usePasswordHash();
-
-  const productMapping = {
-    card: '550e8400-e29b-41d4-a716-446655440003',
-    remittance: '550e8400-e29b-41d4-a716-446655440004',
-  };
+  const roleId = getRoleId(roleCode);
+  const { getProductIds } = useGetProducts();
+  const productIds = getProductIds() || { card: '', remittance: '' };
 
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
@@ -37,24 +36,42 @@ export const useCreatePartner = (
 
     // Determine which product IDs to include
     const product_ids: string[] = [];
-    if (formData.productType.card) {
-      product_ids.push(productMapping.card);
-    }
-    if (formData.productType.remittance) {
-      product_ids.push(productMapping.remittance);
+
+    if (formData.productType.both) {
+      product_ids.push(productIds.card, productIds.remittance);
+    } else {
+      if (formData.productType.card) {
+        product_ids.push(productIds.card);
+      }
+      if (formData.productType.remittance) {
+        product_ids.push(productIds.remittance);
+      }
     }
 
     return {
-      role_id: 'cdadd7a8-a04a-40ba-a5b3-2b1bf6d788c8', // TODO: Make this dynamic
+      role_id: roleId || '',
       email: formData.email,
       first_name: formData.firstName,
       last_name: formData.lastName,
-      password: hashedValue,
+      password: formData.password,
       is_active: formData.isActive ?? true,
-      hashed_key: hashed_key || '',
       business_type: formData.business_type || 'large_enterprise',
-      product_ids,
+      products: product_ids,
+      api_key: HEADER_KEYS.API_KEY,
+      created_by: '5177b708-19ee-4f82-aaf1-1c6e1ddbefff',
+      updated_by: '5177b708-19ee-4f82-aaf1-1c6e1ddbefff',
     };
+    // return {
+    //   role_id: roleId || '',
+    //   email: formData.email,
+    //   first_name: formData.firstName,
+    //   last_name: formData.lastName,
+    //   password: hashedValue,
+    //   is_active: formData.isActive ?? true,
+    //   hashed_key: hashed_key || '',
+    //   business_type: formData.business_type || 'large_enterprise',
+    //   product_ids,
+    // };
   };
 
   const { mutate, isPending, error } = useMutation<

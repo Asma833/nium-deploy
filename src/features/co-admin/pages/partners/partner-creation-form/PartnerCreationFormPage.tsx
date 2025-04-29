@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userSchema } from './partner-form.schema';
 import { userFormConfig } from './partner-form-config';
@@ -16,7 +17,8 @@ import { useCreatePartner } from '@/features/co-admin/hooks/useCreatePartners';
 import { usePartnerUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
 import { PartnerFormData } from '@/features/co-admin/types/partner.type';
-import { toast } from 'sonner';
+import { useGetProducts } from '@/hooks/useGetProducts';
+import useGetRoleId from '@/hooks/useGetRoleId';
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -38,6 +40,7 @@ const PartnerCreationFormPage = () => {
   const { setTitle } = usePageTitle();
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
+  const roleCode = 'checker';
 
   useEffect(() => {
     setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
@@ -48,7 +51,7 @@ const PartnerCreationFormPage = () => {
     isLoading: isCreating,
     error: createError,
   } = useCreatePartner(
-    { role: 'checker' },
+    roleCode,
     {
       onUserCreateSuccess: () => {
         reset({});
@@ -146,6 +149,7 @@ const PartnerCreationFormPage = () => {
   }, [selectedRow, reset]);
 
   const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
+    console.log('formdata:', formdata);
     try {
       if (!formdata.productType.card && !formdata.productType.remittance) {
         toast.error('Please select at least one product type');

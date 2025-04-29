@@ -15,6 +15,7 @@ export const API = {
     REFRESH_TOKEN: `/refresh/accessToken`,
   },
   USER: {
+    GET_ROLES: '/roles',
     GET_PROFILE: `/users/profile`,
     UPDATE_PROFILE: `/users/profile`,
     GET_PREFERENCES: `/users/preferences`,
@@ -75,6 +76,9 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
+  },
+  PRODUCTS: {
+    GET_PRODUCTS: '/products',
   },
 } as const;
 

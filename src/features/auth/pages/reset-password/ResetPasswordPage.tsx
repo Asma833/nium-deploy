@@ -11,9 +11,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const ResetPasswordPage = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -21,7 +21,6 @@ const ResetPasswordPage = () => {
   const [tokenError, setTokenError] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
     // Extract token from URL query parameters
@@ -54,11 +53,7 @@ const ResetPasswordPage = () => {
         }
 
         setTokenError(errorMessage);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: errorMessage,
-        });
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }

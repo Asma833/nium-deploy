@@ -1,6 +1,7 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useState, useEffect } from 'react';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { API } from '@/core/constant/apis';
 
 interface Role {
   id: string;
@@ -26,7 +27,7 @@ export const useGetRoleId = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axiosInstance.get('/roles');
+        const response = await axiosInstance.get(API.USER.GET_ROLES);
         setRoles(response.data);
       } catch (err) {
         setError(
