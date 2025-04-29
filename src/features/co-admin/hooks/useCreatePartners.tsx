@@ -1,13 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { partnerApi } from '../api/partnerApi';
 import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
 import useGetRoleId from '@/hooks/useGetRoleId';
-import usePasswordHash from '@/hooks/usePasswordHash';
-import { mapProductTypeToIds } from '../utils/productMapping';
 import { UserApiPayload, UserCreationRequest } from '../types/partner.type';
 import { useGetProducts } from '@/hooks/useGetProducts';
-
-// Form data structure
+import { HEADER_KEYS } from '@/core/constant/apis';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { partnerApi } from '../api/partnerApi';
 
 export const useCreatePartner = (
   roleCode: string,
@@ -19,21 +17,16 @@ export const useCreatePartner = (
     productOptions?: Array<{ id: string; name: string }>;
   }
 ) => {
-  const { getHashedRoleId, getRoleId } = useGetRoleId();
-  const { hashPassword } = usePasswordHash();
+  const { getRoleId } = useGetRoleId();
   const roleId = getRoleId(roleCode);
   const { getProductIds } = useGetProducts();
   const productIds = getProductIds() || { card: '', remittance: '' };
+  const { getUser } = useCurrentUser();
+  const user = getUser();
 
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-    const hashedValue = await hashPassword(formData.password);
-
-    const hashed_key = formData.role
-      ? getHashedRoleId(formData.role)
-      : undefined;
-
     // Determine which product IDs to include
     const product_ids: string[] = [];
 
@@ -55,23 +48,12 @@ export const useCreatePartner = (
       last_name: formData.lastName,
       password: formData.password,
       is_active: formData.isActive ?? true,
-      business_type: formData.business_type || 'large_enterprise',
+      business_type: user?.business_type || '',
       products: product_ids,
       api_key: HEADER_KEYS.API_KEY,
-      created_by: '5177b708-19ee-4f82-aaf1-1c6e1ddbefff',
-      updated_by: '5177b708-19ee-4f82-aaf1-1c6e1ddbefff',
+      created_by: user?.created_by || '',
+      updated_by: user?.updated_by || '',
     };
-    // return {
-    //   role_id: roleId || '',
-    //   email: formData.email,
-    //   first_name: formData.firstName,
-    //   last_name: formData.lastName,
-    //   password: hashedValue,
-    //   is_active: formData.isActive ?? true,
-    //   hashed_key: hashed_key || '',
-    //   business_type: formData.business_type || 'large_enterprise',
-    //   product_ids,
-    // };
   };
 
   const { mutate, isPending, error } = useMutation<

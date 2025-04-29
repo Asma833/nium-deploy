@@ -48,13 +48,14 @@ export interface PartnerRequest {
   first_name: string;
   last_name: string;
   password: string;
-  is_active: boolean;
-  hashed_key: string;
+  is_active?: boolean;
+  hashed_key?: string;
   api_key?: string;
   business_type?: string;
   created_by?: string;
   updated_by?: string;
-  product_ids: string[];
+  product_ids?: string[];
+  products?: string[];
 }
 export interface PartnerApiPayload {
   role_id: string;
@@ -62,13 +63,14 @@ export interface PartnerApiPayload {
   first_name: string;
   last_name: string;
   password: string;
-  is_active: boolean;
-  hashed_key: string;
+  is_active?: boolean;
+  hashed_key?: string;
   api_key?: string;
   business_type?: string;
   created_by?: string;
   updated_by?: string;
-  product_ids: string[];
+  product_ids?: string[];
+  products?: string[];
 }
 
 export interface UserCreationRequest {

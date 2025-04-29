@@ -1,29 +1,36 @@
-import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { getUserTableColumns } from './partner-creation-table-col';
 import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { getUserTableColumns } from './partner-creation-table-col';
+import { Button } from '@/components/ui/button';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useGetPartnersApi } from '@/features/co-admin/hooks/useGetPartners';
 import { usePartnerStatusUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdateStatus';
+import { useGetData } from '@/hooks/useGetData';
+import { PartnerRequest } from '@/features/co-admin/types/partner.type';
 
 const PartnerCreationTable = () => {
   const navigate = useNavigate();
   const { setTitle } = usePageTitle();
+
   useEffect(() => {
     setTitle('PARTNERS');
   }, [setTitle]);
 
   const {
-    data: users = [],
-    loading,
+    data,
+    isLoading: loading,
     error,
-  } = useGetPartnersApi('NUSERS.PARTNERS.LIST');
+  } = useGetData<PartnerRequest[]>({
+    endpoint: API.NUSERS.PARTNERS.LIST,
+    queryKey: ['getAllCreatePartnersList'],
+    dataPath: 'data',
+  });
 
+  const users = data || [];
 
   const { mutate: updateStatus } = usePartnerStatusUpdateAPI();
 
@@ -58,9 +65,7 @@ const PartnerCreationTable = () => {
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.PARTNERS.LIST,
-    // base query params if needed
     baseQueryParams: {
-      // For example: clientId: '123'
     },
   });
   const columns = getUserTableColumns(handleStatusChange, handleNavigate);
@@ -79,7 +84,7 @@ const PartnerCreationTable = () => {
       </div>
       <DynamicTable
         columns={columns}
-        data={users || []}
+        data={users}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"

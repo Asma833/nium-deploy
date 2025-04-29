@@ -61,6 +61,10 @@ export const useCurrentUser = () => {
     return user?.id;
   };
 
+  const getUser = (): User | null => {
+    return user;
+  };
+
   const getUserEmail = (): string | undefined => {
     return user?.email;
   };
@@ -80,6 +84,7 @@ export const useCurrentUser = () => {
     getUserHashedKey,
     getUserRole,
     getUserId,
+    getUser,
     getUserEmail,
     getBranchId,
     getBankAccountId,

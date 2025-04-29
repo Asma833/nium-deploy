@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { userSchema } from './partner-form.schema';
-import { userFormConfig } from './partner-form-config';
 import { FormProvider } from '@/components/form/context/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
@@ -17,8 +15,9 @@ import { useCreatePartner } from '@/features/co-admin/hooks/useCreatePartners';
 import { usePartnerUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
 import { PartnerFormData } from '@/features/co-admin/types/partner.type';
-import { useGetProducts } from '@/hooks/useGetProducts';
-import useGetRoleId from '@/hooks/useGetRoleId';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { userFormConfig } from './partner-form-config';
+import { userSchema } from './partner-form.schema';
 
 const useScreenSize = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -42,6 +41,10 @@ const PartnerCreationFormPage = () => {
   const selectedRow = (location.state as any)?.selectedRow || null;
   const roleCode = 'checker';
 
+  const { getUser } = useCurrentUser();
+  const user = getUser();
+  console.log('user:', user);
+
   useEffect(() => {
     setTitle(isEditMode ? 'Edit Partner' : 'Create Partner');
   }, [setTitle, isEditMode]);
@@ -50,16 +53,13 @@ const PartnerCreationFormPage = () => {
     mutate: createPartner,
     isLoading: isCreating,
     error: createError,
-  } = useCreatePartner(
-    roleCode,
-    {
-      onUserCreateSuccess: () => {
-        reset({});
-        toast.success('Partner created successfully');
-      },
-      productOptions,
-    }
-  );
+  } = useCreatePartner(roleCode, {
+    onUserCreateSuccess: () => {
+      reset({});
+      toast.success('Partner created successfully');
+    },
+    productOptions,
+  });
 
   const {
     mutate: updatePartner,
@@ -75,7 +75,7 @@ const PartnerCreationFormPage = () => {
       email: '',
       password: '',
       confirmPassword: '',
-      businessType: 'large_enterprise',
+      businessType: '',
       productType: {
         card: true,
         remittance: false,
@@ -128,9 +128,9 @@ const PartnerCreationFormPage = () => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       const productTypeValues = {
         card:
-          selectedRow.products?.some((p: any) => p.name === 'Card') || false,
+          selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'card') || false,
         remittance:
-          selectedRow.products?.some((p: any) => p.name === 'Remittance') ||
+          selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'remittance') ||
           false,
         both: false,
       };
@@ -139,7 +139,7 @@ const PartnerCreationFormPage = () => {
         firstName: selectedRow.first_name || '',
         lastName: selectedRow.last_name || '',
         email: selectedRow.email || '',
-        businessType: selectedRow.business_type || 'large_enterprise',
+        businessType: selectedRow.business_type || '',
         productType: {
           ...productTypeValues,
           both: productTypeValues.card && productTypeValues.remittance,
@@ -187,7 +187,7 @@ const PartnerCreationFormPage = () => {
   return (
     <FormProvider methods={methods}>
       <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? 'Edit User' : 'Create User'}
+        {isEditMode ? 'Edit Partner' : 'Create Partner'}
       </h2>
 
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
@@ -235,21 +235,6 @@ const PartnerCreationFormPage = () => {
                   {getController({ ...field, name, control, errors })}
                 </FieldWrapper>
               ))}
-          </FormFieldRow>
-          <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="my-2">
-            <FieldWrapper>
-              <div>
-                {getController({
-                  ...userFormConfig.fields.businessType,
-                  label:
-                    userFormConfig.fields.businessType.label || 'Business Type',
-                  name: 'businessType',
-                  control,
-                  errors,
-                  disabled: true,
-                })}
-              </div>
-            </FieldWrapper>
           </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
