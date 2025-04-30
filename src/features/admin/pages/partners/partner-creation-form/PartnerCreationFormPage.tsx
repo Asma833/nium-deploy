@@ -127,10 +127,13 @@ const PartnerCreationFormPage = () => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       const productTypeValues = {
         card:
-          selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'card') || false,
+          selectedRow.products?.some(
+            (p: any) => p.name.toLowerCase() === 'card'
+          ) || false,
         remittance:
-          selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'remittance') ||
-          false,
+          selectedRow.products?.some(
+            (p: any) => p.name.toLowerCase() === 'remittance'
+          ) || false,
         both: false,
       };
 

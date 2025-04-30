@@ -11,7 +11,6 @@ import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 const ViewAllTable = () => {
   const { setTitle } = usePageTitle();
 
-
   useEffect(() => {
     setTitle('View All');
   }, [setTitle]);

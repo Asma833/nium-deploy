@@ -1,7 +1,6 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 
-
 type QueryConfig<T> = {
   endpoint: string;
   id?: string;
@@ -16,7 +15,6 @@ type QueryResult<T> = {
   error: Error | null;
   refetch?: () => Promise<any>;
 };
-
 
 export const useGetData = <T,>({
   endpoint,
@@ -46,7 +44,7 @@ export const useGetData = <T,>({
   });
 
   return {
-    data: data ,
+    data: data,
     isLoading,
     error: error as Error | null,
     refetch,

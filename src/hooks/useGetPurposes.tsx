@@ -21,7 +21,6 @@ const fetchPurposeTypes = async (): Promise<PurposeTypeItem[]> => {
   return response.data || [];
 };
 
-
 const useGetPurposes = () => {
   const {
     data: purposeTypes = [],

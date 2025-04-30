@@ -42,7 +42,7 @@ const UserCreationFormPage = () => {
   useEffect(() => {
     setTitle(isEditMode ? 'Edit User' : 'Create User');
   }, [setTitle]);
-const {getBusinessType} = useCurrentUser();
+  const { getBusinessType } = useCurrentUser();
   const methods = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -52,7 +52,7 @@ const {getBusinessType} = useCurrentUser();
       businessType: getBusinessType() || '',
     },
   });
-  
+
   const {
     control,
     reset,

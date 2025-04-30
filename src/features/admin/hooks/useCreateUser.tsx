@@ -36,11 +36,11 @@ export const useCreateUser = (
   }: { onUserCreateSuccess: (data: UserApiPayload) => void }
 ) => {
   const { getRoleId } = useGetRoleId();
-  const { getBankAccountId, getBranchId, getBusinessType} = useCurrentUser();
+  const { getBankAccountId, getBranchId, getBusinessType } = useCurrentUser();
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-     const roleId = getRoleId(role);
+    const roleId = getRoleId(role);
     return {
       role_id: roleId || '',
       email: formData.email,

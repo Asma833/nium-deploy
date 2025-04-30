@@ -20,12 +20,10 @@ const adminComponents = {
       )
   ),
   PartnerCreation: lazy(
-    () =>
-      import('@/features/admin/pages/partners/partner-creation-form/page')
+    () => import('@/features/admin/pages/partners/partner-creation-form/page')
   ),
   UpdatePartner: lazy(
-    () =>
-      import('@/features/admin/pages/partners/partner-creation-form/page')
+    () => import('@/features/admin/pages/partners/partner-creation-form/page')
   ),
   ViewAll: lazy(
     () => import('@/features/admin/pages/view-all/view-table/ViewAllTable')
