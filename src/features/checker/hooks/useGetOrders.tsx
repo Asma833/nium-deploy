@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '@/core/services/axios/axiosInstance';
-import { API } from '@/core/constant/apis';
 import { toast } from 'sonner';
 import axios from 'axios';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
 
 export const useGetOrders = <T = any,>(autoFetch: boolean = true) => {
   const [data, setData] = useState<T | null>(null);
@@ -21,7 +21,7 @@ export const useGetOrders = <T = any,>(autoFetch: boolean = true) => {
       setData(data);
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.log('Unauthorized');
+        console.error('Unauthorized');
       }
 
       const errorMessage =

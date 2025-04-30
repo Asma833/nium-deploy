@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import axiosInstance from '@/core/services/axios/axiosInstance';
-import { API } from '@/core/constant/apis';
 import { toast } from 'sonner';
 import axios from 'axios';
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 type TransactionType = 'all' | 'completed';
@@ -44,7 +44,7 @@ export const useGetAllOrders = <T = any,>(
     } catch (err) {
       // More detailed error logging for authentication issues
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.log('Unauthorized');
+        console.error('Unauthorized');
       }
 
       const errorMessage =

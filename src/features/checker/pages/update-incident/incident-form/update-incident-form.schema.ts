@@ -17,7 +17,6 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
-            console.log('value:', value);
             // If fields.status.reject is true, then comment is required
             return true; // We'll do the validation separately based on UI state
           },
@@ -34,7 +33,6 @@ export const updateIncidentFormSchema = z.object({
         .optional()
         .refine(
           (value) => {
-            console.log('value:', value);
             // If fields.status.approve is true, then niumInvoiceNo is required
             return true; // We'll do the validation separately based on UI state
           },
