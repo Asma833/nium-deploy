@@ -1,8 +1,3 @@
-import {
-  determinePurposeType,
-  determineTransactionType,
-} from '@/utils/getTransactionConfigTypes';
-
 export const getTransactionTableColumns = () => [
   {
     key: 'nium_order_id',
@@ -11,18 +6,7 @@ export const getTransactionTableColumns = () => [
     cell: (value: string) => <span className="text-pink-600">{value}</span>,
     className: 'min-w-0',
   },
-  // {
-  //   key: "orderDate",
-  //   id: "orderDate",
-  //   name: "Order Date",
-  //   className: "min-w-0",
-  // },
-  // {
-  //   key: "agentId",
-  //   id: "agentId",
-  //   name: "Agent ID",
-  //   className: "min-w-0",
-  // },
+
   {
     key: 'customer_pan',
     id: 'customer_pan',
@@ -34,16 +18,18 @@ export const getTransactionTableColumns = () => [
     id: 'transaction_type',
     name: 'Transaction Type',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: any) =>
-      determineTransactionType(rowData.transaction_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.transaction_type.text}</span>
+    ),
   },
   {
     key: 'purpose_type',
     id: 'purpose_type',
     name: 'Purpose Type',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: any) =>
-      determinePurposeType(rowData.purpose_type),
+    cell: (_: unknown, rowData: any) => (
+      <span>{rowData.purpose_type.text}</span>
+    ),
   },
   {
     key: 'e_sign_status',

@@ -6,10 +6,11 @@ import { API } from '@/core/constant/apis';
 import { getTransactionTableColumns } from './view-all-table-col';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import useGetAllOrders from '@/features/co-admin/hooks/useGetAllOrders';
+import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 
 const ViewAllTable = () => {
   const { setTitle } = usePageTitle();
+
 
   useEffect(() => {
     setTitle('View All');

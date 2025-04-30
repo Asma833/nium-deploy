@@ -1,8 +1,8 @@
-import { Link } from 'react-router';
 import React from 'react';
+import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -13,14 +13,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import usePasswordHash from '@/hooks/usePasswordHash';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { mutate, isLoading } = useLogin();
-  const { hashPassword } = usePasswordHash();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -31,10 +29,8 @@ const LoginForm = () => {
   });
 
   const handleLogin = async (values: LoginSchema) => {
-    const hashedPassword = await hashPassword(values.password);
     mutate({
       ...values,
-      // password: hashedPassword,
     });
   };
 

@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { userApi } from '../api/userApi';
 import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import usePasswordHash from '@/hooks/usePasswordHash';
 import useGetRoleId from '@/hooks/useGetRoleId';
 // Form data structure
 export interface UserCreationRequest {
@@ -36,19 +35,15 @@ export const useCreateUser = (
     onUserCreateSuccess,
   }: { onUserCreateSuccess: (data: UserApiPayload) => void }
 ) => {
-  const { hashPassword } = usePasswordHash();
   const { getRoleId } = useGetRoleId();
   const { getBankAccountId, getBranchId, getBusinessType} = useCurrentUser();
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-    const hashedValue = await hashPassword(formData.password);
-    // console.log(role.id)
      const roleId = getRoleId(role);
     return {
       role_id: roleId || '',
       email: formData.email,
-      // password: hashedValue,
       password: formData.password,
       is_active: true,
       business_type: getBusinessType() || '',

@@ -12,5 +12,4 @@ export const DEFAULT_ROUTES: Record<UserRole, string> = {
   'co-admin': '/dashboard',
   maker: '/transaction',
   checker: '/checker/dashboard',
-  // 'admin': '/admin/dashboard',
 } as const;

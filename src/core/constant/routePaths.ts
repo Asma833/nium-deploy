@@ -20,15 +20,6 @@ export const ROUTES = {
         RATE_MARGIN: '/master/rate-margin',
       },
     },
-  },
-  CHECKER: {
-    DASHBOARD: '/dashboard',
-    ASSIGN: '/assign',
-    VIEWALL: '/viewall',
-    UPDATE_INCIDENT: '/update-incident',
-    COMPLETEDTRANSACTIONS: '/completed-transactions',
-  },
-  COADMIN: {
     NUSER: '/users',
     CREATEUSER: '/users/create-user',
     UPDATEUSER: '/users/update-user/:id',
@@ -36,5 +27,12 @@ export const ROUTES = {
     CREATEPARTNER: '/partners/create-partner',
     UPDATEPARTNER: '/partners/update-partner/:id',
     VIEWALL: '/viewall',
+  },
+  CHECKER: {
+    DASHBOARD: '/dashboard',
+    ASSIGN: '/assign',
+    VIEWALL: '/viewall',
+    UPDATE_INCIDENT: '/update-incident',
+    COMPLETEDTRANSACTIONS: '/completed-transactions',
   },
 } as const;

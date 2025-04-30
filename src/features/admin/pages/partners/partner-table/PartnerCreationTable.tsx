@@ -8,9 +8,9 @@ import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterA
 import { API } from '@/core/constant/apis';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { usePartnerStatusUpdateAPI } from '@/features/co-admin/hooks/usePartnerUpdateStatus';
+import { usePartnerStatusUpdateAPI } from '@/features/admin/hooks/usePartnerUpdateStatus';
 import { useGetData } from '@/hooks/useGetData';
-import { PartnerRequest } from '@/features/co-admin/types/partner.type';
+import { PartnerRequest } from '@/features/admin/types/partner.type';
 
 const PartnerCreationTable = () => {
   const navigate = useNavigate();
@@ -27,9 +27,8 @@ const PartnerCreationTable = () => {
   } = useGetData<PartnerRequest[]>({
     endpoint: API.NUSERS.PARTNERS.LIST,
     queryKey: ['getAllCreatePartnersList'],
-    dataPath: 'data',
+    dataPath: '',
   });
-
   const users = data || [];
 
   const { mutate: updateStatus } = usePartnerStatusUpdateAPI();
@@ -65,8 +64,7 @@ const PartnerCreationTable = () => {
   };
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.PARTNERS.LIST,
-    baseQueryParams: {
-    },
+    baseQueryParams: {},
   });
   const columns = getUserTableColumns(handleStatusChange, handleNavigate);
 

@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { checkerRoutes } from './RoutesConfig';
+import { checkerRoutes } from './Routes';
 import { ProtectedRoute } from './ProtectedRoute';
 import CheckerLayout from '@/features/checker/components/CheckerLayout';
 import NotFoundPage from '@/components/common/NotFoundPage';

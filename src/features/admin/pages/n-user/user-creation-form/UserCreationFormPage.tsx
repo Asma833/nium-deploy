@@ -12,9 +12,9 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { useCreateUser } from '../../../hooks/useCreateUser';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useParams, useLocation } from 'react-router-dom';
-import { useUpdateAPI } from '@/features/co-admin/hooks/useUserUpdate';
-import { useProductOptions } from '@/features/co-admin/hooks/useProductOptions';
-import { UserFormData } from '@/features/co-admin/types/user.type';
+import { useUpdateAPI } from '@/features/admin/hooks/useUserUpdate';
+import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
+import { UserFormData } from '@/features/admin/types/user.type';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 const useScreenSize = () => {

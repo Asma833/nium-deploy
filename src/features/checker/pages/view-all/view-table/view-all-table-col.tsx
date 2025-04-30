@@ -1,8 +1,4 @@
 import { formatDate } from '@/utils/dateFormat';
-import {
-  determinePurposeType,
-  determineTransactionType,
-} from '@/utils/getTransactionConfigTypes';
 
 export const getTransactionTableColumns = () => [
   {

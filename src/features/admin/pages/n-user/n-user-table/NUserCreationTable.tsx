@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useUpdateStatusAPI } from '@/features/co-admin/hooks/useUserUpdateStatus';
-import { useGetUserApi } from '@/features/co-admin/hooks/useGetUser';
+import { useUpdateStatusAPI } from '@/features/admin/hooks/useUserUpdateStatus';
+import { useGetUserApi } from '@/features/admin/hooks/useGetUser';
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
