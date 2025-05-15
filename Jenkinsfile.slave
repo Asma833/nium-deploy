@@ -73,6 +73,12 @@ pipeline {
                         expression { params.SONAR == true }
                     }
                     steps {
+                        sh '''
+                            echo "Backing up original package.json"
+                            cp package.json package.original.json
+                            echo "Removing 'type: module' from package.json for Sonar compatibility"
+                            jq 'del(.type)' package.json > package.tmp.json && mv package.tmp.json package.json
+                        '''
                         sh "echo Sonar Scanning"
                         sh 'npm install sonarqube-scanner@4.3.0'
                         sh 'npm run analyse -- -Dproject.settings=./sonar-project.properties'
@@ -83,7 +89,6 @@ pipeline {
                     steps {
                         sh "echo ${BUILD_NUMBER}"
                         sh "docker --version"
-                        
                         sh "docker build --no-cache --build-arg ENV=${params.ENV} -t ${APP_NAME}:latest ."
                         sh "docker tag ${APP_NAME}:latest ${AWS_ECR_ID}.dkr.ecr.ap-south-1.amazonaws.com/${APP_NAME}:${ENV}-${BUILD_NUMBER}"
                         sh "eval \$(aws ecr get-login --no-include-email --region ap-south-1)"
