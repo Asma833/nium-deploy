@@ -34,8 +34,8 @@ const CompletedTransactionTable = () => {
       orderDate: new Date(order.createdAt).toLocaleString(),
       agentId: order.partner_id || 'N/A',
       customerPan: order.customer_pan || 'N/A',
-      transactionType: order.transaction_type.text || 'N/A',
-      purposeType: order.purpose_type.text || 'N/A',
+      transactionType: order.transaction_type?.text || 'N/A',
+      purposeType: order.purpose_type?.text || 'N/A',
       esignStatus: order.e_sign_status || 'N/A',
       esignStatusCompletionDate: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()

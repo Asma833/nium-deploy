@@ -106,7 +106,9 @@ export const GetTransactionTableColumns = (
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
       <span>
-        {rowData.transaction_type ? rowData.transaction_type.text : '-'}
+        {rowData?.transaction_type?.text ||
+          rowData?.transactionType?.name ||
+          '-'}
       </span>
     ),
   },
@@ -116,7 +118,11 @@ export const GetTransactionTableColumns = (
     name: 'Purpose Type',
     className: 'min-w-0 max-w-[70px]',
     cell: (_: unknown, rowData: any) => (
-      <span>{rowData.purpose_type ? rowData.purpose_type.text : '-'}</span>
+      <span>
+        {rowData?.purpose_type?.text ||
+          rowData?.purposeType?.purpose_name ||
+          '-'}
+      </span>
     ),
   },
   {
@@ -157,107 +163,71 @@ export const GetTransactionTableColumns = (
     cell: (_: unknown, rowData: any) => (
       <SignLinkButton
         copyLinkUrl={rowData.e_sign_link}
-        buttonText={'E Sign'}
-        disabled={rowData.e_sign_status === 'not generated'}
+        toastInfoText={'E Sign link copied successfully!'}
+        disabled={
+          !rowData.e_sign_link || rowData.e_sign_status === 'not generated'
+        }
         tooltipText={'Copy E sign Link'}
+        buttonType="copy_link"
+        buttonIconType="copy_link"
       />
     ),
   },
   {
     key: 'v_kyc_link',
     id: 'v_kyc_link',
-    name: 'Vkyc Link',
+    name: 'VKYC Link',
     className: 'min-w-0 max-w-[80px]',
     cell: (_: unknown, rowData: any) => (
       <SignLinkButton
         copyLinkUrl={rowData.v_kyc_link}
-        buttonText={'Vkyc Link'}
+        toastInfoText={'Vkyc Link link copied successfully!'}
         disabled={rowData.v_kyc_link === null}
-        tooltipText={'Copy Vkyc Link'}
+        tooltipText={'Copy VKYC Link'}
+        buttonType="copy_link"
+        buttonIconType="copy_link"
       />
     ),
   },
-  // {
-  //   key: "merged_document",
-  //   id: "merged_document",
-  //   name: "Merged Document",
-  //   className: "min-w-0 max-w-[100px]",
-  //   cell: (_: unknown, rowData: any) => (
-  //     <SignLinkButton
-  //       copyLinkUrl={rowData.e_sign_link}
-  //       buttonText={"E Sign"}
-  //       tooltipText={"Copy Merged Doc Link"}
-  //     />
-  //   ),
-  // },
   {
     key: 'generateLink',
     id: 'generateLink',
     name: 'Generate Esign Link',
     className: 'min-w-0 max-w-[100px]',
     cell: (_: unknown, rowData: any) => (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => handleRegeneratedEsignLink(rowData)}
-              className="flex items-center justify-center mx-auto text-white  disabled:bg-gray-200 disabled:text-gray-500"
-              size={'sm'}
-              disabled={
-                rowData?.incident_status ||
-                rowData?.incident_status === null ||
-                rowData?.incident_status === undefined
-              }
-            >
-              <RefreshCw
-                className={cn(
-                  'cursor-pointer',
-                  loadingOrderId === rowData.nium_order_id ? 'animate-spin' : ''
-                )}
-                size={20}
-              />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent className="bg-gray-400">
-            Generate Esign Link
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <SignLinkButton
+        id={rowData.nium_order_id}
+        loading={
+          isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
+        }
+        copyLinkUrl={rowData.v_kyc_link}
+        tooltipText={'Generate Esign Link'}
+        buttonIconType="refresh"
+        onClick={() => handleRegeneratedEsignLink(rowData)}
+        disabled={
+          rowData?.incident_status ||
+          rowData?.incident_status === null ||
+          rowData?.incident_status === undefined
+        }
+      />
     ),
   },
-  // {
-  //   key: "generateEsign",
-  //   id: "generateEsign",
-  //   name: "Generate E Sign",
-  //   className: "min-w-0 max-w-[100px]",
-  //   cell: (_: unknown, rowData: any) => (
-  //     <SignLinkButton
-  //       copyLinkUrl={rowData.e_sign_link}
-  //       buttonText={"E Sign"}
-  //       tooltipText={"Copy Merged Doc Link"}
-  //     />
-  //   ),
-  // },
   {
     key: 'release',
     id: 'release',
     name: 'Release',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => handleUnassign(rowData)}
-              className="flex items-center justify-center mx-auto"
-              size={'sm'}
-            >
-              <X className="text-white cursor-pointer" size={20} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent className="bg-gray-400">Release Order</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <SignLinkButton
+        id={rowData.nium_order_id}
+        loading={
+          isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
+        }
+        copyLinkUrl={rowData.v_kyc_link}
+        tooltipText={'Release Order'}
+        buttonIconType={'remove'}
+        onClick={() => handleUnassign(rowData)}
+      />
     ),
   },
 ];

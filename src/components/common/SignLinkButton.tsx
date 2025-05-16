@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkIcon } from 'lucide-react';
+import { Delete, Edit, Eye, LinkIcon, Plus, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/utils/clipboard';
 import { cn } from '@/utils/cn';
@@ -10,38 +10,97 @@ import {
 } from '@/components/ui/tooltip';
 
 interface SignLinkButtonProps {
-  copyLinkUrl: string;
-  buttonText: string;
+  id?: string;
+  copyLinkUrl?: string;
+  buttonText?: string;
+  toastInfoText?: string;
   disabled?: boolean;
   className?: string;
   tooltipText?: string;
+  buttonType?:
+    | 'button'
+    | 'copy_link'
+    | 'refresh'
+    | 'remove'
+    | 'delete'
+    | 'edit'
+    | 'view'
+    | 'add';
+  buttonIconType?:
+    | 'button'
+    | 'copy_link'
+    | 'refresh'
+    | 'remove'
+    | 'delete'
+    | 'edit'
+    | 'view'
+    | 'add';
+  onClick?: () => void;
+  loading?: string | boolean;
 }
 
 export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
+  id,
   copyLinkUrl,
-  buttonText,
+  toastInfoText,
   disabled,
   className,
   tooltipText,
+  buttonType,
+  buttonIconType,
+  onClick,
+  loading,
 }) => {
-  const handleCopyLink = () => {
-    copyToClipboard(copyLinkUrl, `${buttonText} link copied successfully!`);
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+      console.log('Button clicked');
+    } else {
+      if (buttonType === 'copy_link' && copyLinkUrl) {
+        copyToClipboard(copyLinkUrl, `${toastInfoText}`);
+      }
+    }
+  };
+
+  const getIcon = () => {
+    switch (buttonIconType) {
+      case 'copy_link':
+        return <LinkIcon className="cursor-pointer" />;
+      case 'refresh':
+        return (
+          <RefreshCw
+            className={cn('cursor-pointer', loading ? 'animate-spin' : '')}
+          />
+        );
+      case 'remove':
+        return <X className="cursor-pointer" />;
+      case 'delete':
+        return <Delete className="cursor-pointer" />;
+      case 'edit':
+        return <Edit className="cursor-pointer" />;
+      case 'view':
+        return <Eye className="cursor-pointer" />;
+      case 'add':
+        return <Plus className="cursor-pointer" />;
+      default:
+        return null;
+    }
   };
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          onClick={handleCopyLink}
+          onClick={handleClick}
           variant="outline"
           size="sm"
           disabled={disabled}
           className={cn(
-            'text-gray-500  hover:bg-black hover:text-white disabled:bg-gray-200 disabled:text-gray-500 ',
+            'text-gray-500  bg-transparent border-none shadow-none hover:bg-black hover:text-white  disabled:text-gray-500 ',
             className
           )}
         >
-          <LinkIcon className="cursor-pointer" />
+          {getIcon()}
         </Button>
       </TooltipTrigger>
       <TooltipContent className="bg-gray-400">{tooltipText}</TooltipContent>

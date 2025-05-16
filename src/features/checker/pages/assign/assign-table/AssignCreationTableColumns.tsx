@@ -45,7 +45,9 @@ export const GetAssignCreationColumns = (
     name: 'Transaction Type',
     cell: (_: unknown, rowData: any) => (
       <span>
-        {rowData.transaction_type ? rowData.transaction_type.text : ' '}
+        {rowData?.transaction_type?.text ||
+          rowData?.transactionType?.name ||
+          '-'}
       </span>
     ),
   },
@@ -54,7 +56,11 @@ export const GetAssignCreationColumns = (
     id: 'purpose_type',
     name: 'Purpose Type',
     cell: (_: unknown, rowData: any) => (
-      <span>{rowData.purpose_type ? rowData.purpose_type.text : ' '}</span>
+      <span>
+        {rowData?.purpose_type?.text ||
+          rowData?.purposeType?.purpose_name ||
+          '-'}
+      </span>
     ),
   },
 ];

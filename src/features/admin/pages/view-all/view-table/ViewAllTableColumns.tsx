@@ -20,7 +20,9 @@ export const GetTransactionTableColumns = () => [
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
       <span>
-        {rowData.transaction_type ? rowData.transaction_type.text : '-'}
+        {rowData?.transaction_type?.text ||
+          rowData?.transactionType?.name ||
+          '-'}
       </span>
     ),
   },
@@ -30,7 +32,11 @@ export const GetTransactionTableColumns = () => [
     name: 'Purpose Type',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
-      <span>{rowData.purpose_type ? rowData.purpose_type.text : '-'}</span>
+      <span>
+        {rowData?.purpose_type?.text ||
+          rowData?.purposeType?.purpose_name ||
+          '-'}
+      </span>
     ),
   },
   {
