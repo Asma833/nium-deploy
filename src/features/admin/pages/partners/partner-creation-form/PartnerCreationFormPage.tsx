@@ -151,8 +151,6 @@ const PartnerCreationFormPage = () => {
   }, [selectedRow, reset]);
 
   const handleFormSubmit = handleSubmit(async (formdata: PartnerFormData) => {
-    console.log('formdata:', formdata);
-
     try {
       if (!formdata.productType.card && !formdata.productType.remittance) {
         toast.error('Please select at least one product type');
