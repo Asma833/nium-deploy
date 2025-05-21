@@ -83,7 +83,7 @@ export const GetTransactionTableColumns = (
   },
   {
     key: 'createdAt',
-    id: 'createdAt',
+    id: 'created_at',
     name: 'Order Date',
     className: 'min-w-0',
   },

@@ -34,7 +34,7 @@ export const GetAssignCreationColumns = (
   },
   {
     key: 'createdAt',
-    id: 'createdAt',
+    id: 'created_at',
     name: 'Order Date',
   },
   {

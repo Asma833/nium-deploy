@@ -98,7 +98,7 @@ const CompletedTransactionTable = () => {
         filter={{
           filterOption: true,
           mode: 'static',
-          dateFilterColumn: 'orderDate',
+          dateFilterColumn: 'created_at',
           statusFilerColumn: 'status',
           roleFilerColumn: 'role',
           renderFilterOptions: {

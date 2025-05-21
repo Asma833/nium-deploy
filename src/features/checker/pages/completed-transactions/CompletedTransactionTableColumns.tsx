@@ -8,7 +8,7 @@ export const GetTransactionTableColumns = () => [
   },
   {
     key: 'orderDate',
-    id: 'orderDate',
+    id: 'created_at',
     name: 'Order Date',
     cell: (_: unknown, rowData: any) => (
       <span>{rowData?.orderDate ? formatDate(rowData?.orderDate) : null}</span>
