@@ -369,17 +369,17 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   </FieldWrapper>
                 );
               })}
-            {showBuySell && (
+            {/* {showBuySell && (
               <FieldWrapper className={cn('w-full mb-2')}>
                 <MaterialText
                   className={cn(baseGeneralFieldStyle, 'w-full')}
                   name="fields.buySell"
-                  label="Transaction Mode"
+                  label="Buy/Sell"
                   disabled={true}
                   baseStyle={baseStyle({})}
                 />
               </FieldWrapper>
-            )}
+            )} */}
           </FormFieldRow>
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
@@ -391,6 +391,20 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               disabled={!documentUrl}
             >
               View Document
+            </Button>
+            <Button
+              type="button"
+              onClick={handleViewDocument}
+              disabled={!documentUrl}
+            >
+              eSign Document
+            </Button>
+            <Button
+              type="button"
+              onClick={handleViewDocument}
+              disabled={!documentUrl}
+            >
+              VKYC Download
             </Button>
           </FormFieldRow>
 

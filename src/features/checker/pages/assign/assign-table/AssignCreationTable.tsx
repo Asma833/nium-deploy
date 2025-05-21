@@ -110,7 +110,7 @@ const AssignCreationTable = () => {
   const columns = GetAssignCreationColumns(handleSelectionChange);
 
   return (
-    <div className="flex flex-col">
+    <div className="dynamic-table-wrap flex flex-col">
       <DynamicTable
         columns={columns}
         data={tableData || []}
@@ -139,7 +139,7 @@ const AssignCreationTable = () => {
         }}
       />
 
-      <div className="w-full  flex flex-col items-center justify-start gap-3">
+      <div className="w-full flex flex-col items-center justify-start gap-3">
         <div className="text-sm text-gray-500">
           {selectedRows.length} transaction
           {selectedRows.length !== 1 ? 's' : ''} selected

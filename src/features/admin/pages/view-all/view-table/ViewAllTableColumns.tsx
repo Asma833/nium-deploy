@@ -14,29 +14,21 @@ export const GetTransactionTableColumns = () => [
     className: 'min-w-0',
   },
   {
-    key: 'transaction_type',
-    id: 'transaction_type',
+    key: 'transaction_type_name',
+    id: 'transaction_type_name',
     name: 'Transaction Type',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.transaction_type?.text ||
-          rowData?.transactionType?.name ||
-          '-'}
-      </span>
+      <span>{rowData?.transaction_type_name?.name || '-'}</span>
     ),
   },
   {
-    key: 'purpose_type',
-    id: 'purpose_type',
+    key: 'purpose_type_name',
+    id: 'purpose_type_name',
     name: 'Purpose Type',
     className: 'min-w-0',
     cell: (_: unknown, rowData: any) => (
-      <span>
-        {rowData?.purpose_type?.text ||
-          rowData?.purposeType?.purpose_name ||
-          '-'}
-      </span>
+      <span>{rowData?.purpose_type_name?.purpose_name || '-'}</span>
     ),
   },
   {
@@ -68,6 +60,18 @@ export const GetTransactionTableColumns = () => [
     id: 'incident_status',
     name: 'Incident Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { incidentStatus?: boolean | null }) => (
+      <span>
+        {rowData.incidentStatus === null ||
+        rowData.incidentStatus === undefined ? (
+          <span className="status-badge pending">Pending</span>
+        ) : rowData.incidentStatus ? (
+          <span className="status-badge approved">Approved</span>
+        ) : (
+          <span className="status-badge rejected">Rejected</span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'incident_completion_date',

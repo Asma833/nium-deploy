@@ -53,7 +53,7 @@ const NuserCreationTable = () => {
   const columns = GetUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
-    <div className="">
+    <div className="dynamic-table-wrap">
       <div className="flex flex-col">
         <div
           className={cn(
@@ -73,7 +73,6 @@ const NuserCreationTable = () => {
       <DynamicTable
         columns={columns}
         data={users || []}
-        tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         renderLeftSideActions={() => (

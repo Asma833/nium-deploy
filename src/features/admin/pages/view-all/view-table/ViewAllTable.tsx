@@ -43,7 +43,7 @@ const ViewAllTable = () => {
   const totalRecords = viewAllData?.totalOrders || pagination.totalRecords || 0;
 
   return (
-    <div className="flex flex-col">
+    <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
         data={viewAllData || []}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import LogoHeader from '@/components/common/LogoHeader';
+import PoweredBy from './footer/PoweredBy';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -19,14 +20,15 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col justify-start">
+    <div className="min-h-screen w-full flex flex-col justify-start bg-secondary">
       <LogoHeader />
-      <div className="h-full w-full flex items-center justify-between flex-1 bg-secondary">
-        <div className="max-w-md mx-auto w-full bg-background border-2 border-gray-200 p-5 rounded-xl">
+      <div className="h-full w-full flex items-center justify-between flex-1">
+        <div className="max-w-md mx-auto w-full p-5 rounded-xl">
           <h1 className="text-2xl font-semibold mb-3">{title}</h1>
           {children}
         </div>
       </div>
+      <PoweredBy />
     </div>
   );
 };

@@ -25,10 +25,10 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
       <Header
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
-        className="fixed top-0 w-full lg:left-28 lg:w-[calc(100%-7rem)]  bg-background shadow-md"
+        className="fixed top-0 w-full lg:left-28 lg:w-[calc(100%-7rem)]  bg-secondary"
       />
       <main
-        className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-14 overflow-y-auto"
+        className="flex-1 w-[calc(100%-15rem)] h-[calc(100vh-70px)] mt-[70px] overflow-y-auto"
         onClick={() => {
           setIsSidebarOpen(false);
         }}

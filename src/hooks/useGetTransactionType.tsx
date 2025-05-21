@@ -1,46 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import { API } from '@/core/constant/apis';
+import { API, HEADER_KEYS } from '@/core/constant/apis';
 
-interface TransactionTypeItem {
+export interface TransactionTypeItem {
   id: string;
   text: string;
 }
 
 /**
+ * Fetches transaction types from the API with proper headers
+ * @returns Promise that resolves to an array of transaction types
+ */
+const fetchTransactionTypes = async (): Promise<TransactionTypeItem[]> => {
+  const response = await axiosInstance.get(API.CONFIG.GET_TRANSACTION_TYPES, {
+    headers: {
+      accept: 'application/json',
+      api_key: HEADER_KEYS.API_KEY,
+      partner_id: HEADER_KEYS.PARTNER_ID,
+    },
+  });
+  return response.data || [];
+};
+
+/**
  * Custom hook to get transaction type text by ID or fetch all transaction types
+ * Uses TanStack Query for efficient data fetching with caching
  * @param id Optional transaction type ID to look up
  * @returns Object containing found transaction type text and loading state
  */
 const useGetTransactionType = (id?: string) => {
-  const [transactionTypes, setTransactionTypes] = useState<
-    TransactionTypeItem[]
-  >([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    const fetchTransactionTypes = async () => {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get(
-          API.CONFIG.GET_TRANSACTION_TYPES
-        );
-        setTransactionTypes(response.data || []);
-        setError(null);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err
-            : new Error('Failed to fetch transaction types')
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTransactionTypes();
-  }, []);
+  const {
+    data: transactionTypes = [],
+    isLoading: loading,
+    error,
+    isError,
+  } = useQuery<TransactionTypeItem[], Error>({
+    queryKey: ['transactionTypes'],
+    queryFn: fetchTransactionTypes,
+    staleTime: 5 * 60 * 1000, // Cache data for 5 minutes
+    retry: 1,
+  });
 
   // Find the transaction name if ID is provided
   const transactionType = id
@@ -51,7 +50,7 @@ const useGetTransactionType = (id?: string) => {
     transactionType,
     transactionTypes,
     loading,
-    error,
+    error: isError ? error : null,
   };
 };
 

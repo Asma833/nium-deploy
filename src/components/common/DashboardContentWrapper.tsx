@@ -1,6 +1,7 @@
 import { cn } from '@/utils/cn';
-import { DashboardContentWrapperProps } from '../types/common-components.types';
 import PageTitle from '../layout/titles/PageTitle';
+import { DashboardContentWrapperProps } from '../types/common-components.types';
+import PoweredBy from '../layout/footer/PoweredBy';
 
 const DashboardContentWrapper = ({
   children,
@@ -9,12 +10,15 @@ const DashboardContentWrapper = ({
   return (
     <div
       className={cn(
-        'w-full px-4 pt-6 pb-6 sm:px-6 lg:px-6 bg-secondary min-h-[calc(100vh-150px)]',
+        'w-full flex flex-col justify-between items-center px-4 pt-6 pb-2 sm:px-6 lg:px-6 bg-secondary min-h-[calc(100vh-70px)]',
         className
       )}
     >
-      <PageTitle />
-      {children}
+      <div className="w-full flex flex-col items-center">
+        {/* <PageTitle /> */}
+        {children}
+      </div>
+      <PoweredBy />
     </div>
   );
 };

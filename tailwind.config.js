@@ -99,6 +99,30 @@ export default {
         '.invert-in-dark': {
           '@apply dark:invert': {},
         },
+        '.bg-pending-badge-bg': {
+          'background-color': 'var(--pending-badge-bg)',
+        },
+        '.bg-approved-badge-bg': {
+          'background-color': 'var(--approved-badge-bg)',
+        },
+        '.bg-rejected-badge-bg': {
+          'background-color': 'var(--rejected-badge-bg)',
+        },
+        '.bg-expired-badge-bg': {
+          'background-color': 'var(--expired-badge-bg)',
+        },
+        '.bg-completed-badge-bg': {
+          'background-color': 'var(--approved-badge-bg)',
+        },
+        '.bg-not-required-badge-bg': {
+          'background-color': 'var(--optional)',
+        },
+        '.bg-not-generated-badge-bg': {
+          'background-color': 'var(--pending-badge-bg)',
+        },
+        '.text-badge-fg': {
+          color: 'var(--badge-fg)',
+        },
       });
     },
   ],

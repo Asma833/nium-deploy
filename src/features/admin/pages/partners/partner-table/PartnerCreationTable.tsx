@@ -65,7 +65,7 @@ const PartnerCreationTable = () => {
   const columns = GetUserTableColumns(handleStatusChange, handleNavigate);
 
   return (
-    <div className="table-wrap">
+    <div className="table-wrap dynamic-table-wrap">
       <div className="flex flex-col">
         <div
           className={cn(

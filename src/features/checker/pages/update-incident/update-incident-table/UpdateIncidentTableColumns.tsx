@@ -1,7 +1,7 @@
+import { ExternalLink } from 'lucide-react';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
-import { ExternalLink } from 'lucide-react';
 
 const NiumOrderID = ({
   rowData,
@@ -34,13 +34,13 @@ const NiumOrderID = ({
       onClick={() => {
         openModal(rowData);
       }}
-      disabled={
-        !(
-          isNuimOrderIdActive__esign ||
-          isNuimOrderIdActive__vkcy ||
-          isNuimOrderIdActive__esignVkcy
-        )
-      }
+      // disabled={
+      //   !(
+      //     isNuimOrderIdActive__esign ||
+      //     isNuimOrderIdActive__vkcy ||
+      //     isNuimOrderIdActive__esignVkcy
+      //   )
+      // }
     >
       {rowData.nium_order_id}
       <ExternalLink
@@ -78,7 +78,7 @@ export const GetTransactionTableColumns = (
   {
     key: 'partner_order_id',
     id: 'partner_order_id',
-    name: 'Partner ID',
+    name: 'Partner Order ID',
     className: 'min-w-0',
   },
   {
@@ -128,11 +128,11 @@ export const GetTransactionTableColumns = (
       <span>
         {rowData.incident_status === null ||
         rowData.incident_status === undefined ? (
-          <span className="text-orange-600">Pending</span>
+          <span className="status-badge pending">Pending</span>
         ) : rowData.incident_status ? (
-          <span className="text-green-600">Approved</span>
+          <span className="status-badge approved">Approved</span>
         ) : (
-          <span className="text-red-600">Rejected</span>
+          <span className="status-badge rejected">Rejected</span>
         )}
       </span>
     ),

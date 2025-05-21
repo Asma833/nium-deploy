@@ -46,6 +46,17 @@ export const GetTransactionTableColumns = () => [
     id: 'esignStatus',
     name: 'E-Sign Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { esignStatus?: string }) => (
+      <span>
+        {rowData.esignStatus && (
+          <span
+            className={`status-badge esign-${rowData.esignStatus.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            {rowData.esignStatus}
+          </span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'esignStatusCompletionDate',
@@ -65,6 +76,17 @@ export const GetTransactionTableColumns = () => [
     id: 'vkycStatus',
     name: 'VKYC Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { vkycStatus?: string }) => (
+      <span>
+        {rowData.vkycStatus && (
+          <span
+            className={`status-badge vkyc-${rowData.vkycStatus.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            {rowData.vkycStatus}
+          </span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'vkycCompletionDate',
@@ -84,6 +106,18 @@ export const GetTransactionTableColumns = () => [
     id: 'incidentStatus',
     name: 'Incident Status',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { incidentStatus?: boolean | null }) => (
+      <span>
+        {rowData.incidentStatus === null ||
+        rowData.incidentStatus === undefined ? (
+          <span className="status-badge pending">Pending</span>
+        ) : rowData.incidentStatus ? (
+          <span className="status-badge approved">Approved</span>
+        ) : (
+          <span className="status-badge rejected">Rejected</span>
+        )}
+      </span>
+    ),
   },
   {
     key: 'incidentCompletionDate',

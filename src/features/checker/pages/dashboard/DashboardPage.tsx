@@ -17,18 +17,20 @@ export const Dashboard: React.FC = () => {
           {error ? 'Something went wrong' : ''}
         </span>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {dashboardItems.map((item) => (
-          <DashboardCard
-            key={item.id}
-            id={item.id}
-            status={item.status}
-            path={item.path}
-            count={item.count}
-            title={item.title}
-            isLoading={isLoading}
-          />
-        ))}
+      <div className="flex w-full">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {dashboardItems.map((item) => (
+            <DashboardCard
+              key={item.id}
+              id={item.id}
+              status={item.status}
+              path={item.path}
+              count={item.count}
+              title={item.title}
+              isLoading={isLoading}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

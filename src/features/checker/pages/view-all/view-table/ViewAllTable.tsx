@@ -55,7 +55,7 @@ const ViewAllTable = () => {
       vkycCompletionDate: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
         : '-',
-      incidentStatus: order.incident_status ? 'Yes' : 'No',
+      incidentStatus: order.incident_status,
       incidentCompletionDate: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
         : '-',
@@ -86,7 +86,7 @@ const ViewAllTable = () => {
     checkerOrdersData?.totalOrders || pagination.totalRecords || 0;
 
   return (
-    <div className="flex flex-col">
+    <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
         data={checkerOrdersData?.orders?.map(transformOrderForTable) || []}

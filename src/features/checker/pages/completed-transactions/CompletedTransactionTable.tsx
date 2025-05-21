@@ -80,7 +80,7 @@ const CompletedTransactionTable = () => {
   const totalRecords = checkerOrdersData?.totalOrders || 0;
 
   return (
-    <div className="flex flex-col">
+    <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
         data={getTableData()}

@@ -89,73 +89,70 @@ const UpdateIncidentCreationTable = () => {
   );
 
   return (
-    <div>
-      <div className="flex flex-col">
-        <div
-          className={cn(
-            'mb-4 flex items-center',
-            !filterApi.loading ? 'hidden' : '',
-            !filterApi.error ? 'hidden' : ''
-          )}
-        >
-          {(filterApi.loading || pagination.loading || isLoading) && (
-            <span className="text-blue-500">Loading data...</span>
-          )}
-          {(filterApi.error || pagination.error || error) && (
-            <span className="text-red-500">Error loading data</span>
-          )}
-        </div>
-
-        <DynamicTable
-          columns={columns}
-          data={data && data.orders.length > 0 ? data.orders : []}
-          defaultSortColumn="nium_order_id"
-          defaultSortDirection="asc"
-          loading={pagination.loading}
-          paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
-          onPageChange={
-            isPaginationDynamic
-              ? pagination.handlePageChange
-              : async (_page: number, _pageSize: number) => []
-          }
-          totalRecords={pagination.totalRecords}
-          filter={{
-            filterOption: true,
-            dateFilterColumn: 'createdAt',
-            mode: isTableFilterDynamic ? 'dynamic' : 'static',
-            renderFilterOptions: {
-              search: true,
-              dateRange: true,
-              applyAction: true,
-              resetAction: true,
-            },
-            // Dynamic callbacks - API functions
-            dynamicCallbacks: isTableFilterDynamic
-              ? {
-                  onSearch: filterApi.search,
-                }
-              : undefined,
-          }}
-        />
-
-        {isModalOpen && (
-          <DialogWrapper
-            triggerBtnText=""
-            title="Update Incident"
-            footerBtnText=""
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
-            description={selectedRowData?.nium_order_id ?? ''}
-            renderContent={
-              <UpdateIncidentForm
-                formActionRight="view"
-                rowData={selectedRowData}
-                setIsModalOpen={setIsModalOpen}
-              />
-            }
-          />
+    <div className="dynamic-table-wrap">
+      <div
+        className={cn(
+          'mb-4 flex items-center',
+          !filterApi.loading ? 'hidden' : '',
+          !filterApi.error ? 'hidden' : ''
+        )}
+      >
+        {(filterApi.loading || pagination.loading || isLoading) && (
+          <span className="text-blue-500">Loading data...</span>
+        )}
+        {(filterApi.error || pagination.error || error) && (
+          <span className="text-red-500">Error loading data</span>
         )}
       </div>
+
+      <DynamicTable
+        columns={columns}
+        data={data && data.orders.length > 0 ? data.orders : []}
+        defaultSortColumn="nium_order_id"
+        defaultSortDirection="asc"
+        loading={pagination.loading}
+        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
+        onPageChange={
+          isPaginationDynamic
+            ? pagination.handlePageChange
+            : async (_page: number, _pageSize: number) => []
+        }
+        totalRecords={pagination.totalRecords}
+        filter={{
+          filterOption: true,
+          dateFilterColumn: 'createdAt',
+          mode: isTableFilterDynamic ? 'dynamic' : 'static',
+          renderFilterOptions: {
+            search: true,
+            dateRange: true,
+            applyAction: true,
+            resetAction: true,
+          },
+          // Dynamic callbacks - API functions
+          dynamicCallbacks: isTableFilterDynamic
+            ? {
+                onSearch: filterApi.search,
+              }
+            : undefined,
+        }}
+      />
+
+      {isModalOpen && (
+        <DialogWrapper
+          triggerBtnText=""
+          title="Update Incident"
+          footerBtnText=""
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          renderContent={
+            <UpdateIncidentForm
+              formActionRight="view"
+              rowData={selectedRowData}
+              setIsModalOpen={setIsModalOpen}
+            />
+          }
+        />
+      )}
     </div>
   );
 };

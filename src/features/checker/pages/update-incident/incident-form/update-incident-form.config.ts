@@ -53,7 +53,7 @@ export const updateFormIncidentConfig = {
       placeholder: 'Enter Transaction Type',
     },
     purpose: {
-      label: 'Purpose',
+      label: 'Purpose Type',
       name: 'purpose_type',
       type: FieldType.Text,
       placeholder: 'Enter Purpose',
@@ -64,7 +64,7 @@ export const updateFormIncidentConfig = {
       label: 'Buy/Sell',
       name: 'incidentform.buySell',
       type: FieldType.Text,
-      placeholder: 'Enter Transaction Type',
+      placeholder: 'Enter Buy/Sell',
     },
   },
   approveReject: {

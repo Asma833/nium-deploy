@@ -62,7 +62,7 @@ export function DialogWrapper({
           className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
           onClick={() => setIsOpen(false)}
         >
-          <X className="w-5 h-5 text-custom-primary hover:opacity-95 outline-none" />
+          <X className="w-7 h-7 text-custom-primary hover:opacity-95 outline-none font-bold" />
         </button>
         {showHeader && (
           <DialogHeader>

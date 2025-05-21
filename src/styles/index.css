@@ -37,7 +37,12 @@
     --table-bg: #ffffff;
     --table-header: #f3f3f3;
     --table-border: #f0f0f0;
-    --sidenav-bg: #f9fafc;
+    --sidenav-bg: #ffffff;
+    --pending-badge-bg: #e1eafa;
+    --approved-badge-bg: #dffce6;
+    --rejected-badge-bg: #fee0e3;
+    --expired-badge-bg: #fee0e3;
+    --badge-fg: #3f3f3f;
   }
   .dark {
     --background: 0 0% 14.9%;
@@ -73,6 +78,11 @@
     --table-header: #000000;
     --table-border: #000000;
     --sidenav-bg: #353535;
+    --pending-badge-bg: #e1eafa;
+    --approved-badge-bg: #dffce6;
+    --rejected-badge-bg: #fee0e3;
+    --expired-badge-bg: #fee0e3;
+    --badge-fg: #3f3f3f;
   }
 }
 
@@ -86,8 +96,57 @@
 }
 
 .dashboard-card {
-  @apply rounded-xl overflow-hidden transition-all duration-300 
-    lg:hover:shadow-xl hover:opacity-85 h-[120px] ease-linear;
+  @apply bg-background border border-gray-400 rounded-lg p-4 h-[146px] flex justify-between items-center;
+}
+
+.status-badge.pending {
+  @apply bg-pending-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.approved {
+  @apply bg-approved-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.rejected {
+  @apply bg-rejected-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.expired {
+  @apply bg-expired-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+/* E-Sign status badges */
+.status-badge.esign-completed {
+  @apply bg-completed-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.esign-not-required {
+  @apply bg-not-required-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.esign-not-generated {
+  @apply bg-not-generated-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.esign-pending {
+  @apply bg-pending-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+/* VKYC status badges */
+.status-badge.vkyc-completed {
+  @apply bg-completed-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.vkyc-not-required {
+  @apply bg-not-required-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.status-badge.vkyc-pending {
+  @apply bg-pending-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+
+.dynamic-table-wrap {
+  @apply w-full flex flex-col;
 }
 
 .MuiStepper-root .Mui-completed.stepper-btn {

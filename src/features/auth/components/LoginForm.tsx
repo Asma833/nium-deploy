@@ -88,10 +88,10 @@ const LoginForm = () => {
           )}
         />
 
-        <div className="text-center">
+        <div className="text-right">
           <Link
             to="/send-password-reset-link"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors"
           >
             Forgot Password?
           </Link>

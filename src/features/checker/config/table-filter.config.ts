@@ -1,12 +1,13 @@
 //  transaction type options
 export const transactionTypeOptions = [
-  { label: 'CARD LOAD', value: 'CARD LOAD' },
-  { label: 'CARD RELOAD', value: 'CARD RELOAD' },
+  { label: 'Card Load', value: 'CARD LOAD' },
+  { label: 'Card Reload', value: 'CARD RELOAD' },
   {
-    label: 'CARD ENCASHMENT',
-    value: 'CARD ENCASHMENT',
+    label: 'Card Refund',
+    value: 'CARD REFUND',
   },
-  { label: 'REMITTANCE', value: 'REMITTANCE' },
+  { label: 'Remittance', value: 'REMITTANCE' },
+  { label: 'TT purchase', value: 'TT PURCHASE' },
 ];
 
 //  status options

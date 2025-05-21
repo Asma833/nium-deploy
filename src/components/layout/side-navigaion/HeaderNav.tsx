@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <nav
       className={cn(
-        `bg-background fixed top-0 right-0 border-b border-gray-200 h-[70px]  z-40`,
+        `bg-secondary fixed top-0 right-0 h-[70px] z-40`,
         className
       )}
     >
@@ -36,19 +36,19 @@ const Header: React.FC<HeaderProps> = ({
         {/* Spacer to push icons to the right */}
         <div className="flex-1">
           <div className="block">
-            <h1 className="text-2xl font-bold">{role && toTitleCase(role)}</h1>
+            {/* <h1 className="text-2xl font-bold">{role && toTitleCase(role)}</h1> */}
           </div>
         </div>
 
         {/* Notification and Logout Buttons (Right) */}
         <div className="flex items-center space-x-4">
           <ThemeToggle />
-          <button className="p-2 rounded-full hover:bg-muted/20">
+          {/* <button className="p-2 rounded-full hover:bg-muted/20">
             <Bell className="w-5 h-5 text-muted-foreground" />
-          </button>
+          </button> */}
           <LogoutWrapper>
             <button className="p-2 rounded-full hover:bg-muted/20">
-              <Power className="w-5 h-5 text-muted-foreground" />
+              <Power className="w-5 h-5 text-foreground" />
             </button>
           </LogoutWrapper>
         </div>
