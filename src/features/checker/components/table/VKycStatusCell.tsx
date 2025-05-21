@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
 const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
@@ -8,7 +9,7 @@ const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
           <span
             className={`status-badge esign-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}
           >
-            {rowData.v_kyc_status}
+            {_.capitalize(rowData.v_kyc_status)}
           </span>
         )
       ) : (

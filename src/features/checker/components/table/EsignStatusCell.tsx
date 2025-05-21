@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
 const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
@@ -8,7 +9,7 @@ const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
           <span
             className={`status-badge esign-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}
           >
-            {rowData.e_sign_status}
+            {_.capitalize(rowData.e_sign_status)}
           </span>
         )
       ) : (

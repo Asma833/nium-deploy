@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
 const IncidentStatusCell = ({ rowData }: { rowData: Order }) => {

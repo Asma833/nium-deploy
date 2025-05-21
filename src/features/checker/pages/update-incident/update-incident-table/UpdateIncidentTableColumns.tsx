@@ -1,67 +1,11 @@
-import { ExternalLink } from 'lucide-react';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
-import DocVerificationStatusCell from '@/features/checker/components/table/DocVerificationStatusCell';
-
-const NiumOrderID = ({
-  rowData,
-  openModal,
-}: {
-  rowData: any;
-  openModal: (value: string) => void;
-}) => {
-  const isNuimOrderIdActive__esign =
-    rowData?.is_esign_required === true &&
-    rowData?.is_v_kyc_required === false &&
-    rowData?.e_sign_status === 'completed' &&
-    rowData?.v_kyc_status === 'not required';
-
-  const isNuimOrderIdActive__vkcy =
-    rowData?.is_esign_required === false &&
-    rowData?.is_v_kyc_required === true &&
-    rowData?.e_sign_status === 'not required' &&
-    rowData?.v_kyc_status === 'completed';
-
-  const isNuimOrderIdActive__esignVkcy =
-    rowData?.is_esign_required === true &&
-    rowData?.is_v_kyc_required === true &&
-    rowData?.e_sign_status === 'completed' &&
-    rowData?.v_kyc_status === 'completed';
-
-  return (
-    <button
-      className="text-pink-600 cursor-pointer underline flex items-center justify-center gap-1 disabled:opacity-50"
-      onClick={() => {
-        openModal(rowData);
-      }}
-      // disabled={
-      //   !(
-      //     isNuimOrderIdActive__esign ||
-      //     isNuimOrderIdActive__vkcy ||
-      //     isNuimOrderIdActive__esignVkcy
-      //   )
-      // }
-    >
-      {rowData.nium_order_id}
-      <ExternalLink
-        size={15}
-        className="mr-2"
-        style={{
-          display:
-            !isNuimOrderIdActive__esign &&
-            !isNuimOrderIdActive__vkcy &&
-            !isNuimOrderIdActive__esignVkcy
-              ? 'none'
-              : 'block',
-        }}
-      />
-    </button>
-  );
-};
+import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
+import CompletedTransactionStatusCell from '@/features/checker/components/table/CompletedTransactionStatusCell';
 
 export const GetTransactionTableColumns = (
   openModal: (value: string) => void,
@@ -137,10 +81,10 @@ export const GetTransactionTableColumns = (
   {
     key: 'doc_verification_status',
     id: 'doc_verification_status',
-    name: 'Document Verification Status',
+    name: 'Completed Transaction Status',
     className: 'min-w-0  max-w-[70px]',
     cell: (_: unknown, rowData: any) => (
-     <DocVerificationStatusCell rowData={rowData} />
+      <CompletedTransactionStatusCell rowData={rowData} />
     ),
   },
   {

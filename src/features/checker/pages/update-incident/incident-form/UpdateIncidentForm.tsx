@@ -55,6 +55,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
+  const [isVkycDownloadLink, setIsVkycDownloadLink] = useState(false);
   const queryClient = useQueryClient();
 
   // State to track if we should show the buy/sell field
@@ -142,6 +144,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       const buySellValue = rowData?.transaction_mode;
       const shouldShowBuySell = buySellValue !== null;
       setShowBuySell(shouldShowBuySell);
+      setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
+      setIsEsignDocumentLink(rowData.is_esign_required ?? false);
 
       const mappedData = {
         niumId: rowData.nium_order_id || '',
@@ -392,20 +396,25 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             >
               View Document
             </Button>
-            <Button
-              type="button"
-              onClick={handleViewDocument}
-              disabled={!documentUrl}
-            >
-              eSign Document
-            </Button>
-            <Button
-              type="button"
-              onClick={handleViewDocument}
-              disabled={!documentUrl}
-            >
-              VKYC Download
-            </Button>
+            {isEsignDocumentLink && (
+              <Button
+                type="button"
+                onClick={handleViewDocument}
+                disabled={!documentUrl}
+              >
+                eSign Document
+              </Button>
+            )}
+
+            {isVkycDownloadLink && (
+              <Button
+                type="button"
+                onClick={handleViewDocument}
+                disabled={!documentUrl}
+              >
+                VKYC Document
+              </Button>
+            )}
           </FormFieldRow>
 
           <FormFieldRow rowCols={handleRowCols()}>

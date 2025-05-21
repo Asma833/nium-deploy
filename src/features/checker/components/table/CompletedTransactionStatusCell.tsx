@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
-const DocVerificationStatusCell = ({ rowData }: { rowData: Order }) => {
+const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
   const esignStatus =
     rowData.is_esign_required && rowData.e_sign_status
       ? rowData.e_sign_status === 'approved' ||
@@ -52,4 +52,4 @@ const DocVerificationStatusCell = ({ rowData }: { rowData: Order }) => {
   );
 };
 
-export default DocVerificationStatusCell;
+export default CompletedTransactionStatusCell;
