@@ -68,7 +68,11 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
       case 'refresh':
         return (
           <RefreshCw
-            className={cn('cursor-pointer', loading ? 'animate-spin' : '')}
+            className={cn(
+              'cursor-pointer text-inherit',
+              loading ? 'animate-spin' : '',
+              disabled ? 'text-gray-500' : ''
+            )}
           />
         );
       case 'remove':
@@ -95,14 +99,15 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           size="sm"
           disabled={disabled}
           className={cn(
-            'text-gray-500  bg-transparent border-none shadow-none hover:bg-black hover:text-white  disabled:text-gray-500 ',
-            className
+            'text-gray-700  bg-transparent border-none shadow-none',
+            className,
+            'hover:bg-primary hover:text-white  disabled:text-gray-500'
           )}
         >
           {getIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-gray-400">{tooltipText}</TooltipContent>
+      <TooltipContent className="bg-gray-600">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

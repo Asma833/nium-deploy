@@ -122,8 +122,8 @@ export const GetTransactionTableColumns = (
     ),
   },
   {
-    key: 'generateLink',
-    id: 'generateLink',
+    key: 'generate_esign_link',
+    id: 'generate_esign_link',
     name: 'Generate Esign Link',
     className: 'min-w-0 max-w-[100px]',
     cell: (_: unknown, rowData: any) => (
@@ -141,7 +141,8 @@ export const GetTransactionTableColumns = (
           rowData?.incident_status === null ||
           rowData?.incident_status === undefined ||
           rowData?.e_sign_status === 'expired' ||
-          rowData?.e_sign_status === 'rejected'
+          rowData?.e_sign_status === 'rejected' ||
+          rowData?.e_sign_status === 'not generated'
         }
       />
     ),
