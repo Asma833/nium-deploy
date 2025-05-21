@@ -1,9 +1,5 @@
-<svg width="66" height="73" viewBox="0 0 66 73" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect width="66" height="73" fill="url(#pattern0_2_25)"/>
-<defs>
-<pattern id="pattern0_2_25" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image0_2_25" transform="scale(0.0151515 0.0136986)"/>
-</pattern>
-<image id="image0_2_25" width="66" height="73" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABJCAQAAAAjmjigAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfpAwoOERSWH6A5AAADpklEQVRo3u2Z22sdRRzHP3POyTHJSdJE0zQmXtKgsbaUQpNGMSUFzYuXQmuTSBtvNApS+wcIRdR4a7VVaiwULBb1JVLB1/4NRlBQIeJLo3ijCrVQaFTy9eHksue4Mzu7ZyMV9jNvOzszn/3Nb2bn7IGMjIyMjP8RJm6DMUaZ1yyzXFi51sEAA5w0JX5aa99+ptingnCUIc2oid61GP5x5jitrc7hV0uXXlQdXekqbGAnfZ4Cy6VNHynPRs8RnDlxP1tBcJzFBPJ7+dS0cqk2iS4287O+qSGG7fxmCvydXKKVG/lDtWb7dSwYg5JJpKPgqxEqkZ5CWQP+NDhEcv++1M3dFFJTgAUWaJbChrJJPMgM2/VVagplLjOiRVp8bzcUyMfcFfzKKcEtljEr6GQTv2gu5TiUKXHF5KJ3nIMsctbxLP06oB7nPjmuEeWs9c8I1kdJ3Moetlu7eFfwJB9zyFI/LGiiQBP1ljtKwpGeQSwdbBHUA/dyjmdD6ncJmoGdnOGg9UHeFtzsGv0u3mK/tfluwTqwaCwrwMN8zavWXm5Ted+wkqeBorV5u6CwdGe1xqoCbOYwI65VknwyEBoVtIVoBBXG+I5jzoV60jUhE1xkOmKlj4doxFNAjwqut0ncw2meiNxwghoTTDMd2IB8FNCmpQQPpYsRtkR2UakRxE8B5VxZUaSNkkcn4Rq+ChGpaciT8+ymWiOWQuT68O7oZUF3wrYpRSK4IgDu4xMOpyFRpJXGRAqxNex0MMTtCRViathxvzmiFPw1el1vj0eY50QMhVG+5WjVSvHRsO0znjlePi9UKhBb403BTa714TpdNgcOJEGFao2NjDOYLCMAtnGE3dbGD6ycJ6oVKjX28AVT1l66BXVEY2k+IGi0KAQ13BMyJaI+GnQyzB3OQO5jjtct9WOCNhrYwDrLHUV5fBo6wK+8Y5XIa6+e15Bjvvv0nCbVZK2fsJwlqsRa6eaSfvSYtfjU8ZfHL/TIvKitvBSdD8sM8wFPr4FC/1JihxGSJzfQw++6kOpU+H0sqaCeDlpSi4GR0fuCHut4xqbRwlVdTiEGhveAVwyBj6//cTSMzjhjEEkLfXTWpFCvszIeCs4NbJBeEMwkeohBPjMlriSPwiqHEOfUHjMGRb0mU30Uro2HOM8RrfcUaNCkcrSnKbDMU/zAh9oRIdCjN1R0HVpCifl/xySPMa9ZPudLrq5czXMnOxjgBdPI92sRgYyMjIyMjGuRfwAnqqF3P0xpuQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNS0wMy0xMFQxNDoxNjoxNSswMDowMGxR14YAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjUtMDMtMTBUMTQ6MTY6MTUrMDA6MDAdDG86AAAAAElFTkSuQmCC"/>
-</defs>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 60 60">
+  <!-- Generator: Adobe Illustrator 29.5.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 141)  -->
+  <path d="M30,11.09c-10.43,0-18.91,8.48-18.91,18.91s8.48,18.91,18.91,18.91,18.91-8.48,18.91-18.91-8.48-18.91-18.91-18.91ZM37.79,34.82c.82.82.82,2.15,0,2.97-.41.41-.95.62-1.49.62s-1.08-.21-1.49-.62l-4.82-4.82-4.82,4.82c-.41.41-.95.62-1.49.62s-1.08-.21-1.49-.62c-.82-.82-.82-2.15,0-2.97l4.82-4.82-4.82-4.82c-.82-.82-.82-2.15,0-2.97.82-.82,2.15-.82,2.97,0l4.82,4.82,4.82-4.82c.82-.82,2.15-.82,2.97,0s.82,2.15,0,2.97l-4.82,4.82,4.82,4.82Z"/>
 </svg>

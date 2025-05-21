@@ -96,7 +96,7 @@
 }
 
 .dashboard-card {
-  @apply bg-background border border-gray-400 rounded-lg p-4 h-[146px] flex justify-between items-center;
+  @apply bg-background border-2 border-gray-200 rounded-sm p-4 h-[126px] flex justify-between items-center;
 }
 
 .status-badge.pending {
