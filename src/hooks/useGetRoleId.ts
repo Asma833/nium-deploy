@@ -14,34 +14,41 @@ interface Role {
   updatedAt: string;
 }
 
-/**
- * A hook that provides a function to get role IDs by name
- * @returns A function that accepts a role name and returns the corresponding ID
- */
+let cachedRoles: Role[] | null = null;  // <-- corrected initialization
+let cachedPromise: Promise<Role[]> | null = null;
+
 export const useGetRoleId = () => {
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [roles, setRoles] = useState<Role[]>(cachedRoles || []);
+  const [loading, setLoading] = useState<boolean>(cachedRoles === null);
   const [error, setError] = useState<Error | null>(null);
   const { getUserHashedKey } = useCurrentUser();
 
   useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await axiosInstance.get(API.USER.GET_ROLES);
-        setRoles(response.data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error('Failed to fetch roles')
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (cachedRoles !== null) {
+      setRoles(cachedRoles);
+      setLoading(false);
+      return;
+    }
 
-    fetchRoles();
+    if (!cachedPromise) {
+      cachedPromise = axiosInstance
+        .get(API.USER.GET_ROLES)
+        .then((response) => {
+          cachedRoles = Array.isArray(response.data) ? response.data : [];
+          return cachedRoles;
+        })
+        .catch((err) => {
+          cachedRoles = [];
+          throw err;
+        });
+    }
+
+    cachedPromise!
+      .then((rolesData) => setRoles(rolesData))
+      .catch((err) => setError(err instanceof Error ? err : new Error('Failed to fetch roles')))
+      .finally(() => setLoading(false));
   }, []);
 
-  // Function to get role ID by name
   const getRoleId = (roleName: string): string | undefined => {
     const role = roles.find(
       (r) => r.name.toLowerCase() === roleName.toLowerCase()
@@ -49,7 +56,6 @@ export const useGetRoleId = () => {
     return role?.id;
   };
 
-  // Function to get hashed role key by name
   const getHashedRoleId = (roleName: string): string | undefined => {
     const role = roles.find(
       (r) => r.name.toLowerCase() === roleName.toLowerCase()
@@ -57,7 +63,6 @@ export const useGetRoleId = () => {
     return role?.hashed_key;
   };
 
-  // Function to get the logged-in user's hashed key
   const getCurrentUserHashedKey = (): string | undefined => {
     return getUserHashedKey();
   };

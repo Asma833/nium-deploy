@@ -7,11 +7,11 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 type TransactionType = 'all' | 'completed';
 
-export const useGetAllOrders = <T = any,>(
+export const useGetAllOrders = (
   initialTransactionType: TransactionType = 'all',
   autoFetch: boolean = true
 ) => {
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
   const [transactionType, setTransactionType] = useState<TransactionType>(
