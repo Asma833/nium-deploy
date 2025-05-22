@@ -26,11 +26,11 @@ export const GetUserTableColumns = (
       id: 'email',
       name: 'Email',
     },
-    {
-      key: 'createdAt',
-      id: 'createdAt',
-      name: 'Creation Date',
-    },
+    // {
+    //   key: 'createdAt',
+    //   id: 'createdAt',
+    //   name: 'Creation Date',
+    // },
     {
       key: 'status',
       id: 'status',

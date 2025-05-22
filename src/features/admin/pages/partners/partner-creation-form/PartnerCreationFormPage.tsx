@@ -191,7 +191,7 @@ const PartnerCreationFormPage = () => {
         {isEditMode ? 'Edit Partner' : 'Create Partner'}
       </h2>
 
-      <FormContentWrapper className="py-2 lg:pr-32 md:pr-0">
+      <FormContentWrapper className="py-2 lg:pr-32 md:pr-0 w-full">
         <Spacer>
           <FormFieldRow rowCols={screenWidth < 768 ? 1 : 2} className="mb-4">
             {Object.entries(userFormConfig.fields)

@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+import { useMutation } from '@tanstack/react-query';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { partnerApi } from '../action/partnerApi';
-import { UserCreationRequest } from '../types/partner.type';
 import { useGetProducts } from '@/hooks/useGetProducts';
+import { UserCreationRequest } from '../types/partner.type';
+import { partnerApi } from '../action/partnerApi';
 
 interface UpdatePartnerParams {
   data: Omit<UserCreationRequest, 'confirmPassword'>;

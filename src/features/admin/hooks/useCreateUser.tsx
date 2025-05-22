@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { userApi } from '../action/userApi';
-import { toast } from 'sonner';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useGetRoleId from '@/hooks/useGetRoleId';
 // Form data structure
@@ -35,12 +36,13 @@ export const useCreateUser = (
     onUserCreateSuccess,
   }: { onUserCreateSuccess: (data: UserApiPayload) => void }
 ) => {
+  const navigate = useNavigate();
   const { getRoleId } = useGetRoleId();
   const { getBankAccountId, getBranchId, getBusinessType } = useCurrentUser();
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
   ): Promise<UserApiPayload> => {
-    const roleId = getRoleId(role);
+    const roleId = getRoleId('checker');
     return {
       role_id: roleId || '',
       email: formData.email,
@@ -65,6 +67,7 @@ export const useCreateUser = (
     onSuccess: (data: UserApiPayload) => {
       toast.success('User created successfully');
       onUserCreateSuccess(data);
+      navigate('/admin/users');
     },
     onError: (error: Error) => {
       toast.error(
