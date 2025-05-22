@@ -14,10 +14,7 @@ const DashboardContentWrapper = ({
         className
       )}
     >
-      <div className="w-full flex flex-col items-center">
-        {/* <PageTitle /> */}
-        {children}
-      </div>
+      <div className="w-full flex flex-col items-center">{children}</div>
       <PoweredBy />
     </div>
   );

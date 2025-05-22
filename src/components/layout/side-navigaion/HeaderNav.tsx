@@ -3,8 +3,6 @@ import { Menu, Bell, Power } from 'lucide-react';
 import LogoutWrapper from '@/features/auth/components/LogoutWrapper';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { cn } from '@/utils/cn';
-import useGetCurrentUser from '@/hooks/useGetCurrentUser';
-import { toTitleCase } from '@/utils/textFormater';
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -17,7 +15,6 @@ const Header: React.FC<HeaderProps> = ({
   setIsSidebarOpen,
   className,
 }) => {
-  const { role } = useGetCurrentUser();
   return (
     <nav
       className={cn(
@@ -33,19 +30,9 @@ const Header: React.FC<HeaderProps> = ({
           {isSidebarOpen ? '' : <Menu className="w-6 h-6" />}
         </button>
 
-        {/* Spacer to push icons to the right */}
-        <div className="flex-1">
-          <div className="block">
-            {/* <h1 className="text-2xl font-bold">{role && toTitleCase(role)}</h1> */}
-          </div>
-        </div>
-
         {/* Notification and Logout Buttons (Right) */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 ml-auto">
           <ThemeToggle />
-          {/* <button className="p-2 rounded-full hover:bg-muted/20">
-            <Bell className="w-5 h-5 text-muted-foreground" />
-          </button> */}
           <LogoutWrapper>
             <button className="p-2 rounded-full hover:bg-muted/20">
               <Power className="w-5 h-5 text-foreground" />

@@ -4,6 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { userApi } from '../action/userApi';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useGetRoleId from '@/hooks/useGetRoleId';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 // Form data structure
 export interface UserCreationRequest {
   email: string;
@@ -38,6 +40,7 @@ export const useCreateUser = (
 ) => {
   const navigate = useNavigate();
   const { getRoleId } = useGetRoleId();
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
   const { getBankAccountId, getBranchId, getBusinessType } = useCurrentUser();
   const mapFormDataToApiPayload = async (
     formData: UserCreationRequest
@@ -51,6 +54,7 @@ export const useCreateUser = (
       business_type: getBusinessType() || '',
       branch_id: getBranchId() || '',
       bank_account_id: getBankAccountId() || '',
+      created_by: userId || '',
     };
   };
 
