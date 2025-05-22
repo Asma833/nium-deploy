@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { getEndpoint } from '@/core/constant/apis';
 import { toast } from 'sonner';
-import axios from 'axios';
 
 export const useGetUserApi = (
   endpointKey: string,

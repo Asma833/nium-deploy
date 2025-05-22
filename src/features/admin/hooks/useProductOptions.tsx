@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 import { partnerApi } from '../action/partnerApi';
 
 interface ProductOption {

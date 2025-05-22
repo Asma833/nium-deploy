@@ -83,7 +83,7 @@ export function DynamicTable<T extends Record<string, any>>({
   data: initialData,
   initialPageSize = 10,
   defaultSortColumn,
-  defaultSortDirection = 'asc',
+  defaultSortDirection = 'desc',
   pageSizeOption = [10, 15, 20, 25, 50],
   onRowClick,
   filter,
@@ -262,38 +262,38 @@ export function DynamicTable<T extends Record<string, any>>({
   //     setDynamicData([]);
   //   }
   // };
-const [resetKey, setResetKey] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
 
-const handleReset = () => {
-  if (isPaginationAction) return;
+  const handleReset = () => {
+    if (isPaginationAction) return;
 
-  const now = Date.now();
-  if (now - lastFiltered < 500) return;
+    const now = Date.now();
+    if (now - lastFiltered < 500) return;
 
-  setLastFiltered(now);
+    setLastFiltered(now);
 
-  setFilters({
-    search: '',
-    status: 'all',
-    role: '',
-    dateRange: { from: undefined, to: undefined },
-    customFilterValues: {},
-  });
+    setFilters({
+      search: '',
+      status: 'all',
+      role: '',
+      dateRange: { from: undefined, to: undefined },
+      customFilterValues: {},
+    });
 
-  setCurrentPage(1);
+    setCurrentPage(1);
 
-  if (mode === 'dynamic') {
-    setDynamicData([]);
-  }
-//re-render of filter component
-  setResetKey(prev => prev + 1); 
-};
-const handleRefreshWithReset = () => {
-  // reset filters
-  handleReset();
-  // fetch fresh data               
-  refreshAction?.onRefresh();   
-};
+    if (mode === 'dynamic') {
+      setDynamicData([]);
+    }
+    //re-render of filter component
+    setResetKey((prev) => prev + 1);
+  };
+  const handleRefreshWithReset = () => {
+    // reset filters
+    handleReset();
+    // fetch fresh data
+    refreshAction?.onRefresh();
+  };
   // Track when setCurrentPage is called with proper timeout
   const handlePageChange = (page: number) => {
     // Only log when the page is actually changing to reduce noise
