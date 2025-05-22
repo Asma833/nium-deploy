@@ -12,14 +12,24 @@ export interface TransactionTypeItem {
  * @returns Promise that resolves to an array of transaction types
  */
 const fetchTransactionTypes = async (): Promise<TransactionTypeItem[]> => {
-  const response = await axiosInstance.get(API.CONFIG.GET_TRANSACTION_TYPES, {
-    headers: {
-      accept: 'application/json',
-      api_key: HEADER_KEYS.API_KEY,
-      partner_id: HEADER_KEYS.PARTNER_ID,
-    },
-  });
-  return response.data || [];
+  try {
+    const response = await axiosInstance.get(API.CONFIG.GET_TRANSACTION_TYPES, {
+      headers: {
+        accept: 'application/json',
+        api_key: HEADER_KEYS.API_KEY,
+        partner_id: HEADER_KEYS.PARTNER_ID,
+      },
+    });
+
+    // Check if response and response.data exist before returning
+    if (response && response.data) {
+      return Array.isArray(response.data) ? response.data : [];
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching transaction types:', error);
+    return [];
+  }
 };
 
 /**

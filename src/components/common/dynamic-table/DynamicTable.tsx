@@ -238,30 +238,6 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage(1);
   };
 
-  // const handleReset = () => {
-  //   // Skip if we're in the middle of a pagination action
-  //   if (isPaginationAction) return;
-
-  //   const now = Date.now();
-  //   // Skip if we just filtered recently
-  //   if (now - lastFiltered < 500) return;
-
-  //   setLastFiltered(now);
-
-  //   setFilters({
-  //     search: '',
-  //     status: 'all',
-  //     role: '',
-  //     dateRange: { from: undefined, to: undefined },
-  //     customFilterValues: {},
-  //   });
-  //   setCurrentPage(1);
-
-  //   // Reset dynamic data to empty if in dynamic mode
-  //   if (mode === 'dynamic') {
-  //     setDynamicData([]);
-  //   }
-  // };
   const [resetKey, setResetKey] = useState(0);
 
   const handleReset = () => {
@@ -394,7 +370,6 @@ export function DynamicTable<T extends Record<string, any>>({
               {!loading ? (
                 paginatedData.length > 0 ? (
                   paginatedData.map((row, idx) => {
-                    // Try to use a unique key from the row, fallback to idx
                     const rowKey =
                       row.id ??
                       row.niumId ??

@@ -2,28 +2,36 @@ import _ from 'lodash';
 import { Order } from '../../types/updateIncident.type';
 
 const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
+  const {
+    e_sign_status,
+    is_esign_required,
+    v_kyc_status,
+    is_v_kyc_required,
+    incident_status,
+  } = rowData;
+
   const esignStatus =
-    rowData.is_esign_required && rowData.e_sign_status
-      ? rowData.e_sign_status === 'approved' ||
-        rowData.e_sign_status === 'completed'
+    is_esign_required && e_sign_status
+      ? e_sign_status === 'approved' || e_sign_status === 'completed'
         ? 'approved'
-        : rowData.e_sign_status === 'rejected'
+        : e_sign_status === 'rejected'
           ? 'rejected'
           : 'pending'
       : 'not required';
+
   const vkycStatus =
-    rowData.is_v_kyc_required && rowData.v_kyc_status
-      ? rowData.v_kyc_status === 'approved' ||
-        rowData.v_kyc_status === 'completed'
+    is_v_kyc_required && v_kyc_status
+      ? v_kyc_status === 'approved' || v_kyc_status === 'completed'
         ? 'approved'
-        : rowData.v_kyc_status === 'rejected'
+        : v_kyc_status === 'rejected'
           ? 'rejected'
           : 'pending'
       : 'not required';
+
   const incidentStatus =
-    rowData.incident_status === null
+    incident_status === null
       ? 'pending'
-      : rowData.incident_status
+      : incident_status
         ? 'approved'
         : 'rejected';
 
