@@ -136,14 +136,21 @@ export const GetTransactionTableColumns = (
         tooltipText={'Generate Esign Link'}
         buttonIconType="refresh"
         onClick={() => handleRegeneratedEsignLink(rowData)}
-        disabled={
-          rowData?.incident_status ||
-          rowData?.incident_status === null ||
-          rowData?.incident_status === undefined ||
-          rowData?.e_sign_status === 'expired' ||
-          rowData?.e_sign_status === 'rejected' ||
-          rowData?.e_sign_status === 'not generated'
-        }
+        disabled={(() => {
+          const { incident_status, e_sign_status } = rowData || {};
+          const disabledEsignStatuses = [
+            'expired',
+            'rejected',
+            'not generated',
+          ];
+
+          return (
+            incident_status === null ||
+            incident_status === undefined ||
+            Boolean(incident_status) ||
+            disabledEsignStatuses.includes(e_sign_status)
+          );
+        })()}
       />
     ),
   },

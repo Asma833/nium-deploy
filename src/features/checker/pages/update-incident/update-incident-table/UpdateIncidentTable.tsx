@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { cn } from '@/utils/cn';
+import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
+import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
+import UpdateIncidentForm from '../incident-form/UpdateIncidentForm';
 
 interface RowData {
   nium_order_id: string;
@@ -29,7 +29,7 @@ const UpdateIncidentCreationTable = () => {
 
   const requestData = {
     checkerId: currentUserHashedKey || '',
-    transaction_type: 'all',
+    transaction_type: 'update',
   };
 
   // Fetch data using the updated hook

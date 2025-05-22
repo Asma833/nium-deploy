@@ -21,7 +21,7 @@ const NuserCreationTable = () => {
   });
   const users = data || [];
   usePageTitle('N-Users');
-  
+
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {

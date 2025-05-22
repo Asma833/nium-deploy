@@ -1,6 +1,5 @@
-import { Image } from "@/components/ui/image";
+import { Image } from '@/components/ui/image';
 import dataseedLogo from '@/assets/images/poweredby-dataseed-logo.svg';
-
 
 const PoweredBy = () => {
   return (
