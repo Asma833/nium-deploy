@@ -31,6 +31,12 @@ export interface ExchangeRateTable {
 }
 export interface UpdateIncidentFormData {
   formActionRight: string;
+  mode: 'edit' | 'view';
+  pageId?:
+    | 'updateIncident'
+    | 'viewAllIncident'
+    | 'assignIncident'
+    | 'completedIncident';
   rowData?: Order & {
     incident_number?: string;
     eon_invoice_number?: string;

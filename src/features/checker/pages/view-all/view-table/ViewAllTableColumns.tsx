@@ -114,6 +114,29 @@ export const GetTransactionTableColumns = () => [
     ),
   },
   {
+    key: 'e_sign_status',
+    id: 'e_sign_status',
+    name: 'E-Sign Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <EsignStatusCell rowData={rowData} />,
+  },
+  {
+    key: 'v_kyc_status',
+    id: 'v_kyc_status',
+    name: 'VKYC Status',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
+  },
+  {
+    key: 'incident_status',
+    id: 'incident_status',
+    name: 'Incident Status',
+    className: 'min-w-0  max-w-[70px]',
+    cell: (_: unknown, rowData: any) => (
+      <IncidentStatusCell rowData={rowData} />
+    ),
+  },
+  {
     key: 'doc_verification_status',
     id: 'doc_verification_status',
     name: 'Completed Transaction Status',
@@ -122,4 +145,71 @@ export const GetTransactionTableColumns = () => [
       <CompletedTransactionStatusCell rowData={rowData} />
     ),
   },
+  // {
+  //   key: 'e_sign_link',
+  //   id: 'e_sign_link',
+  //   name: 'E Sign Link',
+  //   className: 'min-w-0 max-w-[80px]',
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       copyLinkUrl={rowData.e_sign_link}
+  //       toastInfoText={'E Sign link copied successfully!'}
+  //       disabled={
+  //         !rowData.e_sign_link || rowData.e_sign_status === 'not generated'
+  //       }
+  //       tooltipText={'Copy E sign Link'}
+  //       buttonType="copy_link"
+  //       buttonIconType="copy_link"
+  //     />
+  //   ),
+  // },
+  // {
+  //   key: 'v_kyc_link',
+  //   id: 'v_kyc_link',
+  //   name: 'VKYC Link',
+  //   className: 'min-w-0 max-w-[80px]',
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       copyLinkUrl={rowData.v_kyc_link}
+  //       toastInfoText={'Vkyc Link link copied successfully!'}
+  //       disabled={rowData.v_kyc_link === null}
+  //       tooltipText={'Copy VKYC Link'}
+  //       buttonType="copy_link"
+  //       buttonIconType="copy_link"
+  //     />
+  //   ),
+  // },
+  // {
+  //   key: 'generate_esign_link',
+  //   id: 'generate_esign_link',
+  //   name: 'Generate Esign Link',
+  //   className: 'min-w-0 max-w-[100px]',
+  //   cell: (_: unknown, rowData: any) => (
+  //     <SignLinkButton
+  //       id={rowData.nium_order_id}
+  //       loading={
+  //         isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id
+  //       }
+  //       copyLinkUrl={rowData.v_kyc_link}
+  //       tooltipText={'Generate Esign Link'}
+  //       buttonIconType="refresh"
+  //       onClick={() => handleRegeneratedEsignLink(rowData)}
+  //       disabled={(() => {
+  //         const { incident_status, e_sign_status } = rowData || {};
+  //         const disabledEsignStatuses = [
+  //           'expired',
+  //           'rejected',
+  //           'not generated',
+  //         ];
+
+  //         return (
+  //           incident_status === null ||
+  //           incident_status === undefined ||
+  //           Boolean(incident_status) ||
+  //           disabledEsignStatuses.includes(e_sign_status)
+  //         );
+  //       })()}
+  //     />
+  //   ),
+  // },
 ];
