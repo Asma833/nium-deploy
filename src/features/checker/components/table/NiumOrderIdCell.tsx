@@ -9,7 +9,7 @@ const NiumOrderID = ({
   openModal?: (value: string) => void;
   className?: string;
 }) => {
-  const handleOpenModal = (rowData: any) => {
+  const handleOpenModal = () => {
     if (openModal) {
       openModal(rowData);
     }

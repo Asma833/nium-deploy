@@ -23,6 +23,16 @@ export interface UpdateIncidentRequest {
     niumInvoiceNumber?: string;
   };
 }
+export interface UpdateIncidentSelectedRowData extends Order {
+  incident_number?: string;
+  eon_invoice_number?: string;
+  transaction_mode?: string;
+  status?: {
+    approve: boolean;
+    reject: boolean;
+  };
+}
+
 export interface UpdateIncidentDialogProps {
   mode: 'edit' | 'view';
   pageId:
@@ -30,15 +40,7 @@ export interface UpdateIncidentDialogProps {
     | 'viewAllIncident'
     | 'assignIncident'
     | 'completedIncident';
-  selectedRowData: Order & {
-    incident_number?: string;
-    eon_invoice_number?: string;
-    transaction_mode?: string;
-    status?: {
-      approve: boolean;
-      reject: boolean;
-    };
-  };
+  selectedRowData: UpdateIncidentSelectedRowData;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
 }

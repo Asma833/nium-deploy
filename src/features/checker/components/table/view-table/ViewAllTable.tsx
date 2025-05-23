@@ -11,7 +11,7 @@ import {
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { Order } from '@/features/checker/types/updateIncident.type';
+import { Order, Orders } from '@/features/checker/types/updateIncident.type';
 import { useState } from 'react';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
@@ -19,7 +19,7 @@ const ViewAllTable = () => {
   usePageTitle('View All');
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
@@ -72,9 +72,10 @@ const ViewAllTable = () => {
       nium_order_id: order.nium_order_id || '-',
       created_at: new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || '-',
+      partner_order_id: order.partner_order_id || '-',
       customer_pan: order.customer_pan || '-',
-      transaction_type_name: order?.transaction_type_name?.name || '-',
-      purpose_type_name: order?.purpose_type_name?.purpose_name || '-',
+      transaction_type_name: order?.transaction_type_name || '-',
+      purpose_type_name: order?.purpose_type_name || '-',
       is_esign_required: order.is_esign_required || '-',
       is_v_kyc_required: order.is_v_kyc_required || '-',
       e_sign_status: order.e_sign_status || '-',
@@ -173,7 +174,7 @@ const ViewAllTable = () => {
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
 
-      {isModalOpen && (
+      {isModalOpen && selectedRowData && (
         <UpdateIncidentDialog
           pageId="viewAllIncident"
           mode="view"

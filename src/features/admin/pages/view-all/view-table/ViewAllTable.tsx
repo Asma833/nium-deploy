@@ -10,9 +10,14 @@ import {
   purposeTypeOptions,
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
+import { useState } from 'react';
+import { Orders } from '@/features/checker/types/updateIncident.type';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
+  const [selectedRowData, setSelectedRowData] = useState<Orders>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: viewAllData,
@@ -20,6 +25,11 @@ const ViewAllTable = () => {
     error: viewAllError,
     fetchData: refreshData,
   } = useGetAllOrders();
+
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
 
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
@@ -29,7 +39,7 @@ const ViewAllTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  const columns = GetTransactionTableColumns();
+  const columns = GetTransactionTableColumns({ openModal });
 
   const handleExportToCSV = () => {
     const dataToExport = viewAllData || [];
@@ -44,7 +54,6 @@ const ViewAllTable = () => {
 
   const isLoading = viewAllLoading || pagination.loading;
   const hasError = viewAllError || pagination.error;
-  const totalRecords = viewAllData?.totalOrders || pagination.totalRecords || 0;
 
   return (
     <div className="dynamic-table-wrap">
@@ -62,7 +71,6 @@ const ViewAllTable = () => {
         }}
         paginationMode={'static'}
         onPageChange={async (_page: number, _pageSize: number) => []}
-        totalRecords={totalRecords}
         filter={{
           filterOption: true,
           mode: 'static',
@@ -94,6 +102,16 @@ const ViewAllTable = () => {
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>
+
+      {isModalOpen && selectedRowData && (
+        <UpdateIncidentDialog
+          pageId="viewAllIncident"
+          mode="view"
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 };

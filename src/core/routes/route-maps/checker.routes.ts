@@ -17,7 +17,7 @@ export const checkerComponents = {
       )
   ),
   ViewAll: lazy(
-    () => import('@/features/checker/pages/view-all/view-table/ViewAllTable')
+    () => import('@/features/checker/pages/view-all/view-table/ViewAllTablePage')
   ),
 
   CompletedTransaction: lazy(

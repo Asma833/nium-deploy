@@ -26,13 +26,13 @@ const CompletedTransactionTable = () => {
     filterApplied: string;
     orders: any[];
   }>('completed', true); // Start with "completed" type
-const [isModalOpen, setIsModalOpen] = useState(false);
- const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
-const openModal = (rowData: any) => {
-      setSelectedRowData(rowData);
-      setIsModalOpen(true);
-    };
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
   const columns = GetTransactionTableColumns(openModal);
 
   // Transform checker orders data to match the table format
@@ -41,6 +41,7 @@ const openModal = (rowData: any) => {
       nium_order_id: order.nium_order_id || '-',
       created_at: new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || '-',
+      partner_order_id: order.partner_order_id || '-',
       customer_pan: order.customer_pan || '-',
       transaction_type_name: order?.transaction_type_name?.name || '-',
       purpose_type_name: order?.purpose_type_name?.purpose_name || '-',

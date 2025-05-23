@@ -2,6 +2,8 @@ import { SignLinkButton } from '@/components/common/SignLinkButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
+import PurposeType from '@/features/checker/components/table/PurposeType';
+import TransactionType from '@/features/checker/components/table/TransactionType';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDate } from '@/utils/dateFormat';
 
@@ -51,12 +53,14 @@ export const GetTransactionTableColumns = ({
     id: 'transaction_type_name',
     name: 'Transaction Type',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <TransactionType rowData={rowData} />,
   },
   {
     key: 'purpose_type_name',
     id: 'purpose_type_name',
     name: 'Purpose Type',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => <PurposeType rowData={rowData} />,
   },
   {
     key: 'e_sign_status',
