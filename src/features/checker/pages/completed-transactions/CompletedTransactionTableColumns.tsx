@@ -4,12 +4,14 @@ import VKycStatusCell from '../../components/table/VKycStatusCell';
 import EsignStatusCell from '../../components/table/EsignStatusCell';
 import NiumOrderID from '../../components/table/NiumOrderIdCell';
 
-export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
+export const GetTransactionTableColumns = (
+  openModal: (value: string) => void
+) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
-     cell: (_: unknown, rowData: any) => (
+    cell: (_: unknown, rowData: any) => (
       <NiumOrderID rowData={rowData} openModal={openModal} />
     ),
     className: 'min-w-0',

@@ -131,6 +131,40 @@ export const GetTransactionTableColumns = ({
     ),
   },
   {
+    key: 'e_sign_link',
+    id: 'e_sign_link',
+    name: 'E Sign Link',
+    className: 'min-w-0 max-w-[80px]',
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton
+        copyLinkUrl={rowData.e_sign_link}
+        toastInfoText={'E Sign link copied successfully!'}
+        disabled={
+          !rowData.e_sign_link || rowData.e_sign_status === 'not generated'
+        }
+        tooltipText={'Copy E sign Link'}
+        buttonType="copy_link"
+        buttonIconType="copy_link"
+      />
+    ),
+  },
+  {
+    key: 'v_kyc_link',
+    id: 'v_kyc_link',
+    name: 'VKYC Link',
+    className: 'min-w-0 max-w-[80px]',
+    cell: (_: unknown, rowData: any) => (
+      <SignLinkButton
+        copyLinkUrl={rowData.v_kyc_link}
+        toastInfoText={'Vkyc Link link copied successfully!'}
+        disabled={rowData.v_kyc_link === null}
+        tooltipText={'Copy VKYC Link'}
+        buttonType="copy_link"
+        buttonIconType="copy_link"
+      />
+    ),
+  },
+  {
     key: 'generate_esign_link',
     id: 'generate_esign_link',
     name: 'Generate Esign Link',

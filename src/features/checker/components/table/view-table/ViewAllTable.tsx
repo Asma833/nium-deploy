@@ -76,6 +76,8 @@ const ViewAllTable = () => {
       customer_pan: order.customer_pan || '-',
       transaction_type_name: order?.transaction_type_name || '-',
       purpose_type_name: order?.purpose_type_name || '-',
+      e_sign_link: order.e_sign_link || '-',
+      v_kyc_link: order.v_kyc_link || '-',
       is_esign_required: order.is_esign_required || '-',
       is_v_kyc_required: order.is_v_kyc_required || '-',
       e_sign_status: order.e_sign_status || '-',
