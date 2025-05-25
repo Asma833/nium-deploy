@@ -1,4 +1,4 @@
-import { Order } from '../../types/updateIncident.type';
+import { Order } from '../../types/updateIncident.types';
 
 type Props = {
   rowData: Order;

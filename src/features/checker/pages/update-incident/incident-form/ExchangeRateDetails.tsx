@@ -1,4 +1,4 @@
-import { ExchangeRateTable } from '@/features/checker/types/updateIncident.type';
+import { ExchangeRateTable } from '@/features/checker/types/updateIncident.types';
 
 const ExchangeRateDetails = ({ data }: { data: ExchangeRateTable[] }) => {
   const totalCalculatedAmount = data.reduce(

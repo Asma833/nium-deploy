@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Order } from '../../types/updateIncident.type';
+import { Order } from '../../types/updateIncident.types';
 
 const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
   return (

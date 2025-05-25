@@ -8,7 +8,7 @@ import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
-import { Order } from '@/features/checker/types/updateIncident.type';
+import { Order } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const UpdateIncidentCreationTable = () => {
@@ -24,7 +24,7 @@ const UpdateIncidentCreationTable = () => {
 
   const requestData = {
     checkerId: currentUserHashedKey || '',
-    transaction_type: 'update',
+    transaction_type: 'pending',
   };
 
   // Fetch data using the updated hook

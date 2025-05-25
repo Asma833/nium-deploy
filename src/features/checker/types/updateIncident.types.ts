@@ -1,4 +1,4 @@
-export interface UpdateIncidentRequest {
+export type UpdateIncidentRequest = {
   fields: {
     // Original fields
     passportNumber?: string;
@@ -22,8 +22,9 @@ export interface UpdateIncidentRequest {
     purpose?: string;
     niumInvoiceNumber?: string;
   };
-}
-export interface UpdateIncidentSelectedRowData extends Order {
+};
+
+export type UpdateIncidentSelectedRowData = Order & {
   incident_number?: string;
   eon_invoice_number?: string;
   transaction_mode?: string;
@@ -31,9 +32,9 @@ export interface UpdateIncidentSelectedRowData extends Order {
     approve: boolean;
     reject: boolean;
   };
-}
+};
 
-export interface UpdateIncidentDialogProps {
+export type UpdateIncidentDialogProps = {
   mode: 'edit' | 'view';
   pageId:
     | 'updateIncident'
@@ -43,14 +44,15 @@ export interface UpdateIncidentDialogProps {
   selectedRowData: UpdateIncidentSelectedRowData;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
-}
+};
 
-export interface ExchangeRateTable {
+export type ExchangeRateTable = {
   currency: string;
   rate: number;
   amount: number;
-}
-export interface UpdateIncidentFormData {
+};
+
+export type UpdateIncidentFormData = {
   formActionRight: string;
   mode?: string;
   pageId?: string;
@@ -64,30 +66,31 @@ export interface UpdateIncidentFormData {
     };
   };
   setIsModalOpen: (isOpen: boolean) => void;
-}
-export interface UpdateIncidentResponse {
+};
+
+export type UpdateIncidentResponse = {
   success: boolean;
   message: string;
-}
+};
 
-export interface UpdateGetRequestData {
+export type UpdateGetRequestData = {
   checkerId: string;
   transaction_type: string;
-}
+};
 
-export interface EsignLinkRequest {
+export type EsignLinkRequest = {
   partner_order_id: string;
-}
+};
 
-export interface MergedDocument {
+export type MergedDocument = {
   url?: string;
   size?: number;
   mimeType?: string;
   created_at?: string;
   documentIds?: string[];
-}
+};
 
-export interface Order {
+export type Order = {
   id?: string;
   hashed_key?: string;
   partner_id?: string;
@@ -141,8 +144,8 @@ export interface Order {
     id: string;
     purpose_name: string;
   };
-}
+};
 
-export interface Orders {
+export type Orders = {
   [key: string]: Order;
-}
+};

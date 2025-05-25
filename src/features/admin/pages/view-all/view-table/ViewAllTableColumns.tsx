@@ -3,7 +3,7 @@ import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell
 import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
-import { Order } from '@/features/checker/types/updateIncident.type';
+import { Order } from '@/features/checker/types/updateIncident.types';
 import { formatDate } from '@/utils/dateFormat';
 
 export const GetTransactionTableColumns = ({

@@ -17,7 +17,7 @@ import { cn } from '@/utils/cn';
 import {
   UpdateIncidentFormData,
   UpdateIncidentRequest,
-} from '@/features/checker/types/updateIncident.type';
+} from '@/features/checker/types/updateIncident.types';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';

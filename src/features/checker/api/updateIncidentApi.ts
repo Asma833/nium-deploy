@@ -5,7 +5,7 @@ import {
   UpdateGetRequestData,
   UpdateIncidentRequest,
   UpdateIncidentResponse,
-} from '../types/updateIncident.type';
+} from '../types/updateIncident.types';
 
 export const updateIncidentApi = {
   updateIncident: async (

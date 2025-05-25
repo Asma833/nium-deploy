@@ -11,7 +11,7 @@ import {
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { Order, Orders } from '@/features/checker/types/updateIncident.type';
+import { Order, Orders } from '@/features/checker/types/updateIncident.types';
 import { useState } from 'react';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
@@ -76,15 +76,15 @@ const ViewAllTable = () => {
       customer_pan: order.customer_pan || '-',
       transaction_type_name: order?.transaction_type_name || '-',
       purpose_type_name: order?.purpose_type_name || '-',
-      e_sign_link: order.e_sign_link || '-',
-      v_kyc_link: order.v_kyc_link || '-',
+      e_sign_link: order.e_sign_link || null,
+      v_kyc_link: order.v_kyc_link || null,
       is_esign_required: order.is_esign_required || '-',
       is_v_kyc_required: order.is_v_kyc_required || '-',
-      e_sign_status: order.e_sign_status || '-',
+      e_sign_status: order.e_sign_status || null,
       e_sign_customer_completion_date: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
         : '-',
-      v_kyc_status: order.v_kyc_status || '-',
+      v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
         : '-',

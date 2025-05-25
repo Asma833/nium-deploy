@@ -11,7 +11,7 @@ import {
   transactionTypeOptions,
 } from '@/features/checker/config/table-filter.config';
 import { useState } from 'react';
-import { Orders } from '@/features/checker/types/updateIncident.type';
+import { Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const ViewAllTable = () => {

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { updateIncidentApi } from '../api/updateIncidentApi';
-import { EsignLinkRequest } from '../types/updateIncident.type';
+import { EsignLinkRequest } from '../types/updateIncident.types';
 
 export const useSendEsignLink = () => {
   const queryClient = useQueryClient();
