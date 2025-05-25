@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
 // Define the proper type for the form data
 interface IncidentFormData {
@@ -12,8 +13,15 @@ interface IncidentFormData {
   incident_status: boolean;
 }
 
+// Define the callbacks type
+interface SubmitCallbacks {
+  onSuccess?: (data: any) => void;
+  onError?: (error: any) => void;
+}
+
 const useSubmitIncidentFormData = () => {
   const { getUserHashedKey } = useCurrentUser();
+  const { invalidateMultipleQueries } = useQueryInvalidator();
 
   const { mutate, isPending, isError, isSuccess, error, data } = useMutation({
     mutationFn: async (formData: IncidentFormData) => {
@@ -24,12 +32,26 @@ const useSubmitIncidentFormData = () => {
       );
       return response.data;
     },
-    onSuccess: (data) => {},
-    onError: (error) => {},
   });
 
+  // Custom submission function that properly handles callbacks
+  const submitIncidentFormData = (
+    formData: IncidentFormData,
+    callbacks?: SubmitCallbacks
+  ) => {
+    return mutate(formData, {
+      onSuccess: (data) => {
+        callbacks?.onSuccess?.(data);
+        invalidateMultipleQueries([['updateIncident'], ['dashboardMetrics']]);
+      },
+      onError: (error) => {
+        callbacks?.onError?.(error);
+      },
+    });
+  };
+
   return {
-    submitIncidentFormData: mutate,
+    submitIncidentFormData,
     isPending,
     isError,
     isSuccess,

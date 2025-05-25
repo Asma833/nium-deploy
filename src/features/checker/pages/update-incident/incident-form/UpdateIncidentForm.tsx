@@ -44,7 +44,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const transactionType = rowData?.transaction_type_name?.name;
   const purposeType = rowData?.purpose_type_name?.purpose_name;
   const screenWidth = useScreenSize();
-  const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -267,10 +266,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             toast.success('Incident updated successfully');
             resetFormValues();
             setIsModalOpen(false);
-            invalidateMultipleQueries([
-              ['updateIncident'],
-              ['dashboardMetrics'],
-            ]);
           },
           onError: (error) => {
             toast.error(error?.message || 'Failed to update incident');
