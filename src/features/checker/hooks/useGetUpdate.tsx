@@ -5,7 +5,7 @@ import { UpdateGetRequestData } from '../types/updateIncident.types';
 
 export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
   const query = useQuery({
-    queryKey: ['updateIncident', incidentData],
+    queryKey: ['updateIncident'],
     queryFn: async () => {
       try {
         const response =

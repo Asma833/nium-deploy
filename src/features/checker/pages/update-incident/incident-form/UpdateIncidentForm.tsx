@@ -23,7 +23,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
-import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import { downloadFromUrl } from '@/utils/exportUtils';
 
 const useScreenSize = () => {
@@ -263,9 +262,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
         await submitIncidentFormData(formattedData, {
           onSuccess: () => {
+            setIsModalOpen(false);
             toast.success('Incident updated successfully');
             resetFormValues();
-            setIsModalOpen(false);
           },
           onError: (error) => {
             toast.error(error?.message || 'Failed to update incident');

@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
-import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
 // Define the proper type for the form data
@@ -20,7 +19,6 @@ interface SubmitCallbacks {
 }
 
 const useSubmitIncidentFormData = () => {
-  const { getUserHashedKey } = useCurrentUser();
   const { invalidateMultipleQueries } = useQueryInvalidator();
 
   const { mutate, isPending, isError, isSuccess, error, data } = useMutation({
