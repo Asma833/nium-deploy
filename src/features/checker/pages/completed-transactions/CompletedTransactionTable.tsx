@@ -32,14 +32,15 @@ const CompletedTransactionTable = () => {
     setIsModalOpen(true);
   };
   const columns = GetTransactionTableColumns(openModal);
- const {
-    options: purposeTypeOptions,
-  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  const { options: purposeTypeOptions } = useDynamicOptions(
+    API.PURPOSE.GET_PURPOSES
+  );
 
-  const {
-    options: transactionTypeOptions,
-  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
- 
+  const { options: transactionTypeOptions } = useDynamicOptions(
+    API.TRANSACTION.GET_TRANSACTIONS
+  );
+  console.log('transactionTypeOptions:', transactionTypeOptions);
+
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
@@ -123,13 +124,13 @@ const CompletedTransactionTable = () => {
 
             selects: [
               {
-                id: 'purposeType',
+                id: 'purpose_type_name',
                 label: 'Purpose Type',
                 placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
-                id: 'transactionType',
+                id: 'transaction_type_name',
                 label: 'Transaction Type',
                 placeholder: 'Select',
                 options: transactionTypeOptions,

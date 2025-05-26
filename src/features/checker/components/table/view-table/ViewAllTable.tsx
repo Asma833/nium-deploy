@@ -30,16 +30,14 @@ const ViewAllTable = () => {
     filterApplied: string;
     orders: any[];
   }>('all', true);
-   
-  const {
-    options: purposeTypeOptions,
-  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const {
-    options: transactionTypeOptions,
-  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
- 
+  const { options: purposeTypeOptions } = useDynamicOptions(
+    API.PURPOSE.GET_PURPOSES
+  );
 
+  const { options: transactionTypeOptions } = useDynamicOptions(
+    API.TRANSACTION.GET_TRANSACTIONS
+  );
 
   const handleRegenerateEsignLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
@@ -164,13 +162,13 @@ const ViewAllTable = () => {
             resetAction: true,
             selects: [
               {
-                id: 'purpose_type_name',
+                id: 'purpose_type_name.purpose_name',
                 label: 'Purpose Type',
                 placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
-                id: 'transaction_type_name',
+                id: 'transaction_type_name.name',
                 label: 'Transaction Type',
                 placeholder: 'Select',
                 options: transactionTypeOptions,
