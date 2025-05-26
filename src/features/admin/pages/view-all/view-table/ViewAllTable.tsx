@@ -6,14 +6,10 @@ import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
-import {
-  purposeTypeOptions,
-  transactionTypeOptions,
-} from '@/features/checker/config/table-filter.config';
 import { useState } from 'react';
 import { Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 const ViewAllTable = () => {
   usePageTitle('View All');
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
@@ -30,6 +26,15 @@ const ViewAllTable = () => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
   };
+
+    const {
+    options: purposeTypeOptions,
+  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+
+  const {
+    options: transactionTypeOptions,
+  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+ 
 
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({

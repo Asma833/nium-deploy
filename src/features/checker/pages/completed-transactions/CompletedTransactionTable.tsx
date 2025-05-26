@@ -4,12 +4,10 @@ import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import {
-  purposeTypeOptions,
-  transactionTypeOptions,
-} from '../../config/table-filter.config';
 import { useState } from 'react';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
+import { useDynamicOptions } from '../../hooks/useDynamicOptions';
+import { API } from '@/core/constant/apis';
 
 const CompletedTransactionTable = () => {
   usePageTitle('Completed Transaction');
@@ -34,7 +32,14 @@ const CompletedTransactionTable = () => {
     setIsModalOpen(true);
   };
   const columns = GetTransactionTableColumns(openModal);
+ const {
+    options: purposeTypeOptions,
+  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
+  const {
+    options: transactionTypeOptions,
+  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+ 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {

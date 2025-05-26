@@ -80,6 +80,12 @@ export const API = {
   PRODUCTS: {
     GET_PRODUCTS: '/products',
   },
+  TRANSACTION: {
+    GET_TRANSACTIONS: `/transaction_type`,
+  },
+  PURPOSE:{
+    GET_PURPOSES: `/purpose`,
+  }
 } as const;
 
 /**

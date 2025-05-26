@@ -6,14 +6,11 @@ import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import {
-  purposeTypeOptions,
-  transactionTypeOptions,
-} from '@/features/checker/config/table-filter.config';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { Order, Orders } from '@/features/checker/types/updateIncident.types';
 import { useState } from 'react';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 
 const ViewAllTable = () => {
   usePageTitle('View All');
@@ -33,6 +30,16 @@ const ViewAllTable = () => {
     filterApplied: string;
     orders: any[];
   }>('all', true);
+   
+  const {
+    options: purposeTypeOptions,
+  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+
+  const {
+    options: transactionTypeOptions,
+  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
+ 
+
 
   const handleRegenerateEsignLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {

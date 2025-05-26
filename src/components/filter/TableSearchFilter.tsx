@@ -189,7 +189,7 @@ const TableSearchFilter = ({
       status: localStatus,
       customFilterValues: localCustomFilters,
     };
-
+   console.log('Applying dynamic filters:', updatedFilters);
     setFilters(updatedFilters);
 
     // Only call onFilter if we're not in the middle of a pagination action
