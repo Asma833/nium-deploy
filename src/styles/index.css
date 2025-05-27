@@ -182,6 +182,7 @@
   background-color: rgb(249 249 249);
   -webkit-text-fill-color: rgb(0 0 0 / 72%);
 }
+
 .MuiPickersArrowSwitcher-button {
   @apply text-muted-foreground;
 }
@@ -248,4 +249,15 @@ html[class='dark'] {
 .dark .MuiPickersDay-root.Mui-selected {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
+}
+
+.dark .MuiInputBase-input.Mui-disabled {
+  -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
+}
+.dark [class*='MuiOutlinedInput'] {
+  -webkit-text-fill-color: rgb(218, 218, 218);
+  border-color: rgba(202, 202, 202, 0.692) !important;
+}
+.dark [class*='MuiInputLabel-root'] {
+  -webkit-text-fill-color: rgb(218, 218, 218);
 }

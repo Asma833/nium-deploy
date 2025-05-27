@@ -122,6 +122,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (pageId === 'completedIncident') {
+      setShowNiumInvoice(true);
+    }
+  }, [pageId]);
+
   // Update form status when checkbox states change
   useEffect(() => {
     methods.setValue('fields.status', {
@@ -226,15 +232,15 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   const handleFormSubmit = async () => {
-    if (isApproved && !niumInvoiceNumber) {
-      setError('fields.niumInvoiceNumber', {
-        type: 'required',
-        message: 'Nium Invoice Number is required when approving an incident',
-      });
-      return;
-    } else {
-      clearErrors('fields.niumInvoiceNumber');
-    }
+    // if (isApproved && !niumInvoiceNumber) {
+    //   setError('fields.niumInvoiceNumber', {
+    //     type: 'required',
+    //     message: 'Nium Invoice Number is required when approving an incident',
+    //   });
+    //   return;
+    // } else {
+    //   clearErrors('fields.niumInvoiceNumber');
+    // }
 
     if (isRejected && !comment) {
       setError('fields.comment', {
@@ -461,8 +467,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             </FormFieldRow>
           )}
 
-          {mode === 'edit' && (
-            <FormFieldRow rowCols={2}>
+          <FormFieldRow rowCols={2}>
+            {mode === 'edit' && (
               <FormFieldRow className="flex-1">
                 {getController({
                   ...updateFormIncidentConfig.checkFeedInput.comment,
@@ -471,6 +477,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   name: 'fields.comment',
                 })}
               </FormFieldRow>
+            )}
+            {(pageId === 'updateIncident' ||
+              pageId === 'completedIncident') && (
               <FormFieldRow className="flex-1">
                 {showNiumInvoice &&
                   getController({
@@ -480,11 +489,11 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                     name: 'fields.niumInvoiceNumber',
                   })}
               </FormFieldRow>
-            </FormFieldRow>
-          )}
+            )}
+          </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
-      {mode === 'edit' && (
+      {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
         <div className="flex justify-center bg-background">
           <Button disabled={isPending} onClick={handleFormSubmit}>
             {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}

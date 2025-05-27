@@ -44,15 +44,15 @@ const CompletedTransactionTable = () => {
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      nium_order_id: order.nium_order_id || '-',
+      nium_order_id: order.nium_order_id || '',
       created_at: new Date(order.created_at).toLocaleString(),
-      partner_id: order.partner_id || '-',
-      partner_order_id: order.partner_order_id || '-',
-      customer_pan: order.customer_pan || '-',
-      transaction_type_name: order?.transaction_type_name?.name || '-',
-      purpose_type_name: order?.purpose_type_name?.purpose_name || '-',
-      is_esign_required: order.is_esign_required || '-',
-      is_v_kyc_required: order.is_v_kyc_required || '-',
+      partner_id: order.partner_id || '',
+      partner_order_id: order.partner_order_id || '',
+      customer_pan: order.customer_pan || '',
+      transaction_type_name: order?.transaction_type_name?.name || '',
+      purpose_type_name: order?.purpose_type_name?.purpose_name || '',
+      is_esign_required: order.is_esign_required || '',
+      is_v_kyc_required: order.is_v_kyc_required || '',
       e_sign_status: order.e_sign_status || null,
       e_sign_customer_completion_date: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
@@ -65,7 +65,7 @@ const CompletedTransactionTable = () => {
       incident_completion_date: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
         : '-',
-      nium_invoice_number: order.nium_invoice_number || '-',
+      nium_invoice_number: order.nium_invoice_number || '',
     };
   };
 
