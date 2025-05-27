@@ -5,8 +5,7 @@ type Props = {
 };
 
 const PurposeType = ({ rowData }: Props) => {
-  const purposeTypeText =
-    rowData?.purpose_type_name?.purpose_name || rowData?.purpose_type || '-';
+  const purposeTypeText = rowData?.purpose_type_name?.purpose_name || '-';
 
   return <span>{purposeTypeText}</span>;
 };
