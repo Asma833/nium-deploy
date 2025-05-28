@@ -156,6 +156,10 @@ export type Order = {
   totalOrders?: number;
 };
 
+export type OrderRowData = {
+  rowData: Order;
+};
+
 export type Orders = {
   [key: string]: Order;
 };
@@ -172,3 +176,9 @@ export type TransactionType =
   | TransactionTypeEnum.COMPLETED
   | TransactionTypeEnum.PENDING
   | TransactionTypeEnum.REJECTED;
+
+export type NiumOrderIDProps = {
+  rowData: any;
+  openModal?: (value: string) => void;
+  className?: string;
+};

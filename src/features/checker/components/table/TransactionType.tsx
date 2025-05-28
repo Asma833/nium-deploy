@@ -1,10 +1,6 @@
-import { Order } from '../../types/updateIncident.types';
+import { OrderRowData } from '../../types/updateIncident.types';
 
-type Props = {
-  rowData: Order;
-};
-
-const TransactionType = ({ rowData }: Props) => {
+const TransactionType = ({ rowData }: OrderRowData) => {
   const transactionTypeText =
     rowData?.transaction_type_name?.name || rowData?.transaction_type || '-';
 

@@ -1,4 +1,4 @@
-import ViewAllTable from '@/features/checker/components/table/view-table/ViewAllTable';
+import ViewAllTable from '@/components/table/common-tables/view-table/ViewAllTable';
 
 const ViewAllTablePage = () => {
   return <ViewAllTable />;

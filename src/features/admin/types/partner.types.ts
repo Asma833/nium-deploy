@@ -1,4 +1,4 @@
-export interface PartnerCreationRequest {
+export type PartnerCreationRequest = {
   role_id: string;
   is_active: boolean;
   hashed_key: string;
@@ -12,26 +12,26 @@ export interface PartnerCreationRequest {
   updated_by?: string;
   product_ids?: string[];
   products?: string[];
-}
-export interface PartnerStatusRequest {
+};
+export type PartnerStatusRequest = {
   is_active: boolean;
   hashed_key: string;
-}
-export interface PartnerUpdateRequest {
+};
+export type PartnerUpdateRequest = {
   hashed_key: string;
   first_name: string;
   last_name: string;
   email: string;
   password: string;
   product_ids: string[];
-}
+};
 
-export interface PartnerCreationResponse {
+export type PartnerCreationResponse = {
   success: boolean;
   message: string;
-}
+};
 
-export interface PartnerFormData {
+export type PartnerFormData = {
   firstName: string;
   lastName: string;
   email: string;
@@ -43,9 +43,9 @@ export interface PartnerFormData {
     remittance: boolean;
     both: boolean;
   };
-}
+};
 
-export interface PartnerRequest {
+export type PartnerRequest = {
   role_id: string;
   email: string;
   first_name: string;
@@ -59,8 +59,8 @@ export interface PartnerRequest {
   updated_by?: string;
   product_ids?: string[];
   products?: string[];
-}
-export interface PartnerApiPayload {
+};
+export type PartnerApiPayload = {
   role_id: string;
   email: string;
   first_name: string;
@@ -74,9 +74,9 @@ export interface PartnerApiPayload {
   updated_by?: string;
   product_ids?: string[];
   products?: string[];
-}
+};
 
-export interface UserCreationRequest {
+export type UserCreationRequest = {
   firstName: string;
   lastName: string;
   email: string;
@@ -94,10 +94,10 @@ export interface UserCreationRequest {
   };
   role?: string;
   isActive?: boolean;
-}
+};
 
 // Expected API payload structure
-export interface UserApiPayload {
+export type UserApiPayload = {
   role_id: string;
   email: string;
   first_name: string;
@@ -111,4 +111,9 @@ export interface UserApiPayload {
   updated_by?: string;
   product_ids?: string[];
   products?: string[];
-}
+};
+
+export type ProductResponse = {
+  id: string;
+  name: string;
+};

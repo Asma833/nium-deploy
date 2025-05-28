@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import useGetRoleId from '@/hooks/useGetRoleId';
-import { UserApiPayload, UserCreationRequest } from '../types/partner.type';
+import { UserApiPayload, UserCreationRequest } from '../types/partner.types';
 import { useGetProducts } from '@/hooks/useGetProducts';
 import { HEADER_KEYS } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';

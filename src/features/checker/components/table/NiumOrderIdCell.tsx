@@ -1,14 +1,11 @@
 import { cn } from '@/utils/cn';
+import { NiumOrderIDProps } from '../../types/updateIncident.types';
 
 const NiumOrderID = ({
   rowData,
   openModal,
   className = '',
-}: {
-  rowData: any;
-  openModal?: (value: string) => void;
-  className?: string;
-}) => {
+}: NiumOrderIDProps) => {
   const handleOpenModal = () => {
     if (openModal) {
       openModal(rowData);

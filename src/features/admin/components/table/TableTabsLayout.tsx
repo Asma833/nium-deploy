@@ -1,18 +1,8 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/utils/cn';
+import { TableTabsLayoutProps } from '../../types/admin.types';
 
-type NavTab = {
-  label: string;
-  path: string;
-};
-
-type Props = {
-  children: React.ReactNode;
-  tabs?: NavTab[];
-  customNavigate?: (path: string) => void;
-};
-
-const TableTabsLayout = (props: Props) => {
+const TableTabsLayout = (props: TableTabsLayoutProps) => {
   const { children, tabs, customNavigate } = props;
   const navigate = useNavigate();
   const location = useLocation();

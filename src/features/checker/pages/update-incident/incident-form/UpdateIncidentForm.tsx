@@ -27,9 +27,11 @@ import { downloadFromUrl } from '@/utils/exportUtils';
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
   //console.log('UpdateIncidentForm props:', rowData);
-  const transactionType = rowData?.transaction_type_name?.name || rowData?.transaction_type_name;
-  const purposeType = rowData?.purpose_type_name?.purpose_name || rowData?.purpose_type_name;
- 
+  const transactionType =
+    rowData?.transaction_type_name?.name || rowData?.transaction_type_name;
+  const purposeType =
+    rowData?.purpose_type_name?.purpose_name || rowData?.purpose_type_name;
+
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -214,19 +216,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsFormValid(valid);
   }, [isApproved, isRejected, comment, niumInvoiceNumber]);
 
-  
-
   const handleFormSubmit = async () => {
-    // if (isApproved && !niumInvoiceNumber) {
-    //   setError('fields.niumInvoiceNumber', {
-    //     type: 'required',
-    //     message: 'Nium Invoice Number is required when approving an incident',
-    //   });
-    //   return;
-    // } else {
-    //   clearErrors('fields.niumInvoiceNumber');
-    // }
-
     if (isRejected && !comment) {
       setError('fields.comment', {
         type: 'required',
@@ -386,7 +376,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
-          <FormFieldRow >
+          <FormFieldRow>
             {mode === 'view' &&
               (pageId === 'viewAllIncident' ||
                 pageId === 'completedIncident') && (
@@ -423,7 +413,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               )}
           </FormFieldRow>
           {mode === 'edit' && (
-            <FormFieldRow >
+            <FormFieldRow>
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-2">
                   <Checkbox

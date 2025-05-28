@@ -1,11 +1,7 @@
+import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import { toast } from 'sonner';
-
-interface UnassignCheckerParams {
-  orderId: string;
-  checkerId: string;
-}
+import { UnassignCheckerParams } from '../types/checker.types';
 
 const useUnassignChecker = () => {
   const queryClient = useQueryClient();

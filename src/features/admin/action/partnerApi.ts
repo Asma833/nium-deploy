@@ -5,12 +5,8 @@ import {
   PartnerCreationResponse,
   PartnerRequest,
   PartnerUpdateRequest,
-} from '../types/partner.type';
-
-interface ProductResponse {
-  id: string;
-  name: string;
-}
+  ProductResponse,
+} from '../types/partner.types';
 
 export const partnerApi = {
   PartnerCreation: async (

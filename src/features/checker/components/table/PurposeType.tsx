@@ -1,10 +1,6 @@
-import { Order } from '../../types/updateIncident.types';
+import { OrderRowData } from '../../types/updateIncident.types';
 
-type Props = {
-  rowData: Order;
-};
-
-const PurposeType = ({ rowData }: Props) => {
+const PurposeType = ({ rowData }: OrderRowData) => {
   const purposeTypeText = rowData?.purpose_type_name?.purpose_name || '-';
 
   return <span>{purposeTypeText}</span>;

@@ -1,16 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-
-interface DashboardCardProps {
-  count: number;
-  title: string;
-  path: string;
-  icon?: React.ComponentType;
-  id?: number;
-  status: string;
-  isLoading?: boolean;
-  className?: string;
-}
+import { DashboardCardProps } from '../../types/checker.types';
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
   count,
