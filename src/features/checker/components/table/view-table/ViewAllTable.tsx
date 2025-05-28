@@ -79,6 +79,7 @@ const ViewAllTable = () => {
       created_at: new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || '-',
       partner_order_id: order.partner_order_id || '-',
+      customer_name:order.customer_name || '-',
       customer_pan: order.customer_pan || '-',
       transaction_type_name: order?.transaction_type_name || '-',
       purpose_type_name: order?.purpose_type_name || '-',

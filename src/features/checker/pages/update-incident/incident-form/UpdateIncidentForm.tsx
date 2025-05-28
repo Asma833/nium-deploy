@@ -26,9 +26,11 @@ import { downloadFromUrl } from '@/utils/exportUtils';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  //console.log('UpdateIncidentForm props:', rowData);
-  const transactionType = rowData?.transaction_type_name?.name || rowData?.transaction_type_name;
-  const purposeType = rowData?.purpose_type_name?.purpose_name || rowData?.purpose_type_name;
+  console.log('UpdateIncidentForm props:', rowData);
+  const transactionType = typeof rowData?.transaction_type_name === 'object'
+      ? (rowData?.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
+      : (rowData?.transaction_type_name ? rowData.transaction_type_name : 'NA');
+  const purposeType = rowData?.purpose_type_name?.purpose_name ? rowData?.purpose_type_name?.purpose_name : rowData?.purpose_type_name;
  
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
@@ -136,21 +138,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
 
       const mappedData = {
-        niumId: rowData.nium_order_id || '',
-        customerPan: rowData.customer_pan || '',
-        customerName: rowData.customer_name || '',
-        bmfOrderRef: rowData.partner_order_id || '',
-        transactionType: rowData.transaction_type_name?.name || '',
-        purpose: rowData.purpose_type_name?.purpose_name || '',
-        buySell: buySellValue || '',
+        niumId: rowData.nium_order_id || 'NA',
+        customerPan: rowData.customer_pan || 'NA',
+        customerName: rowData.customer_name || 'NA',
+        bmfOrderRef: rowData.partner_order_id || 'NA',
+        transactionType: typeof rowData.transaction_type_name === 'object'
+      ? (rowData.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
+      : (rowData.transaction_type_name ? rowData.transaction_type_name : 'NA'),
+            purpose: rowData.purpose_type_name?.purpose_name || 'NA',
+            buySell: buySellValue || 'NA',
         // comment: rowData.incident_checker_comments || '',
-        incidentNumber: rowData?.incident_number || '',
-        eonInvoiceNumber: rowData?.eon_invoice_number || '',
+        incidentNumber: rowData?.incident_number || 'NA',
+        eonInvoiceNumber: rowData?.eon_invoice_number || 'NA',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNumber: rowData.nium_invoice_number || '',
+        niumInvoiceNumber: rowData.nium_invoice_number || 'NA',
       };
 
       // Set values using appropriate field paths
