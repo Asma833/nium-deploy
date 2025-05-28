@@ -34,7 +34,4 @@ export type DashboardCardProps = {
   status: string;
   isLoading?: boolean;
   className?: string;
-}
-
-
-
+};

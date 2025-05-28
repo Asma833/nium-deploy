@@ -14,7 +14,7 @@ interface Role {
   updatedAt: string;
 }
 
-let cachedRoles: Role[] | null = null;  // <-- corrected initialization
+let cachedRoles: Role[] | null = null; // <-- corrected initialization
 let cachedPromise: Promise<Role[]> | null = null;
 
 export const useGetRoleId = () => {
@@ -45,7 +45,11 @@ export const useGetRoleId = () => {
 
     cachedPromise!
       .then((rolesData) => setRoles(rolesData))
-      .catch((err) => setError(err instanceof Error ? err : new Error('Failed to fetch roles')))
+      .catch((err) =>
+        setError(
+          err instanceof Error ? err : new Error('Failed to fetch roles')
+        )
+      )
       .finally(() => setLoading(false));
   }, []);
 

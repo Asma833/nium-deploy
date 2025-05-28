@@ -18,7 +18,6 @@ import esignRejected from '@/assets/icons/esign-rejected.svg';
 import esignPending from '@/assets/icons/esign-pending.svg';
 import { DashboardItem, DashboardMetrics } from '../types/checker.types';
 
-
 // Default fallback data when API data is not available
 export const apiDummyData: DashboardMetrics = {
   transactionReceived: 0,
