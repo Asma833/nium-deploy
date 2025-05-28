@@ -18,19 +18,32 @@ import {
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 
-const ViewAllTable = () => {
+type ViewAllTableProps = {
+  checkerOrdersData:any;
+  checkerOrdersLoading: boolean;
+  checkerOrdersError: string;
+  refreshData: () => void;
+};
+
+
+const ViewAllTable: React.FC<ViewAllTableProps> = ({
+  checkerOrdersData,
+  checkerOrdersLoading,
+  checkerOrdersError,
+  refreshData,
+}) => {
   usePageTitle('View All');
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    data: checkerOrdersData,
-    loading: checkerOrdersLoading,
-    error: checkerOrdersError,
-    fetchData: refreshData,
-  } = useGetCheckerOrders(TransactionTypeEnum.ALL, true);
+  // const {
+  //   data: checkerOrdersData,
+  //   loading: checkerOrdersLoading,
+  //   error: checkerOrdersError,
+  //   fetchData: refreshData,
+  // } = useGetCheckerOrders(TransactionTypeEnum.ALL, true);
 
   const { options: purposeTypeOptions } = useDynamicOptions(
     API.PURPOSE.GET_PURPOSES
@@ -136,7 +149,7 @@ const ViewAllTable = () => {
     <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
-        data={checkerOrdersData?.orders?.map(transformOrderForTable) || []}
+        data={checkerOrdersData?.orders?.map(transformOrderForTable) || checkerOrdersData?.map(transformOrderForTable) || []}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
