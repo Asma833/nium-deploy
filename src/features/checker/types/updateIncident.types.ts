@@ -34,13 +34,21 @@ export type UpdateIncidentSelectedRowData = Order & {
   };
 };
 
+export enum IncidentPageId {
+  UPDATE = 'updateIncident',
+  VIEW_ALL = 'viewAllIncident',
+  ASSIGN = 'assignIncident',
+  COMPLETED = 'completedIncident',
+}
+
+export enum IncidentMode {
+  EDIT = 'edit',
+  VIEW = 'view',
+}
+
 export type UpdateIncidentDialogProps = {
-  mode: 'edit' | 'view';
-  pageId:
-    | 'updateIncident'
-    | 'viewAllIncident'
-    | 'assignIncident'
-    | 'completedIncident';
+  mode: IncidentMode;
+  pageId: IncidentPageId;
   selectedRowData: UpdateIncidentSelectedRowData;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
@@ -144,8 +152,23 @@ export type Order = {
     id: string;
     purpose_name: string;
   };
+  orders?: Order[];
+  totalOrders?: number;
 };
 
 export type Orders = {
   [key: string]: Order;
 };
+
+export enum TransactionTypeEnum {
+  ALL = 'all',
+  COMPLETED = 'completed',
+  PENDING = 'pending',
+  REJECTED = 'rejected',
+}
+
+export type TransactionType =
+  | TransactionTypeEnum.ALL
+  | TransactionTypeEnum.COMPLETED
+  | TransactionTypeEnum.PENDING
+  | TransactionTypeEnum.REJECTED;

@@ -1,19 +1,19 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
-import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import {
+  Order,
+  TransactionType,
+  TransactionTypeEnum,
+} from '../types/updateIncident.types';
 
-type TransactionType = 'all' | 'completed';
-
-export const useGetCheckerOrders = <T = any,>(
-  initialTransactionType: TransactionType = 'all',
+export const useGetCheckerOrders = (
+  initialTransactionType: TransactionType = TransactionTypeEnum.ALL,
   autoFetch: boolean = true
 ) => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(autoFetch);
-  const [error, setError] = useState<string | null>(null);
   const [transactionType, setTransactionType] = useState<TransactionType>(
     initialTransactionType
   );
@@ -22,44 +22,44 @@ export const useGetCheckerOrders = <T = any,>(
   const { user } = useCurrentUser();
   const userHashedKey = user?.hashed_key;
 
-  // Use a ref to store the latest transaction type to avoid dependencies
-  const transactionTypeRef = useRef(transactionType);
-  transactionTypeRef.current = transactionType;
+  // Define query key
+  const queryKey = ['checkerOrders', transactionType];
+  // Use TanStack Query for data fetching
+  const {
+    data,
+    error,
+    isLoading: loading,
+    refetch,
+  } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      if (!userHashedKey) {
+        throw new Error('User hash key not available');
+      }
 
-  // Function to fetch data with POST request
-  const fetchData = useCallback(async () => {
+      const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
+        checkerId: userHashedKey,
+        transaction_type: transactionType,
+      });
+
+      return data as Order;
+    },
+    enabled: autoFetch && !!userHashedKey,
+    retry: 1,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+  // Function to manually trigger a refetch
+  const fetchData = useCallback(() => {
     if (!userHashedKey) {
-      setError('User hash key not available');
-      setLoading(false);
+      toast.error('Error Fetching Checker Orders', {
+        description: 'User hash key not available',
+      });
       return;
     }
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
-        checkerId: userHashedKey,
-        transaction_type: transactionTypeRef.current,
-      });
-
-      setData(data);
-    } catch (err) {
-      // More detailed error logging for authentication issues
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        console.error('Unauthorized');
-      }
-
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
-      toast.error('Error Fetching Checker Orders', {
-        description: errorMessage,
-      });
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [userHashedKey]);
+    refetch();
+  }, [userHashedKey, refetch]);
 
   // fetch data again
   const changeTransactionType = useCallback((newType: TransactionType) => {
@@ -67,12 +67,11 @@ export const useGetCheckerOrders = <T = any,>(
       setTransactionType(newType);
     };
   }, []);
-
   // Watch for transaction type changes to trigger a new fetch
   useEffect(() => {
     if (loading) return; // Prevent double fetching when autoFetch is true
     fetchData();
-  }, [transactionType, fetchData]);
+  }, [transactionType, fetchData, loading]);
 
   // Auto-fetch on mount if enabled
   useEffect(() => {
@@ -87,8 +86,11 @@ export const useGetCheckerOrders = <T = any,>(
     error,
     fetchData,
     transactionType,
-    getAllTransactions: changeTransactionType('all'),
-    getCompletedTransactions: changeTransactionType('completed'),
+    getAllTransactions: changeTransactionType(TransactionTypeEnum.ALL),
+    getCompletedTransactions: changeTransactionType(
+      TransactionTypeEnum.COMPLETED
+    ),
+    getPendingTransactions: changeTransactionType(TransactionTypeEnum.PENDING),
   };
 };
 

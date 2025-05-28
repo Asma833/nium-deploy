@@ -7,7 +7,11 @@ import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { useState } from 'react';
-import { Orders } from '@/features/checker/types/updateIncident.types';
+import {
+  IncidentMode,
+  IncidentPageId,
+  Orders,
+} from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 const ViewAllTable = () => {
@@ -27,14 +31,13 @@ const ViewAllTable = () => {
     setIsModalOpen(true);
   };
 
-    const {
-    options: purposeTypeOptions,
-  } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  const { options: purposeTypeOptions } = useDynamicOptions(
+    API.PURPOSE.GET_PURPOSES
+  );
 
-  const {
-    options: transactionTypeOptions,
-  } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
- 
+  const { options: transactionTypeOptions } = useDynamicOptions(
+    API.TRANSACTION.GET_TRANSACTIONS
+  );
 
   // Use the dynamic pagination hook for fallback
   const pagination = useDynamicPagination({
@@ -110,8 +113,8 @@ const ViewAllTable = () => {
 
       {isModalOpen && selectedRowData && (
         <UpdateIncidentDialog
-          pageId="viewAllIncident"
-          mode="view"
+          pageId={IncidentPageId.VIEW_ALL}
+          mode={IncidentMode.VIEW}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}

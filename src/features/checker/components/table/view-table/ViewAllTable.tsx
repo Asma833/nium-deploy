@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
@@ -7,8 +8,13 @@ import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { Order, Orders } from '@/features/checker/types/updateIncident.types';
-import { useState } from 'react';
+import {
+  IncidentMode,
+  IncidentPageId,
+  Order,
+  Orders,
+  TransactionTypeEnum,
+} from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 
@@ -24,12 +30,7 @@ const ViewAllTable = () => {
     loading: checkerOrdersLoading,
     error: checkerOrdersError,
     fetchData: refreshData,
-  } = useGetCheckerOrders<{
-    message: string;
-    totalOrders: number;
-    filterApplied: string;
-    orders: any[];
-  }>('all', true);
+  } = useGetCheckerOrders(TransactionTypeEnum.ALL, true);
 
   const { options: purposeTypeOptions } = useDynamicOptions(
     API.PURPOSE.GET_PURPOSES
@@ -183,8 +184,8 @@ const ViewAllTable = () => {
 
       {isModalOpen && selectedRowData && (
         <UpdateIncidentDialog
-          pageId="viewAllIncident"
-          mode="view"
+          pageId={IncidentPageId.VIEW_ALL}
+          mode={IncidentMode.VIEW}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}

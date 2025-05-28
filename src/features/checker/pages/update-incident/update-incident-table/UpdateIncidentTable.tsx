@@ -8,7 +8,11 @@ import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
 import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
-import { Order } from '@/features/checker/types/updateIncident.types';
+import {
+  IncidentMode,
+  IncidentPageId,
+  Order,
+} from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const UpdateIncidentCreationTable = () => {
@@ -114,8 +118,8 @@ const UpdateIncidentCreationTable = () => {
 
       {isModalOpen && (
         <UpdateIncidentDialog
-          pageId="updateIncident"
-          mode="edit"
+          pageId={IncidentPageId.UPDATE}
+          mode={IncidentMode.EDIT}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}

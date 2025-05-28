@@ -1,29 +1,28 @@
+import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { Button } from '@/components/ui/button';
 import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import { useState } from 'react';
+import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
-import { API } from '@/core/constant/apis';
+import {
+  IncidentPageId,
+  IncidentMode,
+  TransactionTypeEnum,
+} from '../../types/updateIncident.types';
 
 const CompletedTransactionTable = () => {
   usePageTitle('Completed Transaction');
-
-  // Use our custom hook to fetch completed transactions
+  // Use our custom hook with TanStack Query to fetch completed transactions
   const {
     data: checkerOrdersData,
     loading: checkerOrdersLoading,
     error: checkerOrdersError,
     fetchData: refreshData,
-  } = useGetCheckerOrders<{
-    message: string;
-    totalOrders: number;
-    filterApplied: string;
-    orders: any[];
-  }>('completed', true); // Start with "completed" type
+  } = useGetCheckerOrders(TransactionTypeEnum.COMPLETED, true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
@@ -39,7 +38,6 @@ const CompletedTransactionTable = () => {
   const { options: transactionTypeOptions } = useDynamicOptions(
     API.TRANSACTION.GET_TRANSACTIONS
   );
-  //console.log('transactionTypeOptions:', transactionTypeOptions);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
@@ -68,14 +66,18 @@ const CompletedTransactionTable = () => {
         : '-',
       nium_invoice_number: order.nium_invoice_number || '',
     };
-  };
-
-  // Get data directly from checker orders data
+  }; // Get data directly from checker orders data
   const getTableData = () => {
-    if (checkerOrdersData && checkerOrdersData.orders) {
-      return checkerOrdersData.orders.map(transformOrderForTable);
+    if (checkerOrdersData) {
+      // If it's an array, use it directly
+      if (Array.isArray(checkerOrdersData)) {
+        return checkerOrdersData.map(transformOrderForTable);
+      }
+      // If it has an orders property (nested data structure)
+      if (checkerOrdersData.orders && Array.isArray(checkerOrdersData.orders)) {
+        return checkerOrdersData.orders.map(transformOrderForTable);
+      }
     }
-
     return [];
   };
 
@@ -89,13 +91,29 @@ const CompletedTransactionTable = () => {
 
     exportToCSV(dataToExport, exportColumns, 'completed-transactions');
   };
-
   // Check for loading and error states
   const isLoading = checkerOrdersLoading;
-  const hasError = checkerOrdersError;
+  const hasError = !!checkerOrdersError; // Get total records
+  const totalRecords = (() => {
+    if (!checkerOrdersData) return 0;
 
-  // Get total records
-  const totalRecords = checkerOrdersData?.totalOrders || 0;
+    // If it's an array, use its length
+    if (Array.isArray(checkerOrdersData)) {
+      return checkerOrdersData.length;
+    }
+
+    // If it has a totalOrders property, use that
+    if (checkerOrdersData.totalOrders !== undefined) {
+      return checkerOrdersData.totalOrders;
+    }
+
+    // If it has an orders array, use its length
+    if (checkerOrdersData.orders && Array.isArray(checkerOrdersData.orders)) {
+      return checkerOrdersData.orders.length;
+    }
+
+    return 0;
+  })();
 
   return (
     <div className="dynamic-table-wrap">
@@ -142,11 +160,11 @@ const CompletedTransactionTable = () => {
       />
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
-      </div>
+      </div>{' '}
       {isModalOpen && (
         <UpdateIncidentDialog
-          pageId="completedIncident"
-          mode="view"
+          pageId={IncidentPageId.COMPLETED}
+          mode={IncidentMode.VIEW}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}

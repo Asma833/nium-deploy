@@ -12,10 +12,14 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
+import {
+  IncidentMode,
+  IncidentPageId,
+} from '@/features/checker/types/updateIncident.types';
 
 const AssignCreationTable = () => {
-  const { invalidateMultipleQueries } = useQueryInvalidator();
   usePageTitle('Assign');
+  const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
@@ -33,9 +37,9 @@ const AssignCreationTable = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
 
   const openModal = (rowData: any) => {
-        setSelectedRowData(rowData);
-        setIsModalOpen(true);
-      };
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
   // Update tableData when data changes
   useEffect(() => {
     if (data) {
@@ -116,7 +120,7 @@ const AssignCreationTable = () => {
     }
   };
 
-  const columns = GetAssignCreationColumns(handleSelectionChange,openModal);
+  const columns = GetAssignCreationColumns(handleSelectionChange, openModal);
 
   return (
     <div className="dynamic-table-wrap flex flex-col">
@@ -165,13 +169,13 @@ const AssignCreationTable = () => {
       </div>
       {isModalOpen && (
         <UpdateIncidentDialog
-          pageId="completedIncident"
-          mode="view"
+          pageId={IncidentPageId.COMPLETED}
+          mode={IncidentMode.VIEW}
           selectedRowData={selectedRowData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
         />
-        )}
+      )}
     </div>
   );
 };
