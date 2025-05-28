@@ -1,6 +1,6 @@
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { updateIncidentApi } from '../api/updateIncidentApi';
-import { toast } from 'sonner';
 import { UpdateGetRequestData } from '../types/updateIncident.types';
 
 export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {

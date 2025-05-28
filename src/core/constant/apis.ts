@@ -83,9 +83,9 @@ export const API = {
   TRANSACTION: {
     GET_TRANSACTIONS: `/transaction_type`,
   },
-  PURPOSE:{
+  PURPOSE: {
     GET_PURPOSES: `/purpose`,
-  }
+  },
 } as const;
 
 /**

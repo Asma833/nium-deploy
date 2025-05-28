@@ -5,7 +5,7 @@ import {
   UserCreationResponse,
   UserRequest,
   UserUpdateRequest,
-} from '../types/user.type';
+} from '../types/user.types';
 
 export const userApi = {
   userCreation: async (

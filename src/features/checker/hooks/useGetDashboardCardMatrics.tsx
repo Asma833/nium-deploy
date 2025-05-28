@@ -1,19 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
-
-export interface DashboardMetrics {
-  transactionReceived: number;
-  transactionApproved: number;
-  transactionRejected: number;
-  transactionPending: number;
-  vkycCompleted: number;
-  vkycPending: number;
-  vkycRejected: number;
-  esignCompleted: number;
-  esignPending: number;
-  esignRejected: number;
-}
+import { DashboardMetrics } from '../types/checker.types';
 
 const fetchDashboardMetrics = async (): Promise<DashboardMetrics> => {
   const response = await axiosInstance.get(API.ORDERS.ORDER_STATUS_COUNTS);

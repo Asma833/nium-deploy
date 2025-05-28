@@ -16,16 +16,7 @@ import vkycPending from '@/assets/icons/vkyc-pending.svg';
 import esignCompleted from '@/assets/icons/esign-completed.svg';
 import esignRejected from '@/assets/icons/esign-rejected.svg';
 import esignPending from '@/assets/icons/esign-pending.svg';
-import { DashboardMetrics } from '@/features/checker/hooks/useGetDashboardCardMatrics';
-
-export interface DashboardItem {
-  id: number;
-  title: string;
-  count: number;
-  icon: React.ComponentType;
-  path: string;
-  status: string;
-}
+import { DashboardItem, DashboardMetrics } from '../types/checker.types';
 
 // Default fallback data when API data is not available
 export const apiDummyData: DashboardMetrics = {

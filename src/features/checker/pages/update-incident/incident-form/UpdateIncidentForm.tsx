@@ -218,19 +218,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsFormValid(valid);
   }, [isApproved, isRejected, comment, niumInvoiceNumber]);
 
-  
-
   const handleFormSubmit = async () => {
-    // if (isApproved && !niumInvoiceNumber) {
-    //   setError('fields.niumInvoiceNumber', {
-    //     type: 'required',
-    //     message: 'Nium Invoice Number is required when approving an incident',
-    //   });
-    //   return;
-    // } else {
-    //   clearErrors('fields.niumInvoiceNumber');
-    // }
-
     if (isRejected && !comment) {
       setError('fields.comment', {
         type: 'required',
@@ -390,7 +378,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
-          <FormFieldRow >
+          <FormFieldRow>
             {mode === 'view' &&
               (pageId === 'viewAllIncident' ||
                 pageId === 'completedIncident') && (
@@ -427,7 +415,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               )}
           </FormFieldRow>
           {mode === 'edit' && (
-            <FormFieldRow >
+            <FormFieldRow>
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-2">
                   <Checkbox

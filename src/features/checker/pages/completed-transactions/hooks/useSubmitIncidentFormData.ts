@@ -40,7 +40,11 @@ const useSubmitIncidentFormData = () => {
     return mutate(formData, {
       onSuccess: (data) => {
         callbacks?.onSuccess?.(data);
-        invalidateMultipleQueries([['updateIncident'], ['dashboardMetrics']]);
+        invalidateMultipleQueries([
+          ['updateIncident'],
+          ['dashboardMetrics'],
+          ['checkerOrders'],
+        ]);
       },
       onError: (error) => {
         callbacks?.onError?.(error);

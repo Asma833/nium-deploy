@@ -1,20 +1,10 @@
 import { Edit } from 'lucide-react';
 import Switch from '@/components/ui/switch';
-
-interface TableColumn {
-  key: string;
-  id: string;
-  name: string;
-  cell?: (value: any, row: any) => React.ReactNode;
-}
-
-interface HandleStatusChange {
-  (row: any, checked: boolean): void;
-}
-
-interface HandleNavigate {
-  (path: string, rowData: string): void;
-}
+import {
+  HandleNavigate,
+  HandleStatusChange,
+  TableColumn,
+} from '@/features/admin/types/user.types';
 
 export const GetUserTableColumns = (
   handleStatusChange: HandleStatusChange,

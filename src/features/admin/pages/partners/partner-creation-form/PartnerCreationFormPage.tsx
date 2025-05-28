@@ -14,7 +14,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { useCreatePartner } from '@/features/admin/hooks/useCreatePartners';
 import { usePartnerUpdate } from '@/features/admin/hooks/usePartnerUpdate';
 import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
-import { PartnerFormData } from '@/features/admin/types/partner.type';
+import { PartnerFormData } from '@/features/admin/types/partner.types';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { userFormConfig } from './partner-form.config';
 import { userSchema } from './partner-form.schema';

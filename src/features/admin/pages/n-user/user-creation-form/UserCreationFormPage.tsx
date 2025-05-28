@@ -11,12 +11,11 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { useUpdateAPI } from '@/features/admin/hooks/useUserUpdate';
 import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
-import { UserFormData } from '@/features/admin/types/user.type';
+import { UserFormData } from '@/features/admin/types/user.types';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useCreateUser } from '../../../hooks/useCreateUser';
 import { userFormConfig } from './user-form.config';
 import { userSchema } from './user-form.schema';
-
 
 const UserCreationFormPage = () => {
   const { productOptions } = useProductOptions();

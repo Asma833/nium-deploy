@@ -9,7 +9,7 @@ import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/us
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { usePartnerStatusUpdateAPI } from '@/features/admin/hooks/usePartnerUpdateStatus';
 import { useGetData } from '@/hooks/useGetData';
-import { PartnerRequest } from '@/features/admin/types/partner.type';
+import { PartnerRequest } from '@/features/admin/types/partner.types';
 import { cn } from '@/utils/cn';
 
 const PartnerCreationTable = () => {

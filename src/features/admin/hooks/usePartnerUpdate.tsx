@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetProducts } from '@/hooks/useGetProducts';
-import { UserCreationRequest } from '../types/partner.type';
+import { UserCreationRequest } from '../types/partner.types';
 import { partnerApi } from '../action/partnerApi';
 
 interface UpdatePartnerParams {
