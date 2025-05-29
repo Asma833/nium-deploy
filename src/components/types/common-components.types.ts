@@ -1,3 +1,6 @@
+import { Order } from "@/features/checker/types/updateIncident.types";
+
+
 export type CommonProps = {
   className?: string;
   children?: React.ReactNode;
@@ -97,4 +100,11 @@ export type DashboardContentWrapperProps = {
 export type GeneralWrapperProps = {
   children: React.ReactNode;
   className?: string;
+};
+
+export type ViewAllTableProps = {
+  tableData: Order;
+  checkerOrdersLoading: boolean;
+  checkerOrdersError: string;
+  refreshData: () => void;
 };

@@ -6,28 +6,19 @@ import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { usePageTitle } from '@/hooks/usePageTitle';
-import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import {
   IncidentMode,
   IncidentPageId,
   Order,
   Orders,
-  TransactionTypeEnum,
 } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
-
-type ViewAllTableProps = {
-  checkerOrdersData:any;
-  checkerOrdersLoading: boolean;
-  checkerOrdersError: string;
-  refreshData: () => void;
-};
-
+import { ViewAllTableProps } from '@/components/types/common-components.types';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
-  checkerOrdersData,
+  tableData,
   checkerOrdersLoading,
   checkerOrdersError,
   refreshData,
@@ -37,13 +28,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const {
-  //   data: checkerOrdersData,
-  //   loading: checkerOrdersLoading,
-  //   error: checkerOrdersError,
-  //   fetchData: refreshData,
-  // } = useGetCheckerOrders(TransactionTypeEnum.ALL, true);
 
   const { options: purposeTypeOptions } = useDynamicOptions(
     API.PURPOSE.GET_PURPOSES
@@ -92,7 +76,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       created_at: new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || '-',
       partner_order_id: order.partner_order_id || '-',
-      customer_name:order.customer_name || '-',
+      customer_name: order.customer_name || '-',
       customer_pan: order.customer_pan || '-',
       transaction_type_name: order?.transaction_type_name || '-',
       purpose_type_name: order?.purpose_type_name || '-',
@@ -116,8 +100,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   };
 
   const handleExportToCSV = () => {
-    const dataToExport =
-      checkerOrdersData?.orders?.map(transformOrderForTable) || [];
+    const dataToExport = tableData?.orders?.map(transformOrderForTable) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -142,14 +125,13 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   });
 
   // Get total records
-  const totalRecords =
-    checkerOrdersData?.totalOrders || pagination.totalRecords || 0;
+  const totalRecords = tableData?.totalOrders || pagination.totalRecords || 0;
 
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
-        data={checkerOrdersData?.orders?.map(transformOrderForTable) || checkerOrdersData?.map(transformOrderForTable) || []}
+        data={tableData?.orders?.map(transformOrderForTable) || []}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
