@@ -3,7 +3,7 @@ import SendEmailForm from '../../components/SendEmailForm';
 
 const SendEmailPage = () => {
   return (
-    <AuthLayout title="Send Reset Email">
+    <AuthLayout title="Send Reset Password Email">
       <SendEmailForm />
     </AuthLayout>
   );
