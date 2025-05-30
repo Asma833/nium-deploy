@@ -1,5 +1,4 @@
-import { Order } from "@/features/checker/types/updateIncident.types";
-
+import { Order } from '@/features/checker/types/updateIncident.types';
 
 export type CommonProps = {
   className?: string;
@@ -103,8 +102,9 @@ export type GeneralWrapperProps = {
 };
 
 export type ViewAllTableProps = {
-  tableData: Order;
+  tableData: Order[];
   checkerOrdersLoading: boolean;
   checkerOrdersError: string;
   refreshData: () => void;
+  disableColumns?: string[]; // Optional prop to disable specific columns
 };

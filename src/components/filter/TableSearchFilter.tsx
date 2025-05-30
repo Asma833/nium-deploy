@@ -71,7 +71,6 @@ const TableSearchFilter = ({
     } else {
       // For static mode - always call onFilter regardless of pagination state
       if (onFilter) {
-        console.log('Search cleared - resetting to page 1');
         onFilter();
       }
     }
@@ -109,9 +108,6 @@ const TableSearchFilter = ({
           } else {
             // For static filtering - always call onFilter for search regardless of pagination state
             if (onFilter) {
-              console.log(
-                'Search filter triggered - always resetting to page 1'
-              );
               onFilter();
             }
           }

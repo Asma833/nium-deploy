@@ -22,6 +22,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   checkerOrdersLoading,
   checkerOrdersError,
   refreshData,
+  disableColumns,
 }) => {
   usePageTitle('View All');
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
@@ -72,35 +73,36 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      nium_order_id: order.nium_order_id || '-',
+      nium_order_id: order.nium_order_id || 'NA',
       created_at: new Date(order.created_at).toLocaleString(),
-      partner_id: order.partner_id || '-',
-      partner_order_id: order.partner_order_id || '-',
-      customer_name: order.customer_name || '-',
-      customer_pan: order.customer_pan || '-',
-      transaction_type_name: order?.transaction_type_name || '-',
-      purpose_type_name: order?.purpose_type_name || '-',
+      partner_id: order.partner_id || 'NA',
+      partner_order_id: order.partner_order_id || 'NA',
+      customer_name: order.customer_name || 'NA',
+      customer_pan: order.customer_pan || 'NA',
+      transaction_type_name: order?.transaction_type_name?.name || 'NA',
+      purpose_type_name: order?.purpose_type_name?.purpose_name || 'NA',
       e_sign_link: order.e_sign_link || null,
       v_kyc_link: order.v_kyc_link || null,
-      is_esign_required: order.is_esign_required || '-',
-      is_v_kyc_required: order.is_v_kyc_required || '-',
+      is_esign_required: order.is_esign_required || 'NA',
+      is_v_kyc_required: order.is_v_kyc_required || 'NA',
       e_sign_status: order.e_sign_status || null,
       e_sign_customer_completion_date: order.e_sign_customer_completion_date
         ? new Date(order.e_sign_customer_completion_date).toLocaleString()
-        : '-',
+        : 'NA',
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date: order.v_kyc_customer_completion_date
         ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
-        : '-',
-      incident_status: order.incident_status,
+        : 'NA',
+      incident_status: order.incident_status || 'Pending',
       incident_completion_date: order.incident_completion_date
         ? new Date(order.incident_completion_date).toLocaleString()
-        : '-',
+        : 'NA',
     };
   };
 
   const handleExportToCSV = () => {
-    const dataToExport = tableData?.orders?.map(transformOrderForTable) || [];
+    const dataToExport =
+      tableData.map((item) => transformOrderForTable(item)) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -124,14 +126,15 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
     openModal,
   });
 
-  // Get total records
-  const totalRecords = tableData?.totalOrders || pagination.totalRecords || 0;
+  const tableColumns = columns.filter(
+    (col) => !disableColumns?.includes(col.id as string)
+  );
 
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable
-        columns={columns}
-        data={tableData?.orders?.map(transformOrderForTable) || []}
+        columns={tableColumns}
+        data={tableData || []}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
@@ -147,7 +150,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
             ? pagination.handlePageChange
             : async (_page: number, _pageSize: number) => []
         }
-        totalRecords={totalRecords}
         filter={{
           filterOption: true,
           mode: 'static',
