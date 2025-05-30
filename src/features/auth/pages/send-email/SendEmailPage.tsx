@@ -1,11 +1,14 @@
 import AuthLayout from '../../../../components/layout/AuthLayout';
 import SendEmailForm from '../../components/SendEmailForm';
+import { AuthRedirectGuard } from '@/core/routes/AuthRedirectGuard';
 
 const SendEmailPage = () => {
   return (
-    <AuthLayout title="Send Reset Email">
-      <SendEmailForm />
-    </AuthLayout>
+    <AuthRedirectGuard>
+      <AuthLayout title="Send Reset Email">
+        <SendEmailForm />
+      </AuthLayout>
+    </AuthRedirectGuard>
   );
 };
 
