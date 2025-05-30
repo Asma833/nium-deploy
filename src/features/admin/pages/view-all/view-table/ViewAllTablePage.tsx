@@ -50,7 +50,7 @@ const ViewAllTablePage = () => {
       checkerOrdersLoading={isLoading}
       checkerOrdersError={errorMessage}
       refreshData={refreshData}
-      disableColumns={['generate_esign_link']}
+      disableColumns={['generate_esign_link', 'partner_id']}
     />
   );
 };

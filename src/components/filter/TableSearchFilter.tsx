@@ -45,7 +45,7 @@ const TableSearchFilter = ({
 
   // Add refs for debounce timer and previous search value to optimize search
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
-  const prevSearchValueRef = useRef(filters.search);
+  const prevSearchValueRef = useRef(filters.search.trim().replace(/\s+/g, ' '));
 
   const executeAsyncOperation = useCallback(
     async <T,>(operation: () => Promise<T>) => {
@@ -79,6 +79,12 @@ const TableSearchFilter = ({
   // Improved search handling with better debounce
   const handleSearchInputChange = useCallback(
     (value: string) => {
+      // Immediately update the filter state with the raw value (allows typing spaces)
+      setFilters((prev: typeof filters) => ({
+        ...prev,
+        search: value,
+      }));
+
       // Clear any existing timeout to implement debounce
       if (searchDebounceRef.current) {
         clearTimeout(searchDebounceRef.current);
@@ -86,23 +92,20 @@ const TableSearchFilter = ({
 
       // Set a new timeout for the search action
       searchDebounceRef.current = setTimeout(async () => {
-        // Only perform search if the value has really changed from last execution
-        if (value !== prevSearchValueRef.current) {
-          prevSearchValueRef.current = value;
+        // Trim leading/trailing spaces and normalize internal spaces for search operations
+        const trimmedValue = value.trim().replace(/\s+/g, ' ');
 
-          // Update the filter state inside the debounced function
-          setFilters((prev: typeof filters) => ({
-            ...prev,
-            search: value,
-          }));
+        // Only perform search if the trimmed value has really changed from last execution
+        if (trimmedValue !== prevSearchValueRef.current) {
+          prevSearchValueRef.current = trimmedValue;
 
-          if (value === '') {
+          if (trimmedValue === '') {
             // Handle empty search - clear results
             await handleSearchClear();
           } else if (mode === 'dynamic' && callbacks?.onSearch) {
-            // For dynamic search
+            // For dynamic search - use trimmed value for API call
             const result = await executeAsyncOperation(() =>
-              callbacks.onSearch!(value)
+              callbacks.onSearch!(trimmedValue)
             );
             if (setDynamicData && result) setDynamicData(result);
           } else {
@@ -136,7 +139,7 @@ const TableSearchFilter = ({
 
   // Update the previous search value ref when filters.search changes
   useEffect(() => {
-    prevSearchValueRef.current = filters.search;
+    prevSearchValueRef.current = filters.search.trim().replace(/\s+/g, ' ');
   }, [filters.search]);
 
   const handleDateChange = useCallback(
@@ -221,7 +224,7 @@ const TableSearchFilter = ({
       customFilterValues: {},
     };
 
-    // Update prev search value ref to match reset state
+    // Update prev search value ref to match reset state (empty trimmed value)
     prevSearchValueRef.current = '';
 
     setLocalDateRange(resetFilters.dateRange);

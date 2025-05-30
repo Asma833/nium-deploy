@@ -42,6 +42,7 @@
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
     --expired-badge-bg: #fee0e3;
+    --rejected-badge-bg: #ffccd1;
     --badge-fg: #3f3f3f;
   }
   .dark {
@@ -81,7 +82,7 @@
     --pending-badge-bg: #e1eafa;
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
-    --expired-badge-bg: #fee0e3;
+    --expired-badge-bg: #ffccd1;
     --badge-fg: #3f3f3f;
   }
 }
@@ -118,6 +119,9 @@
 /* E-Sign status badges */
 .status-badge.esign-completed {
   @apply bg-completed-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
+.status-badge.esign-rejected {
+  @apply bg-rejected-badge-bg text-badge-fg px-2 py-1 rounded-full;
 }
 
 .status-badge.esign-not-required {
@@ -235,7 +239,7 @@ html[class='dark'] {
 
 .dark .MuiInputBase-input.Mui-disabled {
   background-color: hsl(var(--card));
-  color: hsl(var(--muted-foreground)) ;
+  color: hsl(var(--muted-foreground));
 }
 
 .dark .MuiPickersArrowSwitcher-button {

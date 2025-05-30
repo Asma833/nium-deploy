@@ -52,6 +52,7 @@ const ViewAllTablePage = () => {
       checkerOrdersLoading={isLoading}
       checkerOrdersError={errorMessage}
       refreshData={refreshData}
+      disableColumns={['partner_id']}
     />
   );
 };
