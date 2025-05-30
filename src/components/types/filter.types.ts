@@ -3,6 +3,26 @@ export interface DateRange {
   to: Date | undefined;
 }
 
+export interface TableSearchFilterProps {
+  filters: {
+    search: string;
+    status: string;
+    role: string;
+    dateRange: {
+      from: Date | undefined;
+      to: Date | undefined;
+    };
+    customFilterValues: Record<string, string>;
+  };
+  filterConfig: FilterConfig;
+  setFilters: React.Dispatch<React.SetStateAction<any>>;
+  onFilter?: () => void;
+  onReset?: () => void;
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
+  setDynamicData?: React.Dispatch<React.SetStateAction<any[]>>;
+  // Removed isPaginationAction property
+}
+
 export interface SelectOption {
   label: string;
   value: string;
@@ -80,5 +100,5 @@ export interface TableSearchFilterProps {
   onReset?: () => void;
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
   setDynamicData?: React.Dispatch<React.SetStateAction<any[]>>;
-  isPaginationAction?: boolean; // Add this property
+  // Removed isPaginationAction property as it's not needed
 }

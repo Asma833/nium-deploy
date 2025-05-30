@@ -26,12 +26,18 @@ import { downloadFromUrl } from '@/utils/exportUtils';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
-  console.log('UpdateIncidentForm props:', rowData);
-  const transactionType = typeof rowData?.transaction_type_name === 'object'
-      ? (rowData?.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
-      : (rowData?.transaction_type_name ? rowData.transaction_type_name : 'NA');
-  const purposeType = rowData?.purpose_type_name?.purpose_name ? rowData?.purpose_type_name?.purpose_name : rowData?.purpose_type_name;
- 
+  const transactionType =
+    typeof rowData?.transaction_type_name === 'object'
+      ? rowData?.transaction_type_name?.name?.trim()
+        ? rowData.transaction_type_name.name
+        : 'NA'
+      : rowData?.transaction_type_name
+        ? rowData.transaction_type_name
+        : 'NA';
+  const purposeType = rowData?.purpose_type_name?.purpose_name
+    ? rowData?.purpose_type_name?.purpose_name
+    : rowData?.purpose_type_name;
+
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
   // usestates
@@ -142,11 +148,16 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
         customerPan: rowData.customer_pan || 'NA',
         customerName: rowData.customer_name || 'NA',
         bmfOrderRef: rowData.partner_order_id || 'NA',
-        transactionType: typeof rowData.transaction_type_name === 'object'
-      ? (rowData.transaction_type_name?.name?.trim() ? rowData.transaction_type_name.name : 'NA')
-      : (rowData.transaction_type_name ? rowData.transaction_type_name : 'NA'),
-            purpose: rowData.purpose_type_name?.purpose_name || 'NA',
-            buySell: buySellValue || 'NA',
+        transactionType:
+          typeof rowData.transaction_type_name === 'object'
+            ? rowData.transaction_type_name?.name?.trim()
+              ? rowData.transaction_type_name.name
+              : 'NA'
+            : rowData.transaction_type_name
+              ? rowData.transaction_type_name
+              : 'NA',
+        purpose: rowData.purpose_type_name?.purpose_name || 'NA',
+        buySell: buySellValue || 'NA',
         // comment: rowData.incident_checker_comments || '',
         incidentNumber: rowData?.incident_number || 'NA',
         eonInvoiceNumber: rowData?.eon_invoice_number || 'NA',

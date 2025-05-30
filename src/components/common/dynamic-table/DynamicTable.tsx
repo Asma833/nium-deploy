@@ -103,9 +103,6 @@ export function DynamicTable<T extends Record<string, any>>({
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
 
-  // Track pagination action state
-  const [isPaginationAction, setIsPaginationAction] = useState(false);
-
   // Use dynamic data if in dynamic mode, otherwise use filtered data
   const mode = filter?.mode || 'static';
   const loading = externalLoading || internalLoading;
@@ -225,24 +222,22 @@ export function DynamicTable<T extends Record<string, any>>({
   // Force only one filter operation per 500ms
   const handleFilter = () => {
     const now = Date.now();
-    // Skip if we're in the middle of a pagination action
-    if (isPaginationAction) {
-      return;
-    }
 
+    // Always reset to page 1 when filtering, regardless of timing
+    setCurrentPage(1);
+
+    // Only limit frequency of filter operations, not whether they can occur
     if (now - lastFiltered < 500) {
       return;
     }
 
     setLastFiltered(now);
-    setCurrentPage(1);
   };
 
   const [resetKey, setResetKey] = useState(0);
 
   const handleReset = () => {
-    if (isPaginationAction) return;
-
+    // Allow reset operations regardless of pagination state
     const now = Date.now();
     if (now - lastFiltered < 500) return;
 
@@ -274,14 +269,8 @@ export function DynamicTable<T extends Record<string, any>>({
   const handlePageChange = (page: number) => {
     // Only log when the page is actually changing to reduce noise
     if (page !== currentPage) {
-      // Set pagination action flag to true before changing page
-      setIsPaginationAction(true);
       // Set the page
       setCurrentPage(page);
-      // Clear the pagination flag after a short delay
-      setTimeout(() => {
-        setIsPaginationAction(false);
-      }, 200);
     }
   };
 
@@ -327,7 +316,6 @@ export function DynamicTable<T extends Record<string, any>>({
                   onReset={handleReset}
                   setLoading={setInternalLoading}
                   setDynamicData={setDynamicData}
-                  isPaginationAction={isPaginationAction}
                 />
               </div>
             )}
