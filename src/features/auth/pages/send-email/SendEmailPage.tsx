@@ -5,7 +5,7 @@ import { AuthRedirectGuard } from '@/core/routes/AuthRedirectGuard';
 const SendEmailPage = () => {
   return (
     <AuthRedirectGuard>
-      <AuthLayout title="Send Reset Email">
+      <AuthLayout title="Send Reset Password Email">
         <SendEmailForm />
       </AuthLayout>
     </AuthRedirectGuard>

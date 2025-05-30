@@ -9,11 +9,13 @@ const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
           <span
             className={`status-badge esign-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}
           >
-            {_.capitalize(rowData.e_sign_status)}
+            {rowData.e_sign_status === 'N/A'
+              ? 'N/A'
+              : _.capitalize(rowData.e_sign_status)}
           </span>
         )
       ) : (
-        <span>NA</span>
+        <span>Not Required</span>
       )}
     </span>
   );

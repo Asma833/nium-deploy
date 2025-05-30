@@ -73,30 +73,42 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
-      nium_order_id: order.nium_order_id || 'NA',
-      created_at: new Date(order.created_at).toLocaleString(),
-      partner_id: order.partner_id || 'NA',
-      partner_order_id: order.partner_order_id || 'NA',
-      customer_name: order.customer_name || 'NA',
-      customer_pan: order.customer_pan || 'NA',
-      transaction_type_name: order?.transaction_type_name?.name || 'NA',
-      purpose_type_name: order?.purpose_type_name?.purpose_name || 'NA',
+      nium_order_id: order.nium_order_id || 'N/A',
+      created_at:
+        order.created_at === 'N/A'
+          ? 'N/A'
+          : new Date(order.created_at).toLocaleString(),
+      partner_id: order.partner_id || 'N/A',
+      partner_order_id: order.partner_order_id || 'N/A',
+      customer_name: order.customer_name || 'N/A',
+      customer_pan: order.customer_pan || 'N/A',
+      transaction_type_name: order?.transaction_type_name?.name || 'N/A',
+      purpose_type_name: order?.purpose_type_name?.purpose_name || 'N/A',
       e_sign_link: order.e_sign_link || null,
       v_kyc_link: order.v_kyc_link || null,
-      is_esign_required: order.is_esign_required || 'NA',
-      is_v_kyc_required: order.is_v_kyc_required || 'NA',
+      is_esign_required: order.is_esign_required || 'N/A',
+      is_v_kyc_required: order.is_v_kyc_required || 'N/A',
       e_sign_status: order.e_sign_status || null,
-      e_sign_customer_completion_date: order.e_sign_customer_completion_date
-        ? new Date(order.e_sign_customer_completion_date).toLocaleString()
-        : 'NA',
+      e_sign_customer_completion_date:
+        order.e_sign_customer_completion_date === 'N/A'
+          ? 'N/A'
+          : order.e_sign_customer_completion_date
+            ? new Date(order.e_sign_customer_completion_date).toLocaleString()
+            : 'N/A',
       v_kyc_status: order.v_kyc_status || null,
-      v_kyc_customer_completion_date: order.v_kyc_customer_completion_date
-        ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
-        : 'NA',
+      v_kyc_customer_completion_date:
+        order.v_kyc_customer_completion_date === 'N/A'
+          ? 'N/A'
+          : order.v_kyc_customer_completion_date
+            ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
+            : 'N/A',
       incident_status: order.incident_status || 'Pending',
-      incident_completion_date: order.incident_completion_date
-        ? new Date(order.incident_completion_date).toLocaleString()
-        : 'NA',
+      incident_completion_date:
+        order.incident_completion_date === 'N/A'
+          ? 'N/A'
+          : order.incident_completion_date
+            ? new Date(order.incident_completion_date).toLocaleString()
+            : 'N/A',
     };
   };
 

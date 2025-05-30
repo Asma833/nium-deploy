@@ -1,15 +1,12 @@
 import { useMemo } from 'react';
 import ViewAllTable from '@/components/table/common-tables/view-table/ViewAllTable';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import {
   Order,
   TransactionTypeEnum,
 } from '@/features/checker/types/updateIncident.types';
 
 const ViewAllTablePage = () => {
-  usePageTitle('View All Orders');
-
   const {
     data,
     loading: isLoading,
@@ -55,6 +52,7 @@ const ViewAllTablePage = () => {
       checkerOrdersLoading={isLoading}
       checkerOrdersError={errorMessage}
       refreshData={refreshData}
+      disableColumns={['partner_id']}
     />
   );
 };

@@ -5,7 +5,7 @@ import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
-import { formatDate } from '@/utils/dateFormat';
+import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
 export const GetTransactionTableColumns = ({
   handleRegenerateEsignLink,
@@ -33,7 +33,7 @@ export const GetTransactionTableColumns = ({
     name: 'Order Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { created_at?: string }) => (
-      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+      <span>{formatDateWithFallback(rowData.created_at)}</span>
     ),
   },
   {
@@ -85,9 +85,7 @@ export const GetTransactionTableColumns = ({
       rowData: { e_sign_customer_completion_date?: string }
     ) => (
       <span>
-        {rowData.e_sign_customer_completion_date
-          ? formatDate(rowData.e_sign_customer_completion_date)
-          : null}
+        {formatDateWithFallback(rowData.e_sign_customer_completion_date)}
       </span>
     ),
   },
@@ -108,9 +106,7 @@ export const GetTransactionTableColumns = ({
       rowData: { v_kyc_customer_completion_date?: string }
     ) => (
       <span>
-        {rowData.v_kyc_customer_completion_date
-          ? formatDate(rowData.v_kyc_customer_completion_date)
-          : null}
+        {formatDateWithFallback(rowData.v_kyc_customer_completion_date)}
       </span>
     ),
   },
@@ -129,11 +125,7 @@ export const GetTransactionTableColumns = ({
     name: 'Incident Completion Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { incident_completion_date?: string }) => (
-      <span>
-        {rowData.incident_completion_date
-          ? formatDate(rowData.incident_completion_date)
-          : null}
-      </span>
+      <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
     ),
   },
   {

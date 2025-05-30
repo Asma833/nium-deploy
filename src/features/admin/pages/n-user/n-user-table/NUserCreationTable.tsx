@@ -14,6 +14,7 @@ import { GetUserTableColumns } from './NUserCreationTableColumns';
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
+
   const { data, isLoading: loading } = useGetData<User[]>({
     endpoint: API.NUSERS.USER.LIST,
     queryKey: queryKeys.user.allUsers,

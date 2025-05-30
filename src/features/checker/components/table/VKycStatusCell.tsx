@@ -9,11 +9,13 @@ const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
           <span
             className={`status-badge esign-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}
           >
-            {_.capitalize(rowData.v_kyc_status)}
+            {rowData.v_kyc_status === 'N/A'
+              ? 'N/A'
+              : _.capitalize(rowData.v_kyc_status)}
           </span>
         )
       ) : (
-        <span>NA</span>
+        <span>Not Required</span>
       )}
     </span>
   );
