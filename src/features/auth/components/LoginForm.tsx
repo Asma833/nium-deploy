@@ -15,13 +15,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
-import useEncryptDecrypt from '../../../hooks/useEncryptDecrypt'; 
 
-const ENCRYPTION_KEY = '1234567890123456';
 const LoginForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const { mutate, isLoading } = useLogin();
-  const { encrypt } = useEncryptDecrypt();
   
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -32,11 +29,9 @@ const LoginForm = () => {
   });
 
   const handleLogin = async (values: LoginSchema) => {
-    const encryptedEmail = encrypt(ENCRYPTION_KEY, values.email);
-    const encryptedPassword = encrypt(ENCRYPTION_KEY, values.password);
+  
    mutate({
-      email: encryptedEmail,
-      password: encryptedPassword,
+    ...values,
     });
   };
 
