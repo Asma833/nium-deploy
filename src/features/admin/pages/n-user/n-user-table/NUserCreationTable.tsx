@@ -12,13 +12,13 @@ import TableTabsLayout from '@/features/admin/components/table/TableTabsLayout';
 import { userTabs } from '@/features/admin/config/table-tabs-nav.config';
 import { GetUserTableColumns } from './NUserCreationTableColumns';
 import { useEffect } from 'react';
-import useDisableBackButton from '@/utils/useDisableBackButton';
+import useDisableBackButton from '@/hooks/useDisableBackButton';
 
 const NuserCreationTable = () => {
   const navigate = useNavigate();
   useEffect(() => {
-   useDisableBackButton();
-}, []);
+    useDisableBackButton();
+  }, []);
 
   const { data, isLoading: loading } = useGetData<User[]>({
     endpoint: API.NUSERS.USER.LIST,
