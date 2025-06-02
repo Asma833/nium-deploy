@@ -11,7 +11,6 @@ import {
   shouldSkipEncryption,
   shouldEncryptMethod,
 } from '@/core/services/encryption/encryptionConfig';
-import { encryptionLogger } from '@/core/services/encryption/encryptionLogger';
 
 interface EncryptedRequestData {
   encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD
@@ -78,12 +77,9 @@ export const encryptRequestInterceptor = async (
       iv: encryptionResult.iv,
     };
 
-    config.data = encryptedPayload;
-
-    // Set appropriate headers
+    config.data = encryptedPayload; // Set appropriate headers
     if (config.headers) {
       config.headers['Content-Type'] = 'application/json';
-      config.headers['X-Encryption-Enabled'] = 'true';
     }
 
     return config;

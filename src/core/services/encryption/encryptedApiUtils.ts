@@ -26,12 +26,10 @@ export class EncryptedApiUtils {
         encryptedKey: encryptionResult.encryptedAESKey,
         iv: encryptionResult.iv,
       };
-
       const response = await axiosInstance.post<T>(url, encryptedPayload, {
         ...config,
         headers: {
           ...config?.headers,
-          'X-Encryption-Enabled': 'true',
           'X-AES-Key': encryptionResult.aesKey,
           'X-IV': encryptionResult.iv,
         },
@@ -76,12 +74,10 @@ export class EncryptedApiUtils {
         encryptedKey: encryptionResult.encryptedAESKey,
         iv: encryptionResult.iv,
       };
-
       const response = await axiosInstance.put<T>(url, encryptedPayload, {
         ...config,
         headers: {
           ...config?.headers,
-          'X-Encryption-Enabled': 'true',
           'X-AES-Key': encryptionResult.aesKey,
           'X-IV': encryptionResult.iv,
         },
@@ -126,12 +122,10 @@ export class EncryptedApiUtils {
         encryptedKey: encryptionResult.encryptedAESKey,
         iv: encryptionResult.iv,
       };
-
       const response = await axiosInstance.patch<T>(url, encryptedPayload, {
         ...config,
         headers: {
           ...config?.headers,
-          'X-Encryption-Enabled': 'true',
           'X-AES-Key': encryptionResult.aesKey,
           'X-IV': encryptionResult.iv,
         },
