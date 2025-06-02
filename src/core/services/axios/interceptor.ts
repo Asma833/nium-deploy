@@ -7,6 +7,10 @@ import {
 import { store } from '@/store';
 import { logout, updateAccessToken } from '@/features/auth/store/authSlice';
 import { API } from '@/core/constant/apis';
+import {
+  encryptRequestInterceptor,
+  decryptResponseInterceptor,
+} from '@/core/services/encryption/encryptionInterceptor';
 
 interface RefreshTokenResponse {
   data: {
@@ -35,19 +39,28 @@ const processQueue = (error: any, token: string | null) => {
 };
 
 export const setupInterceptors = (axiosInstance: AxiosInstance) => {
+  // Request interceptors (order matters - encryption first, then auth)
   axiosInstance.interceptors.request.use(
-    (config) => {
+    async (config) => {
+      // Apply encryption first
+      const encryptedConfig = await encryptRequestInterceptor(config);
+
+      // Then apply authentication
       const token = store.getState().auth.accessToken;
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (token && encryptedConfig.headers) {
+        encryptedConfig.headers.Authorization = `Bearer ${token}`;
       }
-      return config;
+      return encryptedConfig;
     },
     (error: AxiosError) => Promise.reject(error)
   );
 
+  // Response interceptors (order matters - auth first, then decryption)
   axiosInstance.interceptors.response.use(
-    (response: AxiosResponse) => response,
+    (response: AxiosResponse) => {
+      // Apply decryption to successful responses
+      return decryptResponseInterceptor(response);
+    },
     async (error: AxiosError) => {
       const originalRequest = error.config as AxiosRequestConfig & {
         _retry?: boolean;
