@@ -30,10 +30,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     typeof rowData?.transaction_type_name === 'object'
       ? rowData?.transaction_type_name?.name?.trim()
         ? rowData.transaction_type_name.name
-        : 'NA'
+        : 'N/A'
       : rowData?.transaction_type_name
         ? rowData.transaction_type_name
-        : 'NA';
+        : 'N/A';
   const purposeType = rowData?.purpose_type_name?.purpose_name
     ? rowData?.purpose_type_name?.purpose_name
     : rowData?.purpose_type_name;
@@ -144,28 +144,28 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
 
       const mappedData = {
-        niumId: rowData.nium_order_id || 'NA',
-        customerPan: rowData.customer_pan || 'NA',
-        customerName: rowData.customer_name || 'NA',
-        bmfOrderRef: rowData.partner_order_id || 'NA',
+        niumId: rowData.nium_order_id || 'N/A',
+        customerPan: rowData.customer_pan || 'N/A',
+        customerName: rowData.customer_name || 'N/A',
+        bmfOrderRef: rowData.partner_order_id || 'N/A',
         transactionType:
           typeof rowData.transaction_type_name === 'object'
             ? rowData.transaction_type_name?.name?.trim()
               ? rowData.transaction_type_name.name
-              : 'NA'
+              : 'N/A'
             : rowData.transaction_type_name
               ? rowData.transaction_type_name
-              : 'NA',
-        purpose: rowData.purpose_type_name?.purpose_name || 'NA',
-        buySell: buySellValue || 'NA',
+              : 'N/A',
+        purpose: rowData.purpose_type_name?.purpose_name || 'N/A',
+        buySell: buySellValue || 'N/A',
         // comment: rowData.incident_checker_comments || '',
-        incidentNumber: rowData?.incident_number || 'NA',
-        eonInvoiceNumber: rowData?.eon_invoice_number || 'NA',
+        incidentNumber: rowData?.incident_number || 'N/A',
+        eonInvoiceNumber: rowData?.eon_invoice_number || 'N/A',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNumber: rowData.nium_invoice_number || 'NA',
+        niumInvoiceNumber: rowData.nium_invoice_number || '',
       };
 
       // Set values using appropriate field paths
@@ -398,7 +398,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   onClick={handleViewDocument}
                   disabled={!documentUrl}
                   className="disabled:opacity-60"
-                  >
+                >
                   View Document
                 </Button>
               )}
@@ -409,7 +409,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   type="button"
                   onClick={handleDownloadDocument}
                   disabled={!documentUrl}
-                  className="disabled:opacity-60">
+                  className="disabled:opacity-60"
+                >
                   eSign Document
                 </Button>
               )}
@@ -421,7 +422,8 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   type="button"
                   onClick={handleDownloadVideo}
                   disabled={!documentUrl}
-                  className="disabled:opacity-60">
+                  className="disabled:opacity-60"
+                >
                   VKYC Document
                 </Button>
               )}

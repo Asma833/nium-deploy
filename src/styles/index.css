@@ -41,8 +41,8 @@
     --pending-badge-bg: #e1eafa;
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
-    --expired-badge-bg: #fee0e3;
-    --rejected-badge-bg: #ffccd1;
+    --expired-badge-bg: #e5e5e5;
+    --rejected-badge-bg: #fee0e3;
     --badge-fg: #3f3f3f;
   }
   .dark {
@@ -82,7 +82,7 @@
     --pending-badge-bg: #e1eafa;
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
-    --expired-badge-bg: #ffccd1;
+    --expired-badge-bg: #e5e5e5;
     --badge-fg: #3f3f3f;
   }
 }

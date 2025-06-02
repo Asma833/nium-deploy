@@ -22,6 +22,7 @@ export const API = {
     UPDATE_PREFERENCES: `/users/preferences`,
   },
   ORDERS: {
+    ORDERS: '/orders',
     LIST: `/orders`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
