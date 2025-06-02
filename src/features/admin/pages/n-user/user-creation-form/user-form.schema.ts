@@ -13,8 +13,8 @@ export const userSchema = z
       .regex(
         /[@$!%*?&]/,
         'Password must contain at least one special character (@, $, !, %, *, ?, &)'
-      ),
-
+      )
+    .regex(/^(?!-)/, 'Password cannot start with a hyphen'), 
     confirmPassword: z
       .string()
       .min(6, 'Confirm password must be at least 6 characters'),
