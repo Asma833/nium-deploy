@@ -11,6 +11,7 @@ import {
   shouldSkipEncryption,
   shouldEncryptMethod,
 } from '@/core/services/encryption/encryptionConfig';
+import { encryptionLogger } from '@/core/services/encryption/encryptionLogger';
 
 interface EncryptedRequestData {
   encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD
@@ -59,8 +60,6 @@ export const encryptRequestInterceptor = async (
     if (!shouldEncryptMethod(config.method || '')) {
       return config;
     }
-
-    console.log('Encrypting request data for:', config.url);
 
     // Encrypt the request data
     const encryptionResult: EncryptionResult =
@@ -127,7 +126,6 @@ export const decryptResponseInterceptor = (
       return response;
     }
 
-    console.log('Decrypting response data from:', response.config.url); // Decrypt the response data
     const decryptedData = encryptionService.decryptResponse({
       encryptedData: responseData.encryptedValue,
       aesKey: encryptionCtx.aesKey,

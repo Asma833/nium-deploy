@@ -2,29 +2,16 @@
  * Configuration for endpoints that should skip encryption
  */
 
+import {
+  SKIP_ENCRYPTION_ENDPOINTS,
+  matchesEndpointRule,
+} from '@/core/constant/encryptionEndpoints';
+
 /**
  * Exact endpoint paths that should never be encrypted
- * These are checked using string.includes() so partial matches will work
+ * These are checked for exact matches or when followed by a path separator or query string
  */
-export const SKIP_ENCRYPTION_ENDPOINTS = [
-  // System endpoints
-  '/public-key',
-  '/health',
-  '/status',
-
-  // Authentication endpoints
-  '/auth/login',
-  '/auth/logout',
-  '/auth/refresh',
-  '/auth/verify',
-
-  // API endpoints that should skip encryption
-  '/orders/get-checker-orders',
-
-  // Add more endpoints as needed
-  // Example: '/api/v1/users/public-profile',
-  // Example: '/api/v1/settings/public',
-] as const;
+// SKIP_ENCRYPTION_ENDPOINTS is now imported from encryptionEndpoints.ts
 
 /**
  * Regex patterns for endpoints that should skip encryption
@@ -64,10 +51,10 @@ export const ENCRYPT_METHODS = ['post', 'put', 'patch'] as const;
  * Helper function to check if an endpoint should skip encryption
  */
 export function shouldSkipEncryption(url: string): boolean {
-  // Check exact endpoint matches
-  const skipByEndpoint = SKIP_ENCRYPTION_ENDPOINTS.some((endpoint) =>
-    url.includes(endpoint)
-  );
+  // Check exact endpoint matches using centralized matching rules
+  const skipByEndpoint = SKIP_ENCRYPTION_ENDPOINTS.some((endpoint) => {
+    return matchesEndpointRule(url, endpoint);
+  });
 
   // Check pattern matches
   const skipByPattern = SKIP_ENCRYPTION_PATTERNS.some((pattern) =>

@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js';
 import * as forge from 'node-forge';
+import { encryptionLogger } from './encryptionLogger';
 
 export interface EncryptionResult {
   encryptedData: string;
@@ -67,10 +68,9 @@ class EncryptionService {
       if (!this.rsaPublicKey) {
         throw new Error('Invalid RSA public key received from server');
       }
-
       return this.rsaPublicKey;
     } catch (error) {
-      console.error('Error fetching RSA public key:', error);
+      encryptionLogger.error('Failed to fetch RSA public key', error as Error);
       throw new Error('Failed to fetch RSA public key');
     }
   }
@@ -91,34 +91,34 @@ class EncryptionService {
       if (keySource === 'env') {
         // Get key from environment variables
         this.rsaPublicKey = this.getRSAPublicKeyFromEnv();
-        console.log('RSA public key loaded from environment variables');
+        encryptionLogger.logRSAKeyLoaded('env');
       } else {
         // Fetch key from API
         await this.fetchRSAPublicKey();
-        console.log('RSA public key fetched from API endpoint');
+        encryptionLogger.logRSAKeyLoaded('api');
       }
-
       return this.rsaPublicKey!;
     } catch (error) {
-      console.error(`Failed to get RSA public key from ${keySource}:`, error);
+      encryptionLogger.error(
+        `Failed to get RSA public key from ${keySource}`,
+        error as Error
+      );
 
       // Fallback mechanism: try the other source if the primary fails
       try {
         if (keySource === 'env') {
-          console.log('Falling back to API endpoint...');
+          encryptionLogger.info('Falling back to API endpoint...');
           await this.fetchRSAPublicKey();
-          console.log('RSA public key fetched from API endpoint (fallback)');
+          encryptionLogger.logRSAKeyLoaded('api', true);
         } else {
-          console.log('Falling back to environment variables...');
+          encryptionLogger.info('Falling back to environment variables...');
           this.rsaPublicKey = this.getRSAPublicKeyFromEnv();
-          console.log(
-            'RSA public key loaded from environment variables (fallback)'
-          );
+          encryptionLogger.logRSAKeyLoaded('env', true);
         }
 
         return this.rsaPublicKey!;
       } catch (fallbackError) {
-        console.error('Fallback also failed:', fallbackError);
+        encryptionLogger.error('Fallback also failed', fallbackError as Error);
         throw new Error(
           `Failed to get RSA public key from both ${keySource} and fallback source`
         );
@@ -154,12 +154,10 @@ class EncryptionService {
         iv: ivWordArray,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7,
-      });
-
-      // Return as HEX instead of Base64 (backend expects HEX format)
+      }); // Return as HEX instead of Base64 (backend expects HEX format)
       return encrypted.ciphertext.toString(CryptoJS.enc.Hex);
     } catch (error) {
-      console.error('AES encryption error:', error);
+      encryptionLogger.error('AES encryption error', error as Error);
       throw new Error('Failed to encrypt data with AES');
     }
   }
@@ -189,10 +187,9 @@ class EncryptionService {
       if (!decryptedString) {
         throw new Error('Decryption failed - invalid key or corrupted data');
       }
-
       return decryptedString;
     } catch (error) {
-      console.error('AES decryption error:', error);
+      encryptionLogger.error('AES decryption error', error as Error);
       throw new Error('Failed to decrypt data with AES');
     }
   }
@@ -215,12 +212,10 @@ class EncryptionService {
       const aesKeyBytes = forge.util.hexToBytes(aesKey);
 
       // Encrypt using RSA-OAEP
-      const encrypted = forgePublicKey.encrypt(aesKeyBytes, 'RSA-OAEP');
-
-      // Return as HEX instead of Base64 (backend expects HEX format)
+      const encrypted = forgePublicKey.encrypt(aesKeyBytes, 'RSA-OAEP'); // Return as HEX instead of Base64 (backend expects HEX format)
       return forge.util.bytesToHex(encrypted);
     } catch (error) {
-      console.error('RSA encryption error:', error);
+      encryptionLogger.error('RSA encryption error', error as Error);
       throw new Error('Failed to encrypt AES key with RSA');
     }
   }
@@ -266,7 +261,7 @@ class EncryptionService {
         aesKey, // Include the AES key for response decryption
       };
     } catch (error) {
-      console.error('Encryption process error:', error);
+      encryptionLogger.error('Encryption process error', error as Error);
       throw new Error('Failed to encrypt payload');
     }
   }
@@ -301,7 +296,7 @@ class EncryptionService {
         return decryptedString;
       }
     } catch (error) {
-      console.error('Decryption process error:', error);
+      encryptionLogger.error('Decryption process error', error as Error);
       throw new Error('Failed to decrypt response');
     }
   }
