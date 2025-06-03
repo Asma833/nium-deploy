@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import { checkerRoutes } from './Routes';
 import { ProtectedRoute } from './ProtectedRoute';
-import CheckerLayout from '@/components/layout/SidebarLayout';
 import NotFoundPage from '@/components/common/NotFoundPage';
+import SidebarLayout from '@/components/layout/SidebarLayout';
 
 export const MakerRoutes = () => {
   return (
@@ -13,9 +13,9 @@ export const MakerRoutes = () => {
           path={path}
           element={
             <ProtectedRoute roles={roles} permission={permission}>
-              <CheckerLayout>
+              <SidebarLayout>
                 <Element />
-              </CheckerLayout>
+              </SidebarLayout>
             </ProtectedRoute>
           }
         />
@@ -23,9 +23,9 @@ export const MakerRoutes = () => {
       <Route
         path="*"
         element={
-          <CheckerLayout>
+          <SidebarLayout>
             <NotFoundPage />
-          </CheckerLayout>
+          </SidebarLayout>
         }
       />
     </Routes>
