@@ -8,19 +8,21 @@ import {
   EncryptionResult,
 } from '@/core/services/encryption/encryptionService';
 import {
-  shouldSkipEncryption,
   shouldEncryptMethod,
 } from '@/core/services/encryption/encryptionConfig';
+import {
+  shouldEncryptEndpoint,
+} from '@/core/constant/encryptionEndpoints'; // ✅ Correct import
 
 interface EncryptedRequestData {
   encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD
-  encryptedKey: string; // HEX_RSA_ENCRYPTED_AES_KEY
-  iv: string; // HEX_IV
-  originalData?: any; // For debugging, remove in production
+  encryptedKey: string;   // HEX_RSA_ENCRYPTED_AES_KEY
+  iv: string;             // HEX_IV
+  originalData?: any;     // Optional: remove in production
 }
 
 interface EncryptedResponseData {
-  encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD (server response)
+  encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD (from server)
   success?: boolean;
   message?: string;
 }
@@ -35,18 +37,15 @@ export const encryptRequestInterceptor = async (
   config: InternalAxiosRequestConfig
 ): Promise<InternalAxiosRequestConfig> => {
   try {
-    // Check if URL should skip encryption (using centralized config)
-    const shouldSkipByUrl = shouldSkipEncryption(config.url || '');
+    const url = config.url || '';
+    const shouldEncrypt = shouldEncryptEndpoint(url);
 
-    // Check for header-based encryption control
-    const headerSkipEncryption =
-      config.headers?.['X-Skip-Encryption'] === 'true';
-
-    // Check for per-request encryption disable
+    // Other control flags
+    const headerSkipEncryption = config.headers?.['X-Skip-Encryption'] === 'true';
     const configSkipEncryption = (config as any).skipEncryption === true;
 
     if (
-      shouldSkipByUrl ||
+      !shouldEncrypt ||
       headerSkipEncryption ||
       configSkipEncryption ||
       !config.data ||
@@ -55,38 +54,40 @@ export const encryptRequestInterceptor = async (
       return config;
     }
 
-    // Only encrypt specific HTTP methods with data (using centralized config)
+    // Encrypt only for specific HTTP methods
     if (!shouldEncryptMethod(config.method || '')) {
       return config;
     }
 
-    // Encrypt the request data
-    const encryptionResult: EncryptionResult =
-      await encryptionService.encryptPayload(config.data); // Store the AES key and IV for later decryption (use URL + timestamp as key)
-    const contextKey = `${config.url}_${Date.now()}`;
+   
+    const encryptionResult: EncryptionResult = await encryptionService.encryptPayload(config.data);
+
+    const contextKey = `${url}_${Date.now()}`;
     encryptionContext.set(contextKey, {
-      aesKey: encryptionResult.aesKey, // Store the actual AES key used
+      aesKey: encryptionResult.aesKey,
       iv: encryptionResult.iv,
     });
 
-    // Store context key in request config for response matching (using a custom property)
-    (config as any).encryptionContextKey = contextKey; // Replace request data with encrypted payload
+    (config as any).encryptionContextKey = contextKey;
+
     const encryptedPayload: EncryptedRequestData = {
       encryptedValue: encryptionResult.encryptedData,
       encryptedKey: encryptionResult.encryptedAESKey,
       iv: encryptionResult.iv,
     };
 
-    config.data = encryptedPayload; // Set appropriate headers
+    config.data = encryptedPayload;
+
     if (config.headers) {
       config.headers['Content-Type'] = 'application/json';
+      // config.headers['x-encrypted-key'] = encryptionResult.encryptedAESKey;
+      // config.headers['x-iv'] = encryptionResult.iv;
     }
 
     return config;
   } catch (error) {
     console.error('Error in request encryption interceptor:', error);
-    // In case of encryption error, proceed with original request
-    return config;
+    return config; // fallback to original config if encryption fails
   }
 };
 
@@ -101,18 +102,20 @@ export const decryptResponseInterceptor = (
       return response;
     }
 
-    // Check if response contains encrypted data
     const responseData = response.data as EncryptedResponseData;
+
     if (
       !responseData ||
       typeof responseData !== 'object' ||
       !responseData.encryptedValue
     ) {
       return response;
-    } // Get encryption context from request
+    }
+
     const contextKey = (response.config as any).encryptionContextKey;
+
     if (!contextKey) {
-      console.warn('No encryption context found for response decryption');
+      console.warn('No encryption context key found for response');
       return response;
     }
 
@@ -128,24 +131,23 @@ export const decryptResponseInterceptor = (
       iv: encryptionCtx.iv,
     });
 
-    // Clean up encryption context
-    encryptionContext.delete(contextKey); // Replace response data with decrypted data
+    encryptionContext.delete(contextKey);
+
     response.data = {
       ...responseData,
       ...decryptedData,
-      encryptedValue: undefined, // Remove encrypted data from response
+      encryptedValue: undefined,
     };
 
     return response;
   } catch (error) {
     console.error('Error in response decryption interceptor:', error);
-    // In case of decryption error, return original response
     return response;
   }
 };
 
 /**
- * Enhanced encryption-aware API client wrapper
+ * Optional: Class for manual encryption in custom use cases
  */
 export class EncryptedApiClient {
   private static instance: EncryptedApiClient;
@@ -158,14 +160,11 @@ export class EncryptedApiClient {
     }
     return EncryptedApiClient.instance;
   }
-  /**
-   * Encrypt data for API request
-   */
+
   async encryptRequest(data: any): Promise<EncryptedRequestData> {
     const result = await encryptionService.encryptPayload(data);
 
-    // Store for response decryption
-    this.aesKey = result.aesKey; // Use the actual key from the result
+    this.aesKey = result.aesKey;
     this.iv = result.iv;
 
     return {
@@ -175,9 +174,6 @@ export class EncryptedApiClient {
     };
   }
 
-  /**
-   * Decrypt API response
-   */
   decryptResponse(encryptedData: string): any {
     if (!this.aesKey || !this.iv) {
       throw new Error('No encryption context available for decryption');
@@ -189,16 +185,10 @@ export class EncryptedApiClient {
       iv: this.iv,
     });
 
-    // Clear context after use
-    this.aesKey = null;
-    this.iv = null;
-
+    this.clearContext();
     return result;
   }
 
-  /**
-   * Clear encryption context
-   */
   clearContext(): void {
     this.aesKey = null;
     this.iv = null;
