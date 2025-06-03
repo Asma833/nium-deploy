@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { checkerRoutes } from './Routes';
 import { ProtectedRoute } from './ProtectedRoute';
-import CheckerLayout from '@/components/layout/CheckerLayout';
+import CheckerLayout from '@/components/layout/SidebarLayout';
 import NotFoundPage from '@/components/common/NotFoundPage';
 
 export const CheckerRoutes = () => {

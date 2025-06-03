@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import DashboardContentWrapper from '@/components/common/DashboardContentWrapper';
-import CheckerSideNavigation from '../../features/checker/components/side-navigation/CheckerSideNav';
 import Header from '@/components/layout/side-navigaion/HeaderNav';
+import Sidebar from '@/components/layout/side-navigaion/SideNav';
 import { ReactNode } from 'react';
+import { getNavigationItemsByRole } from '@/core/constant/manageSideNavOptions';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 interface CheckerLayoutProps {
   children: ReactNode;
 }
 
-const CheckerLayout = ({ children }: CheckerLayoutProps) => {
+const SidebarLayout = ({ children }: CheckerLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { getUserRole } = useCurrentUser();
+
+  // Get navigation items based on user role
+  const userRole = getUserRole() || 'checker'; // Default to checker if role is not available
+  const navigationItems = getNavigationItemsByRole(userRole);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -19,7 +26,11 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
           isSidebarOpen ? 'translate-x-0' : '-translate-x-64'
         } lg:translate-x-0 z-50`}
       >
-        <CheckerSideNavigation setIsSidebarOpen={setIsSidebarOpen} />
+        {' '}
+        <Sidebar
+          navItems={navigationItems}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
       </div>
 
       <Header
@@ -39,4 +50,4 @@ const CheckerLayout = ({ children }: CheckerLayoutProps) => {
   );
 };
 
-export default CheckerLayout;
+export default SidebarLayout;

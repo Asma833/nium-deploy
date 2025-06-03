@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
 
-export const checkerComponents = {
+export const makerComponents = {
   Dashboard: lazy(
     () => import('@/features/checker/pages/dashboard/DashboardPage')
   ),
@@ -28,35 +28,17 @@ export const checkerComponents = {
       )
   ),
 };
-export const checkerRoutes = [
+export const makerRoutes = [
   {
     path: ROUTES.CHECKER.DASHBOARD,
-    element: checkerComponents.Dashboard,
-    roles: ['checker'],
+    element: makerComponents.Dashboard,
+    roles: ['maker'],
     permission: '',
   },
   {
     path: ROUTES.CHECKER.ASSIGN,
-    element: checkerComponents.Assign,
-    roles: ['checker'],
-    permission: '',
-  },
-  {
-    path: ROUTES.CHECKER.UPDATE_INCIDENT,
-    element: checkerComponents.UpdateIncident,
-    roles: ['checker'],
-    permission: '',
-  },
-  {
-    path: ROUTES.CHECKER.VIEWALL,
-    element: checkerComponents.ViewAll,
-    roles: ['checker'],
-    permission: '',
-  },
-  {
-    path: ROUTES.CHECKER.COMPLETEDTRANSACTIONS,
-    element: checkerComponents.CompletedTransaction,
-    roles: ['checker'],
+    element: makerComponents.Assign,
+    roles: ['maker'],
     permission: '',
   },
 ];
