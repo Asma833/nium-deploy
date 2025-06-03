@@ -9,6 +9,8 @@ import { MaterialNumber } from '@/components/form/controller/MaterialNumber';
 import MaterialPassword from '@/components/form/controller/MaterialPassword';
 import { MaterialTextArea } from '../controller/MaterialTextArea';
 import { baseGeneralFieldStyle, baseStyle } from '../styles/materialStyles';
+import { FileUpload } from '../controller/FileUpload';
+import FileUploadWithView from '../controller/FIleUploadWithView';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -47,6 +49,32 @@ export const getController = (field: any) => {
       return <MaterialNumber {...styledProps} />;
     case 'file':
       return <MaterialFile {...baseProps} className={baseGeneralFieldStyle} />;
+    case 'fileupload':
+      return (
+        <FileUpload
+          {...baseProps}
+          id={field.id}
+          className={baseGeneralFieldStyle}
+          maxFiles={field.maxFiles}
+          description={field.description}
+          helpText={field.helpText}
+          accept={field.accept}
+          multiple={field.maxFiles > 1}
+        />
+      );
+    case 'fileupload_view':
+      return (
+        <FileUploadWithView
+          {...baseProps}
+          id={field.id}
+          className={baseGeneralFieldStyle}
+          maxFiles={field.maxFiles}
+          description={field.description}
+          helpText={field.helpText}
+          accept={field.accept}
+          multiple={field.maxFiles > 1}
+        />
+      );
     case 'checkbox':
       return (
         <MaterialCheckbox

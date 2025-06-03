@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/form-layout.css';
 import { cn } from '@/utils/cn';
+import '@/components/form/styles/form-layout.css';
 
 type PropsType = {
   id?: string;
@@ -21,6 +21,7 @@ const FieldWrapper = ({
 }: PropsType) => {
   return (
     <div
+      id={id}
       {...props}
       className={cn(
         'fieldWrapper',
