@@ -13,6 +13,7 @@ const ViewAllTablePage = () => {
     error,
     fetchData: refreshData,
   } = useGetCheckerOrders(TransactionTypeEnum.ALL, true);
+  console.log('ViewAllTablePage data:', data);
 
   // Memoize table data to prevent unnecessary re-renders
   const tableData = useMemo(() => {
