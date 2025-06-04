@@ -3,6 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
 import { ErrorMessage } from '../ErrorMessage';
+import '../styles/form-layout.css';
 
 interface MaterialSelectProps {
   name: string;

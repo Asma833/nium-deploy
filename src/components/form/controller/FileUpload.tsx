@@ -14,6 +14,7 @@ interface FileUpload {
   multiple?: boolean;
   handleFileChange?: (e: ChangeEvent<HTMLInputElement> | null) => void;
   styleType?: 'default' | 'fileUploadWithView';
+  defaultValue?: File | null;
 }
 
 export const FileUpload = ({
@@ -23,6 +24,7 @@ export const FileUpload = ({
   className,
   handleFileChange,
   styleType = 'default',
+  defaultValue,
 }: FileUpload) => {
   const { control } = useFormContext();
 
@@ -35,7 +37,7 @@ export const FileUpload = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={null} // Add default value
+      defaultValue={defaultValue || null}
       render={({ field: { value, onChange }, fieldState: { error } }) => (
         <div className={cn('w-full p-3 flex flex-col gap-2', className)}>
           {styleType == 'default' && <span className="text-sm"> {label}</span>}
@@ -48,19 +50,19 @@ export const FileUpload = ({
                 onChange={(e) => {
                   const file = e.target.files?.[0] || null;
                   onChange(file);
-                  handleChange(e); // Call the custom handler if provided
+                  handleChange(e);
                 }}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                className="n-filetype-hidden"
                 accept=".pdf,.jpg,.png"
               />
               <button
                 type="button"
-                className="bg-[#ededed] w-full h-full cursor-pointer flex px-4 py-2 text-gray-500 text-sm rounded overflow-hidden hover:bg-blue-600"
+                className="bg-[#ededed] w-full h-full cursor-pointer flex  text-gray-500 text-[12px] rounded overflow-hidden hover:bg-gray-200"
               >
-                <span className="text-nowrap font-semibold border-r-2 border-gray-400 pr-3">
+                <span className="text-nowrap font-semibold border-r-2 border-gray-400 py-2 pr-3 pl-4">
                   Choose File
                 </span>
-                <span className="ml-2 text-gray-500 font-semibold">
+                <span className="ml-2 text-gray-500 font-semibold px-4 py-2">
                   {value ? value.name : 'No file chosen'}
                 </span>
               </button>

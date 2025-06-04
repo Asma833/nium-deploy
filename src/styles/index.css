@@ -23,7 +23,7 @@
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 85%;
+    --border: 0 0% 55%;
     --input: 0 0% 75%;
     --ring: 328 100% 50%; /* #fd0194 */
     --chart-1: 12 76% 61%;
@@ -208,6 +208,24 @@
 
 .fieldWrapper .MuiFormControl-root {
   width: 100%;
+}
+
+fieldset.MuiOutlinedInput-notchedOutline {
+  @apply border border-[hsl(var(--border))]  text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))];
+}
+
+.MuiSelect-select {
+  display: flex !important;
+  align-items: center !important;
+  justify-items: center !important;
+}
+.n-filetype-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

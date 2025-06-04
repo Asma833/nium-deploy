@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { FileUpload } from './FileUpload';
+import { Eye, X } from 'lucide-react';
 
 interface FileUploadProps {
   id?: string;
@@ -46,7 +47,7 @@ const FileUploadWithView = ({
           <img
             src={fileUrl}
             alt={selectedFile.name}
-            className="max-w-full max-h-96 object-contain"
+            className="max-w-full h-[95vh] object-contain mx-auto"
           />
         </div>
       );
@@ -58,7 +59,11 @@ const FileUploadWithView = ({
           <p className="mb-2">
             <strong>File:</strong> {selectedFile.name}
           </p>
-          <iframe src={fileUrl} className="w-full h-96" title="PDF Preview" />
+          <iframe
+            src={fileUrl}
+            className="w-full h-[95vh]"
+            title="PDF Preview"
+          />
         </div>
       );
     }
@@ -81,7 +86,7 @@ const FileUploadWithView = ({
   return (
     <div className="flex">
       <div className="flex flex-col w-full">
-        <span className="text-sm"> {label}</span>
+        <span className="text-sm mb-2">{label}</span>
         <div className="flex w-full gap-2">
           <FileUpload
             id={id || name}
@@ -93,24 +98,24 @@ const FileUploadWithView = ({
           />
           <button
             type="button"
-            className={`px-2 bg-blue-600 text-white rounded w-1/6 ${className}`}
+            className={`px-2 text-gray-500 border-none bg-transparent rounded w-1/6 flex items-center justify-center gap-2 ${className}`}
             onClick={() => setIsModalOpen(true)}
           >
-            View
+            <Eye /> View
           </button>
         </div>
       </div>
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white p-6 rounded shadow-lg min-w-full md:min-w-[800px] md:max-w-[1100px] max-h-[90vh] overflow-auto">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 ">
+          <div className="relative bg-white p-6 rounded shadow-lg min-w-full md:min-w-[800px] lg:min-w-[1200px] md:max-w-[1100px] max-h-[95vh] overflow-auto">
             <h2 className="text-lg font-bold mb-4">File Preview</h2>
-            {renderFilePreview()}
             <button
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => setIsModalOpen(false)}
             >
-              Close
+              <X className="w-6 h-6 text-primary" />
             </button>
+            {renderFilePreview()}
           </div>
         </div>
       )}

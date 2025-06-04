@@ -55,3 +55,8 @@
     width: calc(33.33% - 15px);
   }
 }
+
+/* Material-UI InputLabel override */
+label.MuiFormLabel-root.MuiInputLabel-root:not(.MuiInputLabel-shrink) {
+  transform: translate(14px, 11px) scale(1) !important;
+}

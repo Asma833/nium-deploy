@@ -10,7 +10,7 @@ import MaterialPassword from '@/components/form/controller/MaterialPassword';
 import { MaterialTextArea } from '../controller/MaterialTextArea';
 import { baseGeneralFieldStyle, baseStyle } from '../styles/materialStyles';
 import { FileUpload } from '../controller/FileUpload';
-import FileUploadWithView from '../controller/FIleUploadWithView';
+import FileUploadWithView from '../controller/FileUploadWithView';
 
 export const getController = (field: any) => {
   const baseProps = {

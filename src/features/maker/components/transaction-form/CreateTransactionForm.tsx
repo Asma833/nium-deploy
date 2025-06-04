@@ -10,7 +10,6 @@ import { transactionFormSchema } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import useGetPurposes from '@/hooks/useGetPurposes';
-import { camelCase } from 'lodash';
 
 const CreateTransactionForm = () => {
   const { transactionTypes } = useGetTransactionType();
@@ -18,12 +17,12 @@ const CreateTransactionForm = () => {
   const formatedTransactionTypes = transactionTypes.map((type) => ({
     id: parseInt(type.id) || 0,
     label: type.text,
-    value: camelCase(type.text),
+    value: type.text,
   }));
   const formatedPurposeTypes = purposeTypes.map((type) => ({
     id: parseInt(type.id) || 0,
     label: type.text,
-    value: camelCase(type.text),
+    value: type.text,
   }));
 
   // Generate dynamic form config
@@ -66,10 +65,13 @@ const CreateTransactionForm = () => {
                 )
               )}
             </FormFieldRow>
+            <span className="border-b border-gray-500 mb-3">
+              Upload Document
+            </span>
             <FormFieldRow className="mb-4" rowCols={2}>
               {Object.entries(formControllerMeta.fields.uploadDocuments).map(
                 ([key, field]) => (
-                  <FieldWrapper key={key}>
+                  <FieldWrapper key={key} className="mb-4">
                     {getController({
                       ...field,
                       control,
