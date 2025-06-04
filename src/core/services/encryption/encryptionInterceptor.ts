@@ -159,9 +159,9 @@ export const decryptResponseInterceptor = (
     encryptionContext.delete(contextKey);
 
     response.data = {
-      ...responseData,
+      // ...responseData,
       ...decryptedData,
-      encryptedValue: undefined,
+      // encryptedValue: undefined,
     };
     return response;
   } catch (error) {
