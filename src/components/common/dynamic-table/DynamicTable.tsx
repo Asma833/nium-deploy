@@ -152,7 +152,7 @@ export function DynamicTable<T extends Record<string, any>>({
 
           // Apply date range filter
           if (filter?.dateFilterColumn && filters.dateRange) {
-            const dateColumn = filter.dateFilterColumn as string;
+            const dateColumn = filter?.dateFilterColumn as string;
             const itemDate = item[dateColumn]
               ? new Date(item[dateColumn])
               : null;
