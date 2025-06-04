@@ -16,7 +16,6 @@ import {
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
-import { log } from 'console';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
