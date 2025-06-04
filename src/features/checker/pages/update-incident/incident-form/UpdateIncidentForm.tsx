@@ -508,13 +508,18 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           )}
 
           <FormFieldRow rowCols={2}>
-            {mode === 'edit' && (
-              <FormFieldRow className="flex-1">
+            {mode === 'edit' && (              <FormFieldRow className="flex-1">
                 {getController({
                   ...updateFormIncidentConfig.checkFeedInput.comment,
                   control,
                   errors,
                   name: 'fields.comment',
+                  onInputChange: (value: string) => {
+                    // Clear validation errors when user starts typing
+                    if (value && value.trim().length > 0) {
+                      clearErrors('fields.comment');
+                    }
+                  },
                 })}
               </FormFieldRow>
             )}

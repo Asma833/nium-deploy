@@ -16,6 +16,7 @@ interface MaterialTextAreaProps {
   required?: boolean;
   error?: any;
   forcedValue?: string;
+  onInputChange?: (value: string) => void;
 }
 
 export const MaterialTextArea = ({
@@ -31,6 +32,7 @@ export const MaterialTextArea = ({
   required,
   forcedValue,
   error,
+  onInputChange,
 }: MaterialTextAreaProps) => {
   const { control } = useFormContext();
 
@@ -56,6 +58,13 @@ export const MaterialTextArea = ({
             {...(placeholder !== undefined && { placeholder })}
             {...(baseStyle && { style: baseStyle })}
             className={cn(className)}
+            onChange={(e) => {
+              field.onChange(e);
+              // Call the onInputChange callback if provided
+              if (onInputChange) {
+                onInputChange(e.target.value);
+              }
+            }}
           />
         )}
       />

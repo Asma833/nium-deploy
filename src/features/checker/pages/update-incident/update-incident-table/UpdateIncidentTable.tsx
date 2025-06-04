@@ -67,6 +67,8 @@ const UpdateIncidentCreationTable = () => {
     handleUnassign,
     isUnassignPending
   );
+  const tableData =
+    data && data.orders && data.orders.length > 0 ? data.orders : [];
 
   return (
     <div className="dynamic-table-wrap">
@@ -83,11 +85,10 @@ const UpdateIncidentCreationTable = () => {
         {(filterApi.error || pagination.error || error) && (
           <span className="text-red-500">Error loading data</span>
         )}
-      </div>
-
+      </div>{' '}
       <DynamicTable
         columns={columns}
-        data={data && data.orders.length > 0 ? data.orders : []}
+        data={tableData}
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={pagination.loading}
@@ -116,7 +117,6 @@ const UpdateIncidentCreationTable = () => {
             : undefined,
         }}
       />
-
       {isModalOpen && (
         <UpdateIncidentDialog
           pageId={IncidentPageId.UPDATE}
