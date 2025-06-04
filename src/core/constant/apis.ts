@@ -29,6 +29,7 @@ export const API = {
     UPDATE: (id: string) => `/orders/${id}`,
     DELETE: (id: string) => `/orders/${id}`,
     CHECKER_ORDERS: `/orders/get-checker-orders`,
+    CHECKER_ORDERS_BY_PARTNER_ID: `/orders/get-checker-orders-by-partner-order-id`,
     UPDATE_ORDER_DETAILS: `/orders/update-order-details`,
     UNASSIGN_CHECKER: `/orders/unassign-checker`,
     ORDER_STATUS_COUNTS: `/orders/order-status-counts`,
