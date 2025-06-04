@@ -12,7 +12,6 @@ const ViewAllTablePage = () => {
     error,
     fetchData: refreshData,
   } = useGetAllOrders();
-
   // Memoize table data to prevent unnecessary re-renders
   const tableData = useMemo(() => {
     if (!data) return [];
@@ -29,6 +28,7 @@ const ViewAllTablePage = () => {
 
     return [];
   }, [data]);
+
   // Format error message consistently
   const errorMessage = useMemo(() => {
     if (!error) return '';

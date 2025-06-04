@@ -106,6 +106,11 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
               refreshUrl,
               {
                 params: { refreshToken: currentRefreshToken },
+                // Skip encryption for refresh token requests to avoid circular dependencies
+                skipEncryption: true,
+                headers: {
+                  'X-Skip-Encryption': 'true',
+                },
               }
             );
 

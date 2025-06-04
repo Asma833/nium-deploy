@@ -72,10 +72,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
-    console.log(
-      'Transforming order for table:',
-      order.incident_completion_date
-    );
     return {
       nium_order_id: order.nium_order_id || 'N/A',
       created_at:

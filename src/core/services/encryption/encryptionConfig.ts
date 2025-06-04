@@ -32,20 +32,15 @@ export const SKIP_ENCRYPTION_PATTERNS = [
 
 /**
  * HTTP methods that should never be encrypted
- * GET and DELETE requests typically don't need encryption
+ * Only DELETE, HEAD, and OPTIONS requests skip encryption entirely
  */
-export const SKIP_ENCRYPTION_METHODS = [
-  'get',
-  'delete',
-  'head',
-  'options',
-] as const;
+export const SKIP_ENCRYPTION_METHODS = ['delete', 'head', 'options'] as const;
 
 /**
  * HTTP methods that should be encrypted (when they have data)
- * Only these methods with request bodies will be considered for encryption
+ * POST, PUT, PATCH encrypt request body; GET needs encryption headers for encrypted responses
  */
-export const ENCRYPT_METHODS = ['post', 'put', 'patch'] as const;
+export const ENCRYPT_METHODS = ['get', 'post', 'put', 'patch'] as const;
 
 /**
  * Helper function to check if an endpoint should skip encryption
@@ -66,6 +61,7 @@ export function shouldSkipEncryption(url: string): boolean {
 
 /**
  * Helper function to check if an HTTP method should be encrypted
+ * Now includes GET requests for encrypted response handling
  */
 export function shouldEncryptMethod(method: string): boolean {
   return ENCRYPT_METHODS.includes(method.toLowerCase() as any);

@@ -197,13 +197,84 @@ export class EncryptedApiUtils {
   }
 
   /**
+   * Make a GET request with encryption headers for encrypted responses
+   */
+  static async encryptedGet<T = any>(
+    url: string,
+    config?: any
+  ): Promise<AxiosResponse<T>> {
+    if (!encryptionService.isEncryptionEnabled()) {
+      return axiosInstance.get<T>(url, config);
+    }
+
+    try {
+      // Generate AES key and IV for encrypted response
+      const aesKey = encryptionService.generateAESKey();
+      const iv = encryptionService.generateIV();
+
+      // Ensure RSA public key is available
+      await encryptionService.ensureRSAPublicKey();
+
+      // Encrypt the AES key with RSA
+      const encryptedAESKey = encryptionService.encryptAESKeyWithRSA(aesKey);
+
+      const response = await axiosInstance.get<T>(url, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          'x-encrypted-key': encryptedAESKey,
+          'x-iv': iv,
+        },
+      });
+
+      // Decrypt response if it's encrypted
+      if (
+        response.data &&
+        typeof response.data === 'object' &&
+        'encryptedValue' in response.data
+      ) {
+        const decryptedData = encryptionService.decryptResponse({
+          encryptedData: (response.data as any).encryptedValue,
+          aesKey: aesKey,
+          iv: iv,
+        });
+
+        response.data = decryptedData;
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Encrypted GET request failed:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Make a GET request (GET requests are never encrypted anyway)
+   * This method now defaults to encrypted GET if encryption is enabled
    */
   static async get<T = any>(
     url: string,
     config?: any
   ): Promise<AxiosResponse<T>> {
+    // Use encrypted GET by default if encryption is enabled
+    if (encryptionService.isEncryptionEnabled()) {
+      return this.encryptedGet<T>(url, config);
+    }
     return axiosInstance.get<T>(url, config);
+  }
+
+  /**
+   * Make a GET request without encryption headers (convenience method)
+   */
+  static async unencryptedGet<T = any>(
+    url: string,
+    config?: any
+  ): Promise<AxiosResponse<T>> {
+    return axiosInstance.get<T>(
+      url,
+      EncryptionControlUtils.withoutEncryption(config)
+    );
   }
 
   /**
