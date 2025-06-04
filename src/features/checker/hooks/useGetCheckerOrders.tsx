@@ -67,18 +67,6 @@ export const useGetCheckerOrders = (
       setTransactionType(newType);
     };
   }, []);
-  // Watch for transaction type changes to trigger a new fetch
-  useEffect(() => {
-    if (loading) return; // Prevent double fetching when autoFetch is true
-    fetchData();
-  }, [transactionType, fetchData, loading]);
-
-  // Auto-fetch on mount if enabled
-  useEffect(() => {
-    if (autoFetch) {
-      fetchData();
-    }
-  }, [fetchData, autoFetch]);
 
   return {
     data,
