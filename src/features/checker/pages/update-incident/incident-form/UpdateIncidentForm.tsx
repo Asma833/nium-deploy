@@ -22,10 +22,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
-import { downloadFromUrl } from '@/utils/exportUtils';
+import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheckerOrdersByPartnerId';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
+  console.log('rowData:', rowData);
   const transactionType =
     typeof rowData?.transaction_type_name === 'object'
       ? rowData?.transaction_type_name?.name?.trim()
@@ -40,6 +41,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
+
   // usestates
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
   const [documentUrl, setDocumentUrl] = useState<string | null>(null);
@@ -48,6 +50,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
   const [isVkycDownloadLink, setIsVkycDownloadLink] = useState(false);
+  const [partnerOrderId, setPartnerOrderId] = useState('');
 
   // State to track if we should show the buy/sell field
   // const [showBuySell, setShowBuySell] = useState(true);
@@ -142,6 +145,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       // setShowBuySell(shouldShowBuySell);
       setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
+      setPartnerOrderId(rowData.partner_order_id || '');
 
       const mappedData = {
         niumId: rowData.nium_order_id || 'NA',
@@ -165,7 +169,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
         },
-        niumInvoiceNumber: rowData.nium_invoice_number || 'NA',
+        niumInvoiceNumber: rowData.nium_invoice_number || '',
       };
 
       // Set values using appropriate field paths
@@ -270,25 +274,80 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     }
   };
 
+  const {
+    data: order,
+    loading: loadingOrder,
+    error: loadingError,
+    fetchData,
+  } = useGetCheckerOrdersByPartnerId(partnerOrderId);
+
+  const {
+    merged_document,
+    esigns,
+    resources_documents_files,
+    resources_images_files,
+    resources_videos_files,
+  } = order || {};
+
+  const mergeDocument = merged_document?.url || '';
+  const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
+  const vkycDocumentFiles = resources_documents_files || {};
+  const vkycVideoFiles = resources_videos_files?.customer || '';
+  const vkycDocumentFilesArray = Object.values(vkycDocumentFiles);
+
+  // console.log('resources_documents_files:', resources_documents_files);
+  // console.log('resources_images_files:', resources_images_files);
+  // console.log('resources_videos_files:', resources_videos_files);
+  // console.log('esigns:', esignFile);
+  console.log('order:', order);
+  console.log('vkycVideoFiles:', vkycVideoFiles);
+  console.log('vkycDocumentFilesArray:', vkycDocumentFilesArray);
+  console.log('esignFile:', esignFile);
+  console.log('vkycDocumentFiles:', vkycDocumentFiles);
+
   const handleViewDocument = () => {
-    if (documentUrl) {
-      window.open(documentUrl, '_blank');
+    if (mergeDocument) {
+      window.open(mergeDocument, '_blank');
     }
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = () => {
-    if (documentUrl) {
-      downloadFromUrl(documentUrl);
+  const handleDownloadDocument = (
+    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo'
+  ) => {
+    if (docType && docType === 'esignDocument' && esignFile) {
+      window.open(esignFile, '_blank');
+    } else if (
+      docType === 'vkycDocument' &&
+      vkycDocumentFilesArray.length > 0
+    ) {
+      const firstDocument = vkycDocumentFilesArray[0];
+
+      if (firstDocument) {
+        window.open(firstDocument, '_blank');
+      } else {
+        toast.error('No VKYC document available for download');
+      }
+    } else if (docType === 'vkycVideo' && vkycVideoFiles) {
+      const videoUrl = vkycVideoFiles || '';
+      console.log('videoUrl:', videoUrl);
+
+      if (videoUrl) {
+        window.open(videoUrl, '_blank');
+      } else {
+        toast.error('No VKYC video available for download');
+      }
+    } else {
+      toast.error('No document available for download');
     }
   };
 
   // Download handler for VKYC Document
-  const handleDownloadVideo = () => {
-    if (documentUrl) {
-      downloadFromUrl(documentUrl);
-    }
-  };
+  // const handleDownloadVideo = () => {
+  //   if (documentUrl) {
+  //     window.open(documentUrl, '_blank');
+  //   }
+  // };
 
   // Custom handler for the Approve checkbox
   const handleApproveChange = (checked: boolean) => {
@@ -396,9 +455,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 <Button
                   type="button"
                   onClick={handleViewDocument}
-                  disabled={!documentUrl}
+                  disabled={!mergeDocument}
                   className="disabled:opacity-60"
-                  >
+                >
                   View Document
                 </Button>
               )}
@@ -407,9 +466,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 pageId === 'completedIncident') && (
                 <Button
                   type="button"
-                  onClick={handleDownloadDocument}
-                  disabled={!documentUrl}
-                  className="disabled:opacity-60">
+                  onClick={() => handleDownloadDocument('esignDocument')}
+                  disabled={!isEsignDocumentLink}
+                  className="disabled:opacity-60"
+                >
                   eSign Document
                 </Button>
               )}
@@ -419,10 +479,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 pageId === 'completedIncident') && (
                 <Button
                   type="button"
-                  onClick={handleDownloadVideo}
-                  disabled={!documentUrl}
-                  className="disabled:opacity-60">
+                  onClick={() => handleDownloadDocument('vkycDocument')}
+                  disabled={!isVkycDownloadLink}
+                  className="disabled:opacity-60"
+                >
                   VKYC Document
+                </Button>
+              )}
+            {vkycVideoFiles &&
+              (pageId === 'updateIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={() => handleDownloadDocument('vkycVideo')}
+                  disabled={!vkycVideoFiles}
+                  className="disabled:opacity-60"
+                >
+                  VKYC Video
                 </Button>
               )}
           </FormFieldRow>
