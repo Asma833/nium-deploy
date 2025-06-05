@@ -13,6 +13,7 @@ interface MaterialTextProps {
   required?: boolean;
   forcedValue?: string;
   error?: any;
+  onInputChange?: (value: string) => void;
 }
 
 export const MaterialText = ({
@@ -25,6 +26,7 @@ export const MaterialText = ({
   required = false,
   forcedValue,
   error,
+  onInputChange,
 }: MaterialTextProps) => {
   const { control } = useFormContext();
 
@@ -48,6 +50,10 @@ export const MaterialText = ({
                 ? e.target.value.toUpperCase()
                 : e.target.value;
               field.onChange(value);
+              // Call the onInputChange callback if provided
+              if (onInputChange) {
+                onInputChange(value);
+              }
             }}
             sx={baseStyle as SxProps<Theme>}
             className={cn(className)}

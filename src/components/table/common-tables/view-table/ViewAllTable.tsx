@@ -72,10 +72,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
-    console.log(
-      'Transforming order for table:',
-      order.incident_completion_date
-    );
     return {
       nium_order_id: order.nium_order_id || 'N/A',
       created_at:
@@ -148,12 +144,11 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const tableColumns = columns.filter(
     (col) => !disableColumns?.includes(col.id as string)
   );
-
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable
         columns={tableColumns}
-        data={tableData || []}
+        data={tableData}
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         loading={isLoading}
@@ -195,6 +190,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
           },
         }}
       />
+
       <div className="flex justify-center sm:justify-start mt-4 gap-3">
         <Button onClick={handleExportToCSV}>Export CSV</Button>
       </div>

@@ -152,7 +152,7 @@ export function DynamicTable<T extends Record<string, any>>({
 
           // Apply date range filter
           if (filter?.dateFilterColumn && filters.dateRange) {
-            const dateColumn = filter.dateFilterColumn as string;
+            const dateColumn = filter?.dateFilterColumn as string;
             const itemDate = item[dateColumn]
               ? new Date(item[dateColumn])
               : null;
@@ -353,36 +353,38 @@ export function DynamicTable<T extends Record<string, any>>({
                   </TableHead>
                 ))}
               </TableRow>
-            </TableHeader>
+            </TableHeader>{' '}
             <TableBody className="odz-table-body">
               {!loading ? (
                 paginatedData.length > 0 ? (
-                  paginatedData.map((row, idx) => {
-                    const rowKey =
-                      row.id ??
-                      row.niumId ??
-                      row._id ??
-                      `${currentPage}-${idx}`;
-                    return (
-                      <TableRow
-                        key={rowKey}
-                        className={cn(
-                          'odz-table-row',
-                          onRowClick && 'cursor-pointer hover:bg-gray-50'
-                        )}
-                        onClick={() => onRowClick?.(row)}
-                      >
-                        {columns.map((col: Column<T>) => (
-                          <TableCell
-                            className="odz-table-cell text-center"
-                            key={`${rowKey}-${col.key}`}
-                          >
-                            {getCellContent(row, col)}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })
+                  paginatedData
+                    .filter((row) => row != null)
+                    .map((row, idx) => {
+                      const rowKey =
+                        row.id ??
+                        row.niumId ??
+                        row._id ??
+                        `${currentPage}-${idx}`;
+                      return (
+                        <TableRow
+                          key={rowKey}
+                          className={cn(
+                            'odz-table-row',
+                            onRowClick && 'cursor-pointer hover:bg-gray-50'
+                          )}
+                          onClick={() => onRowClick?.(row)}
+                        >
+                          {columns.map((col: Column<T>) => (
+                            <TableCell
+                              className="odz-table-cell text-center"
+                              key={`${rowKey}-${col.key}`}
+                            >
+                              {getCellContent(row, col)}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      );
+                    })
                 ) : (
                   <TableRow className="odz-table-row">
                     <TableCell

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { GetAssignCreationColumns } from './AssignCreationTableColumns';
@@ -23,13 +23,32 @@ const AssignCreationTable = () => {
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
 
-  const { data, isLoading, error } = useGetData<any[]>({
+  const { data, isLoading, error } = useGetData({
     endpoint: API.CHECKER.ASSIGN.LIST,
     queryKey: ['getAssignList'],
   });
+  const formateDataArray = useMemo(() => {
+    if (!data) return [];
+
+    if (Array.isArray(data)) {
+      return data.filter((item) => item != null);
+    }
+
+    // If data is an object, extract values and ensure they form a proper array
+    if (typeof data === 'object' && data !== null) {
+      // const values = Object.values(data as Record<string, any>);
+      return (
+        Object.values(data)
+          .flat()
+          .filter((item) => item != null) || []
+      );
+    }
+
+    return [];
+  }, [data]);
 
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [tableData, setTableData] = useState(data || []);
+  const [tableData, setTableData] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -39,13 +58,12 @@ const AssignCreationTable = () => {
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
-  };
-  // Update tableData when data changes
+  }; // Update tableData when data changes
   useEffect(() => {
     if (data) {
-      setTableData(data);
+      setTableData(formateDataArray);
     }
-  }, [data]);
+  }, [formateDataArray]);
 
   // Display error toast if API request fails
   useEffect(() => {
@@ -76,13 +94,13 @@ const AssignCreationTable = () => {
       } else {
         return prev.filter((id) => id !== rowId);
       }
-    });
-
-    // Also update the tableData to reflect the checked state
+    }); // Also update the tableData to reflect the checked state
     setTableData((prevData) =>
-      prevData.map((row) =>
-        row.partner_order_id === rowId ? { ...row, select: checked } : row
-      )
+      Array.isArray(prevData)
+        ? prevData.map((row: any) =>
+            row.partner_order_id === rowId ? { ...row, select: checked } : row
+          )
+        : []
     );
   };
 
@@ -126,7 +144,7 @@ const AssignCreationTable = () => {
     <div className="dynamic-table-wrap flex flex-col">
       <DynamicTable
         columns={columns}
-        data={tableData || []}
+        data={formateDataArray || []}
         defaultSortColumn="nium_order_id"
         defaultSortDirection="asc"
         loading={isLoading}

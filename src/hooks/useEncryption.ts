@@ -1,6 +1,8 @@
-import encryptionService, { DecryptionParams, EncryptionResult } from '@/core/services/encryption';
+import encryptionService, {
+  DecryptionParams,
+  EncryptionResult,
+} from '@/core/services/encryption';
 import { useCallback, useEffect, useState } from 'react';
-
 
 interface UseEncryptionReturn {
   encryptPayload: (data: any) => Promise<EncryptionResult>;

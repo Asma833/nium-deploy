@@ -79,12 +79,6 @@ const TableSearchFilter = ({
   // Improved search handling with better debounce
   const handleSearchInputChange = useCallback(
     (value: string) => {
-      // Immediately update the filter state with the raw value (allows typing spaces)
-      setFilters((prev: typeof filters) => ({
-        ...prev,
-        search: value,
-      }));
-
       // Clear any existing timeout to implement debounce
       if (searchDebounceRef.current) {
         clearTimeout(searchDebounceRef.current);
@@ -92,6 +86,11 @@ const TableSearchFilter = ({
 
       // Set a new timeout for the search action
       searchDebounceRef.current = setTimeout(async () => {
+        setFilters((prev: typeof filters) => ({
+          ...prev,
+          search: value,
+        }));
+
         // Trim leading/trailing spaces and normalize internal spaces for search operations
         const trimmedValue = value.trim().replace(/\s+/g, ' ');
 
@@ -115,7 +114,7 @@ const TableSearchFilter = ({
             }
           }
         }
-      }, 100);
+      }, 50);
     },
     [
       setFilters,

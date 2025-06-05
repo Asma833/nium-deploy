@@ -98,6 +98,80 @@ export type MergedDocument = {
   documentIds?: string[];
 };
 
+export type EsignFileDetails = {
+  file_name?: string;
+  esign_file?: string;
+  esign_fields?: {
+    esign_fields?: any;
+  };
+  esign_allow_fill?: boolean;
+  esign_profile_id?: string;
+  esign_additional_files?: any[];
+};
+
+export type EsignDetails = {
+  status?: string;
+  esign_doc_id?: string;
+  esign_details?: Array<{
+    esign_url?: string | null;
+    url_status?: boolean;
+    esign_expiry?: string | null;
+    esigner_name?: string | null;
+    esigner_email?: string | null;
+    esigner_phone?: string | null;
+  }>;
+  esigner_details?: any;
+};
+
+export type EsignRecord = {
+  id?: string;
+  hashed_key?: string;
+  partner_order_id?: string;
+  order_id?: string;
+  attempt_number?: number;
+  task_id?: string;
+  group_id?: string;
+  esign_file_details?: EsignFileDetails;
+  esign_stamp_details?: {
+    esign_stamp_value?: string;
+    esign_series_group?: string;
+    esign_stamp_series?: string;
+  };
+  esign_invitees?: Array<{
+    esigner_name?: string;
+    esigner_email?: string;
+    esigner_phone?: string;
+    aadhaar_esign_verification?: {
+      aadhaar_yob?: string;
+      aadhaar_gender?: string;
+      aadhaar_pincode?: string;
+    };
+  }>;
+  esign_details?: EsignDetails;
+  esign_doc_id?: string | null;
+  status?: string;
+  request_id?: string;
+  completed_at?: string;
+  esign_expiry?: string | null;
+  active?: boolean;
+  expired?: boolean;
+  rejected?: boolean;
+  result?: any;
+  esigners?: any;
+  file_details?: any;
+  request_details?: any;
+  esign_irn?: string | null;
+  esign_folder?: string | null;
+  esign_type?: string | null;
+  esign_url?: string | null;
+  esigner_email?: string | null;
+  esigner_phone?: string | null;
+  is_signed?: boolean;
+  type?: string | null;
+  created_by?: string;
+  updated_by?: string;
+};
+
 export type Order = {
   id?: string;
   hashed_key?: string;
@@ -127,7 +201,7 @@ export type Order = {
   v_kyc_link?: string | null;
   v_kyc_link_status?: string | null;
   v_kyc_link_expires?: string | null;
-  v_kyc_completed_by_customer?: string | null;
+  v_kyc_completed_by_customer?: boolean | null;
   v_kyc_customer_completion_date?: string | null;
   v_kyc_comments?: string | null;
   incident_status?: string | null;
@@ -139,21 +213,38 @@ export type Order = {
   is_esign_regenerated?: boolean;
   is_esign_regenerated_details?: string | null;
   is_video_kyc_link_regenerated?: boolean;
-  is_video_kyc_link_regenerated_details?: string | null;
+  is_video_kyc_link_regenerated_details?: any[];
   created_by?: string;
   updated_by?: string;
   checker_id?: string | null;
   merged_document?: MergedDocument;
+  created_at?: string;
   transaction_type_name?: {
     id: string;
     name: string;
-  };
+  } | null;
   purpose_type_name?: {
     id: string;
     purpose_name: string;
   };
+  esigns?: EsignRecord[];
+  vkycs?: any[];
+  resources_documents_files?: {
+    [key: string]: string;
+  };
+  resources_images_files?: {
+    [key: string]: string;
+  };
+  resources_videos_files?: {
+    [key: string]: string;
+  };
   orders?: Order[];
   totalOrders?: number;
+};
+
+export type CheckerOrdersResponse = {
+  message?: string;
+  order?: Order;
 };
 
 export type OrderRowData = {
