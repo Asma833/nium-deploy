@@ -1,4 +1,4 @@
-export const GetViewStatusColumns = ({
+export const ViewStatusColumns = ({
     
 })=>[
     {
