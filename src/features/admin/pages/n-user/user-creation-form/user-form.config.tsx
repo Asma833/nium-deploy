@@ -1,4 +1,5 @@
-import { FieldType, UserFormConfig } from '@/features/admin/types/user.types';
+import { UserFormConfig } from '@/features/admin/types/user.types';
+import { FieldType } from '@/types/common.type';
 
 export const userFormConfig: UserFormConfig = {
   sectionTitle: 'Create User',
