@@ -62,7 +62,7 @@ export const FileUpload = ({
               >
                 <span className="text-nowrap font-semibold border-r-2 border-gray-400 py-2 pr-3 pl-4">Choose File</span>
                 <span className="ml-2 text-gray-500 font-semibold px-4 py-2">
-                  {value ? value.name : 'No file chosen'}
+                  {value.name ? value.name : 'No file chosen'}
                 </span>
               </button>
             </div>
