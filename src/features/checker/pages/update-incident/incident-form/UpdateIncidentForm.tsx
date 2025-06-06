@@ -436,18 +436,18 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' &&
+            {/* {mode === 'view' &&
               (pageId === 'viewAllIncident' ||
-                pageId === 'completedIncident') && (
-                <Button
-                  type="button"
-                  onClick={handleViewDocument}
-                  disabled={!mergeDocument}
-                  className="disabled:opacity-60"
-                >
-                  View Document
-                </Button>
-              )}
+                pageId === 'completedIncident') && ( */}
+            <Button
+              type="button"
+              onClick={handleViewDocument}
+              // disabled={!mergeDocument}
+              className="disabled:opacity-60"
+            >
+              View Document
+            </Button>
+            {/* // )} */}
             {isEsignDocumentLink &&
               (pageId === 'updateIncident' ||
                 pageId === 'completedIncident') && (
