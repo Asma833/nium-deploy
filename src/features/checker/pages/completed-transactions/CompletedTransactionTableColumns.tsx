@@ -31,12 +31,12 @@ export const GetTransactionTableColumns = (
     name: 'Partner Order ID',
     className: 'min-w-0',
   },
-  // {
-  //   key: 'partner_id',
-  //   id: 'partner_id',
-  //   name: 'Partner ID',
-  //   className: 'min-w-0',
-  // },
+  {
+    key: 'partner_id',
+    id: 'partner_id',
+    name: 'Partner ID',
+    className: 'min-w-0',
+  },
   {
     key: 'customer_pan',
     id: 'customer_pan',
