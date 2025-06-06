@@ -4,7 +4,7 @@ import { Order } from '../../types/updateIncident.types';
 const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
   return (
     <span>
-      {rowData.is_esign_required ? (
+      {rowData.is_v_kyc_required ? (
         rowData.v_kyc_status && (
           <span
             className={`status-badge esign-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}

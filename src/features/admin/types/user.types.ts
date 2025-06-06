@@ -1,12 +1,12 @@
 export type UserCreationRequest = {
   role_id: string;
-  is_active: boolean;
+  is_active?: boolean;
   hashed_key?: string;
-  email: string;
+  email?: string;
   password: string;
   business_type?: string;
-  branch_id: string;
-  bank_account_id: string;
+  branch_id?: string;
+  bank_account_id?: string;
 };
 
 export type UserStatusRequest = {
