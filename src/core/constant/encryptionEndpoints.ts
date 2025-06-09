@@ -45,7 +45,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
   },
   'unassign-orders': {
     endpoint: API.CHECKER.UPDATE_INCIDENT.UNASSIGN,
-    matchType: 'exact-only' as const,
+    matchType: 'standard' as const,
     description: 'Unassign orders endpoint',
   },
   'take-request': {
@@ -57,6 +57,16 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_ESIGN_LINK,
     matchType: 'exact-only' as const,
     description: 'Generate e-sign link endpoint',
+  },
+   'orders': {
+    endpoint: API.ORDERS.LIST,
+    matchType: 'standard' as const,
+    description: 'Order list endpoint',
+  },
+  'checker-orders': {
+    endpoint: API.ORDERS.CHECKER_ORDERS,
+    matchType: 'standard' as const,
+    description: 'Checker order list endpoint',
   },
 } as const;
 

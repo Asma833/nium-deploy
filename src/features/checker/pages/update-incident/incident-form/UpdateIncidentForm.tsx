@@ -402,26 +402,30 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' && (pageId === 'viewAllIncident' || pageId === 'completedIncident') && (
-              <Button
-                type="button"
-                onClick={handleViewDocument}
-                disabled={!mergeDocument}
-                className="disabled:opacity-60"
-              >
-                View Document
-              </Button>
-            )}
-            {isEsignDocumentLink && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
-              <Button
-                type="button"
-                onClick={() => handleDownloadDocument('esignDocument')}
-                disabled={!isEsignDocumentLink}
-                className="disabled:opacity-60"
-              >
-                eSign Document
-              </Button>
-            )}
+            {/* {mode === 'view' &&
+              (pageId === 'viewAllIncident' ||
+                pageId === 'completedIncident') && ( */}
+            <Button
+              type="button"
+              onClick={handleViewDocument}
+              // disabled={!mergeDocument}
+              className="disabled:opacity-60"
+            >
+              View Document
+            </Button>
+            {/* // )} */}
+            {isEsignDocumentLink &&
+              (pageId === 'updateIncident' ||
+                pageId === 'completedIncident') && (
+                <Button
+                  type="button"
+                  onClick={() => handleDownloadDocument('esignDocument')}
+                  disabled={!isEsignDocumentLink}
+                  className="disabled:opacity-60"
+                >
+                  eSign Document
+                </Button>
+              )}
 
             {Array.isArray(vkycDocumentFilesArray) &&
               vkycDocumentFilesArray.length > 0 &&

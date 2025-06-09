@@ -21,7 +21,6 @@ export const useUpdateAPI = () => {
         hashed_key: id,
         password: data.password,
         role_id: roleId || '',
-        is_active: true,
         branch_id: getBranchId() || '',
         bank_account_id: getBankAccountId() || '',
         business_type: 'large_enterprise',

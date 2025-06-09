@@ -2,6 +2,7 @@ import { SignLinkButton } from '@/components/common/SignLinkButton';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
+import { formatDate } from '@/utils/dateFormat';
 
 export const GetTransactionTableColumns = (
   openModal: (value: string) => void,
@@ -26,6 +27,9 @@ export const GetTransactionTableColumns = (
     id: 'created_at',
     name: 'Order Date',
     className: 'min-w-0',
+    cell: (_: unknown, rowData: { created_at?: string }) => (
+              <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+    ),
   },
   {
     key: 'customer_pan',
