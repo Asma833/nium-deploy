@@ -17,7 +17,7 @@ const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
           </span>
         )
       ) : (
-        <span className='status-badge na'>Not Required</span>
+        <span className="status-badge na text-nowrap">Not Required</span>
       )}
     </span>
   );
