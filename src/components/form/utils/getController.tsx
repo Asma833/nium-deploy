@@ -6,6 +6,8 @@ import { MaterialEmail } from '@/components/form/controller/MaterialEmail';
 import { MaterialFile } from '@/components/form/controller/MaterialFile';
 import { MaterialCheckbox } from '@/components/form/controller/MaterialCheckbox';
 import { MaterialNumber } from '@/components/form/controller/MaterialNumber';
+import { MaterialPhone } from '@/components/form/controller/MaterialPhone';
+import { MaterialIndianPhone } from '@/components/form/controller/MaterialIndianPhone';
 import MaterialPassword from '@/components/form/controller/MaterialPassword';
 import { MaterialTextArea } from '../controller/MaterialTextArea';
 import { baseGeneralFieldStyle, baseStyle } from '../styles/materialStyles';
@@ -48,6 +50,10 @@ export const getController = (field: any) => {
       return <MaterialEmail {...styledProps} />;
     case 'number':
       return <MaterialNumber {...styledProps} />;
+    case 'phone':
+      return <MaterialPhone {...styledProps} />;
+    case 'indian_phone':
+      return <MaterialIndianPhone {...styledProps} />;
     case 'file':
       return <MaterialFile {...baseProps} className={baseGeneralFieldStyle} />;
     case 'fileupload':

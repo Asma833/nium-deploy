@@ -1,35 +1,42 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { TextField } from '@mui/material';
 
-interface MaterialEmailProps {
+interface MaterialPhoneProps {
   name: string;
   label: string;
   baseStyle?: any;
   className?: string;
 }
 
-export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEmailProps) => {
+export const MaterialPhone = ({ name, label, baseStyle, className }: MaterialPhoneProps) => {
   const { control } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue="" // Add default value
+      defaultValue=""
       render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
-          value={value ?? ''} // Ensure value is never undefined
+          value={value ?? ''}
           onChange={(e) => {
-            onChange(e.target.value || ''); // Handle empty string case
+            // Remove all non-numeric characters
+            const numericValue = e.target.value.replace(/\D/g, '');
+            // Limit to 10 digits
+            const limitedValue = numericValue.slice(0, 10);
+            onChange(limitedValue);
           }}
-          type="email"
+          type="tel"
           label={label}
           error={!!error}
           helperText={error?.message}
           sx={baseStyle}
           className={className ?? ''}
-          placeholder="Enter Email Address"
+          placeholder="Enter phone number"
+          inputProps={{
+            maxLength: 10, // Limit to 10 digits
+          }}
         />
       )}
     />

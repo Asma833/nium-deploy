@@ -64,6 +64,20 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           placeholder: 'Select Purpose',
           options: Object.keys(purposeOptions).length > 0 ? purposeOptions : {},
         },
+        email: {
+          name: 'applicantDetails.email',
+          label: 'Email',
+          type: FieldType.Email,
+          required: true,
+          placeholder: 'Enter Email Address',
+        },
+        mobileNumber: {
+          name: 'applicantDetails.mobileNumber',
+          label: 'Mobile Number',
+          type: FieldType.Phone,
+          required: true,
+          placeholder: 'Enter Mobile Number',
+        },
       },
       uploadDocuments: {
         pan: {

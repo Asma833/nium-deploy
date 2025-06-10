@@ -17,7 +17,7 @@ import { CreateTransactionFormProps } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 
-const fieldWrapperBaseStyle = 'mb-4';
+const fieldWrapperBaseStyle = 'mb-2';
 
 const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   const { transactionTypes } = useGetTransactionType();
@@ -84,7 +84,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
             </FormFieldRow>
             <span className="border-b border-gray-500 mb-3">Upload Document</span>
             <FormFieldRow className={fieldWrapperBaseStyle} wrapperClassName="justify-between" rowCols={2}>
-              <FieldWrapper className="mb-4 w-full" error={errors?.uploadDocuments?.pan?.message || null}>
+              <FieldWrapper className="w-full" error={errors?.uploadDocuments?.pan?.message || null}>
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.pan.id,
                   label: formControllerMeta.fields.uploadDocuments.pan.label,
@@ -133,10 +133,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   })}
                 </FieldWrapper>
               </FieldWrapper>
-              <FieldWrapper
-                className="mb-4 md:mt-[28px] w-full"
-                error={errors?.uploadDocuments?.payerPan?.message || null}
-              >
+              <FieldWrapper className="md:mt-[28px] w-full" error={errors?.uploadDocuments?.payerPan?.message || null}>
                 {getController({
                   id: formControllerMeta.fields.uploadDocuments.payerPan.id,
                   label: formControllerMeta.fields.uploadDocuments.payerPan.label,
@@ -169,7 +166,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                 </FieldWrapper>
               </FieldWrapper>
               <FieldWrapper
-                className="mb-4 md:mt-[28px] w-full"
+                className="md:mt-[28px] w-full"
                 error={errors?.uploadDocuments?.payerRelationshipProof?.message || null}
               >
                 {getController({

@@ -1,9 +1,7 @@
 .formFieldRow {
   display: flex;
-  width: 100%;
   flex-wrap: wrap;
-  row-gap: 30px;
-  column-gap: 20px;
+  gap: 28px 20px;
 }
 
 .fieldWrapper {
@@ -32,11 +30,6 @@
 }
 .formCardHeader {
   @apply flex items-center justify-between;
-}
-.formFieldRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
 }
 
 .formFieldRow .fieldWrapper {
