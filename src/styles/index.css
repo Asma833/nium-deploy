@@ -1,3 +1,4 @@
+@import url('../assets/font/stylesheet.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -103,6 +104,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Hellix', 'Inter', sans-serif;
   }
 }
 
