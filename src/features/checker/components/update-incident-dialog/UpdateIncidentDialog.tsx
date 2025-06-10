@@ -6,7 +6,7 @@ const UpdateIncidentDialog = (props: UpdateIncidentDialogProps) => {
   const { pageId, mode, selectedRowData, isModalOpen, setIsModalOpen } = props;
   return (
     <DialogWrapper
-      title="Update Incident"
+      title={mode === 'edit' ? 'Update Incident' : 'View Incident'}
       isOpen={isModalOpen}
       setIsOpen={setIsModalOpen}
       renderContent={

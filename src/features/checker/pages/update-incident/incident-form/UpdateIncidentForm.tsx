@@ -49,6 +49,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
+  const [esignStatus, setEsignStatus] = useState('pending');
   const [partnerOrderId, setPartnerOrderId] = useState('');
 
   // State to track if we should show the buy/sell field
@@ -145,25 +146,26 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
       setPartnerOrderId(rowData.partner_order_id || '');
+      setEsignStatus(rowData?.e_sign_status || 'pending');
 
       const mappedData = {
-        niumId: rowData.nium_order_id || 'NA',
-        customerPan: rowData.customer_pan || 'NA',
-        customerName: rowData.customer_name || 'NA',
-        bmfOrderRef: rowData.partner_order_id || 'NA',
+        niumId: rowData.nium_order_id || 'N/A',
+        customerPan: rowData.customer_pan || 'N/A',
+        customerName: rowData.customer_name || 'N/A',
+        bmfOrderRef: rowData.partner_order_id || 'N/A',
         transactionType:
           typeof rowData.transaction_type_name === 'object'
             ? rowData.transaction_type_name?.name?.trim()
               ? rowData.transaction_type_name.name
-              : 'NA'
+              : 'N/A'
             : rowData.transaction_type_name
               ? rowData.transaction_type_name
-              : 'NA',
-        purpose: rowData.purpose_type_name?.purpose_name || 'NA',
-        buySell: buySellValue || 'NA',
+              : 'N/A',
+        purpose: rowData.purpose_type_name?.purpose_name || 'N/A',
+        buySell: buySellValue || 'N/A',
         // comment: rowData.incident_checker_comments || '',
-        incidentNumber: rowData?.incident_number || 'NA',
-        eonInvoiceNumber: rowData?.eon_invoice_number || 'NA',
+        incidentNumber: rowData?.incident_number || 'N/A',
+        eonInvoiceNumber: rowData?.eon_invoice_number || 'N/A',
         status: {
           approve: rowData.status?.approve ?? true,
           reject: rowData.status?.reject ?? false,
@@ -420,34 +422,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   </FieldWrapper>
                 );
               })}
-            {/* {showBuySell && (
-              <FieldWrapper className={cn('w-full mb-2')}>
-                <MaterialText
-                  className={cn(baseGeneralFieldStyle, 'w-full')}
-                  name="fields.buySell"
-                  label="Buy/Sell"
-                  disabled={true}
-                  baseStyle={baseStyle({})}
-                />
-              </FieldWrapper>
-            )} */}
           </FormFieldRow>
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {/* {mode === 'view' &&
-              (pageId === 'viewAllIncident' ||
-                pageId === 'completedIncident') && ( */}
-            <Button
-              type="button"
-              onClick={handleViewDocument}
-              // disabled={!mergeDocument}
-              className="disabled:opacity-60"
-            >
-              View Document
-            </Button>
-            {/* // )} */}
+            {mode === 'view' &&
+              pageId === 'viewAllIncident' &&
+              (esignStatus === 'completed' || esignStatus === 'rejected') && (
+                <Button
+                  type="button"
+                  onClick={handleViewDocument}
+                  // disabled={!mergeDocument}
+                  className="disabled:opacity-60"
+                >
+                  View Document
+                </Button>
+              )}
             {isEsignDocumentLink &&
               (pageId === 'updateIncident' ||
                 pageId === 'completedIncident') && (

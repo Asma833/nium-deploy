@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
@@ -16,7 +15,6 @@ import {
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 
 const UpdateIncidentCreationTable = () => {
-  usePageTitle('Update Incident');
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { getUserHashedKey } = useCurrentUser();
