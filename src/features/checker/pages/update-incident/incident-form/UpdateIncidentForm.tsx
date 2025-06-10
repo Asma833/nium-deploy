@@ -49,6 +49,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [isApproved, setIsApproved] = useState(true);
   const [isRejected, setIsRejected] = useState(false);
   const [isEsignDocumentLink, setIsEsignDocumentLink] = useState(false);
+  const [esignStatus, setEsignStatus] = useState('pending');
   const [partnerOrderId, setPartnerOrderId] = useState('');
 
   // State to track if we should show the buy/sell field
@@ -145,6 +146,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
       setPartnerOrderId(rowData.partner_order_id || '');
+      setEsignStatus(rowData?.e_sign_status || 'pending');
 
       const mappedData = {
         niumId: rowData.nium_order_id || 'N/A',
@@ -420,34 +422,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   </FieldWrapper>
                 );
               })}
-            {/* {showBuySell && (
-              <FieldWrapper className={cn('w-full mb-2')}>
-                <MaterialText
-                  className={cn(baseGeneralFieldStyle, 'w-full')}
-                  name="fields.buySell"
-                  label="Buy/Sell"
-                  disabled={true}
-                  baseStyle={baseStyle({})}
-                />
-              </FieldWrapper>
-            )} */}
           </FormFieldRow>
 
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {/* {mode === 'view' &&
-              (pageId === 'viewAllIncident' ||
-                pageId === 'completedIncident') && ( */}
-            <Button
-              type="button"
-              onClick={handleViewDocument}
-              // disabled={!mergeDocument}
-              className="disabled:opacity-60"
-            >
-              View Document
-            </Button>
-            {/* // )} */}
+            {mode === 'view' &&
+              pageId === 'viewAllIncident' &&
+              (esignStatus === 'completed' || esignStatus === 'rejected') && (
+                <Button
+                  type="button"
+                  onClick={handleViewDocument}
+                  // disabled={!mergeDocument}
+                  className="disabled:opacity-60"
+                >
+                  View Document
+                </Button>
+              )}
             {isEsignDocumentLink &&
               (pageId === 'updateIncident' ||
                 pageId === 'completedIncident') && (
