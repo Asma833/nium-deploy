@@ -11,7 +11,9 @@ const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
           >
             {rowData.v_kyc_status === 'N/A'
               ? 'N/A'
-              : _.capitalize(rowData.v_kyc_status)}
+              : rowData.v_kyc_status === 'in_progress'
+                ? 'In Progress'
+                : _.capitalize(rowData.v_kyc_status)}
           </span>
         )
       ) : (

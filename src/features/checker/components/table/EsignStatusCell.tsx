@@ -15,7 +15,7 @@ const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
           </span>
         )
       ) : (
-        <span>Not Required</span>
+        <span className="status-badge na text-nowrap">Not Required</span>
       )}
     </span>
   );
