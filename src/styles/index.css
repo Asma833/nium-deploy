@@ -116,6 +116,7 @@
   @apply bg-expired-badge-bg text-badge-fg px-2 py-1 rounded-full;
 }
 
+.status-badge.in_progress,
 .status-badge.na {
   @apply bg-gray-200 text-badge-fg px-2 py-1 rounded-full;
 }
