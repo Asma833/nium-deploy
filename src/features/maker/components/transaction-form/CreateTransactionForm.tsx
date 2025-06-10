@@ -16,6 +16,8 @@ import useGetPurposes from '@/hooks/useGetPurposes';
 import { CreateTransactionFormProps } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
+import RejectionSummary from '@/components/common/RejectionSummary';
+import FromSectionTitle from '@/components/common/FromSectionTitle';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
@@ -82,7 +84,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                 );
               })}
             </FormFieldRow>
-            <span className="border-b border-gray-500 mb-3">Upload Document</span>
+            <FromSectionTitle>Upload Document</FromSectionTitle>
             <FormFieldRow className={fieldWrapperBaseStyle} wrapperClassName="justify-between" rowCols={2}>
               <FieldWrapper className="w-full" error={errors?.uploadDocuments?.pan?.message || null}>
                 {getController({
@@ -224,6 +226,10 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
           Submit
         </Button>
       </FormProvider>
+
+      <FromSectionTitle>Rejection Summary</FromSectionTitle>
+      <RejectionSummary className="mb-4" rejectionComments={[]} />
+
       <DialogWrapper
         isOpen={false}
         setIsOpen={() => {}}
@@ -242,7 +248,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
         triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
         className="sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto"
         onSave={handleSubmit((data) => {
-          reset(transactionFormDefaults); // Reset form to default values after submission
+          reset(transactionFormDefaults);
         })}
         footerBtnText="Submit"
       />

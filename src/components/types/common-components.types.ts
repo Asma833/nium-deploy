@@ -106,7 +106,7 @@ export type ViewAllTableProps = {
   checkerOrdersLoading: boolean;
   checkerOrdersError: string;
   refreshData: () => void;
-  disableColumns?: string[]; // Optional prop to disable specific columns
+  disableColumns?: string[];
 };
 
 export type FieldWrapperPropsType = {
@@ -120,4 +120,16 @@ export type FieldWrapperPropsType = {
   rowCols?: number | string;
   flexdirection?: string;
   error?: string | null;
+};
+
+export type rejectionComment = {
+  id: string;
+  document: string;
+  comment: string;
+  date: string;
+};
+
+export type RejectionSummaryProps = {
+  className?: string;
+  rejectionComments: rejectionComment[];
 };
