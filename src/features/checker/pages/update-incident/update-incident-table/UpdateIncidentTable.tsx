@@ -6,32 +6,42 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
-import { useGetUpdateIncident } from '../../../hooks/useGetUpdate';
 import {
   IncidentMode,
   IncidentPageId,
   Order,
+  TransactionTypeEnum,
 } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
+import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { API } from '@/core/constant/apis';
 
 const UpdateIncidentCreationTable = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { getUserHashedKey, getUserId } = useCurrentUser();
+  const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  const roleId = getUserId();
+  const { options: purposeTypeOptions } = useDynamicOptions(
+    API.PURPOSE.GET_PURPOSES
+  );
+
+  const { options: transactionTypeOptions } = useDynamicOptions(
+    API.TRANSACTION.GET_TRANSACTIONS
+  );
 
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
 
-  const requestData = {
-    checkerId: currentUserHashedKey || '',
-    transaction_type: 'pending',
-  };
-
   // Fetch data using the updated hook
-  const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
+  // const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
+  const {
+    data,
+    loading: isLoading,
+    error,
+    fetchData: refreshData,
+  } = useGetCheckerOrders(TransactionTypeEnum.PENDING, true);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -99,7 +109,7 @@ const UpdateIncidentCreationTable = () => {
         totalRecords={pagination.totalRecords}
         refreshAction={{
           isRefreshButtonVisible: true,
-          onRefresh: refetch,
+          onRefresh: refreshData,
           isLoading: isLoading,
           hasError: error,
         }}
@@ -112,6 +122,20 @@ const UpdateIncidentCreationTable = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
+            selects: [
+              {
+                id: 'purpose_type_name',
+                label: 'Purpose Type',
+                placeholder: 'Select',
+                options: purposeTypeOptions,
+              },
+              {
+                id: 'transaction_type_name',
+                label: 'Transaction Type',
+                placeholder: 'Select',
+                options: transactionTypeOptions,
+              },
+            ],
           },
           // Dynamic callbacks - API functions
           dynamicCallbacks: isTableFilterDynamic

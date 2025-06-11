@@ -29,7 +29,7 @@ const AssignCreationTable = () => {
     API.TRANSACTION.GET_TRANSACTIONS
   );
 
-  const { data, isLoading, error } = useGetData({
+  const { data, isLoading, error, refetch } = useGetData({
     endpoint: API.CHECKER.ASSIGN.LIST,
     queryKey: ['getAssignList'],
   });
@@ -155,6 +155,12 @@ const AssignCreationTable = () => {
         defaultSortDirection="asc"
         loading={isLoading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
+        refreshAction={{
+          isRefreshButtonVisible: true,
+          onRefresh: refetch ?? (() => {}),
+          isLoading: isLoading,
+          hasError: error,
+        }}
         onPageChange={
           isPaginationDynamic
             ? pagination.handlePageChange
@@ -170,13 +176,13 @@ const AssignCreationTable = () => {
             resetAction: true,
             selects: [
               {
-                id: 'purpose_type',
+                id: 'purpose_type_name.purpose_name',
                 label: 'Purpose Type',
                 placeholder: 'Select',
                 options: purposeTypeOptions,
               },
               {
-                id: 'transaction_type',
+                id: 'transaction_type_name.name',
                 label: 'Transaction Type',
                 placeholder: 'Select',
                 options: transactionTypeOptions,

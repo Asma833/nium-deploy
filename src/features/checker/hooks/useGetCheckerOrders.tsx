@@ -33,7 +33,6 @@ export const useGetCheckerOrders = (
     queryKey,
     queryFn: async () => {
       const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
-        checkerId: hashCheckerId,
         transaction_type: transactionType,
       });
 
