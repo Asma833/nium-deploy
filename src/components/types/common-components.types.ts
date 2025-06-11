@@ -20,7 +20,7 @@ export type TablePaginationProps = {
   setPageSize: (size: number) => void;
   setCurrentPage: (page: number) => void;
   filteredDataLength: number;
-  paginationMode?: 'static' | 'dynamic'; // Make paginationMode optional
+  paginationMode?: 'static' | 'dynamic';
   onPageChange?: any;
   totalRecords?: number;
 };

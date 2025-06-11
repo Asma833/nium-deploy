@@ -19,8 +19,9 @@ export const useGetCheckerOrders = (
   );
 
   // Get the current user once
-  const { user } = useCurrentUser();
-  const userHashedKey = user?.hashed_key;
+  const { user, getUserId } = useCurrentUser();
+  // const userHashedKey = user?.hashed_key;
+  const roleId = getUserId();
 
   // Define query key
   const queryKey = ['checkerOrders', transactionType];
@@ -33,25 +34,25 @@ export const useGetCheckerOrders = (
   } = useQuery({
     queryKey,
     queryFn: async () => {
-      if (!userHashedKey) {
-        throw new Error('User hash key not available');
-      }
+      // if (!userHashedKey) {
+      //   throw new Error('User hash key not available');
+      // }
 
       const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS, {
-        checkerId: userHashedKey,
+        checkerId: roleId,
         transaction_type: transactionType,
       });
 
       return data as Order;
     },
-    enabled: autoFetch && !!userHashedKey,
+    enabled: autoFetch && !!roleId,
     retry: 1,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
   // Function to manually trigger a refetch
   const fetchData = useCallback(() => {
-    if (!userHashedKey) {
+    if (!roleId) {
       toast.error('Error Fetching Checker Orders', {
         description: 'User hash key not available',
       });
@@ -59,7 +60,7 @@ export const useGetCheckerOrders = (
     }
 
     refetch();
-  }, [userHashedKey, refetch]);
+  }, [roleId, refetch]);
 
   // fetch data again
   const changeTransactionType = useCallback((newType: TransactionType) => {

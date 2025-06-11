@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import {
   IncidentMode,
@@ -24,7 +23,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   refreshData,
   disableColumns,
 }) => {
-  usePageTitle('View All');
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();

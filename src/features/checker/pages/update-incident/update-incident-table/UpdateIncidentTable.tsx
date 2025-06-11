@@ -17,20 +17,21 @@ import UpdateIncidentDialog from '@/features/checker/components/update-incident-
 const UpdateIncidentCreationTable = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { getUserHashedKey } = useCurrentUser();
+  const { getUserHashedKey, getUserId } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
+  const roleId = getUserId();
 
   // Call the hook at the top level of the component
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
     useUnassignChecker();
 
   const requestData = {
-    checkerId: currentUserHashedKey || '',
+    checkerId: roleId || '',
     transaction_type: 'pending',
   };
 
   // Fetch data using the updated hook
-  const { data, isLoading, error } = useGetUpdateIncident(requestData);
+  const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
 
   const isTableFilterDynamic = false;
   const isPaginationDynamic = false;
@@ -96,6 +97,12 @@ const UpdateIncidentCreationTable = () => {
             : async (_page: number, _pageSize: number) => []
         }
         totalRecords={pagination.totalRecords}
+        refreshAction={{
+          isRefreshButtonVisible: true,
+          onRefresh: refetch,
+          isLoading: isLoading,
+          hasError: error,
+        }}
         filter={{
           filterOption: true,
           dateFilterColumn: 'created_at',

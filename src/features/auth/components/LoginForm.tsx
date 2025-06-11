@@ -86,15 +86,15 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-
-        <div className="text-right">
+        {/* disabling for this phase */}
+        {/* <div className="text-right">
           <Link
             to="/send-password-reset-link"
             className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors"
           >
             Forgot Password?
           </Link>
-        </div>
+        </div> */}
 
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? (

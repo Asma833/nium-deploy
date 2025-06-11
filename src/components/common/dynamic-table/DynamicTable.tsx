@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FileX2 } from 'lucide-react';
 import {
   Table,
@@ -216,12 +216,20 @@ export function DynamicTable<T extends Record<string, any>>({
     setCurrentPage,
   } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
 
+  // Track previous filtered data to avoid infinite loops
+  const prevFilteredDataRef = useRef<T[]>([]);
+
   // Notify parent component when filtered data changes
   useEffect(() => {
-    if (onFilteredDataChange) {
+    if (
+      onFilteredDataChange &&
+      JSON.stringify(filteredData) !==
+        JSON.stringify(prevFilteredDataRef.current)
+    ) {
+      prevFilteredDataRef.current = filteredData;
       onFilteredDataChange(filteredData);
     }
-  }, [filteredData, onFilteredDataChange]);
+  }, [filteredData]); // Only depend on filteredData, not the callback
 
   // We need to track filter operations separately
   const [lastFiltered, setLastFiltered] = useState<number>(0);
