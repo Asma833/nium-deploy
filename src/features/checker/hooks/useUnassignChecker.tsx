@@ -18,6 +18,7 @@ const useUnassignChecker = () => {
       toast.success('Checker unassigned successfully');
       queryClient.invalidateQueries({ queryKey: ['updateIncident'] });
       queryClient.invalidateQueries({ queryKey: ['dashboardMetrics'] });
+      queryClient.invalidateQueries({ queryKey: ['checkerOrders'] });
     },
     onError: (error) => {
       toast.error('Failed to unassign checker');
