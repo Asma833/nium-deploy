@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
-import { usePageTitle } from '@/hooks/usePageTitle';
 import { useUpdateStatusAPI } from '@/features/admin/hooks/useUserUpdateStatus';
 import { useGetData } from '@/hooks/useGetData';
 import { User } from '@/features/auth/types/auth.types';
@@ -26,7 +25,6 @@ const NuserCreationTable = () => {
       : Array.isArray(data)
         ? (data as Record<string, any>[])
         : [];
-  usePageTitle('N-Users');
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
 

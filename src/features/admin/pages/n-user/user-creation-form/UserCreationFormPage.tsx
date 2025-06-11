@@ -30,7 +30,7 @@ const UserCreationFormPage = () => {
   const { mutate: createUser, isLoading } = useCreateUser(
     { role: 'checker' },
     {
-      onUserCreateSuccess: (data) => {
+      onUserCreateSuccess: () => {
         reset({});
       },
     }
@@ -94,7 +94,7 @@ const UserCreationFormPage = () => {
                   errors,
                 })}
               </FieldWrapper>
-              <FieldWrapper>
+              {/* <FieldWrapper>
                 <div>
                   {getController({
                     ...userFormConfig.fields.businessType,
@@ -106,7 +106,7 @@ const UserCreationFormPage = () => {
                     errors,
                   })}
                 </div>
-              </FieldWrapper>
+              </FieldWrapper> */}
             </FormFieldRow>
             <FormFieldRow className="mb-4">
               {Object.entries(userFormConfig.fields)
