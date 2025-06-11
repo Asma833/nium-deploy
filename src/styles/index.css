@@ -152,7 +152,9 @@
 .status-badge.esign-pending {
   @apply bg-pending-badge-bg text-badge-fg px-2 py-1 rounded-full;
 }
-
+.status-badge.esign-expired {
+  @apply bg-rejected-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
 /* VKYC status badges */
 .status-badge.vkyc-completed {
   @apply bg-completed-badge-bg text-badge-fg px-2 py-1 rounded-full;
@@ -309,4 +311,7 @@ html[class='dark'] {
 }
 .dark [class*='MuiInputLabel-root'] {
   -webkit-text-fill-color: rgb(218, 218, 218);
+}
+.table-border-b{
+  border-bottom: 1px solid rgb(218, 218, 218);
 }
