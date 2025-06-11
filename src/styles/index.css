@@ -1,3 +1,4 @@
+@import url('../assets/font/stylesheet.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +7,12 @@
   :root {
     --background: 0 0% 100%; /* #ffffff */
     --foreground: 0 0% 0%; /* #000000 */
+    --gray-light: #e5e5e5;
+    --gray-medium: #d9d9d9;
+    --gray-100: #f5f5f5;
+    --gray-150: #ededed;
+    --gray-200: #e5e5e5;
+    --gray-300: #d4d4d4;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
@@ -23,7 +30,7 @@
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 85%;
+    --border: 0 0% 55%;
     --input: 0 0% 75%;
     --ring: 328 100% 50%; /* #fd0194 */
     --chart-1: 12 76% 61%;
@@ -41,13 +48,17 @@
     --pending-badge-bg: #e1eafa;
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
-    --expired-badge-bg: #fee0e3;
-    --rejected-badge-bg: #ffccd1;
+    --expired-badge-bg: #e5e5e5;
+    --rejected-badge-bg: #fee0e3;
     --badge-fg: #3f3f3f;
   }
   .dark {
     --background: 0 0% 14.9%;
     --foreground: 0 0% 98%;
+    --gray-100: #2a2a2a;
+    --gray-150: #4e4e4e;
+    --gray-200: #4e4e4e;
+    --gray-300: #303030;
     --card: 0 0% 10%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
@@ -82,7 +93,7 @@
     --pending-badge-bg: #e1eafa;
     --approved-badge-bg: #dffce6;
     --rejected-badge-bg: #fee0e3;
-    --expired-badge-bg: #ffccd1;
+    --expired-badge-bg: #e5e5e5;
     --badge-fg: #3f3f3f;
   }
 }
@@ -93,6 +104,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Hellix', 'Inter', sans-serif;
   }
 }
 
@@ -215,6 +227,29 @@
   width: 100%;
 }
 
+fieldset.MuiOutlinedInput-notchedOutline {
+  @apply border border-[hsl(var(--border))]  text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))];
+}
+
+/* Material-UI InputLabel override */
+label.MuiFormLabel-root.MuiInputLabel-root:not(.MuiInputLabel-shrink) {
+  transform: translate(14px, 11px) scale(1) !important;
+}
+
+.MuiSelect-select {
+  display: flex !important;
+  align-items: center !important;
+  justify-items: center !important;
+}
+.n-filetype-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .formFieldRow {
     flex-direction: column;
@@ -260,7 +295,12 @@ html[class='dark'] {
   color: hsl(var(--primary-foreground));
 }
 
-.dark .MuiInputBase-input.Mui-disabled {
+.dark .MuiList-root.MuiMenu-list {
+  -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
+  background-color: black !important;
+}
+
+.dark .MuiList-root.MuiList-padding.MuiMenu-list {
   -webkit-text-fill-color: rgba(218, 218, 218, 0.72);
 }
 .dark [class*='MuiOutlinedInput'] {

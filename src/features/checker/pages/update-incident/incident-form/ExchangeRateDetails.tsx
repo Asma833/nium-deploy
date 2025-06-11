@@ -1,10 +1,7 @@
 import { ExchangeRateTable } from '@/features/checker/types/updateIncident.types';
 
 const ExchangeRateDetails = ({ data }: { data: ExchangeRateTable[] }) => {
-  const totalCalculatedAmount = data.reduce(
-    (acc, row) => acc + row.rate * row.amount,
-    0
-  );
+  const totalCalculatedAmount = data.reduce((acc, row) => acc + row.rate * row.amount, 0);
 
   return (
     <div className="border rounded-md p-3 w-full">
@@ -20,9 +17,7 @@ const ExchangeRateDetails = ({ data }: { data: ExchangeRateTable[] }) => {
           <span>{row.currency}</span>
           <span>{row.rate}</span>
           <span>{row.amount}</span>
-          <span className="font-medium">
-            {(row.rate * row.amount).toFixed(2)}
-          </span>
+          <span className="font-medium">{(row.rate * row.amount).toFixed(2)}</span>
         </div>
       ))}
 

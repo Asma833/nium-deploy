@@ -59,10 +59,7 @@ export const exportToCSV = <T extends Record<string, any>>(
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute(
-      'download',
-      `${filename}-${new Date().toISOString().split('T')[0]}.csv`
-    );
+    link.setAttribute('download', `${filename}-${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -130,10 +127,7 @@ export const exportToExcel = <T extends Record<string, any>>(
     const fileData = new Blob([excelBuffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-    saveAs(
-      fileData,
-      `${filename}-${new Date().toISOString().split('T')[0]}.xlsx`
-    );
+    saveAs(fileData, `${filename}-${new Date().toISOString().split('T')[0]}.xlsx`);
 
     toast.success('Excel file exported successfully');
   } catch (error) {

@@ -61,12 +61,8 @@ const NuserCreationTable = () => {
               !filterApi.error ? 'hidden' : ''
             )}
           >
-            {filterApi.loading && (
-              <span className="text-blue-500">Loading data...</span>
-            )}
-            {filterApi.error && (
-              <span className="text-red-500">Error loading data</span>
-            )}
+            {filterApi.loading && <span className="text-blue-500">Loading data...</span>}
+            {filterApi.error && <span className="text-red-500">Error loading data</span>}
           </div>
         </div>
         <DynamicTable

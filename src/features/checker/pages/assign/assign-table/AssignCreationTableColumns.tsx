@@ -17,9 +17,7 @@ export const GetAssignCreationColumns = (
         <input
           type="checkbox"
           checked={value}
-          onChange={(e) =>
-            handleSelectionChange(row.partner_order_id, e.target.checked)
-          }
+          onChange={(e) => handleSelectionChange(row.partner_order_id, e.target.checked)}
           className="relative h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300 inline-block align-middle accent-[#E53888]"
         />
       );

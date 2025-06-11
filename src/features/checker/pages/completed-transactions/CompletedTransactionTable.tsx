@@ -7,11 +7,7 @@ import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
-import {
-  IncidentPageId,
-  IncidentMode,
-  TransactionTypeEnum,
-} from '../../types/updateIncident.types';
+import { IncidentPageId, IncidentMode, TransactionTypeEnum } from '../../types/updateIncident.types';
 
 const CompletedTransactionTable = () => {
   const {
@@ -30,22 +26,16 @@ const CompletedTransactionTable = () => {
     setIsModalOpen(true);
   };
   const columns = GetTransactionTableColumns(openModal);
-  const { options: purposeTypeOptions } = useDynamicOptions(
-    API.PURPOSE.GET_PURPOSES
-  );
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(
-    API.TRANSACTION.GET_TRANSACTIONS
-  );
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
 
   // Transform checker orders data to match the table format
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || '',
       created_at:
-        order.created_at === 'N/A' || order.created_at === 'NA'
-          ? 'N/A'
-          : new Date(order.created_at).toLocaleString(),
+        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || '',
       partner_order_id: order.partner_order_id || '',
       customer_name: order.customer_name || '',
@@ -56,14 +46,12 @@ const CompletedTransactionTable = () => {
       is_v_kyc_required: order.is_v_kyc_required || '',
       e_sign_status: order.e_sign_status || null,
       e_sign_customer_completion_date:
-        order.e_sign_customer_completion_date === 'N/A' ||
-        order.e_sign_customer_completion_date === 'NA'
+        order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.e_sign_customer_completion_date).toLocaleString(),
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
-        order.v_kyc_customer_completion_date === 'N/A' ||
-        order.v_kyc_customer_completion_date === 'NA'
+        order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
       incident_status: order.incident_status
@@ -72,8 +60,7 @@ const CompletedTransactionTable = () => {
           ? 'Rejected'
           : 'Pending',
       incident_completion_date:
-        order.incident_completion_date === 'N/A' ||
-        order.incident_completion_date === 'NA'
+        order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.incident_completion_date).toLocaleString(),
       nium_invoice_number: order.nium_invoice_number || '',

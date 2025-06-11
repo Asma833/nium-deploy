@@ -38,9 +38,7 @@ class EncryptionService {
   private getRSAPublicKeyFromEnv(): string {
     const envKey = import.meta.env.VITE_RSA_PUBLIC_KEY;
     if (!envKey) {
-      throw new Error(
-        'RSA public key not found in environment variables (VITE_RSA_PUBLIC_KEY)'
-      );
+      throw new Error('RSA public key not found in environment variables (VITE_RSA_PUBLIC_KEY)');
     }
     return envKey;
   }
@@ -99,10 +97,7 @@ class EncryptionService {
       }
       return this.rsaPublicKey!;
     } catch (error) {
-      encryptionLogger.error(
-        `Failed to get RSA public key from ${keySource}`,
-        error as Error
-      );
+      encryptionLogger.error(`Failed to get RSA public key from ${keySource}`, error as Error);
 
       // Fallback mechanism: try the other source if the primary fails
       try {
@@ -119,9 +114,7 @@ class EncryptionService {
         return this.rsaPublicKey!;
       } catch (fallbackError) {
         encryptionLogger.error('Fallback also failed', fallbackError as Error);
-        throw new Error(
-          `Failed to get RSA public key from both ${keySource} and fallback source`
-        );
+        throw new Error(`Failed to get RSA public key from both ${keySource} and fallback source`);
       }
     }
   }
@@ -229,8 +222,7 @@ class EncryptionService {
   async encryptPayload(data: any): Promise<EncryptionResult> {
     try {
       // Check if encryption is enabled
-      const encryptionEnabled =
-        import.meta.env.VITE_ENABLE_ENCRYPTION === 'true';
+      const encryptionEnabled = import.meta.env.VITE_ENABLE_ENCRYPTION === 'true';
       if (!encryptionEnabled) {
         // Return data as-is if encryption is disabled
         return {
@@ -271,8 +263,7 @@ class EncryptionService {
    */
   decryptResponse(params: DecryptionParams): any {
     try {
-      const encryptionEnabled =
-        import.meta.env.VITE_ENABLE_ENCRYPTION === 'true';
+      const encryptionEnabled = import.meta.env.VITE_ENABLE_ENCRYPTION === 'true';
 
       if (!encryptionEnabled) {
         // Return data as-is if encryption is disabled
@@ -283,11 +274,7 @@ class EncryptionService {
         }
       }
 
-      const decryptedString = this.decryptWithAES(
-        params.encryptedData,
-        params.aesKey,
-        params.iv
-      );
+      const decryptedString = this.decryptWithAES(params.encryptedData, params.aesKey, params.iv);
 
       // Try to parse as JSON, fallback to string
       try {

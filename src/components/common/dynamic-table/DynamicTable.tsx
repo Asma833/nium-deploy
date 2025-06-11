@@ -1,21 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { FileX2 } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import TableSearchFilter from '@/components/filter/TableSearchFilter';
 import { cn } from '@/utils/cn';
 import { useTableSorting } from '@/components/common/dynamic-table/hooks/useTableSorting';
 import { useTablePagination } from '@/components/common/dynamic-table/hooks/useTablePagination';
-import {
-  Column,
-  DynamicTableProps,
-} from '@/components/types/common-components.types';
+import { Column, DynamicTableProps } from '@/components/types/common-components.types';
 import { SetFilters } from '@/components/types/filter.types';
 import { Button } from '@/components/ui/button';
 import { TablePagination } from './TablePagination';
@@ -32,10 +22,7 @@ const formatDate = (date: Date | string | undefined) => {
   });
 };
 
-const getCellContent = <T extends Record<string, any>>(
-  row: any,
-  column: Column<T>
-) => {
+const getCellContent = <T extends Record<string, any>>(row: any, column: Column<T>) => {
   if (column.cell) {
     return column.cell(row[column.id], row);
   }
@@ -109,8 +96,7 @@ export function DynamicTable<T extends Record<string, any>>({
   const loading = externalLoading || internalLoading;
 
   // Use either the dynamically fetched data or the original data based on mode
-  const dataSource =
-    mode === 'dynamic' && dynamicData.length > 0 ? dynamicData : initialData;
+  const dataSource = mode === 'dynamic' && dynamicData.length > 0 ? dynamicData : initialData;
 
   const { sortedData, sortColumn, sortDirection, toggleSort } = useTableSorting(
     dataSource || [], // Ensure dataSource is an array
@@ -154,9 +140,7 @@ export function DynamicTable<T extends Record<string, any>>({
           // Apply date range filter
           if (filter?.dateFilterColumn && filters.dateRange) {
             const dateColumn = filter?.dateFilterColumn as string;
-            const itemDate = item[dateColumn]
-              ? new Date(item[dateColumn])
-              : null;
+            const itemDate = item[dateColumn] ? new Date(item[dateColumn]) : null;
 
             if (filters.dateRange.from && itemDate) {
               const fromDate = new Date(filters.dateRange.from);
@@ -171,19 +155,13 @@ export function DynamicTable<T extends Record<string, any>>({
           }
 
           // Apply status filter
-          if (
-            filter?.statusFilerColumn &&
-            filters.status &&
-            filters.status !== 'all'
-          ) {
+          if (filter?.statusFilerColumn && filters.status && filters.status !== 'all') {
             const statusColumn = filter.statusFilerColumn as string;
             if (item[statusColumn] !== filters.status) return false;
           }
 
           // Apply custom select filters
-          for (const [key, value] of Object.entries(
-            filters.customFilterValues
-          )) {
+          for (const [key, value] of Object.entries(filters.customFilterValues)) {
             if (value && value !== 'all') {
               // Handle nested properties with dot notation (e.g., 'purpose_type_name.purpose_name')
               if (key.includes('.')) {
@@ -195,8 +173,7 @@ export function DynamicTable<T extends Record<string, any>>({
                   if (nestedValue === undefined) break;
                 }
                 // If nestedValue is undefined or doesn't match, filter out
-                if (nestedValue === undefined || nestedValue !== value)
-                  return false;
+                if (nestedValue === undefined || nestedValue !== value) return false;
               } else if (item[key] !== value) {
                 // Standard property check
                 return false;
@@ -293,31 +270,19 @@ export function DynamicTable<T extends Record<string, any>>({
     <div className="space-y-4 dynamic-table-container w-full">
       {refreshAction && refreshAction.isRefreshButtonVisible && (
         <div className="flex items-center justify-between">
-          <Button
-            onClick={handleRefreshWithReset}
-            variant="outline"
-            size={'sm'}
-          >
-            {refreshAction.refreshButtonText
-              ? refreshAction.refreshButtonText
-              : 'Refresh Data'}
+          <Button onClick={handleRefreshWithReset} variant="outline" size={'sm'}>
+            {refreshAction.refreshButtonText ? refreshAction.refreshButtonText : 'Refresh Data'}
           </Button>
 
           <div>
-            {refreshAction.isLoading && (
-              <span className="text-blue-500">Loading data...</span>
-            )}
-            {refreshAction.hasError && (
-              <span className="text-red-500">Error loading data</span>
-            )}
+            {refreshAction.isLoading && <span className="text-blue-500">Loading data...</span>}
+            {refreshAction.hasError && <span className="text-red-500">Error loading data</span>}
           </div>
         </div>
       )}
 
       <div className="flex sm:items-center justify-between w-full md:flex-row flex-col">
-        {renderLeftSideActions && (
-          <div className="flex-1 py-2">{renderLeftSideActions()}</div>
-        )}
+        {renderLeftSideActions && <div className="flex-1 py-2">{renderLeftSideActions()}</div>}
         {(filter || renderComponents) && (
           <div className="w-full sm:flex-1 items-center sm:py-2">
             {filter?.filterOption && (
@@ -339,13 +304,8 @@ export function DynamicTable<T extends Record<string, any>>({
         )}
       </div>
 
-      <div
-        className={cn(
-          'overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm',
-          tableWrapperClass
-        )}
-      >
-        <div className="border  overflow-clip">
+      <div className={cn('overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm', tableWrapperClass)}>
+        <div className="border border-gray-200 overflow-clip">
           <Table className="odz-table w-full overflow-auto">
             <TableHeader className="bg-[--table-header]">
               <TableRow className="odz-table-row">
@@ -376,25 +336,15 @@ export function DynamicTable<T extends Record<string, any>>({
                   paginatedData
                     .filter((row) => row != null)
                     .map((row, idx) => {
-                      const rowKey =
-                        row.id ??
-                        row.niumId ??
-                        row._id ??
-                        `${currentPage}-${idx}`;
+                      const rowKey = row.id ?? row.niumId ?? row._id ?? `${currentPage}-${idx}`;
                       return (
                         <TableRow
                           key={rowKey}
-                          className={cn(
-                            'odz-table-row',
-                            onRowClick && 'cursor-pointer hover:bg-gray-50'
-                          )}
+                          className={cn('odz-table-row', onRowClick && 'cursor-pointer hover:bg-gray-50')}
                           onClick={() => onRowClick?.(row)}
                         >
                           {columns.map((col: Column<T>) => (
-                            <TableCell
-                              className="odz-table-cell text-center"
-                              key={`${rowKey}-${col.key}`}
-                            >
+                            <TableCell className="odz-table-cell text-center" key={`${rowKey}-${col.key}`}>
                               {getCellContent(row, col)}
                             </TableCell>
                           ))}
@@ -403,10 +353,7 @@ export function DynamicTable<T extends Record<string, any>>({
                     })
                 ) : (
                   <TableRow className="odz-table-row">
-                    <TableCell
-                      className="odz-table-cell"
-                      colSpan={columns.length}
-                    >
+                    <TableCell className="odz-table-cell" colSpan={columns.length}>
                       <div className="odz-table-cell-inner flex items-center justify-center space-x-2 py-20 text-primary">
                         <FileX2 size="20px" />
                         <div className="not-data-found-w">Data Not Found</div>
@@ -416,10 +363,7 @@ export function DynamicTable<T extends Record<string, any>>({
                 )
               ) : (
                 <TableRow className="odz-table-row">
-                  <TableCell
-                    className="odz-table-cell"
-                    colSpan={columns.length}
-                  >
+                  <TableCell className="odz-table-cell" colSpan={columns.length}>
                     <TableDataLoader />
                   </TableCell>
                 </TableRow>

@@ -3,6 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
 import { ErrorMessage } from '../ErrorMessage';
+import '../styles/form-layout.css';
 
 interface MaterialSelectProps {
   name: string;
@@ -15,23 +16,16 @@ interface MaterialSelectProps {
   placeholder?: string;
 }
 
-export const MaterialSelect = ({
-  name,
-  label,
-  options,
-  baseStyle,
-  className,
-  placeholder,
-}: MaterialSelectProps) => {
+export const MaterialSelect = ({ name, label, options, baseStyle, className, placeholder }: MaterialSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
 
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
     if (isArrayOptions) {
-      const selectedOption = (
-        options as Array<{ value: string; label: string; selected?: boolean }>
-      ).find((option) => option.selected);
+      const selectedOption = (options as Array<{ value: string; label: string; selected?: boolean }>).find(
+        (option) => option.selected
+      );
       return selectedOption ? selectedOption.value : '';
     } else {
       const entries = Object.entries(options);
@@ -48,10 +42,7 @@ export const MaterialSelect = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({
-          field: { value, onChange, ...field },
-          fieldState: { error },
-        }) => {
+        render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
           // Log for debugging
 
           return (
@@ -70,9 +61,7 @@ export const MaterialSelect = ({
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
-                  return Array.isArray(selected)
-                    ? toTitleCase(selected.join(', '))
-                    : toTitleCase(selected);
+                  return Array.isArray(selected) ? toTitleCase(selected.join(', ')) : toTitleCase(selected);
                 }}
               >
                 <MenuItem disabled value="">

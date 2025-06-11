@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import ViewAllTable from '@/components/table/common-tables/view-table/ViewAllTable';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
-import {
-  Order,
-  TransactionTypeEnum,
-} from '@/features/checker/types/updateIncident.types';
+import { Order, TransactionTypeEnum } from '@/features/checker/types/updateIncident.types';
 
 const ViewAllTablePage = () => {
   const {

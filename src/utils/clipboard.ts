@@ -5,10 +5,7 @@ import { toast } from 'sonner';
  * @param text Text to copy to clipboard
  * @param message Optional custom success message
  */
-export const copyToClipboard = async (
-  text: string,
-  message: string = 'Copied to clipboard!'
-) => {
+export const copyToClipboard = async (text: string, message: string = 'Copied to clipboard!') => {
   try {
     await navigator.clipboard.writeText(text);
     toast.success(message);

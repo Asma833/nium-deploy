@@ -11,23 +11,16 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-import {
-  IncidentMode,
-  IncidentPageId,
-} from '@/features/checker/types/updateIncident.types';
+import { IncidentMode, IncidentPageId } from '@/features/checker/types/updateIncident.types';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 
 const AssignCreationTable = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  const { options: purposeTypeOptions } = useDynamicOptions(
-    API.PURPOSE.GET_PURPOSES
-  );
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(
-    API.TRANSACTION.GET_TRANSACTIONS
-  );
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
 
   const { data, isLoading, error, refetch } = useGetData({
     endpoint: API.CHECKER.ASSIGN.LIST,
@@ -103,9 +96,7 @@ const AssignCreationTable = () => {
     }); // Also update the tableData to reflect the checked state
     setTableData((prevData) =>
       Array.isArray(prevData)
-        ? prevData.map((row: any) =>
-            row.partner_order_id === rowId ? { ...row, select: checked } : row
-          )
+        ? prevData.map((row: any) => (row.partner_order_id === rowId ? { ...row, select: checked } : row))
         : []
     );
   };
@@ -118,22 +109,13 @@ const AssignCreationTable = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await axiosInstance.post(
-        API.CHECKER.ASSIGN.TAKE_REQUEST,
-        {
-          orderIds: selectedRows,
-          checkerId: currentUserHashedKey,
-        }
-      ); // Handle successful response
+      const response = await axiosInstance.post(API.CHECKER.ASSIGN.TAKE_REQUEST, {
+        orderIds: selectedRows,
+        checkerId: currentUserHashedKey,
+      }); // Handle successful response
       if (response) {
-        toast.success(
-          `Successfully assigned ${selectedRows.length} transaction(s)`
-        );
-        await invalidateMultipleQueries([
-          ['getAssignList'],
-          ['dashboardMetrics'],
-          ['checkerOrders'],
-        ]);
+        toast.success(`Successfully assigned ${selectedRows.length} transaction(s)`);
+        await invalidateMultipleQueries([['getAssignList'], ['dashboardMetrics'], ['checkerOrders']]);
       }
 
       setSelectedRows([]);
@@ -162,9 +144,7 @@ const AssignCreationTable = () => {
           hasError: error,
         }}
         onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
         totalRecords={pagination.totalRecords}
         filter={{
@@ -204,14 +184,8 @@ const AssignCreationTable = () => {
           {selectedRows.length} transaction
           {selectedRows.length !== 1 ? 's' : ''} selected
         </div>
-        <Button
-          onClick={handleTakeRequest}
-          disabled={selectedRows.length === 0 || isSubmitting}
-          className="border"
-        >
-          {isSubmitting
-            ? 'Processing...'
-            : `Take Request${selectedRows.length !== 1 ? 's' : ''}`}
+        <Button onClick={handleTakeRequest} disabled={selectedRows.length === 0 || isSubmitting} className="border">
+          {isSubmitting ? 'Processing...' : `Take Request${selectedRows.length !== 1 ? 's' : ''}`}
         </Button>
       </div>
       {isModalOpen && (

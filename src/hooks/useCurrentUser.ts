@@ -5,9 +5,7 @@ export const useCurrentUser = () => {
   const auth = useSelector((state: RootState) => state.auth);
 
   const getUserHashedKey = () => {
-    return (
-      auth.user?.id || auth.accessToken?.split('.')[1] || 'default-user-hash'
-    );
+    return auth.user?.id || auth.accessToken?.split('.')[1] || 'default-user-hash';
   };
 
   return {

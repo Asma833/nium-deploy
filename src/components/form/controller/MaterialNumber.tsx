@@ -8,12 +8,7 @@ interface MaterialNumberProps {
   className?: string;
 }
 
-export const MaterialNumber = ({
-  name,
-  label,
-  baseStyle,
-  className,
-}: MaterialNumberProps) => {
+export const MaterialNumber = ({ name, label, baseStyle, className }: MaterialNumberProps) => {
   const { control } = useFormContext();
 
   return (
@@ -21,10 +16,7 @@ export const MaterialNumber = ({
       name={name}
       control={control}
       defaultValue=""
-      render={({
-        field: { value, onChange, ...field },
-        fieldState: { error },
-      }) => (
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
           value={value ?? ''}

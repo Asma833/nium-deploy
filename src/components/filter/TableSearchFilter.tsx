@@ -5,13 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SearchInput } from './SearchInput';
 import { TableSearchFilterProps } from '../types/filter.types';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 
 const CustomCalendarIcon = () => {
@@ -31,17 +25,14 @@ const TableSearchFilter = ({
   setLoading,
   setDynamicData,
 }: TableSearchFilterProps) => {
-  const { search, dateRange, status, selects } =
-    filterConfig.renderFilterOptions;
+  const { search, dateRange, status, selects } = filterConfig.renderFilterOptions;
   const mode = filterConfig.mode || 'static';
   const callbacks = filterConfig.dynamicCallbacks;
 
   // Store filter values locally to avoid applying them immediately
   const [localDateRange, setLocalDateRange] = useState(filters.dateRange);
   const [localStatus, setLocalStatus] = useState(filters.status);
-  const [localCustomFilters, setLocalCustomFilters] = useState(
-    filters.customFilterValues
-  );
+  const [localCustomFilters, setLocalCustomFilters] = useState(filters.customFilterValues);
 
   // Add refs for debounce timer and previous search value to optimize search
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -103,9 +94,7 @@ const TableSearchFilter = ({
             await handleSearchClear();
           } else if (mode === 'dynamic' && callbacks?.onSearch) {
             // For dynamic search - use trimmed value for API call
-            const result = await executeAsyncOperation(() =>
-              callbacks.onSearch!(trimmedValue)
-            );
+            const result = await executeAsyncOperation(() => callbacks.onSearch!(trimmedValue));
             if (setDynamicData && result) setDynamicData(result);
           } else {
             // For static filtering - always call onFilter for search regardless of pagination state
@@ -116,15 +105,7 @@ const TableSearchFilter = ({
         }
       }, 50);
     },
-    [
-      setFilters,
-      handleSearchClear,
-      mode,
-      callbacks,
-      executeAsyncOperation,
-      setDynamicData,
-      onFilter,
-    ]
+    [setFilters, handleSearchClear, mode, callbacks, executeAsyncOperation, setDynamicData, onFilter]
   );
 
   // Clean up debounce timer on unmount
@@ -141,24 +122,17 @@ const TableSearchFilter = ({
     prevSearchValueRef.current = filters.search.trim().replace(/\s+/g, ' ');
   }, [filters.search]);
 
-  const handleDateChange = useCallback(
-    (key: 'from' | 'to', date: Date | null) => {
-      setLocalDateRange((prev) => {
-        const updated = { ...prev, [key]: date ?? undefined };
+  const handleDateChange = useCallback((key: 'from' | 'to', date: Date | null) => {
+    setLocalDateRange((prev) => {
+      const updated = { ...prev, [key]: date ?? undefined };
 
-        if (
-          updated.from &&
-          updated.to &&
-          dayjs(updated.from).isAfter(dayjs(updated.to), 'day')
-        ) {
-          updated.to = undefined; // Only clear "to" if "from" becomes greater
-        }
+      if (updated.from && updated.to && dayjs(updated.from).isAfter(dayjs(updated.to), 'day')) {
+        updated.to = undefined; // Only clear "to" if "from" becomes greater
+      }
 
-        return updated;
-      });
-    },
-    []
-  );
+      return updated;
+    });
+  }, []);
 
   const handleStatusChange = useCallback(
     (value: string) => {
@@ -235,45 +209,24 @@ const TableSearchFilter = ({
     if (onReset) onReset();
 
     if (mode === 'dynamic' && callbacks?.onFilterApply && setDynamicData) {
-      const result = await executeAsyncOperation(
-        () => callbacks?.onFilterApply?.(resetFilters) ?? Promise.resolve([])
-      );
+      const result = await executeAsyncOperation(() => callbacks?.onFilterApply?.(resetFilters) ?? Promise.resolve([]));
       if (result) setDynamicData(result);
     }
-  }, [
-    filters,
-    mode,
-    callbacks,
-    onReset,
-    setDynamicData,
-    setFilters,
-    executeAsyncOperation,
-  ]);
+  }, [filters, mode, callbacks, onReset, setDynamicData, setFilters, executeAsyncOperation]);
 
   return (
-    <div
-      className="flex flex-col gap-3 w-full"
-      role="search"
-      aria-label="Table filter controls"
-    >
+    <div className="flex flex-col gap-3 w-full" role="search" aria-label="Table filter controls">
       <div className="flex items-end justify-between gap-4 flex-wrap text-[--primary-text]">
         <div className="flex items-end gap-2 flex-wrap">
           {dateRange && (
             <>
               <div className="flex items-start flex-col">
-                <span
-                  id="from-date-label"
-                  className="text-sm whitespace-nowrap text-gray-500"
-                >
+                <span id="from-date-label" className="text-sm whitespace-nowrap text-gray-500">
                   From Date
                 </span>
                 <DatePicker
-                  value={
-                    localDateRange.from ? dayjs(localDateRange.from) : null
-                  }
-                  onChange={(date) =>
-                    handleDateChange('from', date?.toDate() || null)
-                  }
+                  value={localDateRange.from ? dayjs(localDateRange.from) : null}
+                  onChange={(date) => handleDateChange('from', date?.toDate() || null)}
                   slotProps={{
                     textField: {
                       size: 'small',
@@ -298,21 +251,13 @@ const TableSearchFilter = ({
                 />
               </div>
               <div className="flex items-start flex-col">
-                <span
-                  id="to-date-label"
-                  className="text-sm whitespace-nowrap text-gray-500"
-                >
+                <span id="to-date-label" className="text-sm whitespace-nowrap text-gray-500">
                   To Date
                 </span>
                 <DatePicker
                   value={localDateRange.to ? dayjs(localDateRange.to) : null}
-                  onChange={(date) =>
-                    handleDateChange('to', date?.toDate() || null)
-                  }
-                  shouldDisableDate={(day) =>
-                    !!localDateRange.from &&
-                    day.isBefore(dayjs(localDateRange.from), 'day')
-                  }
+                  onChange={(date) => handleDateChange('to', date?.toDate() || null)}
+                  shouldDisableDate={(day) => !!localDateRange.from && day.isBefore(dayjs(localDateRange.from), 'day')}
                   slotProps={{
                     textField: {
                       size: 'small',
@@ -341,14 +286,10 @@ const TableSearchFilter = ({
 
           {status && status.options && (
             <div className="flex items-start flex-col ">
-              <span className="text-sm whitespace-nowrap text-gray-500">
-                {status.label || 'Status'}:
-              </span>
+              <span className="text-sm whitespace-nowrap text-gray-500">{status.label || 'Status'}:</span>
               <Select value={localStatus} onValueChange={handleStatusChange}>
                 <SelectTrigger className="w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
-                  <SelectValue
-                    placeholder={status.placeholder || `Select ${status.label}`}
-                  />
+                  <SelectValue placeholder={status.placeholder || `Select ${status.label}`} />
                 </SelectTrigger>
                 <SelectContent>
                   {status.options.map((option) => (
@@ -364,14 +305,10 @@ const TableSearchFilter = ({
           {selects &&
             selects.map((select) => (
               <div key={select.id} className="flex items-start flex-col ">
-                <span className="text-sm whitespace-nowrap text-gray-500">
-                  {select.label}:
-                </span>
+                <span className="text-sm whitespace-nowrap text-gray-500">{select.label}:</span>
                 <Select
                   value={localCustomFilters[select.id] || ''}
-                  onValueChange={(value) =>
-                    handleSelectChange(select.id, value)
-                  }
+                  onValueChange={(value) => handleSelectChange(select.id, value)}
                 >
                   <SelectTrigger className="min-w-fit w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                     <SelectValue
@@ -420,13 +357,7 @@ const TableSearchFilter = ({
               </div>
             )}
         </div>
-        {search && (
-          <SearchInput
-            value={filters.search}
-            onChange={handleSearchInputChange}
-            aria-label="Search table"
-          />
-        )}
+        {search && <SearchInput value={filters.search} onChange={handleSearchInputChange} aria-label="Search table" />}
       </div>
     </div>
   );

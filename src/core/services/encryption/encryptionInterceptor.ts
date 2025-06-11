@@ -1,12 +1,5 @@
-import {
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
-import {
-  encryptionService,
-  EncryptionResult,
-} from '@/core/services/encryption/encryptionService';
+import { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { encryptionService, EncryptionResult } from '@/core/services/encryption/encryptionService';
 import { shouldEncryptMethod } from '@/core/services/encryption/encryptionConfig';
 import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints';
 import encryptionLogger from './encryptionLogger';
@@ -37,16 +30,10 @@ export const encryptRequestInterceptor = async (
     const method = config.method?.toLowerCase() || '';
     const shouldEncrypt = shouldEncryptEndpoint(url);
 
-    const headerSkipEncryption =
-      config.headers?.['X-Skip-Encryption'] === 'true';
+    const headerSkipEncryption = config.headers?.['X-Skip-Encryption'] === 'true';
     const configSkipEncryption = (config as any).skipEncryption === true;
 
-    if (
-      !shouldEncrypt ||
-      headerSkipEncryption ||
-      configSkipEncryption ||
-      !encryptionService.isEncryptionEnabled()
-    ) {
+    if (!shouldEncrypt || headerSkipEncryption || configSkipEncryption || !encryptionService.isEncryptionEnabled()) {
       return config;
     }
 
@@ -74,8 +61,7 @@ export const encryptRequestInterceptor = async (
       return config;
     }
 
-    const encryptionResult: EncryptionResult =
-      await encryptionService.encryptPayload(config.data);
+    const encryptionResult: EncryptionResult = await encryptionService.encryptPayload(config.data);
 
     const contextKey = `${url}_${Date.now()}`;
     encryptionContext.set(contextKey, {
@@ -107,9 +93,7 @@ export const encryptRequestInterceptor = async (
 /**
  * Response interceptor to decrypt incoming data
  */
-export const decryptResponseInterceptor = (
-  response: AxiosResponse
-): AxiosResponse => {
+export const decryptResponseInterceptor = (response: AxiosResponse): AxiosResponse => {
   try {
     if (!encryptionService.isEncryptionEnabled()) {
       return response;
@@ -117,11 +101,7 @@ export const decryptResponseInterceptor = (
 
     const responseData = response.data as EncryptedResponseData;
 
-    if (
-      !responseData ||
-      typeof responseData !== 'object' ||
-      !responseData.encryptedValue
-    ) {
+    if (!responseData || typeof responseData !== 'object' || !responseData.encryptedValue) {
       return response;
     }
 
@@ -147,11 +127,7 @@ export const decryptResponseInterceptor = (
     encryptionContext.delete(contextKey);
 
     // ✅ Log decrypted response data
-    encryptionLogger.logApiResponse(
-      response.config.url || '',
-      decryptedData,
-      response.status
-    );
+    encryptionLogger.logApiResponse(response.config.url || '', decryptedData, response.status);
 
     response.data = {
       ...decryptedData,

@@ -1,7 +1,4 @@
-import encryptionService, {
-  DecryptionParams,
-  EncryptionResult,
-} from '@/core/services/encryption';
+import encryptionService, { DecryptionParams, EncryptionResult } from '@/core/services/encryption';
 import { useCallback, useEffect, useState } from 'react';
 
 interface UseEncryptionReturn {
@@ -37,8 +34,7 @@ export const useEncryption = (): UseEncryptionReturn => {
       await encryptionService.fetchRSAPublicKey();
       setIsRSAKeyLoaded(true);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to fetch RSA key';
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch RSA key';
       setError(errorMessage);
       console.error('Error fetching RSA key:', err);
     } finally {
@@ -46,28 +42,23 @@ export const useEncryption = (): UseEncryptionReturn => {
     }
   }, [isEncryptionEnabled]);
 
-  const encryptPayload = useCallback(
-    async (data: any): Promise<EncryptionResult> => {
-      try {
-        setError(null);
-        return await encryptionService.encryptPayload(data);
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Encryption failed';
-        setError(errorMessage);
-        throw err;
-      }
-    },
-    []
-  );
+  const encryptPayload = useCallback(async (data: any): Promise<EncryptionResult> => {
+    try {
+      setError(null);
+      return await encryptionService.encryptPayload(data);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Encryption failed';
+      setError(errorMessage);
+      throw err;
+    }
+  }, []);
 
   const decryptResponse = useCallback((params: DecryptionParams): any => {
     try {
       setError(null);
       return encryptionService.decryptResponse(params);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Decryption failed';
+      const errorMessage = err instanceof Error ? err.message : 'Decryption failed';
       setError(errorMessage);
       throw err;
     }

@@ -5,9 +5,7 @@ import { NavItem } from '@/components/types/navigation.types';
 export const useActiveMenu = (navItems: NavItem[]) => {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string>('');
-  const [activeDropdownItem, setActiveDropdownItem] = useState<string | null>(
-    null
-  );
+  const [activeDropdownItem, setActiveDropdownItem] = useState<string | null>(null);
 
   const findActiveItems = useCallback(
     (path: string) => {

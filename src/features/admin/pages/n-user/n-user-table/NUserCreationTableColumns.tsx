@@ -1,10 +1,6 @@
 import { Edit } from 'lucide-react';
 import Switch from '@/components/ui/switch';
-import {
-  HandleNavigate,
-  HandleStatusChange,
-  TableColumn,
-} from '@/features/admin/types/user.types';
+import { HandleNavigate, HandleStatusChange, TableColumn } from '@/features/admin/types/user.types';
 
 export const GetUserTableColumns = (
   handleStatusChange: HandleStatusChange,

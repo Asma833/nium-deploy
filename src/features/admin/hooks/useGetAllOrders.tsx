@@ -7,16 +7,11 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 type TransactionType = 'all' | 'completed';
 
-export const useGetAllOrders = (
-  initialTransactionType: TransactionType = 'all',
-  autoFetch: boolean = true
-) => {
+export const useGetAllOrders = (initialTransactionType: TransactionType = 'all', autoFetch: boolean = true) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
-  const [transactionType, setTransactionType] = useState<TransactionType>(
-    initialTransactionType
-  );
+  const [transactionType, setTransactionType] = useState<TransactionType>(initialTransactionType);
 
   // Get the current user once
   const { user } = useCurrentUser();
@@ -47,8 +42,7 @@ export const useGetAllOrders = (
         console.error('Unauthorized');
       }
 
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       toast.error('Error Fetching Checker Orders', {
         description: errorMessage,
       });

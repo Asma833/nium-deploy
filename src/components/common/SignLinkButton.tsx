@@ -3,11 +3,7 @@ import { Delete, Edit, Eye, LinkIcon, Plus, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { copyToClipboard } from '@/utils/clipboard';
 import { cn } from '@/utils/cn';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SignLinkButtonProps {
   id?: string;
@@ -17,24 +13,8 @@ interface SignLinkButtonProps {
   disabled?: boolean;
   className?: string;
   tooltipText?: string;
-  buttonType?:
-    | 'button'
-    | 'copy_link'
-    | 'refresh'
-    | 'remove'
-    | 'delete'
-    | 'edit'
-    | 'view'
-    | 'add';
-  buttonIconType?:
-    | 'button'
-    | 'copy_link'
-    | 'refresh'
-    | 'remove'
-    | 'delete'
-    | 'edit'
-    | 'view'
-    | 'add';
+  buttonType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add';
+  buttonIconType?: 'button' | 'copy_link' | 'refresh' | 'remove' | 'delete' | 'edit' | 'view' | 'add';
   onClick?: () => void;
   loading?: string | boolean;
 }
@@ -107,9 +87,7 @@ export const SignLinkButton: React.FC<SignLinkButtonProps> = ({
           {getIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-secondary text-foreground">
-        {tooltipText}
-      </TooltipContent>
+      <TooltipContent className="bg-secondary text-foreground">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

@@ -5,11 +5,7 @@ import { partnerApi } from '../action/partnerApi';
 
 export const usePartnerStatusUpdateAPI = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, error } = useMutation<
-    void,
-    Error,
-    UserStatusRequest
-  >({
+  const { mutate, isPending, error } = useMutation<void, Error, UserStatusRequest>({
     mutationFn: async (userData: any) => {
       await partnerApi.PartnerUpdate(userData);
     },

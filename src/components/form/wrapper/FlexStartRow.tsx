@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn';
-import React from 'react';
+import '../styles/form-layout.css';
 
 type Props = {
   children: React.ReactNode;
@@ -7,9 +7,7 @@ type Props = {
 };
 
 const FlexStartRow = ({ children, className }: Props) => {
-  return (
-    <div className={cn('flex justify-start w-full', className)}>{children}</div>
-  );
+  return <div className={cn('flex justify-start w-full', className)}>{children}</div>;
 };
 
 export default FlexStartRow;

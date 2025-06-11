@@ -6,12 +6,8 @@ const EsignStatusCell = ({ rowData }: { rowData: Order }) => {
     <span>
       {rowData.is_esign_required ? (
         rowData.e_sign_status && (
-          <span
-            className={`status-badge esign-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}
-          >
-            {rowData.e_sign_status === 'N/A'
-              ? 'N/A'
-              : _.capitalize(rowData.e_sign_status)}
+          <span className={`status-badge esign-${rowData.e_sign_status.toLowerCase().replace(/\s+/g, '-')}`}>
+            {rowData.e_sign_status === 'N/A' ? 'N/A' : _.capitalize(rowData.e_sign_status)}
           </span>
         )
       ) : (

@@ -8,12 +8,7 @@ interface MaterialEmailProps {
   className?: string;
 }
 
-export const MaterialEmail = ({
-  name,
-  label,
-  baseStyle,
-  className,
-}: MaterialEmailProps) => {
+export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEmailProps) => {
   const { control } = useFormContext();
 
   return (
@@ -21,10 +16,7 @@ export const MaterialEmail = ({
       name={name}
       control={control}
       defaultValue="" // Add default value
-      render={({
-        field: { value, onChange, ...field },
-        fieldState: { error },
-      }) => (
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
           value={value ?? ''} // Ensure value is never undefined
@@ -37,6 +29,7 @@ export const MaterialEmail = ({
           helperText={error?.message}
           sx={baseStyle}
           className={className ?? ''}
+          placeholder="Enter Email Address"
         />
       )}
     />

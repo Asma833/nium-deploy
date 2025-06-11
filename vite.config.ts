@@ -16,12 +16,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           // React core
-          'react-core': [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            'react-router',
-          ],
+          'react-core': ['react', 'react-dom', 'react-router-dom', 'react-router'],
 
           // UI Framework chunks
           mui: ['@mui/material', '@mui/lab', '@mui/x-date-pickers'],
@@ -36,28 +31,16 @@ export default defineConfig({
           ],
 
           // State management
-          'state-management': [
-            '@reduxjs/toolkit',
-            'react-redux',
-            'redux-persist',
-          ],
+          'state-management': ['@reduxjs/toolkit', 'react-redux', 'redux-persist'],
 
           // Data handling
-          'data-utils': [
-            '@tanstack/react-query',
-            '@tanstack/react-table',
-            'axios',
-          ],
+          'data-utils': ['@tanstack/react-query', '@tanstack/react-table', 'axios'],
 
           // Form handling
           'form-tools': ['react-hook-form', '@hookform/resolvers', 'zod'],
 
           // UI utilities
-          'ui-utils': [
-            'framer-motion',
-            'class-variance-authority',
-            'tailwind-merge',
-          ],
+          'ui-utils': ['framer-motion', 'class-variance-authority', 'tailwind-merge'],
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',

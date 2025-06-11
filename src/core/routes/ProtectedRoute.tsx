@@ -30,11 +30,7 @@ const publicPaths = [
   ROUTES.AUTH.RESET_PASSWORD,
 ];
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  allowedRoles = [],
-  roles,
-}) => {
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles = [], roles }) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
   const location = useLocation();
 
@@ -48,8 +44,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return (
       location.pathname === path ||
       // Special case for reset-password which has a query parameter
-      (path === ROUTES.AUTH.RESET_PASSWORD &&
-        location.pathname === ROUTES.AUTH.RESET_PASSWORD)
+      (path === ROUTES.AUTH.RESET_PASSWORD && location.pathname === ROUTES.AUTH.RESET_PASSWORD)
     );
   });
 
@@ -69,9 +64,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  const hasRequiredRole =
-    allowedRoles.length === 0 ||
-    (user.role && allowedRoles.includes(user.role.name));
+  const hasRequiredRole = allowedRoles.length === 0 || (user.role && allowedRoles.includes(user.role.name));
 
   if (!hasRequiredRole) {
     return <Navigate to="/unauthorized" replace />;

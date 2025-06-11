@@ -15,12 +15,7 @@ export const mapProductTypeToIds = (
     // If product options are provided, use dynamic mapping
     return Object.keys(productType)
       .filter((key) => productType[key as keyof typeof productType])
-      .map(
-        (key) =>
-          productOptions.find(
-            (product) => product.name.toLowerCase() === key.toLowerCase()
-          )?.id
-      )
+      .map((key) => productOptions.find((product) => product.name.toLowerCase() === key.toLowerCase())?.id)
       .filter(Boolean) as string[];
   }
 

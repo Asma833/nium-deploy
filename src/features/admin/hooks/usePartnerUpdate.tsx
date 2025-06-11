@@ -13,8 +13,7 @@ interface UpdatePartnerParams {
 
 export const usePartnerUpdate = () => {
   const navigate = useNavigate();
-  const { getBankAccountId, getBranchId, getUserHashedKey, getUserId } =
-    useCurrentUser();
+  const { getBankAccountId, getBranchId, getUserHashedKey, getUserId } = useCurrentUser();
 
   const { getProductIds } = useGetProducts();
   const productIds = getProductIds() || { card: '', remittance: '' };

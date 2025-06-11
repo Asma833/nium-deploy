@@ -6,12 +6,7 @@ import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import {
-  IncidentMode,
-  IncidentPageId,
-  Order,
-  Orders,
-} from '@/features/checker/types/updateIncident.types';
+import { IncidentMode, IncidentPageId, Order, Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
@@ -29,13 +24,9 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
 
-  const { options: purposeTypeOptions } = useDynamicOptions(
-    API.PURPOSE.GET_PURPOSES
-  );
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(
-    API.TRANSACTION.GET_TRANSACTIONS
-  );
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
 
   const handleRegenerateEsignLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
@@ -74,9 +65,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
     return {
       nium_order_id: order.nium_order_id || 'N/A',
       created_at:
-        order.created_at === 'N/A' || order.created_at === 'NA'
-          ? 'N/A'
-          : new Date(order.created_at).toLocaleString(),
+        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleString(),
       partner_id: order.partner_id || 'N/A',
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
@@ -89,28 +78,21 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       is_v_kyc_required: order.is_v_kyc_required || 'N/A',
       e_sign_status: order.e_sign_status || null,
       e_sign_customer_completion_date:
-        order.e_sign_customer_completion_date === 'N/A' ||
-        order.e_sign_customer_completion_date === 'NA'
+        order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
           : order.e_sign_customer_completion_date
             ? new Date(order.e_sign_customer_completion_date).toLocaleString()
             : 'N/A',
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
-        order.v_kyc_customer_completion_date === 'N/A' ||
-        order.v_kyc_customer_completion_date === 'NA'
+        order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : order.v_kyc_customer_completion_date
             ? new Date(order.v_kyc_customer_completion_date).toLocaleString()
             : 'N/A',
-      incident_status: order.incident_status
-        ? 'Approved'
-        : !order.incident_status
-          ? 'Rejected'
-          : 'Pending',
+      incident_status: order.incident_status ? 'Approved' : !order.incident_status ? 'Rejected' : 'Pending',
       incident_completion_date:
-        order.incident_completion_date === 'N/A' ||
-        order.incident_completion_date === 'NA'
+        order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
           : order.incident_completion_date
             ? new Date(order.incident_completion_date).toLocaleString()
@@ -146,9 +128,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
     openModal,
   });
 
-  const tableColumns = columns.filter(
-    (col) => !disableColumns?.includes(col.id as string)
-  );
+  const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));
   return (
     <div className="dynamic-table-wrap">
       {' '}
@@ -166,9 +146,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         }}
         paginationMode={'static'}
         onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
         onFilteredDataChange={setFilteredData}
         filter={{

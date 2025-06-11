@@ -5,9 +5,7 @@ import { SetFilters } from '@/components/types/filter.types';
  * @param filters - The filters object
  * @returns An object with API-compatible filter parameters
  */
-export const createFilterParams = (
-  filters: SetFilters
-): Record<string, any> => {
+export const createFilterParams = (filters: SetFilters): Record<string, any> => {
   const params: Record<string, any> = {};
 
   // Add search term if present
@@ -116,11 +114,7 @@ export const filterByDateRange = <T extends Record<string, any>>(
  * @param value - Value to filter for
  * @returns Filtered array of data
  */
-export const filterByFieldValue = <T extends Record<string, any>>(
-  data: T[],
-  field: keyof T,
-  value: string
-): T[] => {
+export const filterByFieldValue = <T extends Record<string, any>>(data: T[], field: keyof T, value: string): T[] => {
   if (value === 'all' || !value) return data;
 
   return data.filter((item) => item[field] === value);

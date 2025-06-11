@@ -46,9 +46,7 @@ export function useDynamicPagination<T = any>({
 
       // Extract data and pagination info
       const responseData = extractValueFromPath(response.data, dataPath) || [];
-      const responseTotalRecords =
-        extractValueFromPath(response.data, totalRecordsPath) ||
-        responseData.length;
+      const responseTotalRecords = extractValueFromPath(response.data, totalRecordsPath) || responseData.length;
 
       setData(responseData);
       setTotalRecords(responseTotalRecords);
@@ -69,10 +67,7 @@ export function useDynamicPagination<T = any>({
   }
 
   // Handle page change
-  const handlePageChange = async (
-    page: number,
-    size: number = pageSize
-  ): Promise<T[]> => {
+  const handlePageChange = async (page: number, size: number = pageSize): Promise<T[]> => {
     setCurrentPage(page);
     return await fetchData({ page, pageSize: size });
   };

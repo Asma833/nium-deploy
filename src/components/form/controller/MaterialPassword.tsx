@@ -39,9 +39,7 @@ const MaterialPassword: React.FC<MaterialPasswordProps> = ({
             error={!!error}
             helperText={error?.message}
             onChange={(e) => {
-              const value = uppercase
-                ? e.target.value.toUpperCase()
-                : e.target.value;
+              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
               field.onChange(value);
             }}
             sx={baseStyle}
@@ -52,10 +50,7 @@ const MaterialPassword: React.FC<MaterialPasswordProps> = ({
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </IconButton>
                 </InputAdornment>

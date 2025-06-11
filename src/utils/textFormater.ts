@@ -43,11 +43,7 @@ export function slugify(text: string): string {
  * @example
  * truncate('This is a long text', 10) // returns 'This is...'
  */
-export function truncate(
-  str: string,
-  length: number,
-  ending: string = '...'
-): string {
+export function truncate(str: string, length: number, ending: string = '...'): string {
   return _.truncate(str, { length, omission: ending });
 }
 
@@ -75,6 +71,34 @@ export function formatPhoneNumber(phone: string): string {
   if (match) {
     return '(' + match[1] + ') ' + match[2] + '-' + match[3];
   }
+  return phone;
+}
+
+/**
+ * Formats an Indian mobile number string to +91 XXXXX XXXXX
+ * @param phone - The input phone number string
+ * @returns Formatted Indian mobile number
+ * @example
+ * formatIndianMobileNumber('9876543210') // returns '+91 98765 43210'
+ */
+export function formatIndianMobileNumber(phone: string): string {
+  const cleaned = phone.replace(/\D/g, '');
+
+  // Handle numbers with country code
+  if (cleaned.startsWith('91') && cleaned.length === 12) {
+    const number = cleaned.substring(2);
+    const match = number.match(/^(\d{5})(\d{5})$/);
+    if (match) {
+      return '+91 ' + match[1] + ' ' + match[2];
+    }
+  }
+
+  // Handle 10-digit mobile numbers
+  const match = cleaned.match(/^(\d{5})(\d{5})$/);
+  if (match && cleaned.length === 10) {
+    return '+91 ' + match[1] + ' ' + match[2];
+  }
+
   return phone;
 }
 

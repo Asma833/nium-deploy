@@ -1,17 +1,9 @@
 // Core encryption service
 export { encryptionService } from './encryptionService';
-export type {
-  EncryptionResult,
-  DecryptionParams,
-  ApiEncryptionPayload,
-} from './encryptionService';
+export type { EncryptionResult, DecryptionParams, ApiEncryptionPayload } from './encryptionService';
 
 // Axios interceptors
-export {
-  encryptRequestInterceptor,
-  decryptResponseInterceptor,
-  EncryptedApiClient,
-} from './encryptionInterceptor';
+export { encryptRequestInterceptor, decryptResponseInterceptor, EncryptedApiClient } from './encryptionInterceptor';
 
 // Utility functions
 export { EncryptedApiUtils } from './encryptedApiUtils';

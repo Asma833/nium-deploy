@@ -5,11 +5,7 @@ import { EsignLinkRequest } from '../types/updateIncident.types';
 
 export const useSendEsignLink = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, error } = useMutation<
-    void,
-    Error,
-    EsignLinkRequest
-  >({
+  const { mutate, isPending, error } = useMutation<void, Error, EsignLinkRequest>({
     mutationFn: async (userData: any) => {
       await updateIncidentApi.sendEsignLink(userData);
     },

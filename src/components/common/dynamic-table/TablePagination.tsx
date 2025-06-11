@@ -7,13 +7,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface TablePaginationProps {
   currentPage: number;
@@ -57,10 +51,7 @@ export const TablePagination = ({
       // Add more pages before or after current page to reach 5
       if (currentPage <= 3) {
         // Add more pages after current
-        while (
-          pagesArray.length < 5 &&
-          pagesArray[pagesArray.length - 2] < totalPages - 1
-        ) {
+        while (pagesArray.length < 5 && pagesArray[pagesArray.length - 2] < totalPages - 1) {
           const nextPage = pagesArray[pagesArray.length - 2] + 1;
           pagesArray.splice(pagesArray.length - 1, 0, nextPage);
         }
@@ -97,23 +88,14 @@ export const TablePagination = ({
     <div className="flex justify-between items-center mt-4 flex-col md:flex-row gap-4">
       <div className="flex items-center space-x-4">
         <span className="text-sm md:text-nowrap">
-          Showing{' '}
-          <span className="font-medium">
-            {filteredDataLength === 0 ? 0 : (currentPage - 1) * pageSize + 1}
-          </span>{' '}
-          to{' '}
-          <span className="font-medium">
-            {Math.min(currentPage * pageSize, totalRecords)}
-          </span>{' '}
-          of <span className="font-medium">{totalRecords}</span> results
+          Showing <span className="font-medium">{filteredDataLength === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span>{' '}
+          to <span className="font-medium">{Math.min(currentPage * pageSize, totalRecords)}</span> of{' '}
+          <span className="font-medium">{totalRecords}</span> results
         </span>
 
         <div className="flex items-center space-x-2">
           <span className="text-sm">Show</span>
-          <Select
-            value={pageSize.toString()}
-            onValueChange={handlePageSizeChange}
-          >
+          <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
             <SelectTrigger className="h-8 w-16">
               <SelectValue placeholder={pageSize} />
             </SelectTrigger>
@@ -133,9 +115,7 @@ export const TablePagination = ({
           <PaginationItem>
             <PaginationPrevious
               aria-label="Go to previous page"
-              className={
-                currentPage === 1 ? 'pointer-events-none opacity-50' : ''
-              }
+              className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
               onClick={() => handlePageChange(currentPage - 1)}
             />
           </PaginationItem>
@@ -145,8 +125,7 @@ export const TablePagination = ({
             const isFirstPage = index === 0;
             const isLastPage = index === pageNumbers.length - 1;
             const showEllipsisBefore = isFirstPage && page > 1 && page !== 2;
-            const showEllipsisAfter =
-              isLastPage && page < totalPages && page !== totalPages - 1;
+            const showEllipsisAfter = isLastPage && page < totalPages && page !== totalPages - 1;
 
             return (
               <React.Fragment key={page}>
@@ -169,11 +148,7 @@ export const TablePagination = ({
           <PaginationItem>
             <PaginationNext
               aria-label="Go to next page"
-              className={
-                currentPage === totalPages
-                  ? 'pointer-events-none opacity-50'
-                  : ''
-              }
+              className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
               onClick={() => handlePageChange(currentPage + 1)}
             />
           </PaginationItem>

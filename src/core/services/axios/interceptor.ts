@@ -1,9 +1,4 @@
-import {
-  AxiosError,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { store } from '@/store';
 import { logout, updateAccessToken } from '@/features/auth/store/authSlice';
 import { API } from '@/core/constant/apis';
@@ -68,9 +63,7 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
 
       // Handle 401 errors
       if (error.response?.status === 401) {
-        const errorMessage =
-          (error.response?.data as { message?: string })?.message ||
-          'Unauthorized';
+        const errorMessage = (error.response?.data as { message?: string })?.message || 'Unauthorized';
 
         // If the error is due to invalid credentials, reject immediately
         if (originalRequest.url === API.AUTH.LOGIN) {
@@ -102,25 +95,21 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
             }
 
             const refreshUrl = API.AUTH.REFRESH_TOKEN;
-            const response = await axiosInstance.get<RefreshTokenResponse>(
-              refreshUrl,
-              {
-                params: { refreshToken: currentRefreshToken },
-                // Skip encryption for refresh token requests to avoid circular dependencies
-                skipEncryption: true,
-                headers: {
-                  'X-Skip-Encryption': 'true',
-                },
-              }
-            );
+            const response = await axiosInstance.get<RefreshTokenResponse>(refreshUrl, {
+              params: { refreshToken: currentRefreshToken },
+              // Skip encryption for refresh token requests to avoid circular dependencies
+              skipEncryption: true,
+              headers: {
+                'X-Skip-Encryption': 'true',
+              },
+            });
 
             const { accessToken } = response.data.data;
             store.dispatch(updateAccessToken(accessToken));
             processQueue(null, accessToken);
 
             if (originalRequest.headers) {
-              originalRequest.headers['Authorization'] =
-                `Bearer ${accessToken}`;
+              originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
             }
             return axiosInstance(originalRequest);
           } catch (refreshError) {

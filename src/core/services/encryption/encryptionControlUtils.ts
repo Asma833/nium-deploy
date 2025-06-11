@@ -12,9 +12,7 @@ export class EncryptionControlUtils {
   /**
    * Create axios config that skips encryption for this request
    */
-  static withoutEncryption(
-    config?: AxiosRequestConfig
-  ): ExtendedAxiosRequestConfig {
+  static withoutEncryption(config?: AxiosRequestConfig): ExtendedAxiosRequestConfig {
     return {
       ...config,
       skipEncryption: true,
@@ -24,9 +22,7 @@ export class EncryptionControlUtils {
   /**
    * Create axios config that forces encryption for this request
    */
-  static withEncryption(
-    config?: AxiosRequestConfig
-  ): ExtendedAxiosRequestConfig {
+  static withEncryption(config?: AxiosRequestConfig): ExtendedAxiosRequestConfig {
     return {
       ...config,
       skipEncryption: false,
@@ -40,10 +36,7 @@ export class EncryptionControlUtils {
   /**
    * Create axios config with custom encryption control header
    */
-  static withEncryptionControl(
-    skipEncryption: boolean,
-    config?: AxiosRequestConfig
-  ): ExtendedAxiosRequestConfig {
+  static withEncryptionControl(skipEncryption: boolean, config?: AxiosRequestConfig): ExtendedAxiosRequestConfig {
     return {
       ...config,
       skipEncryption,
@@ -59,9 +52,7 @@ export class EncryptionControlUtils {
    */
   static addSkipEndpoint(endpoint: string): void {
     // This would require modifying the interceptor to use a dynamic list
-    console.warn(
-      'Dynamic endpoint control not implemented yet. Use static configuration.'
-    );
+    console.warn('Dynamic endpoint control not implemented yet. Use static configuration.');
   }
 }
 

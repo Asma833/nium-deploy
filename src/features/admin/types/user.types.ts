@@ -1,3 +1,5 @@
+import { FieldType, FormField } from '@/types/common.type';
+
 export type UserCreationRequest = {
   role_id: string;
   is_active?: boolean;
@@ -84,20 +86,6 @@ export type TableColumn = {
 export type HandleStatusChange = (row: any, checked: boolean) => void;
 
 export type HandleNavigate = (path: string, rowData: string) => void;
-
-export enum FieldType {
-  Text = 'text',
-  Email = 'email',
-  Password = 'password',
-  Select = 'select',
-}
-
-export type FormField = {
-  label: string;
-  type: FieldType;
-  required: boolean;
-  placeholder: string;
-};
 
 export type CheckboxField = FormField & {
   options: Record<string, { label: string; checked: boolean }>;

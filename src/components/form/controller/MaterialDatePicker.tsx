@@ -10,13 +10,7 @@ interface MaterialDatePickerProps {
   error?: string;
 }
 
-export const MaterialDatePicker = ({
-  name,
-  label,
-  baseStyle,
-  className,
-  error,
-}: MaterialDatePickerProps) => {
+export const MaterialDatePicker = ({ name, label, baseStyle, className, error }: MaterialDatePickerProps) => {
   const { control, clearErrors } = useFormContext();
 
   const mergedStyles = {

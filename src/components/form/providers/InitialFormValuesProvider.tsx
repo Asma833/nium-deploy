@@ -7,9 +7,7 @@ interface InitialFormValuesProviderProps {
 
 export type FormValues = Record<string, any>;
 
-export const InitialFormValuesProvider: React.FC<
-  InitialFormValuesProviderProps
-> = ({ children }) => {
+export const InitialFormValuesProvider: React.FC<InitialFormValuesProviderProps> = ({ children }) => {
   const [initialFormValues, setFormValues] = useState<FormValues>({});
 
   const setInitialValues = useCallback((newValues: FormValues) => {

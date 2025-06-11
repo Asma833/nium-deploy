@@ -7,9 +7,5 @@ interface MUIProvidersProps {
 }
 
 export const MUIProviders: React.FC<MUIProvidersProps> = ({ children }) => {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {children}
-    </LocalizationProvider>
-  );
+  return <LocalizationProvider dateAdapter={AdapterDayjs}>{children}</LocalizationProvider>;
 };

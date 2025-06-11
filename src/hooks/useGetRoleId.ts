@@ -45,25 +45,17 @@ export const useGetRoleId = () => {
 
     cachedPromise!
       .then((rolesData) => setRoles(rolesData))
-      .catch((err) =>
-        setError(
-          err instanceof Error ? err : new Error('Failed to fetch roles')
-        )
-      )
+      .catch((err) => setError(err instanceof Error ? err : new Error('Failed to fetch roles')))
       .finally(() => setLoading(false));
   }, []);
 
   const getRoleId = (roleName: string): string | undefined => {
-    const role = roles.find(
-      (r) => r.name.toLowerCase() === roleName.toLowerCase()
-    );
+    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
     return role?.id;
   };
 
   const getHashedRoleId = (roleName: string): string | undefined => {
-    const role = roles.find(
-      (r) => r.name.toLowerCase() === roleName.toLowerCase()
-    );
+    const role = roles.find((r) => r.name.toLowerCase() === roleName.toLowerCase());
     return role?.hashed_key;
   };
 

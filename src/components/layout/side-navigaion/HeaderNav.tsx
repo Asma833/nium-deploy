@@ -10,23 +10,11 @@ interface HeaderProps {
   className?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({
-  isSidebarOpen,
-  setIsSidebarOpen,
-  className,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isSidebarOpen, setIsSidebarOpen, className }) => {
   return (
-    <nav
-      className={cn(
-        `bg-secondary fixed top-0 right-0 h-[70px] z-[9999]`,
-        className
-      )}
-    >
+    <nav className={cn(`bg-secondary fixed top-0 right-0 h-[70px] z-[9999]`, className)}>
       <div className="sm:px-6 lg:px-6 flex items-center h-16">
-        <button
-          className="lg:hidden p-2"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-        >
+        <button className="lg:hidden p-2" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           {isSidebarOpen ? '' : <Menu className="w-6 h-6" />}
         </button>
 
