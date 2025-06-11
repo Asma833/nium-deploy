@@ -30,7 +30,7 @@ export const GetTransactionTableColumns = (
     name: 'Order Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { created_at?: string }) => (
-              <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
     ),
   },
   {

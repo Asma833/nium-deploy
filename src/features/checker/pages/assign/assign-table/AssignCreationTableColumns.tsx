@@ -41,9 +41,9 @@ export const GetAssignCreationColumns = (
     key: 'created_at',
     id: 'created_at',
     name: 'Order Date',
-      cell: (_: unknown, rowData: { created_at?: string }) => (
-          <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
-        ),
+    cell: (_: unknown, rowData: { created_at?: string }) => (
+      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+    ),
   },
   {
     key: 'customer_pan',

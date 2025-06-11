@@ -26,7 +26,7 @@ const UpdateIncidentCreationTable = () => {
     useUnassignChecker();
 
   const requestData = {
-    checkerId: roleId || '',
+    checkerId: currentUserHashedKey || '',
     transaction_type: 'pending',
   };
 

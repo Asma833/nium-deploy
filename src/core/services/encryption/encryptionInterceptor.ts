@@ -11,7 +11,6 @@ import { shouldEncryptMethod } from '@/core/services/encryption/encryptionConfig
 import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints';
 import encryptionLogger from './encryptionLogger';
 
-
 interface EncryptedRequestData {
   encryptedValue: string;
   encryptedKey: string;

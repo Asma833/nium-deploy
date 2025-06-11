@@ -134,28 +134,29 @@ class EncryptionLogger {
   }
 
   logApiResponse(
-  url: string,
-  responseData: any,
-  status?: number,
-  context: LogContext = { service: 'EncryptionInterceptor' }
-): void {
-  const safeData = this.isDevelopment ? responseData : '[hidden in prod]';
+    url: string,
+    responseData: any,
+    status?: number,
+    context: LogContext = { service: 'EncryptionInterceptor' }
+  ): void {
+    const safeData = this.isDevelopment ? responseData : '[hidden in prod]';
 
-  const enrichedContext: LogContext = {
-    ...context,
-    method: 'logApiResponse',
-    url,
-    status,
-  };
+    const enrichedContext: LogContext = {
+      ...context,
+      method: 'logApiResponse',
+      url,
+      status,
+    };
 
-  if (this.shouldLog('info')) {
-    console.groupCollapsed(`[ENCRYPTION] API Response: ${url} (status: ${status})`);
-    console.info('▶️ Decrypted Data:', safeData); //  DevTools will let you expand/collapse this
-    console.info('ℹ️ Context:', enrichedContext);
-    console.groupEnd();
+    if (this.shouldLog('info')) {
+      console.groupCollapsed(
+        `[ENCRYPTION] API Response: ${url} (status: ${status})`
+      );
+      console.info('▶️ Decrypted Data:', safeData); //  DevTools will let you expand/collapse this
+      console.info('ℹ️ Context:', enrichedContext);
+      console.groupEnd();
+    }
   }
-}
-
 }
 
 // Export singleton instance
