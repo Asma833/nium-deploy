@@ -362,7 +362,8 @@ export function DynamicTable<T extends Record<string, any>>({
                     {col.name}
                     {sortColumn === col.id && (
                       <span className="ml-2">
-                        {sortDirection === 'asc' ? '↑' : '↓'}
+                        {/* disabling static sorting in this phase */}
+                        {/* {sortDirection === 'asc' ? '↑' : '↓'} */}
                       </span>
                     )}{' '}
                   </TableHead>

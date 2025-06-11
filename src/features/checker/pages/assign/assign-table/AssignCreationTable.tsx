@@ -129,10 +129,10 @@ const AssignCreationTable = () => {
         toast.success(
           `Successfully assigned ${selectedRows.length} transaction(s)`
         );
-        // Use the hook-based implementation which uses the correct QueryClient instance
         await invalidateMultipleQueries([
           ['getAssignList'],
           ['dashboardMetrics'],
+          ['checkerOrders'],
         ]);
       }
 
