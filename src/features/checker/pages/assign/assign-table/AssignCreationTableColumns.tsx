@@ -51,13 +51,13 @@ export const GetAssignCreationColumns = (
     name: 'Customer PAN',
   },
   {
-    key: 'transaction_type',
-    id: 'transaction_type',
+    key: 'transaction_type_name',
+    id: 'transaction_type_name',
     name: 'Transaction Type',
     cell: (_: unknown, rowData: any) => <TransactionType rowData={rowData} />,
   },
   {
-    key: 'purpose_type',
+    key: 'purpose_type_name',
     id: 'purpose_type',
     name: 'Purpose Type',
     cell: (_: unknown, rowData: any) => <PurposeType rowData={rowData} />,
