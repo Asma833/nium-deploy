@@ -6,9 +6,11 @@ interface MaterialPhoneProps {
   label: string;
   baseStyle?: any;
   className?: string;
+  disabled?: boolean;
+  forcedValue?: string;
 }
 
-export const MaterialPhone = ({ name, label, baseStyle, className }: MaterialPhoneProps) => {
+export const MaterialPhone = ({ name, label, disabled = false, baseStyle, className }: MaterialPhoneProps) => {
   const { control } = useFormContext();
 
   return (
@@ -27,6 +29,7 @@ export const MaterialPhone = ({ name, label, baseStyle, className }: MaterialPho
             const limitedValue = numericValue.slice(0, 10);
             onChange(limitedValue);
           }}
+          disabled={disabled}
           type="tel"
           label={label}
           error={!!error}

@@ -60,37 +60,6 @@ export const transactionFormSchema = z.object({
     purposeType: z.string().optional().or(z.literal('')),
   }),
   // Document Uploads
-  uploadDocuments: z.object({
-    pan: z.array(fileSchema).optional().default([]),
-
-    passportAadharDrivingVoter: z
-      .object({
-        front: z.array(fileSchema).optional().default([]),
-        back: z.array(fileSchema).optional().default([]),
-      })
-      .optional()
-      .default({ front: [], back: [] }),
-
-    studentPassport: z
-      .object({
-        front: z.array(fileSchema).optional().default([]),
-        back: z.array(fileSchema).optional().default([]),
-      })
-      .optional()
-      .default({ front: [], back: [] }),
-
-    studentUniversityOfferLetter: z.array(fileSchema).optional().default([]),
-
-    studentVisa: z.array(fileSchema).optional().default([]),
-
-    payerPan: z.array(fileSchema).optional().default([]),
-
-    payerRelationshipProof: z.array(fileSchema).optional().default([]),
-
-    educationLoanDocument: z.array(fileSchema).optional().default([]),
-
-    otherDocuments: z.array(fileSchema).optional().default([]),
-  }),
 });
 
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;
@@ -128,36 +97,6 @@ export const transactionFormSubmissionSchema = z.object({
     transactionType: z.string().min(1, 'Transaction type is required'),
 
     purposeType: z.string().min(1, 'Purpose is required'),
-  }),
-
-  uploadDocuments: z.object({
-    pan: z.array(fileSchema).min(1, 'PAN document is required').max(3, 'Maximum 3 PAN documents allowed'),
-
-    passportAadharDrivingVoter: z
-      .object({
-        front: z.array(fileSchema).optional(),
-        back: z.array(fileSchema).optional(),
-      })
-      .optional(),
-
-    studentPassport: z
-      .object({
-        front: z.array(fileSchema).optional(),
-        back: z.array(fileSchema).optional(),
-      })
-      .optional(),
-
-    studentUniversityOfferLetter: z.array(fileSchema).optional(),
-
-    studentVisa: z.array(fileSchema).optional(),
-
-    payerPan: z.array(fileSchema).optional(),
-
-    payerRelationshipProof: z.array(fileSchema).optional(),
-
-    educationLoanDocument: z.array(fileSchema).optional(),
-
-    otherDocuments: z.array(fileSchema).optional(),
   }),
 });
 

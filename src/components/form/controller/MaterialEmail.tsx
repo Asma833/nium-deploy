@@ -6,9 +6,10 @@ interface MaterialEmailProps {
   label: string;
   baseStyle?: any;
   className?: string;
+  disabled?: boolean;
 }
 
-export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEmailProps) => {
+export const MaterialEmail = ({ name, label, disabled = false, baseStyle, className }: MaterialEmailProps) => {
   const { control } = useFormContext();
 
   return (
@@ -19,6 +20,7 @@ export const MaterialEmail = ({ name, label, baseStyle, className }: MaterialEma
       render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
+          disabled={disabled}
           value={value ?? ''} // Ensure value is never undefined
           onChange={(e) => {
             onChange(e.target.value || ''); // Handle empty string case

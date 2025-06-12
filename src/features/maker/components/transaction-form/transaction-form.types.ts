@@ -22,6 +22,7 @@ export enum TransactionMode {
   CREATE = 'create',
   EDIT = 'edit',
   VIEW = 'view',
+  UPDATE = 'update',
 }
 
 export type CreateTransactionFormProps = {

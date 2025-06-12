@@ -37,6 +37,7 @@ export const ROUTES = {
   },
   MAKER: {
     CREATE_TRANSACTION: '/create-transaction',
+    UPDATE_TRANSACTION: '/update-transaction',
     VIEW_STATUS: '/view-status',
   },
 } as const;

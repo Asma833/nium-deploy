@@ -14,9 +14,19 @@ interface MaterialSelectProps {
   baseStyle?: any;
   className?: string;
   placeholder?: string;
+  disabled?: boolean;
+  forcedValue?: string;
 }
 
-export const MaterialSelect = ({ name, label, options, baseStyle, className, placeholder }: MaterialSelectProps) => {
+export const MaterialSelect = ({
+  name,
+  label,
+  disabled = false,
+  options,
+  baseStyle,
+  className,
+  placeholder,
+}: MaterialSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
 
@@ -56,6 +66,7 @@ export const MaterialSelect = ({ name, label, options, baseStyle, className, pla
                 }}
                 label={label}
                 sx={baseStyle}
+                disabled={disabled}
                 className={cn(className)}
                 renderValue={(selected) => {
                   if (!selected || selected === '') {

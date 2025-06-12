@@ -19,6 +19,9 @@ export const getController = (field: any) => {
   const baseProps = {
     name: field.name,
     label: field.label,
+    disabled: field.disabled,
+    forcedValue: field.forcedValue,
+    id: field.id,
   };
 
   const styledProps = {
@@ -41,27 +44,25 @@ export const getController = (field: any) => {
       return (
         <MaterialTextArea
           {...baseProps}
-          disabled={field.disabled}
           forcedValue={field.forcedValue}
           className="w-full"
           onInputChange={field.onInputChange}
         />
       );
     case 'email':
-      return <MaterialEmail {...styledProps} />;
+      return <MaterialEmail {...baseProps} {...styledProps} />;
     case 'number':
-      return <MaterialNumber {...styledProps} />;
+      return <MaterialNumber {...baseProps} {...styledProps} />;
     case 'phone':
-      return <MaterialPhone {...styledProps} />;
+      return <MaterialPhone {...baseProps} {...styledProps} />;
     case 'indian_phone':
-      return <MaterialIndianPhone {...styledProps} />;
+      return <MaterialIndianPhone {...baseProps} {...styledProps} />;
     case 'file':
       return <MaterialFile {...baseProps} className={baseGeneralFieldStyle} />;
     case 'fileupload':
       return (
         <FileUpload
           {...baseProps}
-          id={field.id}
           className={baseGeneralFieldStyle}
           maxFiles={field.maxFiles}
           description={field.description}
@@ -74,7 +75,6 @@ export const getController = (field: any) => {
       return (
         <FileUploadWithView
           {...baseProps}
-          id={field.id}
           className={baseGeneralFieldStyle}
           maxFiles={field.maxFiles}
           description={field.description}
@@ -103,9 +103,9 @@ export const getController = (field: any) => {
         />
       );
     case 'select':
-      return <MaterialSelect {...styledProps} options={field.options} placeholder={field.placeholder} />;
+      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} />;
     case 'date':
-      return <MaterialDatePicker {...styledProps} error={field.error} />;
+      return <MaterialDatePicker {...baseProps} {...styledProps} error={field.error} />;
     case 'radio':
       return <MaterialRadioGroup {...baseProps} options={field.options} />;
     case 'password':

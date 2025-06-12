@@ -14,7 +14,7 @@ import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import useGetPurposes from '@/hooks/useGetPurposes';
-import { CreateTransactionFormProps } from './transaction-form.types';
+import { CreateTransactionFormProps, TransactionMode } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import RejectionSummary from '@/components/common/RejectionSummary';
@@ -143,7 +143,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       <FormProvider methods={methods}>
         <FormContentWrapper className="w-full bg-transparent">
           <Spacer>
-            {' '}
             <FormFieldRow className={fieldWrapperBaseStyle} rowCols={4}>
               {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
                 // Get the correct error path for each field
@@ -172,17 +171,20 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                       ...field,
                       control,
                       errors,
+                      disabled: mode === TransactionMode.UPDATE,
                     })}
                   </FieldWrapper>
                 );
               })}
             </FormFieldRow>
-            <FormFieldRow>
-              <Button className="min-w-60" onClick={handleFormSubmit}>
-                Generate Order
-              </Button>
-            </FormFieldRow>{' '}
-            {showUploadSection && partnerOrderId && (
+            {mode !== TransactionMode.UPDATE && (
+              <FormFieldRow>
+                <Button className="min-w-60" onClick={handleFormSubmit}>
+                  Generate Order
+                </Button>
+              </FormFieldRow>
+            )}
+            {(showUploadSection && partnerOrderId) || mode === TransactionMode.UPDATE ? (
               <FormFieldRow className="mt-4">
                 <UploadDocuments
                   partnerOrderId={partnerOrderId}
@@ -193,7 +195,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                   }}
                 />
               </FormFieldRow>
-            )}
+            ) : null}
           </Spacer>
         </FormContentWrapper>
       </FormProvider>
@@ -208,11 +210,11 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
             <div className="text-center space-y-2">
               <div>
                 <span className="text-gray-600">Partner Order ID: </span>
-                <span className="font-bold text-blue-600">{createdTransactionId}</span>
+                <span className="font-bold text-dark">{createdTransactionId}</span>
               </div>
               <div>
                 <span className="text-gray-600">Nium Forex Order ID: </span>
-                <span className="font-bold text-green-600">{niumForexOrderId}</span>
+                <span className="font-bold text-dark">{niumForexOrderId}</span>
               </div>
               <div className="text-green-600 font-medium mt-4">Order created successfully!</div>
             </div>

@@ -6,9 +6,10 @@ interface MaterialNumberProps {
   label: string;
   baseStyle?: any;
   className?: string;
+  disabled?: boolean;
 }
 
-export const MaterialNumber = ({ name, label, baseStyle, className }: MaterialNumberProps) => {
+export const MaterialNumber = ({ name, label, disabled = false, baseStyle, className }: MaterialNumberProps) => {
   const { control } = useFormContext();
 
   return (
@@ -25,6 +26,7 @@ export const MaterialNumber = ({ name, label, baseStyle, className }: MaterialNu
             onChange(val === '' ? '' : val);
           }}
           type="number"
+          disabled={disabled}
           label={label}
           error={!!error}
           helperText={error?.message}
