@@ -36,7 +36,6 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement> | null) => {
     if (e && e.target.files?.[0]) {
       const file = e.target.files[0];
-      console.log('file:', file);
       setSelectedFile(file);
     }
   };
@@ -48,7 +47,6 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
 
     const fileType = selectedFile.type;
     const fileUrl = URL.createObjectURL(selectedFile);
-    console.log('fileUrl:', fileUrl);
 
     if (fileType.startsWith('image/')) {
       return (

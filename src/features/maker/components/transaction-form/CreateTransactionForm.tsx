@@ -2,13 +2,14 @@ import { Fragment, useState } from 'react';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import { FormProvider } from '@/components/form/providers/FormProvider';
 import { getController } from '@/components/form/utils/getController';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
-import { transactionFormSchema, TransactionFormData } from './transaction-form.schema';
+import { transactionFormSchema, transactionFormSubmissionSchema, TransactionFormData } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
@@ -65,6 +66,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
+  console.log('Form errors:', errors);
 
   // Watch for form changes to debug
   const watchedValues = watch();
@@ -91,16 +93,49 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       // Handle error (show toast, etc.)
     }
   };
+  const handleFormSubmit = async () => {
+    try {
+      // Get current form values
+      const currentValues = getValues();
 
-  const handleFormSubmit = () => {
-    const formData = watchedValues;
-    const manualFormData = getValues();
+      // Validate using the strict submission schema
+      const validationResult = transactionFormSubmissionSchema.safeParse(currentValues);
 
-    console.log('Watched Values:', formData);
-    console.log('GetValues Result:', manualFormData);
+      if (!validationResult.success) {
+        // Extract and display validation errors with user-friendly field names
+        const fieldNameMap: Record<string, string> = {
+          'applicantDetails.applicantName': 'Applicant Name',
+          'applicantDetails.applicantPanNumber': 'Applicant PAN Number',
+          'applicantDetails.email': 'Email',
+          'applicantDetails.mobileNumber': 'Mobile Number',
+          'applicantDetails.partnerOrderId': 'Partner Order ID',
+          'applicantDetails.isVKycRequired': 'V-KYC Required',
+          'applicantDetails.transactionType': 'Transaction Type',
+          'applicantDetails.purposeType': 'Purpose Type',
+          'uploadDocuments.pan': 'PAN Document',
+        };
 
-    // Trigger proper form submission
-    handleSubmit(onSubmit)();
+        const errorMessages = validationResult.error.errors.map((err) => {
+          const fieldPath = err.path.join('.');
+          const friendlyFieldName = fieldNameMap[fieldPath] || fieldPath;
+          return `${friendlyFieldName}: ${err.message}`;
+        });
+
+        // Show the first error in a toast
+        toast.error(errorMessages[0] || 'Please fill in all required fields');
+
+        // Log all errors for debugging
+        console.error('Validation errors:', errorMessages);
+
+        return; // Don't proceed with submission
+      }
+
+      // If validation passes, trigger form submission
+      handleSubmit(onSubmit)();
+    } catch (error) {
+      console.error('Form validation error:', error);
+      toast.error('Please check the form and try again');
+    }
   };
 
   return (
@@ -108,8 +143,29 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       <FormProvider methods={methods}>
         <FormContentWrapper className="w-full bg-transparent">
           <Spacer>
+            {' '}
             <FormFieldRow className={fieldWrapperBaseStyle} rowCols={4}>
               {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
+                // Get the correct error path for each field
+                const errorPath = field.name.split('.');
+                const fieldError = errorPath.reduce((acc: any, path: string) => acc?.[path], errors);
+                console.log('fieldError:', fieldError?.[key]);
+
+                // Safely access nested error messages for applicantDetails fields
+                let errorMessage: string | undefined = undefined;
+                if (field.name.startsWith('applicantDetails.')) {
+                  const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
+                  const applicantDetailError = errors.applicantDetails?.[subKey];
+                  errorMessage =
+                    applicantDetailError &&
+                    typeof applicantDetailError === 'object' &&
+                    'message' in applicantDetailError
+                      ? (applicantDetailError as { message?: string }).message
+                      : undefined;
+                } else {
+                  errorMessage = (errors as any)?.[field.name]?.message;
+                }
+
                 return (
                   <FieldWrapper key={key}>
                     {getController({
@@ -126,11 +182,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                 Generate Order
               </Button>
             </FormFieldRow>{' '}
-            {/* {showUploadSection && partnerOrderId && (
-              <FormFieldRow className="mt-10">
-                <FromSectionTitle>Upload Document</FromSectionTitle>
-              </FormFieldRow>
-            )} */}
             {showUploadSection && partnerOrderId && (
               <FormFieldRow className="mt-4">
                 <UploadDocuments
