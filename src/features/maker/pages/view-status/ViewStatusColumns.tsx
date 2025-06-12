@@ -8,13 +8,17 @@ export const ViewStatusColumns = (
  
   {
      handleRegenerateEsignLink,
+     handleRegenerateVkycLink,
     openModal,
+    isSendVkycLinkLoading = false,
     isSendEsignLinkLoading = false,
     loadingOrderId = null
   }: {
     handleRegenerateEsignLink: (rowData: any) => void;
+    handleRegenerateVkycLink: (rowData: any) => void;
     openModal: (rowData: any) => void;
     isSendEsignLinkLoading?: boolean;
+    isSendVkycLinkLoading?: boolean;
     loadingOrderId?: string | null;
   }
 ) => [
@@ -30,6 +34,12 @@ export const ViewStatusColumns = (
     name: 'Created Date',
     className: 'min-w-0 p-2',
     cell: (_: unknown, rowData: { created_at?: string }) => <span>{formatDateWithFallback(rowData.created_at)}</span>,
+  },
+   {
+    key: 'partner_order_id',
+    id: 'partner_order_id',
+    name: 'Partner Order ID',
+    className: 'min-w-0',
   },
   {
     key: 'expiry_date',
@@ -85,26 +95,53 @@ export const ViewStatusColumns = (
   name: 'E Sign Link',
   className: 'min-w-0 max-w-[80px]',
   cell: (_: unknown, rowData: any) => {
-    const { e_sign_link, e_sign_status, incident_status, e_sign_link_status } = rowData;
-    const isActionNeeded = e_sign_status === 'rejected' ||
-                           e_sign_status === 'expired' ||
-                           incident_status === 'rejected' ||
-                           incident_status === 'expired' ||
-                           e_sign_link_status === null
-
-return (
-  <SignLinkButton
-    id={rowData.nium_order_id}
-    copyLinkUrl={rowData.e_sign_link || ""} 
-    loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
-    toastInfoText={'E Sign link copied successfully!'}
-    disabled={isActionNeeded ? false : !e_sign_link}  
-    {...(isActionNeeded ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}  
-    tooltipText={isActionNeeded ? 'Generate E sign Link' : 'Copy E sign Link'}
-    buttonType={isActionNeeded ? 'refresh' : 'copy_link'}
-    buttonIconType={isActionNeeded ? 'refresh' : 'copy_link'}
-  />
-);
+    // Extract necessary values from rowData
+    const { e_sign_link, e_sign_status, incident_status, merged_document, nium_order_id } = rowData;
+    
+    // No action can be taken if there's no merged document
+    if (merged_document === null) {
+      return (
+        <SignLinkButton
+          id={nium_order_id}
+          copyLinkUrl=""
+          loading={false}
+          toastInfoText=""
+          disabled={true} // Disable button when no merged document exists
+          tooltipText="No document available"
+          buttonType="copy_link"
+          buttonIconType="copy_link"
+        />
+      );
+    }
+    
+    // Check if we need to generate a new link (no existing link or status requires regeneration)
+    const needsGeneration = 
+      e_sign_link === null || 
+      e_sign_status === 'rejected' || 
+      e_sign_status === 'expired';
+    
+    // Button should be disabled if e-sign is completed and no regeneration is needed
+    const isDisabled = e_sign_status === 'completed' && !needsGeneration;
+    
+    // Determine if loading state applies to this row
+    const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
+    
+    // Set tooltip text based on whether we need generation or copy
+    const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
+    
+    return (
+      <SignLinkButton
+        id={nium_order_id}
+        copyLinkUrl={e_sign_link || ''} 
+        loading={isLoading}
+        toastInfoText="E Sign link copied successfully!"
+        disabled={isDisabled}
+        {...(needsGeneration ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}
+        tooltipText={tooltipText}
+        buttonType={needsGeneration ? 'refresh' : 'copy_link'}
+        buttonIconType={needsGeneration ? 'refresh' : 'copy_link'}
+      />
+    );
   }
 },
  {
@@ -116,29 +153,48 @@ return (
   },
   
   {
-    key: 'v_kyc_link',
-    id: 'v_kyc_link',
-    name: 'VKYC Link',
-    className: 'min-w-0 max-w-[80px]',
-    cell: (_: unknown, rowData: any) => {
-    const {  v_kyc_status } = rowData;
-    const isActionNeeded = v_kyc_status !==  "N/A" && v_kyc_status !== 'completed' 
-      return   (
+  key: 'v_kyc_link',
+  id: 'v_kyc_link',
+  name: 'VKYC Link',
+  className: 'min-w-0 max-w-[80px]',
+  cell: (_: unknown, rowData: any) => {
+
+    const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+    const isActionNeeded = (
+      e_sign_status === 'completed' && 
+      is_v_kyc_required === true && 
+      (v_kyc_status !== 'completed' || v_kyc_status === 'rejected') &&
+      v_kyc_link === null 
+    );
+    
+    const isDisabled = 
+      v_kyc_status === 'completed' || 
+      v_kyc_status === 'N/A' || 
+      e_sign_status === 'pending';
+    
+    // Determine tooltip text
+    const tooltipText = isActionNeeded 
+      ? 'Generate VKYC Link' 
+      : (is_v_kyc_required ? 'Copy VKYC Link' : '');
+    
+    // Determine if loading state applies to this row
+    const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
+    
+    return (
       <SignLinkButton
-        id={rowData.nium_order_id}
-        copyLinkUrl={rowData.v_kyc_link}
-        loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
-        toastInfoText={'Vkyc Link link copied successfully!'}
-        disabled={isActionNeeded ? false : !rowData.v_kyc_link}
-         {...(isActionNeeded ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}  
-        tooltipText={isActionNeeded ? 'Generate VKYC Link' : 'Copy VKYC Link'}
+        id={nium_order_id}
+        copyLinkUrl={v_kyc_link || ''}
+        loading={isLoading}
+        toastInfoText="VKYC Link copied successfully!"
+        disabled={isDisabled}
+        {...(isActionNeeded ? { onClick: () => handleRegenerateVkycLink(rowData) } : {})}
+        tooltipText={tooltipText}
         buttonType={isActionNeeded ? 'refresh' : 'copy_link'}
         buttonIconType={isActionNeeded ? 'refresh' : 'copy_link'}
       />
     );
-    }
-    
-  },
+  }
+},
   {
     key: 'view_action',
     id: 'view_action',

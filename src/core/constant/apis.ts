@@ -53,6 +53,7 @@ export const API = {
       CHECKER_ORDER: `/orders/get-checker-orders`,
       UNASSIGN: `orders/unassign-checker`,
       REGENERATE_ESIGN_LINK: `/ekyc/generate-e-sign`,
+      REGENERATE_VKYC_LINK: `/videokyc/generate-v-kyc`,
     },
   },
   MAKER: {

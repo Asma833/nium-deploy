@@ -6,6 +6,7 @@ import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/us
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { Order } from '@/features/checker/types/updateIncident.types';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 
 const ViewStatus: React.FC = () => {
   // const [loading, setIsLoading] = useState(false);
@@ -14,6 +15,7 @@ const ViewStatus: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
 const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
      const tableData = useMemo(() => {
        if (!data) return [];
@@ -80,6 +82,22 @@ const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
       }
     );
   };
+  const handleRegenerateVkycLink = (rowData: Order): void => {
+    if (rowData.nium_order_id) {
+      setLoadingOrderId(rowData.nium_order_id);
+    }
+    sendVkycLink(
+      { partner_order_id: rowData.partner_order_id || '' },
+      {
+        onSuccess: () => {
+          setLoadingOrderId('');
+        },
+        onError: () => {
+          setLoadingOrderId('');
+        },
+      }
+    );
+  };
 const isPaginationDynamic = false;
 
   // Use the dynamic pagination hook for fallback
@@ -98,8 +116,10 @@ const isPaginationDynamic = false;
   const tableColumns = ViewStatusColumns({
     openModal,
     isSendEsignLinkLoading,
+    isSendVkycLinkLoading,
     loadingOrderId,
-    handleRegenerateEsignLink
+    handleRegenerateEsignLink,
+    handleRegenerateVkycLink
   });
 
  

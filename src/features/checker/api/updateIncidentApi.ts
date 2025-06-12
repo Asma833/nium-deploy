@@ -28,4 +28,13 @@ export const updateIncidentApi = {
     });
     return data;
   },
+  sendVkycLink: async (incidentData: EsignLinkRequest): Promise<any> => {
+    const { data } = await axiosInstance.post<any>(API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK, incidentData, {
+      headers: {
+        api_key: HEADER_KEYS.API_KEY,
+        partner_id: HEADER_KEYS.PARTNER_ID,
+      },
+    });
+    return data;
+  },
 };
