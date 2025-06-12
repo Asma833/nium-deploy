@@ -8,6 +8,7 @@ const adminComponents = {
   Partner: lazy(() => import('@/features/admin/pages/partners/partner-table/PartnerCreationTable')),
   PartnerCreation: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
   UpdatePartner: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
+  Maker: lazy(() => import('@/features/admin/pages/maker/MakerTablePage')),
   ViewAll: lazy(() => import('@/features/admin/pages/view-all/view-table/ViewAllTablePage')),
 };
 
@@ -33,6 +34,12 @@ export const adminRoutes = [
   {
     path: ROUTES.ADMIN.PARTNER,
     element: adminComponents.Partner,
+    roles: ['admin'],
+    permission: '',
+  },
+   {
+    path: ROUTES.ADMIN.MAKER,
+    element: adminComponents.Maker,
     roles: ['admin'],
     permission: '',
   },

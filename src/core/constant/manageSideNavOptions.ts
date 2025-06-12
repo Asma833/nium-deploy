@@ -17,6 +17,11 @@ export const SideNavOptions = {
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: LayoutDashboard,
     },
+    {
+      title: 'Create Maker',
+      path: getNavPath('ADMIN', ROUTES.ADMIN.MAKER),
+      icon: LayoutDashboard,
+    },
     // Commented the following items as they are not used in the current phase
     // {
     //   title: 'Partners',
