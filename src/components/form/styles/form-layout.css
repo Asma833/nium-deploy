@@ -7,6 +7,9 @@
 .fieldWrapper {
   @apply flex;
 }
+.fieldWrapper .MuiFormGroup-root.MuiRadioGroup-root {
+  @apply flex flex-row;
+}
 .formFieldRow.row-cols-100d2 .fieldWrapper {
   width: calc(50% - 15px);
 }

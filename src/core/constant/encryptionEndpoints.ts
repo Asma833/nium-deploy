@@ -68,6 +68,16 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Checker order list endpoint',
   },
+  'upload-documents': {
+    endpoint: API.DOCUMENTS.UPLOAD,
+    matchType: 'exact-only' as const,
+    description: 'Upload documents endpoint',
+  },
+  'generate-order': {
+    endpoint: API.MAKER.GENERATE_ORDER,
+    matchType: 'exact-only' as const,
+    description: 'Generate Order endpoint',
+  },
 } as const;
 
 /**

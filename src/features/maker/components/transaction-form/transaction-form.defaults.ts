@@ -5,6 +5,10 @@ export const transactionFormDefaults = {
     applicantPanNumber: '',
     transactionType: '',
     purposeType: '',
+    email: '',
+    mobileNumber: '',
+    partnerOrderId: '',
+    isVKycRequired: 'false', // Default to 'false'
   },
   uploadDocuments: {
     pan: [],

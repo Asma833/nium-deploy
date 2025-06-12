@@ -13,6 +13,7 @@ import { MaterialTextArea } from '../controller/MaterialTextArea';
 import { baseGeneralFieldStyle, baseStyle } from '../styles/materialStyles';
 import { FileUpload } from '../controller/FileUpload';
 import FileUploadWithView from '../controller/FileUploadWithView';
+import { FileUploadWithButton } from '../controller/FileUploadWithButton';
 
 export const getController = (field: any) => {
   const baseProps = {
@@ -80,6 +81,15 @@ export const getController = (field: any) => {
           helpText={field.helpText}
           accept={field.accept}
           multiple={field.maxFiles > 1}
+        />
+      );
+    case 'fileupload_with_button':
+      return (
+        <FileUploadWithButton
+          name={field.name}
+          label={field.label}
+          onUpload={field.onUpload}
+          disabled={field.disabled}
         />
       );
     case 'checkbox':

@@ -22,6 +22,7 @@ export enum FieldType {
   Checkbox = 'checkbox',
   FileUpload = 'fileupload',
   Fileupload_View = 'fileupload_view',
+  FileUploadWithButton = 'fileupload_with_button',
 }
 
 export type FormField = {

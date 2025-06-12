@@ -34,6 +34,13 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     description: 'Fill in the details to create a new transaction',
     fields: {
       applicantDetails: {
+        partnerOrderId: {
+          name: 'applicantDetails.partnerOrderId',
+          label: 'Partner Order ID',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter Partner Order ID',
+        },
         applicantName: {
           name: 'applicantDetails.applicantName',
           label: 'Applicant Name',
@@ -64,6 +71,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           placeholder: 'Select Purpose',
           options: Object.keys(purposeOptions).length > 0 ? purposeOptions : {},
         },
+
         email: {
           name: 'applicantDetails.email',
           label: 'Email',
@@ -77,6 +85,17 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           type: FieldType.Phone,
           required: true,
           placeholder: 'Enter Mobile Number',
+        },
+        isVKycRequired: {
+          name: 'applicantDetails.isVKycRequired',
+          label: 'Is V-KYC Required?',
+          type: FieldType.Radio,
+          required: true,
+          placeholder: '',
+          options: {
+            true: { label: 'Yes' },
+            false: { label: 'No' },
+          },
         },
       },
       uploadDocuments: {
