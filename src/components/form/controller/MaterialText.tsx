@@ -2,6 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { TextField } from '@mui/material';
 import { SxProps, Theme } from '@mui/system';
 import { cn } from '@/utils/cn';
+import '../styles/form-layout.css';
 
 interface MaterialTextProps {
   name: string;
@@ -46,9 +47,7 @@ export const MaterialText = ({
             disabled={disabled}
             required={required}
             onChange={(e) => {
-              const value = uppercase
-                ? e.target.value.toUpperCase()
-                : e.target.value;
+              const value = uppercase ? e.target.value.toUpperCase() : e.target.value;
               field.onChange(value);
               // Call the onInputChange callback if provided
               if (onInputChange) {

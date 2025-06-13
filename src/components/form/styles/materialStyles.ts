@@ -3,8 +3,7 @@ interface FieldWithStyleProps {
   error?: boolean;
 }
 
-export const baseGeneralFieldStyle =
-  'bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-md text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] focus:border-[hsl(var(--primary))]';
+export const baseGeneralFieldStyle = 'bg-transparent ';
 
 export const baseStyle = (field: FieldWithStyleProps) => {
   const fieldHeight = field.height || '45px';

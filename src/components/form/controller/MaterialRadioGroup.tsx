@@ -1,11 +1,5 @@
 import { Controller, FieldValues, Path } from 'react-hook-form';
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from '@mui/material';
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { ErrorMessage } from '../ErrorMessage';
 import { Circle, CircleCheck } from 'lucide-react';
 
@@ -13,12 +7,16 @@ type MaterialRadioGroupProps<T extends FieldValues> = {
   name: Path<T>;
   label: string;
   options: { [key: string]: { label: string; checked?: boolean } };
+  disabled?: boolean;
+  forcedValue?: string;
 };
 
 export const MaterialRadioGroup = <T extends FieldValues>({
   name,
+  disabled = false,
   label,
   options,
+  forcedValue,
 }: MaterialRadioGroupProps<T>) => {
   return (
     <FormControl component="fieldset">
@@ -32,14 +30,13 @@ export const MaterialRadioGroup = <T extends FieldValues>({
                 return (
                   <FormControlLabel
                     key={value}
-                    value={value}
+                    value={(forcedValue ? forcedValue : value) || ''}
                     control={
                       <Radio
                         icon={<Circle size={'20'} />}
                         checked={field.value === value}
-                        checkedIcon={
-                          <CircleCheck className="text-primary" size={'20'} />
-                        }
+                        checkedIcon={<CircleCheck className="text-primary" size={'20'} />}
+                        disabled={disabled}
                       />
                     }
                     label={option.label}

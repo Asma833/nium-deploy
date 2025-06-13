@@ -12,8 +12,8 @@ const ResetLinkConfirmationAlert = () => {
             <span>Reset Password Link Sent Successfully</span>
           </h1>
           <p className="text-gray-500 mt-2">
-            A password reset link has been sent to your email address. Please
-            check your inbox and follow the instructions.{'  '}
+            A password reset link has been sent to your email address. Please check your inbox and follow the
+            instructions.{'  '}
             <Link to="/login" className="text-primary underline">
               Login
             </Link>

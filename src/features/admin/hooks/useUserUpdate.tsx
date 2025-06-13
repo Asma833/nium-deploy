@@ -7,10 +7,11 @@ import useGetRoleId from '@/hooks/useGetRoleId';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 
-export const useUpdateAPI = () => {
+export const useUpdateAPI = ({ role }: { role: string }) => {
   const navigate = useNavigate();
   const { getRoleId } = useGetRoleId();
-  const roleId = getRoleId('checker');
+  const userRole = role ? role : 'user';
+  const roleId = getRoleId(userRole);
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const { getBankAccountId, getBranchId } = useCurrentUser();
 
@@ -31,7 +32,8 @@ export const useUpdateAPI = () => {
     },
     onSuccess: () => {
       toast.success('User details updated successfully');
-      navigate(`/admin/users`);
+      const url = role === 'maker' ? '/admin/makers' : '/admin/users';
+      navigate(url);
     },
     onError: (error: Error) => {
       toast.error(error.message || 'User update failed');

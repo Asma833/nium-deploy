@@ -1,12 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { MobileNavProps } from '../../types/navigation.types';
 
@@ -32,10 +27,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className="h-full overflow-y-auto pb-20"
       >
         <div className="top-actions flex items-end justify-end px-4">
-          <span
-            className="w-6 h-6 text-muted-foreground"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
+          <span className="w-6 h-6 text-muted-foreground" onClick={() => setIsMobileMenuOpen(false)}>
             Close
           </span>
         </div>
@@ -43,12 +35,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           {navItems.map((item, idx) =>
             item.dropdown ? (
               <AccordionItem key={idx} value={item.title}>
-                <AccordionTrigger
-                  className={cn(
-                    'px-6 py-2',
-                    activeItem === item.title && 'text-primary font-medium'
-                  )}
-                >
+                <AccordionTrigger className={cn('px-6 py-2', activeItem === item.title && 'text-primary font-medium')}>
                   {item.title}
                 </AccordionTrigger>
                 <AccordionContent>
@@ -59,16 +46,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         variant="ghost"
                         className={cn(
                           'justify-start px-2',
-                          activeDropdownItem === dropItem.title &&
-                            'text-primary font-medium bg-accent'
+                          activeDropdownItem === dropItem.title && 'text-primary font-medium bg-accent'
                         )}
-                        onClick={() =>
-                          onNavigation(
-                            dropItem.path,
-                            item.title,
-                            dropItem.title
-                          )
-                        }
+                        onClick={() => onNavigation(dropItem.path, item.title, dropItem.title)}
                       >
                         {dropItem.title}
                       </Button>

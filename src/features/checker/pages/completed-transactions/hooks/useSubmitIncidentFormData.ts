@@ -24,27 +24,17 @@ const useSubmitIncidentFormData = () => {
   const { mutate, isPending, isError, isSuccess, error, data } = useMutation({
     mutationFn: async (formData: IncidentFormData) => {
       const payload = formData;
-      const response = await axiosInstance.post(
-        API.ORDERS.UPDATE_ORDER_DETAILS,
-        payload
-      );
+      const response = await axiosInstance.post(API.ORDERS.UPDATE_ORDER_DETAILS, payload);
       return response.data;
     },
   });
 
   // Custom submission function that properly handles callbacks
-  const submitIncidentFormData = (
-    formData: IncidentFormData,
-    callbacks?: SubmitCallbacks
-  ) => {
+  const submitIncidentFormData = (formData: IncidentFormData, callbacks?: SubmitCallbacks) => {
     return mutate(formData, {
       onSuccess: (data) => {
         callbacks?.onSuccess?.(data);
-        invalidateMultipleQueries([
-          ['updateIncident'],
-          ['dashboardMetrics'],
-          ['checkerOrders'],
-        ]);
+        invalidateMultipleQueries([['updateIncident'], ['dashboardMetrics'], ['checkerOrders']]);
       },
       onError: (error) => {
         callbacks?.onError?.(error);

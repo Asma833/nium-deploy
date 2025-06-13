@@ -5,9 +5,7 @@ import { SetFilters } from '@/components/types/filter.types';
  * @param filters The filter values
  * @returns An object with formatted filter parameters for API
  */
-export const createFilterParams = (
-  filters: SetFilters
-): Record<string, any> => {
+export const createFilterParams = (filters: SetFilters): Record<string, any> => {
   const params: Record<string, any> = {};
 
   // Add search term
@@ -63,9 +61,7 @@ export const fetchTableData = async (
       Object.assign(params, createFilterParams(filters));
     }
 
-    const response = await fetch(
-      `${api}?${new URLSearchParams(params as any)}`
-    );
+    const response = await fetch(`${api}?${new URLSearchParams(params as any)}`);
     return await response.json();
   } catch (error) {
     throw error;

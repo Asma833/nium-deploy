@@ -6,10 +6,7 @@ import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { Order, CheckerOrdersResponse } from '../types/updateIncident.types';
 
-export const useGetCheckerOrdersByPartnerId = (
-  partnerOrderId: string,
-  autoFetch: boolean = true
-) => {
+export const useGetCheckerOrdersByPartnerId = (partnerOrderId: string, autoFetch: boolean = true) => {
   // Get the current user once
   const { user } = useCurrentUser();
   const userHashedKey = user?.hashed_key;
@@ -30,13 +27,10 @@ export const useGetCheckerOrdersByPartnerId = (
         throw new Error('User hash key not available');
       }
 
-      const { data } = await axiosInstance.post(
-        API.ORDERS.CHECKER_ORDERS_BY_PARTNER_ID,
-        {
-          checkerId: userHashedKey,
-          partner_order_id: partnerOrderId,
-        }
-      ); // Return the order from the response, not the entire response
+      const { data } = await axiosInstance.post(API.ORDERS.CHECKER_ORDERS_BY_PARTNER_ID, {
+        checkerId: userHashedKey,
+        partner_order_id: partnerOrderId,
+      }); // Return the order from the response, not the entire response
       const response = data as CheckerOrdersResponse;
       return response.order as Order;
     },

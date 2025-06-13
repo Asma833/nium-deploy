@@ -10,8 +10,10 @@ const TableTabsLayout = (props: TableTabsLayoutProps) => {
 
   // Default tabs if none provided
   const defaultTabs = [
-    { label: 'List', path: '/admin/users' },
-    { label: 'Create User', path: '/admin/users/create-user' },
+    { label: 'List', path: '/admin/users'},
+    { label: 'Create User', path: '/admin/users/create-user'},
+    { label: 'List', path: '/admin/maker'},
+    { label: 'Create User', path: '/admin/maker/create-maker'},
   ];
 
   const navigationTabs = tabs || defaultTabs;
@@ -33,9 +35,7 @@ const TableTabsLayout = (props: TableTabsLayoutProps) => {
             key={index}
             className={cn(
               'px-4 py-2 rounded-md transition-colors min-w-[150px]',
-              currentPath === tab.path
-                ? 'bg-primary text-white'
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+              currentPath === tab.path ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
             )}
             onClick={() => handleNavigation(tab.path)}
           >

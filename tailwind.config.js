@@ -47,6 +47,12 @@ export default {
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
         },
+        gray: {
+          100: 'var(--gray-100)',
+          150: 'var(--gray-150)',
+          200: 'var(--gray-200)',
+          300: 'var(--gray-300)',
+        },
         custom: {
           primary: '#fd0194',
           tablehead: '#f9fafc',
@@ -62,7 +68,18 @@ export default {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Hellix', 'Inter', 'sans-serif'],
+        hellix: ['Hellix', 'sans-serif'],
+      },
+      fontWeight: {
+        thin: '100',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+        extrabold: '800',
+        black: '900',
       },
       filter: {
         'invert-dark': 'invert(1)',

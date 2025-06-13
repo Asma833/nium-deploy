@@ -44,11 +44,7 @@ const PartnerCreationFormPage = () => {
     productOptions,
   });
 
-  const {
-    mutate: updatePartner,
-    isLoading: isUpdating,
-    error: updateError,
-  } = usePartnerUpdate();
+  const { mutate: updatePartner, isLoading: isUpdating, error: updateError } = usePartnerUpdate();
 
   const methods = useForm({
     resolver: zodResolver(userSchema),
@@ -76,10 +72,7 @@ const PartnerCreationFormPage = () => {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const handleCheckboxChange = (
-    key: 'card' | 'remittance' | 'both',
-    checked: boolean
-  ) => {
+  const handleCheckboxChange = (key: 'card' | 'remittance' | 'both', checked: boolean) => {
     const currentValues = watch('productType');
 
     if (key === 'both') {
@@ -110,14 +103,8 @@ const PartnerCreationFormPage = () => {
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       const productTypeValues = {
-        card:
-          selectedRow.products?.some(
-            (p: any) => p.name.toLowerCase() === 'card'
-          ) || false,
-        remittance:
-          selectedRow.products?.some(
-            (p: any) => p.name.toLowerCase() === 'remittance'
-          ) || false,
+        card: selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'card') || false,
+        remittance: selectedRow.products?.some((p: any) => p.name.toLowerCase() === 'remittance') || false,
         both: false,
       };
 
@@ -171,9 +158,7 @@ const PartnerCreationFormPage = () => {
 
   return (
     <FormProvider methods={methods}>
-      <h2 className="text-xl font-bold mb-4">
-        {isEditMode ? 'Edit Partner' : 'Create Partner'}
-      </h2>
+      <h2 className="text-xl font-bold mb-4">{isEditMode ? 'Edit Partner' : 'Create Partner'}</h2>
 
       <FormContentWrapper className="py-2 lg:pr-32 md:pr-0 w-full">
         <Spacer>
@@ -181,9 +166,7 @@ const PartnerCreationFormPage = () => {
             {Object.entries(userFormConfig.fields)
               .slice(0, 2)
               .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
+                <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>
               ))}
           </FormFieldRow>
           <FormFieldRow className="mb-2">
@@ -196,9 +179,7 @@ const PartnerCreationFormPage = () => {
               })}
             </FieldWrapper>
             <FieldWrapper>
-              <small className="block text-xs font-semibold">
-                {userFormConfig.fields.productType.label}
-              </small>
+              <small className="block text-xs font-semibold">{userFormConfig.fields.productType.label}</small>
               <CheckboxWrapper className="flex space-x-4 items-center">
                 {getController({
                   ...userFormConfig.fields.productType,
@@ -216,9 +197,7 @@ const PartnerCreationFormPage = () => {
             {Object.entries(userFormConfig.fields)
               .slice(3, 5)
               .map(([name, field]) => (
-                <FieldWrapper key={name}>
-                  {getController({ ...field, name, control, errors })}
-                </FieldWrapper>
+                <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>
               ))}
           </FormFieldRow>
         </Spacer>

@@ -25,16 +25,9 @@ export const MaterialCheckbox = ({
 
   const getDefaultValues = () => {
     if (isMulti) {
-      return Object.fromEntries(
-        Object.keys(options).map((key) => [key, false])
-      );
+      return Object.fromEntries(Object.keys(options).map((key) => [key, false]));
     } else {
-      return Object.fromEntries(
-        Object.keys(options).map((key) => [
-          key,
-          defaultSelected?.[key] || false,
-        ])
-      );
+      return Object.fromEntries(Object.keys(options).map((key) => [key, defaultSelected?.[key] || false]));
     }
   };
 
@@ -56,9 +49,7 @@ export const MaterialCheckbox = ({
                     <Checkbox
                       checked={isChecked}
                       icon={<Circle size={20} />}
-                      checkedIcon={
-                        <CircleCheck className="text-primary" size={20} />
-                      }
+                      checkedIcon={<CircleCheck className="text-primary" size={20} />}
                       onChange={(e) => {
                         const checked = e.target.checked;
                         let updatedValue = { ...field.value, [key]: checked };
@@ -66,10 +57,7 @@ export const MaterialCheckbox = ({
                         // If single selection, uncheck all others when a new one is selected
                         if (!isMulti) {
                           updatedValue = Object.fromEntries(
-                            Object.keys(options).map((k) => [
-                              k,
-                              k === key ? checked : false,
-                            ])
+                            Object.keys(options).map((k) => [k, k === key ? checked : false])
                           );
                         }
 

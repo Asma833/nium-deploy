@@ -2,13 +2,7 @@ import _ from 'lodash';
 import { Order } from '../../types/updateIncident.types';
 
 const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
-  const {
-    e_sign_status,
-    is_esign_required,
-    v_kyc_status,
-    is_v_kyc_required,
-    incident_status,
-  } = rowData;
+  const { e_sign_status, is_esign_required, v_kyc_status, is_v_kyc_required, incident_status } = rowData;
 
   const esignStatus =
     is_esign_required && e_sign_status
@@ -28,18 +22,11 @@ const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
           : 'pending'
       : 'not required';
 
-  const incidentStatus =
-    incident_status === null
-      ? 'pending'
-      : incident_status
-        ? 'approved'
-        : 'rejected';
+  const incidentStatus = incident_status === null ? 'pending' : incident_status ? 'approved' : 'rejected';
 
   // Determine the overall status based on the priority: rejected > pending > approved
   const determineOverallStatus = (...statuses: string[]) => {
-    const relevantStatuses = statuses.filter(
-      (status) => status !== 'not required'
-    );
+    const relevantStatuses = statuses.filter((status) => status !== 'not required');
 
     if (relevantStatuses.length === 0) return 'pending';
     if (relevantStatuses.includes('rejected')) return 'rejected';
@@ -52,9 +39,7 @@ const CompletedTransactionStatusCell = ({ rowData }: { rowData: Order }) => {
       ? incidentStatus
       : determineOverallStatus(esignStatus, vkycStatus, incidentStatus);
   return (
-    <span
-      className={`status-badge ${docVerificationStatus.toLowerCase().replace(/\s+/g, '-')}`}
-    >
+    <span className={`status-badge ${docVerificationStatus.toLowerCase().replace(/\s+/g, '-')}`}>
       {_.capitalize(docVerificationStatus)}
     </span>
   );

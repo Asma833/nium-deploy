@@ -53,7 +53,11 @@ export const API = {
       CHECKER_ORDER: `/orders/get-checker-orders`,
       UNASSIGN: `orders/unassign-checker`,
       REGENERATE_ESIGN_LINK: `/ekyc/generate-e-sign`,
+      REGENERATE_VKYC_LINK: `/videokyc/generate-v-kyc`,
     },
+  },
+  MAKER: {
+    GENERATE_ORDER: `/orders/generate-order`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
@@ -78,6 +82,11 @@ export const API = {
     GET_CONFIG: `/config`,
     GET_PURPOSE_TYPES: `/config?type=purpose_type`,
     GET_TRANSACTION_TYPES: `/config?type=transaction_type`,
+    GET_DOCUMENT_TYPES: `/config?type=document_type`,
+  },
+  DOCUMENTS: {
+    UPLOAD: `/documents/upload`,
+    UPLOAD_WITH_MERGE: `/documents/upload-with-merge`,
   },
   PRODUCTS: {
     GET_PRODUCTS: '/products',

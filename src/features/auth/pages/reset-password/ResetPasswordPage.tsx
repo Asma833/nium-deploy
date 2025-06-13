@@ -3,13 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../../../components/layout/AuthLayout';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
 import { ROUTES } from '@/core/constant/routePaths';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
@@ -28,9 +22,7 @@ const ResetPasswordPage = () => {
     const tokenParam = params.get('token');
 
     if (!tokenParam) {
-      setTokenError(
-        'No reset token found. Please request a new password reset link.'
-      );
+      setTokenError('No reset token found. Please request a new password reset link.');
       setLoading(false);
       return;
     }
@@ -46,8 +38,7 @@ const ResetPasswordPage = () => {
       } catch (error) {
         console.error('Token validation error:', error);
 
-        let errorMessage =
-          'Invalid or expired reset token. Please request a new password reset link.';
+        let errorMessage = 'Invalid or expired reset token. Please request a new password reset link.';
         if (axios.isAxiosError(error) && error.response) {
           errorMessage = error.response.data?.message || errorMessage;
         }
@@ -69,12 +60,8 @@ const ResetPasswordPage = () => {
   return (
     <AuthLayout>
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">
-          Reset Password
-        </CardTitle>
-        <CardDescription className="text-center">
-          Create a new password for your account
-        </CardDescription>
+        <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
+        <CardDescription className="text-center">Create a new password for your account</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (

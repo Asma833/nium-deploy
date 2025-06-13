@@ -14,10 +14,7 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { updateFormIncidentConfig } from './update-incident-form.config';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
-import {
-  UpdateIncidentFormData,
-  UpdateIncidentRequest,
-} from '@/features/checker/types/updateIncident.types';
+import { UpdateIncidentFormData, UpdateIncidentRequest } from '@/features/checker/types/updateIncident.types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
@@ -180,10 +177,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           setValue(`fields.${key}`, value as string);
         } else if (key === 'status') {
           // Handle status object separately
-          setValue(
-            'fields.status',
-            value as { approve: boolean; reject: boolean }
-          );
+          setValue('fields.status', value as { approve: boolean; reject: boolean });
         } else {
           setValue(`fields.${key}` as any, value);
         }
@@ -220,17 +214,11 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   }, [isApproved, isRejected, methods]);
 
   // Update watch for form values
-  const [comment, niumInvoiceNumber] = methods.watch([
-    'fields.comment',
-    'fields.niumInvoiceNumber',
-  ]);
+  const [comment, niumInvoiceNumber] = methods.watch(['fields.comment', 'fields.niumInvoiceNumber']);
 
   // Update validation whenever these values change
   useEffect(() => {
-    const valid = !!(
-      (isApproved && niumInvoiceNumber) ||
-      (isRejected && comment)
-    );
+    const valid = !!((isApproved && niumInvoiceNumber) || (isRejected && comment));
     setIsFormValid(valid);
   }, [isApproved, isRejected, comment, niumInvoiceNumber]);
 
@@ -252,9 +240,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
         const formattedData = {
           partner_order_id: fields.bmfOrderRef || '',
           checker_id: getUserHashedKey() || '',
-          nium_invoice_number: fields?.status?.approve
-            ? fields.niumInvoiceNumber || ''
-            : '',
+          nium_invoice_number: fields?.status?.approve ? fields.niumInvoiceNumber || '' : '',
           incident_checker_comments: fields.comment || '',
           incident_status: fields?.status?.approve ? true : false,
         };
@@ -282,14 +268,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     fetchData,
   } = useGetCheckerOrdersByPartnerId(partnerOrderId);
 
-  const {
-    merged_document,
-    esigns,
-    resources_documents_files,
-    resources_videos_files,
-  } = order || {};
+  const { merged_document, esigns, resources_documents_files, resources_videos_files } = order || {};
+  console.log('merged_document:', merged_document);
 
-  const mergeDocument = merged_document?.url || '';
+  const mergeDocument = merged_document?.url || rowData?.merged_document?.url || '';
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
   const vkycDocumentFiles = resources_documents_files || {};
   const vkycVideoFiles = resources_videos_files?.customer || '';
@@ -302,15 +284,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = (
-    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc'
-  ) => {
+  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc') => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
-    } else if (
-      docType === 'vkycDocument' &&
-      vkycDocumentFilesArray.length > 0
-    ) {
+    } else if (docType === 'vkycDocument' && vkycDocumentFilesArray.length > 0) {
       const firstDocument = vkycDocumentFilesArray[0];
 
       if (firstDocument) {
@@ -369,18 +346,14 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               .map(([name, field]) => {
                 const hasError = !!errors[name as keyof typeof errors];
                 return (
-                  <FieldWrapper
-                    key={name}
-                    className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}
-                  >
+                  <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
                       ...field,
                       name,
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue:
-                        rowData?.[field.name as keyof typeof rowData],
+                      forcedValue: rowData?.[field.name as keyof typeof rowData],
                     })}
                   </FieldWrapper>
                 );
@@ -390,10 +363,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               .map(([name, field]) => {
                 const hasError = !!errors[name as keyof typeof errors];
                 return (
-                  <FieldWrapper
-                    key={name}
-                    className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}
-                  >
+                  <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
                       ...field,
                       name,
@@ -410,10 +380,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               .map(([name, field]) => {
                 const hasError = !!errors[name as keyof typeof errors];
                 return (
-                  <FieldWrapper
-                    key={name}
-                    className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}
-                  >
+                  <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
                       ...field,
                       name,
@@ -430,87 +397,63 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' &&
-              pageId === 'viewAllIncident' &&
-              (esignStatus === 'completed' || esignStatus === 'rejected') && (
-                <Button
-                  type="button"
-                  onClick={handleViewDocument}
-                  className="disabled:opacity-60"
-                >
-                  View Document
-                </Button>
-              )}
-            {isEsignDocumentLink &&
-              (pageId === 'updateIncident' ||
-                pageId === 'completedIncident') && (
-                <Button
-                  type="button"
-                  onClick={() => {
-                    handleDownloadDocument('mergeDoc');
-                  }}
-                  disabled={!isEsignDocumentLink}
-                  className="disabled:opacity-60"
-                >
-                  eSign Document
-                </Button>
-              )}
+            {mode === 'view' && pageId === 'viewAllIncident' && rowData?.merged_document !== null && (
+              <Button type="button" onClick={handleViewDocument} className="disabled:opacity-60">
+                View Document
+              </Button>
+            )}
+            {isEsignDocumentLink && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              <Button
+                type="button"
+                onClick={() => {
+                  handleDownloadDocument('mergeDoc');
+                }}
+                disabled={!isEsignDocumentLink}
+                className="disabled:opacity-60"
+              >
+                eSign Document
+              </Button>
+            )}
 
             {Array.isArray(vkycDocumentFilesArray) &&
               vkycDocumentFilesArray.length > 0 &&
-              (pageId === 'updateIncident' ||
-                pageId === 'completedIncident') && (
+              (pageId === 'updateIncident' || pageId === 'completedIncident') && (
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('vkycDocument')}
-                  disabled={
-                    !Array.isArray(vkycDocumentFilesArray) ||
-                    vkycDocumentFilesArray.length === 0
-                  }
+                  disabled={!Array.isArray(vkycDocumentFilesArray) || vkycDocumentFilesArray.length === 0}
                   className="disabled:opacity-60"
                 >
                   VKYC Document
                 </Button>
               )}
-            {vkycVideoFiles &&
-              (pageId === 'updateIncident' ||
-                pageId === 'completedIncident') && (
-                <Button
-                  type="button"
-                  onClick={() => handleDownloadDocument('vkycVideo')}
-                  disabled={!vkycVideoFiles}
-                  className="disabled:opacity-60"
-                >
-                  VKYC Video
-                </Button>
-              )}
+            {vkycVideoFiles && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              <Button
+                type="button"
+                onClick={() => handleDownloadDocument('vkycVideo')}
+                disabled={!vkycVideoFiles}
+                className="disabled:opacity-60"
+              >
+                VKYC Video
+              </Button>
+            )}
           </FormFieldRow>
           {mode === 'edit' && (
             <FormFieldRow>
               <div className="flex items-center space-x-8">
                 <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="approve"
-                    checked={isApproved}
-                    onCheckedChange={handleApproveChange}
-                  />
+                  <Checkbox id="approve" checked={isApproved} onCheckedChange={handleApproveChange} />
                   <Label htmlFor="approve" className="cursor-pointer">
                     Approve
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="reject"
-                    checked={isRejected}
-                    onCheckedChange={handleRejectChange}
-                  />
+                  <Checkbox id="reject" checked={isRejected} onCheckedChange={handleRejectChange} />
                   <Label htmlFor="reject" className="cursor-pointer">
                     Reject
                   </Label>
                 </div>
-                <FormHelperText error={!!errors.fields?.status}>
-                  {errors.fields?.status?.message}
-                </FormHelperText>
+                <FormHelperText error={!!errors.fields?.status}>{errors.fields?.status?.message}</FormHelperText>
               </div>
             </FormFieldRow>
           )}
@@ -532,8 +475,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 })}
               </FormFieldRow>
             )}
-            {(pageId === 'updateIncident' ||
-              pageId === 'completedIncident') && (
+            {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
               <FormFieldRow className="flex-1">
                 {showNiumInvoice &&
                   getController({

@@ -2,13 +2,7 @@ import { ReactNode } from 'react';
 import Grid from '@mui/material/Grid2';
 import { ZodSchema } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Button,
-  ButtonProps,
-  IconButton,
-  IconButtonProps,
-  Typography,
-} from '@mui/material';
+import { Button, ButtonProps, IconButton, IconButtonProps, Typography } from '@mui/material';
 import {
   DefaultValues,
   FieldValues,
@@ -90,11 +84,7 @@ const Form = <T extends FieldValues>({
           >
             <Typography variant="h6">{title}</Typography>
             {showResetButton && !readOnly && (
-              <IconButton
-                onClick={handleResetFormClick}
-                color="inherit"
-                {...slotProps?.resetButtonProps}
-              >
+              <IconButton onClick={handleResetFormClick} color="inherit" {...slotProps?.resetButtonProps}>
                 <RotateCcw />
               </IconButton>
             )}
@@ -109,14 +99,8 @@ const Form = <T extends FieldValues>({
 
         {!readOnly && (
           <Grid offset="auto">
-            <Button
-              type="submit"
-              variant="contained"
-              {...slotProps?.submitButtonProps}
-            >
-              {submitButtonText ??
-                slotProps?.submitButtonProps?.children ??
-                d.submit}
+            <Button type="submit" variant="contained" {...slotProps?.submitButtonProps}>
+              {submitButtonText ?? slotProps?.submitButtonProps?.children ?? d.submit}
             </Button>
           </Grid>
         )}

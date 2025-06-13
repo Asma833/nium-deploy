@@ -6,9 +6,7 @@ const VKycStatusCell = ({ rowData }: { rowData: Order }) => {
     <span>
       {rowData.is_v_kyc_required ? (
         rowData.v_kyc_status && (
-          <span
-            className={`status-badge esign-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}
-          >
+          <span className={`status-badge esign-${rowData.v_kyc_status.toLowerCase().replace(/\s+/g, '-')}`}>
             {rowData.v_kyc_status === 'N/A'
               ? 'N/A'
               : rowData.v_kyc_status === 'in_progress'

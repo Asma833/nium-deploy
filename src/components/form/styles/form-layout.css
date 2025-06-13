@@ -1,13 +1,14 @@
 .formFieldRow {
   display: flex;
-  width: 100%;
   flex-wrap: wrap;
-  row-gap: 30px;
-  column-gap: 20px;
+  gap: 28px 20px;
 }
 
 .fieldWrapper {
   @apply flex;
+}
+.fieldWrapper .MuiFormGroup-root.MuiRadioGroup-root {
+  @apply flex flex-row;
 }
 .formFieldRow.row-cols-100d2 .fieldWrapper {
   width: calc(50% - 15px);
@@ -33,14 +34,13 @@
 .formCardHeader {
   @apply flex items-center justify-between;
 }
-.formFieldRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
 
 .formFieldRow .fieldWrapper {
   width: 100%;
+}
+
+.fieldWrapper .fieldWrapper .fileupload-label {
+  @apply text-gray-500 text-[13px];
 }
 
 @media (min-width: 768px) {
@@ -53,5 +53,11 @@
   /* lg: 3 columns */
   .formFieldRow .fieldWrapper {
     width: calc(33.33% - 15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .fieldWrapper {
+    width: 100% !important;
   }
 }

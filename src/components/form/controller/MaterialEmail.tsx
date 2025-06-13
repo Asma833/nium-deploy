@@ -6,11 +6,15 @@ interface MaterialEmailProps {
   label: string;
   baseStyle?: any;
   className?: string;
+  disabled?: boolean;
+  forcedValue?: string;
 }
 
 export const MaterialEmail = ({
   name,
   label,
+  disabled = false,
+  forcedValue,
   baseStyle,
   className,
 }: MaterialEmailProps) => {
@@ -20,14 +24,12 @@ export const MaterialEmail = ({
     <Controller
       name={name}
       control={control}
-      defaultValue="" // Add default value
-      render={({
-        field: { value, onChange, ...field },
-        fieldState: { error },
-      }) => (
+      defaultValue=""
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
-          value={value ?? ''} // Ensure value is never undefined
+          disabled={disabled}
+          value={(forcedValue ? forcedValue : value) || ''}
           onChange={(e) => {
             onChange(e.target.value || ''); // Handle empty string case
           }}
@@ -37,6 +39,7 @@ export const MaterialEmail = ({
           helperText={error?.message}
           sx={baseStyle}
           className={className ?? ''}
+          placeholder="Enter Email Address"
         />
       )}
     />

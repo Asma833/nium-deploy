@@ -10,11 +10,7 @@ interface FetchState {
   fetchData: (params?: Record<string, any>) => Promise<void>;
 }
 
-export const useGetApi = (
-  endpointKey: string,
-  params?: any,
-  autoFetch: boolean = true
-): FetchState => {
+export const useGetApi = (endpointKey: string, params?: any, autoFetch: boolean = true): FetchState => {
   const [data, setData] = useState<null>(null);
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +26,7 @@ export const useGetApi = (
         });
         setData(response.data);
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'An unknown error occurred';
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
 
         toast.error('Error Fetching Data', {
           description: errorMessage,

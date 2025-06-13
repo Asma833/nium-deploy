@@ -1,22 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router';
 import { Loader2 } from 'lucide-react';
 import { useForgotPassword } from '../hooks/useForgotPassword';
-import {
-  emailLinkSchema,
-  EmailLinkSchema,
-} from '../schemas/send-email-link.schema';
+import { emailLinkSchema, EmailLinkSchema } from '../schemas/send-email-link.schema';
 
 const SendEmailForm = () => {
   const { mutate, isLoading } = useForgotPassword();
@@ -41,12 +31,7 @@ const SendEmailForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="email"
-                  placeholder="Enter your email"
-                  autoComplete="off"
-                />
+                <Input {...field} type="email" placeholder="Enter your email" autoComplete="off" />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -4,14 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useLogin } from '../hooks/useLogin';
 import { loginSchema, LoginSchema } from '../schemas/login.schema';
@@ -43,12 +36,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="email"
-                  placeholder="Enter your email"
-                  autoComplete="off"
-                />
+                <Input {...field} type="email" placeholder="Enter your email" autoComplete="off" />
               </FormControl>
               <FormMessage />
             </FormItem>

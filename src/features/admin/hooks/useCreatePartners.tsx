@@ -24,9 +24,7 @@ export const useCreatePartner = (
   const { getUser } = useCurrentUser();
   const user = getUser();
 
-  const mapFormDataToApiPayload = async (
-    formData: UserCreationRequest
-  ): Promise<UserApiPayload> => {
+  const mapFormDataToApiPayload = async (formData: UserCreationRequest): Promise<UserApiPayload> => {
     const product_ids: string[] = [];
 
     if (formData.productType.both) {
@@ -55,11 +53,7 @@ export const useCreatePartner = (
     };
   };
 
-  const { mutate, isPending, error } = useMutation<
-    void,
-    Error,
-    UserCreationRequest
-  >({
+  const { mutate, isPending, error } = useMutation<void, Error, UserCreationRequest>({
     mutationFn: async (userData: UserCreationRequest) => {
       const apiPayload = await mapFormDataToApiPayload(userData);
       await partnerApi.PartnerCreation(apiPayload);

@@ -3,6 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
 import { ErrorMessage } from '../ErrorMessage';
+import '../styles/form-layout.css';
 
 interface MaterialSelectProps {
   name: string;
@@ -13,12 +14,16 @@ interface MaterialSelectProps {
   baseStyle?: any;
   className?: string;
   placeholder?: string;
+  disabled?: boolean;
+  forcedValue?: string;
 }
 
 export const MaterialSelect = ({
   name,
   label,
+  disabled = false,
   options,
+  forcedValue,
   baseStyle,
   className,
   placeholder,
@@ -29,9 +34,9 @@ export const MaterialSelect = ({
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
     if (isArrayOptions) {
-      const selectedOption = (
-        options as Array<{ value: string; label: string; selected?: boolean }>
-      ).find((option) => option.selected);
+      const selectedOption = (options as Array<{ value: string; label: string; selected?: boolean }>).find(
+        (option) => option.selected
+      );
       return selectedOption ? selectedOption.value : '';
     } else {
       const entries = Object.entries(options);
@@ -48,31 +53,25 @@ export const MaterialSelect = ({
         name={name}
         control={control}
         defaultValue={defaultValue}
-        render={({
-          field: { value, onChange, ...field },
-          fieldState: { error },
-        }) => {
-          // Log for debugging
-
+        render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
           return (
             <FormControl fullWidth error={!!error}>
               <InputLabel>{label}</InputLabel>
               <Select
                 {...field}
-                value={value || ''}
+                value={(forcedValue ? forcedValue : value) || ''}
                 onChange={(e) => {
                   onChange(e.target.value);
                 }}
                 label={label}
                 sx={baseStyle}
+                disabled={disabled}
                 className={cn(className)}
                 renderValue={(selected) => {
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
-                  return Array.isArray(selected)
-                    ? toTitleCase(selected.join(', '))
-                    : toTitleCase(selected);
+                  return Array.isArray(selected) ? toTitleCase(selected.join(', ')) : toTitleCase(selected);
                 }}
               >
                 <MenuItem disabled value="">

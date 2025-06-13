@@ -35,10 +35,7 @@ export const useGetData = <T,>({
         return response.data;
       }
 
-      return (
-        dataPath.split('.').reduce((obj, key) => obj?.[key], response.data) ??
-        null
-      );
+      return dataPath.split('.').reduce((obj, key) => obj?.[key], response.data) ?? null;
     },
     enabled: enabled && (!id || !!id),
   });

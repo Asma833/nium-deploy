@@ -68,15 +68,29 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Checker order list endpoint',
   },
+  'upload-documents': {
+    endpoint: API.DOCUMENTS.UPLOAD,
+    matchType: 'exact-only' as const,
+    description: 'Upload documents endpoint',
+  },
+  'generate-order': {
+    endpoint: API.MAKER.GENERATE_ORDER,
+    matchType: 'exact-only' as const,
+    description: 'Generate Order endpoint',
+  },
+  
+  'generate-vkyc': {
+    endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,
+    matchType: 'standard' as const,
+    description: 'Generate vkyc link endpoint',
+  },
 } as const;
 
 
 /**
  * Extract endpoints for backward compatibility
  */
-export const SKIP_ENCRYPTION_ENDPOINTS = Object.values(
-  ENDPOINT_MATCHING_RULES
-).map((rule) => rule.endpoint);
+export const SKIP_ENCRYPTION_ENDPOINTS = Object.values(ENDPOINT_MATCHING_RULES).map((rule) => rule.endpoint);
 
 /**
  * Normalize endpoint path for clean comparison
@@ -89,9 +103,7 @@ export function normalizeEndpointPath(path: string): string {
  * Get matching rule based on actual URL
  * Prioritizes more specific rules over general ones
  */
-export function getEndpointMatchingRuleByUrl(
-  url: string
-): EndpointRule | undefined {
+export function getEndpointMatchingRuleByUrl(url: string): EndpointRule | undefined {
   const normalizedUrl = normalizeEndpointPath(url);
 
   // Convert to array and sort by specificity (longer endpoints first)
@@ -111,10 +123,7 @@ export function getEndpointMatchingRuleByUrl(
     const normalizedEndpoint = normalizeEndpointPath(rule.endpoint);
 
     if (rule.matchType === 'exact-only') {
-      return (
-        normalizedUrl === normalizedEndpoint ||
-        normalizedUrl === normalizedEndpoint + '/'
-      );
+      return normalizedUrl === normalizedEndpoint || normalizedUrl === normalizedEndpoint + '/';
     } else {
       return (
         normalizedUrl === normalizedEndpoint ||
@@ -145,10 +154,7 @@ export function matchesEndpointRule(url: string, endpoint: string): boolean {
   const rule = getEndpointMatchingRuleByUrl(endpoint);
 
   if (rule?.matchType === 'exact-only') {
-    return (
-      normalizedUrl === normalizedEndpoint ||
-      normalizedUrl === normalizedEndpoint + '/'
-    );
+    return normalizedUrl === normalizedEndpoint || normalizedUrl === normalizedEndpoint + '/';
   }
 
   return (

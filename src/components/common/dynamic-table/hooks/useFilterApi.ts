@@ -36,9 +36,7 @@ export function useFilterApi<T = any>({
   const [error, setError] = useState<Error | null>(null);
 
   // Helper function to make API calls
-  const fetchFilteredData = async (
-    params: Record<string, any>
-  ): Promise<T[]> => {
+  const fetchFilteredData = async (params: Record<string, any>): Promise<T[]> => {
     setLoading(true);
     setError(null);
 

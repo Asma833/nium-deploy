@@ -31,8 +31,7 @@ const d = {
   defaultLoading: 'Loading...',
   saveAndContinue: 'Save and Continue',
   confirmAction: 'Confirm Action',
-  pleaseConfirmYouWouldLikeToProcess:
-    'Please confirm you would like to proceed',
+  pleaseConfirmYouWouldLikeToProcess: 'Please confirm you would like to proceed',
   ok: 'Ok',
   cancel: 'Cancel',
   uploadPDF: 'Upload PDF',

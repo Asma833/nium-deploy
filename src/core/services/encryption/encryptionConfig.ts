@@ -2,10 +2,7 @@
  * Configuration for endpoints that should skip encryption
  */
 
-import {
-  SKIP_ENCRYPTION_ENDPOINTS,
-  matchesEndpointRule,
-} from '@/core/constant/encryptionEndpoints';
+import { SKIP_ENCRYPTION_ENDPOINTS, matchesEndpointRule } from '@/core/constant/encryptionEndpoints';
 
 /**
  * Exact endpoint paths that should never be encrypted
@@ -52,9 +49,7 @@ export function shouldSkipEncryption(url: string): boolean {
   });
 
   // Check pattern matches
-  const skipByPattern = SKIP_ENCRYPTION_PATTERNS.some((pattern) =>
-    pattern.test(url)
-  );
+  const skipByPattern = SKIP_ENCRYPTION_PATTERNS.some((pattern) => pattern.test(url));
 
   return skipByEndpoint || skipByPattern;
 }

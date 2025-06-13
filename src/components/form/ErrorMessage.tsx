@@ -7,9 +7,7 @@ type ErrorMessageProps<T extends FieldValues> = {
   name: Path<T> | ArrayPath<T>;
 };
 
-const ErrorMessage = <T extends FieldValues>({
-  name,
-}: ErrorMessageProps<T>) => {
+const ErrorMessage = <T extends FieldValues>({ name }: ErrorMessageProps<T>) => {
   return (
     <>
       <RHFErrorMessage name={name} as={<FormHelperText error />} />

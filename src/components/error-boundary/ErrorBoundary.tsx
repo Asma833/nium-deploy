@@ -5,15 +5,10 @@ import FallbackPage from '../common/FallbackPage';
 
 const DefaultFallback: React.FC = () => <FallbackPage />;
 
-const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
-  children,
-  fallback,
-}) => {
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children, fallback }) => {
   return (
     <ReactErrorBoundary
-      FallbackComponent={() =>
-        fallback ? <>{fallback}</> : <DefaultFallback />
-      }
+      FallbackComponent={() => (fallback ? <>{fallback}</> : <DefaultFallback />)}
       onError={(error, info) => {}}
     >
       {children}

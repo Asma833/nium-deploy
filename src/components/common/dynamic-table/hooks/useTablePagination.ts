@@ -1,13 +1,7 @@
 import { useState, useMemo } from 'react';
 
-export function useTablePagination<T>(
-  data: T[],
-  initialPageSize: number,
-  pageSizeOptions: number[]
-) {
-  const [pageSize, setPageSize] = useState<number>(
-    pageSizeOptions?.[0] || initialPageSize
-  );
+export function useTablePagination<T>(data: T[], initialPageSize: number, pageSizeOptions: number[]) {
+  const [pageSize, setPageSize] = useState<number>(pageSizeOptions?.[0] || initialPageSize);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const paginatedData = useMemo(() => {

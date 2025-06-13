@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@/store';
-import { DEFAULT_ROUTES } from '@/core/constant/routes';
+import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
 import LoadingFallback from '@/components/loader/LoadingFallback';
 
 interface AuthRedirectGuardProps {
@@ -18,9 +18,7 @@ const selectAuthState = createSelector(
   })
 );
 
-export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({
-  children,
-}) => {
+export const AuthRedirectGuard: React.FC<AuthRedirectGuardProps> = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
 
   // Show loading while checking authentication status

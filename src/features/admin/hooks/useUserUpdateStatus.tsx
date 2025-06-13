@@ -5,11 +5,7 @@ import { UserStatusRequest } from '../types/user.types';
 
 export const useUpdateStatusAPI = () => {
   const queryClient = useQueryClient();
-  const { mutate, isPending, error } = useMutation<
-    void,
-    Error,
-    UserStatusRequest
-  >({
+  const { mutate, isPending, error } = useMutation<void, Error, UserStatusRequest>({
     mutationFn: async (userData: any) => {
       await userApi.userStatusUpdate(userData);
     },

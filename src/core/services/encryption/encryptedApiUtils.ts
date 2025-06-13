@@ -10,11 +10,7 @@ export class EncryptedApiUtils {
   /**
    * Make an encrypted POST request
    */
-  static async encryptedPost<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async encryptedPost<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
     if (!encryptionService.isEncryptionEnabled()) {
       return axiosInstance.post<T>(url, data, config);
     }
@@ -34,11 +30,7 @@ export class EncryptedApiUtils {
           'X-IV': encryptionResult.iv,
         },
       }); // Decrypt response if needed
-      if (
-        response.data &&
-        typeof response.data === 'object' &&
-        'encryptedValue' in response.data
-      ) {
+      if (response.data && typeof response.data === 'object' && 'encryptedValue' in response.data) {
         const decryptedData = encryptionService.decryptResponse({
           encryptedData: (response.data as any).encryptedValue,
           aesKey: encryptionResult.aesKey,
@@ -58,11 +50,7 @@ export class EncryptedApiUtils {
   /**
    * Make an encrypted PUT request
    */
-  static async encryptedPut<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async encryptedPut<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
     if (!encryptionService.isEncryptionEnabled()) {
       return axiosInstance.put<T>(url, data, config);
     }
@@ -82,11 +70,7 @@ export class EncryptedApiUtils {
           'X-IV': encryptionResult.iv,
         },
       }); // Decrypt response if needed
-      if (
-        response.data &&
-        typeof response.data === 'object' &&
-        'encryptedValue' in response.data
-      ) {
+      if (response.data && typeof response.data === 'object' && 'encryptedValue' in response.data) {
         const decryptedData = encryptionService.decryptResponse({
           encryptedData: (response.data as any).encryptedValue,
           aesKey: encryptionResult.aesKey,
@@ -106,11 +90,7 @@ export class EncryptedApiUtils {
   /**
    * Make an encrypted PATCH request
    */
-  static async encryptedPatch<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async encryptedPatch<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
     if (!encryptionService.isEncryptionEnabled()) {
       return axiosInstance.patch<T>(url, data, config);
     }
@@ -130,11 +110,7 @@ export class EncryptedApiUtils {
           'X-IV': encryptionResult.iv,
         },
       }); // Decrypt response if needed
-      if (
-        response.data &&
-        typeof response.data === 'object' &&
-        'encryptedValue' in response.data
-      ) {
+      if (response.data && typeof response.data === 'object' && 'encryptedValue' in response.data) {
         const decryptedData = encryptionService.decryptResponse({
           encryptedData: (response.data as any).encryptedValue,
           aesKey: encryptionResult.aesKey,
@@ -154,55 +130,28 @@ export class EncryptedApiUtils {
   /**
    * Make a POST request without encryption (convenience method)
    */
-  static async unencryptedPost<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
-    return axiosInstance.post<T>(
-      url,
-      data,
-      EncryptionControlUtils.withoutEncryption(config)
-    );
+  static async unencryptedPost<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
+    return axiosInstance.post<T>(url, data, EncryptionControlUtils.withoutEncryption(config));
   }
 
   /**
    * Make a PUT request without encryption (convenience method)
    */
-  static async unencryptedPut<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
-    return axiosInstance.put<T>(
-      url,
-      data,
-      EncryptionControlUtils.withoutEncryption(config)
-    );
+  static async unencryptedPut<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
+    return axiosInstance.put<T>(url, data, EncryptionControlUtils.withoutEncryption(config));
   }
 
   /**
    * Make a PATCH request without encryption (convenience method)
    */
-  static async unencryptedPatch<T = any>(
-    url: string,
-    data: any,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
-    return axiosInstance.patch<T>(
-      url,
-      data,
-      EncryptionControlUtils.withoutEncryption(config)
-    );
+  static async unencryptedPatch<T = any>(url: string, data: any, config?: any): Promise<AxiosResponse<T>> {
+    return axiosInstance.patch<T>(url, data, EncryptionControlUtils.withoutEncryption(config));
   }
 
   /**
    * Make a GET request with encryption headers for encrypted responses
    */
-  static async encryptedGet<T = any>(
-    url: string,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async encryptedGet<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
     if (!encryptionService.isEncryptionEnabled()) {
       return axiosInstance.get<T>(url, config);
     }
@@ -228,11 +177,7 @@ export class EncryptedApiUtils {
       });
 
       // Decrypt response if it's encrypted
-      if (
-        response.data &&
-        typeof response.data === 'object' &&
-        'encryptedValue' in response.data
-      ) {
+      if (response.data && typeof response.data === 'object' && 'encryptedValue' in response.data) {
         const decryptedData = encryptionService.decryptResponse({
           encryptedData: (response.data as any).encryptedValue,
           aesKey: aesKey,
@@ -253,10 +198,7 @@ export class EncryptedApiUtils {
    * Make a GET request (GET requests are never encrypted anyway)
    * This method now defaults to encrypted GET if encryption is enabled
    */
-  static async get<T = any>(
-    url: string,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async get<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
     // Use encrypted GET by default if encryption is enabled
     if (encryptionService.isEncryptionEnabled()) {
       return this.encryptedGet<T>(url, config);
@@ -267,23 +209,14 @@ export class EncryptedApiUtils {
   /**
    * Make a GET request without encryption headers (convenience method)
    */
-  static async unencryptedGet<T = any>(
-    url: string,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
-    return axiosInstance.get<T>(
-      url,
-      EncryptionControlUtils.withoutEncryption(config)
-    );
+  static async unencryptedGet<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
+    return axiosInstance.get<T>(url, EncryptionControlUtils.withoutEncryption(config));
   }
 
   /**
    * Make a DELETE request (DELETE requests are never encrypted anyway)
    */
-  static async delete<T = any>(
-    url: string,
-    config?: any
-  ): Promise<AxiosResponse<T>> {
+  static async delete<T = any>(url: string, config?: any): Promise<AxiosResponse<T>> {
     return axiosInstance.delete<T>(url, config);
   }
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
@@ -18,13 +19,18 @@ const NuserCreationTable = () => {
     queryKey: queryKeys.user.allUsers,
     dataPath: '',
   });
-  const users: Record<string, any>[] =
-    data && typeof data === 'object' && !Array.isArray(data)
-      ? (Object.values(data) as Record<string, any>[])
-      : Array.isArray(data)
-        ? (data as Record<string, any>[])
-        : [];
+  const users = React.useMemo(() => {
+    if (!data) return [];
 
+    const normalizedData =
+      typeof data === 'object' && !Array.isArray(data)
+        ? (Object.values(data) as Record<string, any>[])
+        : Array.isArray(data)
+          ? (data as Record<string, any>[])
+          : [];
+
+    return normalizedData.filter((user) => user?.role?.name?.toLowerCase() === 'checker');
+  }, [data]);
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
   const handleStatusChange = async (rowData: any, checked: boolean) => {
@@ -61,12 +67,8 @@ const NuserCreationTable = () => {
               !filterApi.error ? 'hidden' : ''
             )}
           >
-            {filterApi.loading && (
-              <span className="text-blue-500">Loading data...</span>
-            )}
-            {filterApi.error && (
-              <span className="text-red-500">Error loading data</span>
-            )}
+            {filterApi.loading && <span className="text-blue-500">Loading data...</span>}
+            {filterApi.error && <span className="text-red-500">Error loading data</span>}
           </div>
         </div>
         <DynamicTable

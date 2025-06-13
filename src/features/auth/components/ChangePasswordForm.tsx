@@ -7,14 +7,7 @@ import { useForm } from 'react-hook-form';
 import { ROUTES } from '@/core/constant/routePaths';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
@@ -40,10 +33,7 @@ const formSchema = (isResetPassword: boolean) =>
       path: ['confirmPassword'],
     });
 
-const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
-  token,
-  isResetPassword = false,
-}) => {
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ token, isResetPassword = false }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -107,11 +97,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
               <FormItem>
                 <FormLabel>Current Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter current password"
-                    {...field}
-                  />
+                  <Input type="password" placeholder="Enter current password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,11 +112,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter new password"
-                  {...field}
-                />
+                <Input type="password" placeholder="Enter new password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,11 +126,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Confirm your password"
-                  {...field}
-                />
+                <Input type="password" placeholder="Confirm your password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -156,11 +134,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
         />
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading
-            ? 'Processing...'
-            : isResetPassword
-              ? 'Reset Password'
-              : 'Change Password'}
+          {loading ? 'Processing...' : isResetPassword ? 'Reset Password' : 'Change Password'}
         </Button>
       </form>
     </Form>

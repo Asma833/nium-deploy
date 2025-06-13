@@ -11,18 +11,15 @@ import { UserApiPayload, UserCreationRequest } from '../types/admin.types';
 
 export const useCreateUser = (
   { role }: { role: string },
-  {
-    onUserCreateSuccess,
-  }: { onUserCreateSuccess: (data: UserApiPayload) => void }
+  { onUserCreateSuccess }: { onUserCreateSuccess: (data: UserApiPayload) => void }
 ) => {
   const navigate = useNavigate();
   const { getRoleId } = useGetRoleId();
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const { getBankAccountId, getBranchId, getBusinessType } = useCurrentUser();
-  const mapFormDataToApiPayload = async (
-    formData: UserCreationRequest
-  ): Promise<UserApiPayload> => {
-    const roleId = getRoleId('checker');
+  const mapFormDataToApiPayload = async (formData: UserCreationRequest): Promise<UserApiPayload> => {
+    const userRole = role ? role : 'user';
+    const roleId = getRoleId(userRole);
     return {
       role_id: roleId || '',
       email: formData.email,
@@ -35,11 +32,7 @@ export const useCreateUser = (
     };
   };
 
-  const { mutate, isPending, error } = useMutation<
-    UserApiPayload,
-    Error,
-    UserCreationRequest
-  >({
+  const { mutate, isPending, error } = useMutation<UserApiPayload, Error, UserCreationRequest>({
     mutationFn: async (userData: UserCreationRequest) => {
       const apiPayload = await mapFormDataToApiPayload(userData);
       await userApi.userCreation(apiPayload);
@@ -48,7 +41,8 @@ export const useCreateUser = (
     onSuccess: (data: UserApiPayload) => {
       toast.success('User created successfully');
       onUserCreateSuccess(data);
-      navigate('/admin/users');
+      const url = role === 'maker' ? '/admin/maker' : '/admin/users';
+      navigate(url);
     },
     onError: (error: Error) => {
       toast.error(

@@ -2,12 +2,13 @@ import { useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { publicRoutes } from './Routes';
-import { DEFAULT_ROUTES } from '@/core/constant/routes';
+import { DEFAULT_ROUTES } from '@/core/constant/manageDefaultRoutes';
 import { UserRole } from '@/features/auth/types/auth.types';
 import { RootState } from '@/store';
 import NotFoundPage from '@/components/common/NotFoundPage';
 import { CheckerRoutes } from './CheckerRoutes';
 import { AdminRoutes } from './AdminRoutes';
+import { MakerRoutes } from './MakerRoutes';
 
 export const AppRoutes = () => {
   const selectUser = useMemo(() => (state: RootState) => state.auth.user, []);
@@ -21,12 +22,10 @@ export const AppRoutes = () => {
       {publicRoutes.map(({ path, element: Element }) => (
         <Route key={path} path={path} element={<Element />} />
       ))}
-      <Route path="/checker/*" element={<CheckerRoutes />} />
       <Route path="/admin/*" element={<AdminRoutes />} />
-      <Route
-        path="/"
-        element={<Navigate to={getDefaultRoute(user?.role.name)} replace />}
-      />
+      <Route path="/checker/*" element={<CheckerRoutes />} />
+      <Route path="/maker/*" element={<MakerRoutes />} />
+      <Route path="/" element={<Navigate to={getDefaultRoute(user?.role.name)} replace />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

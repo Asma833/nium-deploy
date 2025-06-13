@@ -1,11 +1,4 @@
-import {
-  CheckCircle,
-  XCircle,
-  MoreHorizontal,
-  FileCheck2,
-  FileX,
-  FileClock,
-} from 'lucide-react';
+import { CheckCircle, XCircle, MoreHorizontal, FileCheck2, FileX, FileClock } from 'lucide-react';
 import transactionReceived from '@/assets/icons/transaction-received.svg';
 import transactionApproved from '@/assets/icons/transaction-approved.svg';
 import transactionRejected from '@/assets/icons/transaction-rejected.svg';
@@ -33,9 +26,7 @@ export const apiDummyData: DashboardMetrics = {
 };
 
 // Create dashboard data based on metrics from API
-export const createDashboardData = (
-  metrics: DashboardMetrics = apiDummyData
-): DashboardItem[] => [
+export const createDashboardData = (metrics: DashboardMetrics = apiDummyData): DashboardItem[] => [
   {
     id: 1,
     title: 'Transaction Received',

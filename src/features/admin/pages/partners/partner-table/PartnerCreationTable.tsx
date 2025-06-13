@@ -68,18 +68,12 @@ const PartnerCreationTable = () => {
     <div className="table-wrap dynamic-table-wrap">
       <div className="flex flex-col">
         <div
-          className={cn(
-            'mb-4 flex items-center',
-            !filterApi.loading ? 'hidden' : '',
-            !filterApi.error ? 'hidden' : ''
-          )}
+          className={cn('mb-4 flex items-center', !filterApi.loading ? 'hidden' : '', !filterApi.error ? 'hidden' : '')}
         >
           {(filterApi.loading || pagination.loading || loading) && (
             <span className="text-blue-500">Loading data...</span>
           )}
-          {(filterApi.error || pagination.error || error) && (
-            <span className="text-red-500">Error loading data</span>
-          )}
+          {(filterApi.error || pagination.error || error) && <span className="text-red-500">Error loading data</span>}
         </div>
       </div>
       <DynamicTable
@@ -89,10 +83,7 @@ const PartnerCreationTable = () => {
         defaultSortColumn="niumId"
         defaultSortDirection="asc"
         renderLeftSideActions={() => (
-          <Button
-            onClick={handleCreateUser}
-            className="bg-primary text-white px-4"
-          >
+          <Button onClick={handleCreateUser} className="bg-primary text-white px-4">
             {' '}
             <PlusIcon /> Create User
           </Button>
@@ -100,9 +91,7 @@ const PartnerCreationTable = () => {
         loading={pagination.loading ?? loading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
         totalRecords={pagination.totalRecords}
         filter={{

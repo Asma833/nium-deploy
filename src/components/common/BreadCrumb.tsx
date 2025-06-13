@@ -15,12 +15,7 @@ export default function BreadCrumb({ className }: { className?: string }) {
   const pathSegments = location.pathname.split('/').filter(Boolean);
 
   return (
-    <div
-      className={cn(
-        'flex w-full pb-4 sticky top-[70px] bg-secondary z-2',
-        className
-      )}
-    >
+    <div className={cn('flex w-full pb-4 sticky top-[70px] bg-secondary z-2', className)}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

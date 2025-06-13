@@ -8,10 +8,7 @@ const useUnassignChecker = () => {
 
   const { mutate, isPending, isError, isSuccess } = useMutation({
     mutationFn: async (params: UnassignCheckerParams) => {
-      const response = await axiosInstance.post(
-        '/orders/unassign-checker',
-        params
-      );
+      const response = await axiosInstance.post('/orders/unassign-checker', params);
       return response.data;
     },
     onSuccess: (data) => {

@@ -52,9 +52,7 @@ const useGetTransactionType = (id?: string) => {
   });
 
   // Find the transaction name if ID is provided
-  const transactionType = id
-    ? transactionTypes.find((item) => item.id === id)?.text || null
-    : null;
+  const transactionType = id ? transactionTypes.find((item) => item.id === id)?.text || null : null;
 
   return {
     transactionType,

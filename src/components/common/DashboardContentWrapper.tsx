@@ -3,10 +3,7 @@ import PageTitle from '../layout/titles/PageTitle';
 import { DashboardContentWrapperProps } from '../types/common-components.types';
 import PoweredBy from '../layout/footer/PoweredBy';
 
-const DashboardContentWrapper = ({
-  children,
-  className,
-}: DashboardContentWrapperProps) => {
+const DashboardContentWrapper = ({ children, className }: DashboardContentWrapperProps) => {
   return (
     <div
       className={cn(

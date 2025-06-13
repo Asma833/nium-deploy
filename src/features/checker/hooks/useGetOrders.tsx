@@ -24,8 +24,7 @@ export const useGetOrders = <T = any,>(autoFetch: boolean = true) => {
         console.error('Unauthorized');
       }
 
-      const errorMessage =
-        err instanceof Error ? err.message : 'An unknown error occurred';
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       toast.error('Error Fetching Orders', {
         description: errorMessage,
       });

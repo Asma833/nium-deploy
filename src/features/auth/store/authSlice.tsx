@@ -69,6 +69,5 @@ const persistConfig = {
 
 const persistedAuthReducer = persistReducer(persistConfig, authSlice.reducer);
 
-export const { setCredentials, updateAccessToken, logout, setLoading } =
-  authSlice.actions;
+export const { setCredentials, updateAccessToken, logout, setLoading } = authSlice.actions;
 export default persistedAuthReducer;

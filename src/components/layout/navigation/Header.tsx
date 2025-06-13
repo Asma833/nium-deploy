@@ -19,19 +19,10 @@ import { useActiveMenu } from '@/hooks/useActiveMenu';
 
 const Header: React.FC<HeaderProps> = ({ navItems }) => {
   const navigate = useNavigate();
-  const {
-    activeItem,
-    setActiveItem,
-    activeDropdownItem,
-    setActiveDropdownItem,
-  } = useActiveMenu(navItems);
+  const { activeItem, setActiveItem, activeDropdownItem, setActiveDropdownItem } = useActiveMenu(navItems);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleNavigation = (
-    path: string,
-    itemTitle: string,
-    dropdownTitle?: string
-  ) => {
+  const handleNavigation = (path: string, itemTitle: string, dropdownTitle?: string) => {
     setActiveItem(itemTitle);
     setActiveDropdownItem(dropdownTitle || null);
     setIsMobileMenuOpen(false);
@@ -56,11 +47,7 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                   <NavigationMenuItem key={idx}>
                     {item.dropdown ? (
                       <>
-                        <NavigationMenuTrigger
-                          className={cn(
-                            activeItem === item.title && 'text-primary'
-                          )}
-                        >
+                        <NavigationMenuTrigger className={cn(activeItem === item.title && 'text-primary')}>
                           {item.title}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
@@ -70,20 +57,11 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                                 <NavigationMenuLink
                                   className={cn(
                                     'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground  focus:text-accent-foreground',
-                                    activeDropdownItem === dropItem.title &&
-                                      'bg-accent'
+                                    activeDropdownItem === dropItem.title && 'bg-accent'
                                   )}
-                                  onClick={() =>
-                                    handleNavigation(
-                                      dropItem.path,
-                                      item.title,
-                                      dropItem.title
-                                    )
-                                  }
+                                  onClick={() => handleNavigation(dropItem.path, item.title, dropItem.title)}
                                 >
-                                  <div className="text-sm font-medium leading-none">
-                                    {dropItem.title}
-                                  </div>
+                                  <div className="text-sm font-medium leading-none">{dropItem.title}</div>
                                   {dropItem.description && (
                                     <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                                       {dropItem.description}
@@ -97,13 +75,8 @@ const Header: React.FC<HeaderProps> = ({ navItems }) => {
                       </>
                     ) : (
                       <NavigationMenuLink
-                        className={cn(
-                          navigationMenuTriggerStyle(),
-                          activeItem === item.title && 'text-primary'
-                        )}
-                        onClick={() =>
-                          item.path && handleNavigation(item.path, item.title)
-                        }
+                        className={cn(navigationMenuTriggerStyle(), activeItem === item.title && 'text-primary')}
+                        onClick={() => item.path && handleNavigation(item.path, item.title)}
                       >
                         {item.title}
                       </NavigationMenuLink>

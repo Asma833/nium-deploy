@@ -2,17 +2,11 @@ import { Controller, FieldValues, Path } from 'react-hook-form';
 import { Radio, RadioProps, FormControl } from '@mui/material';
 import { ErrorMessage } from '../ErrorMessage';
 
-type MaterialRadioProps<T extends FieldValues> = Omit<
-  RadioProps,
-  'name' | 'defaultValue'
-> & {
+type MaterialRadioProps<T extends FieldValues> = Omit<RadioProps, 'name' | 'defaultValue'> & {
   name: Path<T>;
 };
 
-export const MaterialRadio = <T extends FieldValues>({
-  name,
-  ...props
-}: MaterialRadioProps<T>) => {
+export const MaterialRadio = <T extends FieldValues>({ name, ...props }: MaterialRadioProps<T>) => {
   return (
     <>
       <Controller

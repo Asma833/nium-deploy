@@ -1,9 +1,5 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import {
-  useMutation,
-  UseMutationResult,
-  UseMutationOptions,
-} from '@tanstack/react-query';
+import { useMutation, UseMutationResult, UseMutationOptions } from '@tanstack/react-query';
 
 type MutationConfig<TData, TVariables> = {
   requestId?: string;
@@ -17,11 +13,7 @@ export const usePostData = <TData, TVariables>({
   endpoint,
   onSuccess = () => {},
   onError = () => {},
-}: MutationConfig<TData, TVariables>): UseMutationResult<
-  TData,
-  Error,
-  TVariables
-> => {
+}: MutationConfig<TData, TVariables>): UseMutationResult<TData, Error, TVariables> => {
   const endpointurl = requestId ? `${endpoint}/${requestId}` : endpoint;
 
   return useMutation<TData, Error, TVariables>({

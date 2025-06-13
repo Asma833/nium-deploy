@@ -1,8 +1,4 @@
-import {
-  QueryKey,
-  useQueryClient,
-  InvalidateQueryFilters,
-} from '@tanstack/react-query';
+import { QueryKey, useQueryClient, InvalidateQueryFilters } from '@tanstack/react-query';
 
 /**
  * Hook for invalidating multiple queries at once using the correct QueryClient instance.
@@ -19,9 +15,7 @@ export const useQueryInvalidator = () => {
     queryKeys: QueryKey[] = [],
     options: Partial<Pick<InvalidateQueryFilters, 'refetchType' | 'exact'>> = {}
   ) => {
-    const defaultOptions: Partial<
-      Pick<InvalidateQueryFilters, 'refetchType' | 'exact'>
-    > = {
+    const defaultOptions: Partial<Pick<InvalidateQueryFilters, 'refetchType' | 'exact'>> = {
       refetchType: 'all',
       exact: false,
       ...options,

@@ -54,10 +54,7 @@ export type FilterMode = 'static' | 'dynamic';
 
 export interface DynamicFilterCallbacks<T = any> {
   onSearch?: (term: string) => Promise<T[]>;
-  onDateRangeChange?: (
-    from: Date | undefined,
-    to: Date | undefined
-  ) => Promise<T[]>;
+  onDateRangeChange?: (from: Date | undefined, to: Date | undefined) => Promise<T[]>;
   onStatusChange?: (status: string) => Promise<T[]>;
   onSelectChange?: (id: string, value: string) => Promise<T[]>;
   onFilterApply?: (filters: SetFilters) => Promise<T[]>;

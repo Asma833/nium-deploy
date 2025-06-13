@@ -29,11 +29,7 @@ export const useProductOptions = () => {
   });
 
   if (error) {
-    toast.error(
-      error instanceof Error
-        ? error.message
-        : 'Failed to fetch product options.'
-    );
+    toast.error(error instanceof Error ? error.message : 'Failed to fetch product options.');
   }
 
   return { productOptions: data || [], isLoading, error };

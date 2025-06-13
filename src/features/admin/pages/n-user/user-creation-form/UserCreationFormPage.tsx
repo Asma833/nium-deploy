@@ -26,7 +26,7 @@ const UserCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
 
-  const { mutate: updateUser } = useUpdateAPI();
+  const { mutate: updateUser } = useUpdateAPI({ role: 'checker' });
   const { mutate: createUser, isLoading } = useCreateUser(
     { role: 'checker' },
     {
@@ -81,9 +81,7 @@ const UserCreationFormPage = () => {
     <>
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-2 rounded-lg w-4/5 mr-auto bg-transparent">
-          <h2 className="text-xl font-bold mb-4">
-            {isEditMode ? 'Edit User' : 'Create User'}
-          </h2>
+          <h2 className="text-xl font-bold mb-4">{isEditMode ? 'Edit User' : 'Create User'}</h2>
           <Spacer>
             <FormFieldRow className="mb-4">
               <FieldWrapper>
@@ -98,9 +96,7 @@ const UserCreationFormPage = () => {
                 <div>
                   {getController({
                     ...userFormConfig.fields.businessType,
-                    label:
-                      userFormConfig.fields.businessType.label ||
-                      'Business Type',
+                    label: userFormConfig.fields.businessType.label || 'Business Type',
                     name: 'businessType',
                     control,
                     errors,
@@ -112,9 +108,7 @@ const UserCreationFormPage = () => {
               {Object.entries(userFormConfig.fields)
                 .slice(2, 5)
                 .map(([name, field]) => (
-                  <FieldWrapper key={name}>
-                    {getController({ ...field, name, control, errors })}
-                  </FieldWrapper>
+                  <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>
                 ))}
             </FormFieldRow>
           </Spacer>

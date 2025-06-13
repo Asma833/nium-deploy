@@ -9,18 +9,14 @@ import {
 } from '../types/partner.types';
 
 export const partnerApi = {
-  PartnerCreation: async (
-    PartnerData: PartnerRequest
-  ): Promise<PartnerCreationResponse> => {
+  PartnerCreation: async (PartnerData: PartnerRequest): Promise<PartnerCreationResponse> => {
     const { data } = await axiosInstance.post<PartnerCreationResponse>(
       getEndpoint('NUSERS.PARTNERS.CREATE'),
       PartnerData
     );
     return data;
   },
-  PartnerStatusUpdate: async (
-    PartnerData: PartnerCreationRequest
-  ): Promise<PartnerUpdateRequest> => {
+  PartnerStatusUpdate: async (PartnerData: PartnerCreationRequest): Promise<PartnerUpdateRequest> => {
     const { hashed_key, ...updateData } = PartnerData;
 
     const { data } = await axiosInstance.put<PartnerUpdateRequest>(
@@ -30,9 +26,7 @@ export const partnerApi = {
 
     return data;
   },
-  PartnerUpdate: async (
-    PartnerData: PartnerCreationRequest
-  ): Promise<PartnerUpdateRequest> => {
+  PartnerUpdate: async (PartnerData: PartnerCreationRequest): Promise<PartnerUpdateRequest> => {
     const { hashed_key, ...updateData } = PartnerData;
 
     const { data } = await axiosInstance.put<PartnerUpdateRequest>(
@@ -45,9 +39,7 @@ export const partnerApi = {
 
   getProducts: async () => {
     try {
-      const { data } = await axiosInstance.get<ProductResponse[]>(
-        getEndpoint('NUSERS.PARTNERS.PRODUCTS')
-      );
+      const { data } = await axiosInstance.get<ProductResponse[]>(getEndpoint('NUSERS.PARTNERS.PRODUCTS'));
       return data || [];
     } catch (error) {
       console.error('Error fetching products:', error);

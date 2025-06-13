@@ -15,9 +15,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onCheckedChange }) => {
 
   return (
     <>
-      <span className="text-sm font-medium">
-        {isChecked ? 'Active' : 'Inactive'}
-      </span>
+      <span className="text-sm font-medium">{isChecked ? 'Active' : 'Inactive'}</span>
       <button
         className={`relative w-12 h-6 flex items-center rounded-full transition-all 
       ${isChecked ? 'bg-primary' : 'bg-gray-300'}`}

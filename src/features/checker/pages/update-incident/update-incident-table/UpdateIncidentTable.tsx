@@ -22,17 +22,12 @@ const UpdateIncidentCreationTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { getUserHashedKey } = useCurrentUser();
   const currentUserHashedKey = getUserHashedKey();
-  const { options: purposeTypeOptions } = useDynamicOptions(
-    API.PURPOSE.GET_PURPOSES
-  );
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
-  const { options: transactionTypeOptions } = useDynamicOptions(
-    API.TRANSACTION.GET_TRANSACTIONS
-  );
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
 
   // Call the hook at the top level of the component
-  const { handleUnassign: unassignChecker, isPending: isUnassignPending } =
-    useUnassignChecker();
+  const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();
 
   // Fetch data using the updated hook
   // const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
@@ -70,29 +65,18 @@ const UpdateIncidentCreationTable = () => {
     }
   };
 
-  const columns = GetTransactionTableColumns(
-    openModal,
-    handleUnassign,
-    isUnassignPending
-  );
-  const tableData =
-    data && data.orders && data.orders.length > 0 ? data.orders : [];
+  const columns = GetTransactionTableColumns(openModal, handleUnassign, isUnassignPending);
+  const tableData = data && data.orders && data.orders.length > 0 ? data.orders : [];
 
   return (
     <div className="dynamic-table-wrap">
       <div
-        className={cn(
-          'mb-4 flex items-center',
-          !filterApi.loading ? 'hidden' : '',
-          !filterApi.error ? 'hidden' : ''
-        )}
+        className={cn('mb-4 flex items-center', !filterApi.loading ? 'hidden' : '', !filterApi.error ? 'hidden' : '')}
       >
         {(filterApi.loading || pagination.loading || isLoading) && (
           <span className="text-blue-500">Loading data...</span>
         )}
-        {(filterApi.error || pagination.error || error) && (
-          <span className="text-red-500">Error loading data</span>
-        )}
+        {(filterApi.error || pagination.error || error) && <span className="text-red-500">Error loading data</span>}
       </div>{' '}
       <DynamicTable
         columns={columns}
@@ -102,9 +86,7 @@ const UpdateIncidentCreationTable = () => {
         loading={pagination.loading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
         totalRecords={pagination.totalRecords}
         refreshAction={{

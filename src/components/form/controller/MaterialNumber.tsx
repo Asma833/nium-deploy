@@ -6,11 +6,15 @@ interface MaterialNumberProps {
   label: string;
   baseStyle?: any;
   className?: string;
+  disabled?: boolean;
+  forcedValue?: string | number;
 }
 
 export const MaterialNumber = ({
   name,
   label,
+  disabled = false,
+  forcedValue,
   baseStyle,
   className,
 }: MaterialNumberProps) => {
@@ -21,18 +25,16 @@ export const MaterialNumber = ({
       name={name}
       control={control}
       defaultValue=""
-      render={({
-        field: { value, onChange, ...field },
-        fieldState: { error },
-      }) => (
+      render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
-          value={value ?? ''}
+          value={(forcedValue ? forcedValue : value) || ''}
           onChange={(e) => {
             const val = e.target.value;
             onChange(val === '' ? '' : val);
           }}
           type="number"
+          disabled={disabled}
           label={label}
           error={!!error}
           helperText={error?.message}

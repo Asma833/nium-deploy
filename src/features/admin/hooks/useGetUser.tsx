@@ -3,11 +3,7 @@ import axiosInstance from '@/core/services/axios/axiosInstance';
 import { getEndpoint } from '@/core/constant/apis';
 import { toast } from 'sonner';
 
-export const useGetUserApi = (
-  endpointKey: string,
-  params?: Record<string, any>,
-  autoFetch: boolean = true
-) => {
+export const useGetUserApi = (endpointKey: string, params?: Record<string, any>, autoFetch: boolean = true) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
@@ -24,8 +20,7 @@ export const useGetUserApi = (
         });
         setData(data);
       } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'An unknown error occurred';
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
         toast.error('Error Fetching Data', {
           description: errorMessage,
         });

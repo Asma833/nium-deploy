@@ -7,29 +7,17 @@ interface ImageProps extends React.ComponentProps<typeof Img> {
   loaderClassName?: string;
 }
 
-const Image = ({
-  wrapperClassName,
-  loaderClassName,
-  className,
-  ...props
-}: ImageProps) => {
+const Image = ({ wrapperClassName, loaderClassName, className, ...props }: ImageProps) => {
   return (
     <div className={cn('relative', wrapperClassName)}>
       <Img
         loader={
-          <div
-            className={cn(
-              'flex items-center justify-center w-full h-full',
-              loaderClassName
-            )}
-          >
+          <div className={cn('flex items-center justify-center w-full h-full', loaderClassName)}>
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
         }
         unloader={
-          <div className="flex items-center justify-center w-full h-full text-destructive">
-            Failed to load image
-          </div>
+          <div className="flex items-center justify-center w-full h-full text-destructive">Failed to load image</div>
         }
         className={cn(className)}
         {...props}

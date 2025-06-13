@@ -34,11 +34,7 @@ export const MaterialFile = ({ name, label, className }: MaterialFileProps) => {
               }}
             />
           </Button>
-          {error && (
-            <p className="text-[hsl(var(--destructive))] text-sm mt-1">
-              {error.message}
-            </p>
-          )}
+          {error && <p className="text-[hsl(var(--destructive))] text-sm mt-1">{error.message}</p>}
         </div>
       )}
     />

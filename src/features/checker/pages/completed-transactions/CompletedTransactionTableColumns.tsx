@@ -4,16 +4,12 @@ import VKycStatusCell from '../../components/table/VKycStatusCell';
 import EsignStatusCell from '../../components/table/EsignStatusCell';
 import NiumOrderID from '../../components/table/NiumOrderIdCell';
 
-export const GetTransactionTableColumns = (
-  openModal: (value: string) => void
-) => [
+export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
     name: 'Nium ID',
-    cell: (_: unknown, rowData: any) => (
-      <NiumOrderID rowData={rowData} openModal={openModal} />
-    ),
+    cell: (_: unknown, rowData: any) => <NiumOrderID rowData={rowData} openModal={openModal} />,
     className: 'min-w-0',
   },
   {
@@ -61,14 +57,9 @@ export const GetTransactionTableColumns = (
     id: 'e_sign_customer_completion_date',
     name: 'E-Sign Status Completion Date',
     className: 'min-w-0',
-    cell: (
-      _: unknown,
-      rowData: { e_sign_customer_completion_date?: string }
-    ) => (
+    cell: (_: unknown, rowData: { e_sign_customer_completion_date?: string }) => (
       <span>
-        {rowData.e_sign_customer_completion_date
-          ? formatDate(rowData.e_sign_customer_completion_date)
-          : null}
+        {rowData.e_sign_customer_completion_date ? formatDate(rowData.e_sign_customer_completion_date) : null}
       </span>
     ),
   },
@@ -84,15 +75,8 @@ export const GetTransactionTableColumns = (
     id: 'v_kyc_customer_completion_date',
     name: 'VKYC Completion Date',
     className: 'min-w-0',
-    cell: (
-      _: unknown,
-      rowData: { v_kyc_customer_completion_date?: string }
-    ) => (
-      <span>
-        {rowData.v_kyc_customer_completion_date
-          ? formatDate(rowData.v_kyc_customer_completion_date)
-          : null}
-      </span>
+    cell: (_: unknown, rowData: { v_kyc_customer_completion_date?: string }) => (
+      <span>{rowData.v_kyc_customer_completion_date ? formatDate(rowData.v_kyc_customer_completion_date) : null}</span>
     ),
   },
   {
@@ -100,9 +84,7 @@ export const GetTransactionTableColumns = (
     id: 'incident_status',
     name: 'Incident Status',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: any) => (
-      <IncidentStatusCell rowData={rowData} />
-    ),
+    cell: (_: unknown, rowData: any) => <IncidentStatusCell rowData={rowData} />,
   },
   {
     key: 'incident_completion_date',
@@ -110,11 +92,7 @@ export const GetTransactionTableColumns = (
     name: 'Incident Completion Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { incident_completion_date?: string }) => (
-      <span>
-        {rowData.incident_completion_date
-          ? formatDate(rowData.incident_completion_date)
-          : null}
-      </span>
+      <span>{rowData.incident_completion_date ? formatDate(rowData.incident_completion_date) : null}</span>
     ),
   },
   {

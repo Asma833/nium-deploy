@@ -7,11 +7,7 @@ interface UseTakeRequestProps {
   onError?: (error: any) => void;
 }
 
-export function useTakeRequest({
-  endpoint,
-  onSuccess,
-  onError,
-}: UseTakeRequestProps) {
+export function useTakeRequest({ endpoint, onSuccess, onError }: UseTakeRequestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
