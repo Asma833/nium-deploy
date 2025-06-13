@@ -1,10 +1,8 @@
-import CreateTransactionForm from '../../components/transaction-form/CreateTransactionForm';
+import TransactionForm from '../../components/transaction-form/TransactionForm';
 import { TransactionMode } from '../../components/transaction-form/transaction-form.types';
 
-type Props = {};
-
-const CreateTransaction = (props: Props) => {
-  return <CreateTransactionForm mode={TransactionMode.CREATE} />;
+const CreateTransaction = () => {
+  return <TransactionForm mode={TransactionMode.CREATE} />;
 };
 
 export default CreateTransaction;

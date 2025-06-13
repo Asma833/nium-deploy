@@ -9,3 +9,11 @@ export type CreateTransactionRequest = {
   customer_phone: string;
   customer_pan: string;
 };
+
+export type TransactionCreatedDialogProps = {
+  isDialogOpen: boolean;
+  setIsDialogOpen: (open: boolean) => void;
+  createdTransactionId: string;
+  niumForexOrderId: string;
+  isSubmitting?: boolean;
+};

@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -15,22 +14,22 @@ import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import useGetPurposes from '@/hooks/useGetPurposes';
-import { CreateTransactionFormProps, TransactionMode } from './transaction-form.types';
+import { TransactionFormProps, TransactionMode } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
-import RejectionSummary from '@/components/common/RejectionSummary';
-import FromSectionTitle from '@/components/common/FromSectionTitle';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
+import { useUpdateOrder } from '../../hooks/useUpdateOrder';
 import { transformFormDataToApiRequest } from '../../utils/transformFormData';
 import { cn } from '@/utils/cn';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { TransactionOrderData } from '@/types/common.type';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
+import DeleteConfirmationDialog from '../../../../components/common/DeleteConfirmationDialog';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
-const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
+const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [searchParams] = useSearchParams();
   const partnerOrderIdParam = searchParams.get('partner-order-id') || '';
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -43,6 +42,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   const { transactionTypes } = useGetTransactionType();
   const { purposeTypes } = useGetPurposes();
   const createTransactionMutation = useCreateTransaction();
+  const updateOrderMutation = useUpdateOrder();
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const typedAllTransactionsData = allTransactionsData as TransactionOrderData[];
   // extract the incident checker comments from the selected transaction data
@@ -76,7 +76,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
     control,
     getValues,
     reset,
-    watch,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
@@ -165,6 +164,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
   // Determine the mode of the form
   const isUpdatePage = mode === TransactionMode.UPDATE;
   const isViewPage = mode === TransactionMode.VIEW;
+  const isEditPage = mode === TransactionMode.EDIT;
 
   return (
     <Fragment>
@@ -194,7 +194,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                     errorMessage = (errors as any)?.[field.name]?.message;
                   } // For view mode, get value from seletedRowTransactionData
                   let value = undefined;
-                  if (isViewPage && seletedRowTransactionData) {
+                  if ((isViewPage || isEditPage) && seletedRowTransactionData) {
                     // Map field.name to the corresponding property in seletedRowTransactionData
                     // Based on TransactionOrderData type structure
                     const fieldMap: Record<string, string> = {
@@ -207,10 +207,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                       'applicantDetails.transactionType': 'transaction_type_name',
                       'applicantDetails.purposeType': 'purpose_type_name',
                     };
-                    console.log('Field Map:', fieldMap);
                     const dataKey = fieldMap[field.name];
-                    console.log('dataKey:', dataKey);
-                    console.log('dataKey:typeof', typeof dataKey);
 
                     if (
                       dataKey &&
@@ -229,9 +226,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                     if (dataKey === 'purpose_type_name') {
                       value = seletedRowTransactionData.purpose_type_name?.purpose_name || '';
                     }
-
-                    // Debug logging
-                    console.log(`Field: ${field.name}, DataKey: ${dataKey}, Value: ${value}, Type: ${typeof value}`);
                   }
 
                   return (
@@ -240,8 +234,11 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                         ...field,
                         control,
                         errors,
-                        disabled: isUpdatePage || isViewPage,
-                        ...(isViewPage && value !== undefined ? { forcedValue: value } : {}),
+                        disabled:
+                          isUpdatePage ||
+                          isViewPage ||
+                          (isEditPage && field.name === 'applicantDetails.partnerOrderId'),
+                        ...(value !== undefined ? { forcedValue: value } : {}),
                       })}
                     </FieldWrapper>
                   );
@@ -253,7 +250,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
         {!isUpdatePage && !isViewPage && (
           <FormFieldRow>
             <Button className="min-w-60" onClick={handleFormSubmit}>
-              Generate Order
+              {isEditPage ? 'Update Order' : 'Generate Order'}
             </Button>
           </FormFieldRow>
         )}
@@ -265,8 +262,8 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
           </FormFieldRow>
         )}
 
-        {(showUploadSection && partnerOrderId) || isUpdatePage || isViewPage ? (
-          <FormFieldRow>
+        {(showUploadSection && partnerOrderId) || isUpdatePage || !isViewPage ? (
+          <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
               onESignGenerated={() => {
@@ -276,38 +273,14 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
           </FormFieldRow>
         ) : null}
       </FormProvider>
-      <DialogWrapper
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-        renderContent={
-          <div className="flex flex-col justify-center items-center gap-4 text-lg min-h-[200px] text-gray-700">
-            <Check className="text-primary font-extrabold w-12 h-12 border rounded-full p-1" />
-            <div className="text-center space-y-2">
-              <div>
-                <span className="text-gray-600">Partner Order ID: </span>
-                <span className="font-bold text-dark">{createdTransactionId}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Nium Forex Order ID: </span>
-                <span className="font-bold text-dark">{niumForexOrderId}</span>
-              </div>
-              <div className="text-green-600 font-medium mt-4">Order created successfully!</div>
-            </div>
-          </div>
-        }
-        showFooter={false}
-        showHeader={false}
-        isLoading={isSubmitting}
-        iconType="default"
-        triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
-        className="sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto"
-        onSave={handleSubmit((data) => {
-          reset(transactionFormDefaults);
-        })}
-        footerBtnText="Submit"
+      <TransactionCreatedDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        createdTransactionId={createdTransactionId}
+        niumForexOrderId={niumForexOrderId}
       />
     </Fragment>
   );
 };
 
-export default CreateTransactionForm;
+export default TransactionForm;

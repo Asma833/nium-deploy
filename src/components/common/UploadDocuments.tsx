@@ -171,7 +171,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       <div className="w-full flex items-start flex-col">
         <FormFieldRow className="w-full">
           <FromSectionTitle>Upload Document</FromSectionTitle>

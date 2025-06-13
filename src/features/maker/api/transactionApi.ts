@@ -1,5 +1,6 @@
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { CreateTransactionRequest } from '../types/create-transaction.types';
+import { UpdateOrderRequest } from '../types/update-order.types';
 import { API, HEADER_KEYS } from '@/core/constant/apis';
 
 export const createTransaction = (data: CreateTransactionRequest) => {
@@ -15,6 +16,15 @@ export const createTransaction = (data: CreateTransactionRequest) => {
 export const deleteTransaction = (orderId: string) => {
   return axiosInstance.delete(API.ORDERS.DELETE(orderId), {
     headers: {
+      accept: '*/*',
+    },
+  });
+};
+
+export const updateOrder = (partnerOrderId: string, data: UpdateOrderRequest) => {
+  return axiosInstance.put(API.ORDERS.UPDATE(partnerOrderId), data, {
+    headers: {
+      'Content-Type': 'application/json',
       accept: '*/*',
     },
   });

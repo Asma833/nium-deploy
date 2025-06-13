@@ -3,9 +3,10 @@ import { ROUTES } from '../../constant/routePaths';
 
 export const makerComponents = {
   CreateTransaction: lazy(() => import('@/features/maker/pages/create-transaction/CreateTransaction')),
-  Update: lazy(() => import('@/features/maker/pages/update-transaction/UpdateTransaction')),
+  Update: lazy(() => import('@/features/maker/pages/update-doc-transaction/UpdateDocTransaction')),
   ViewTransaction: lazy(() => import('@/features/maker/pages/view-transaction/ViewTransaction')),
-  ViewStatus: lazy(() => import('@/features/maker/pages/view-status/VIewStatus')),
+  ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatus')),
+  EditTransaction: lazy(() => import('@/features/maker/pages/edit-transaction/EditTransaction')),
 };
 export const makerRoutes = [
   {
@@ -29,6 +30,12 @@ export const makerRoutes = [
   {
     path: ROUTES.MAKER.VIEW_TRANSACTION,
     element: makerComponents.ViewTransaction,
+    roles: ['maker'],
+    permission: '',
+  },
+  {
+    path: ROUTES.MAKER.EDIT_TRANSACTION,
+    element: makerComponents.EditTransaction,
     roles: ['maker'],
     permission: '',
   },

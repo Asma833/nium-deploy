@@ -47,7 +47,7 @@ export type TransactionOrderData = {
   customer_pan?: string;
   order_status?: string;
   e_sign_status?: string;
-  e_sign_link?: string;
+  e_sign_link?: string | null;
   e_sign_link_status?: string;
   e_sign_link_doc_id?: string;
   e_sign_link_request_id?: string;
@@ -83,7 +83,7 @@ export type TransactionOrderData = {
     mimeType?: string;
     created_at?: string;
     documentIds?: string[];
-  };
+  } | null;
   created_at?: string;
   esigns?: {
     id?: string;

@@ -42,6 +42,7 @@ export const ROUTES = {
     CREATE_TRANSACTION: '/create-transaction',
     UPDATE_TRANSACTION: '/update-transaction',
     VIEW_TRANSACTION: '/view-transaction',
+    EDIT_TRANSACTION: '/edit-transaction',
     VIEW_STATUS: '/view-status',
   },
 } as const;
