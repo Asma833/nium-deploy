@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
-import ViewButton from '@/components/common/ViewButton';
 import TooltipActionButton from '@/components/common/TooltipActionButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { ArrowUpFromLine, Edit, RotateCcw, Upload, Trash2, Eye } from 'lucide-react';
-import { TransactionOrderData } from '@/types/common.type';
+import { Edit, Upload, Trash2, Eye } from 'lucide-react';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
   handleRegenerateVkycLink,
-  openModal,
-  handleEdit,
   handleDelete,
   isSendVkycLinkLoading = false,
   isSendEsignLinkLoading = false,
@@ -20,8 +16,6 @@ export const ViewStatusTableColumns = ({
 }: {
   handleRegenerateEsignLink: (rowData: any) => void;
   handleRegenerateVkycLink: (rowData: any) => void;
-  openModal: (rowData: any) => void;
-  handleEdit: (rowData: any) => void;
   handleDelete: (rowData: any) => void;
   isSendEsignLinkLoading?: boolean;
   isSendVkycLinkLoading?: boolean;
@@ -207,7 +201,7 @@ export const ViewStatusTableColumns = ({
             icon={<Upload size={16} />}
             tooltipText="Upload Document"
             variant="upload"
-            disabled={true}
+            disabled={rowData.merged_document !== null}
           />
           <TooltipActionButton
             onClick={() => handleDelete(rowData)}

@@ -20,7 +20,7 @@ const ViewButton: React.FC<ViewButtonProps> = ({
   disabled = false,
   buttonType,
   buttonIconType,
-  className
+  className,
 }) => {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,7 +44,7 @@ const ViewButton: React.FC<ViewButtonProps> = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-         <Button
+        <Button
           onClick={handleClick}
           variant="outline"
           size="sm"
@@ -58,9 +58,7 @@ const ViewButton: React.FC<ViewButtonProps> = ({
           {renderIcon()}
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-secondary text-foreground">
-        {tooltipText}
-      </TooltipContent>
+      <TooltipContent className="bg-secondary text-foreground">{tooltipText}</TooltipContent>
     </Tooltip>
   );
 };

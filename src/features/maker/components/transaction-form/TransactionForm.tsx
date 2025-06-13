@@ -220,11 +220,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             <Spacer>
               <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                  // Get the correct error path for each field
-                  const errorPath = field.name.split('.');
-                  const fieldError = errorPath.reduce((acc: any, path: string) => acc?.[path], errors);
-                  console.log('fieldError:', fieldError?.[key]);
-
                   // Safely access nested error messages for applicantDetails fields
                   let errorMessage: string | undefined = undefined;
                   if (field.name.startsWith('applicantDetails.')) {
@@ -275,14 +270,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </Button>
           </FormFieldRow>
         )}
-        {isViewPage && (
+        {isViewPage && checkerComments && (
           <FormFieldRow className="mb-4 w-full">
             <div>
               Comment: <span className="text-red-500">{checkerComments}</span>
             </div>
           </FormFieldRow>
         )}
-        {(showUploadSection && partnerOrderId) || isUpdatePage || !isViewPage ? (
+        {(showUploadSection && partnerOrderId) || isUpdatePage || isViewPage ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}

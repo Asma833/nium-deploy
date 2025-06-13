@@ -269,8 +269,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   } = useGetCheckerOrdersByPartnerId(partnerOrderId);
 
   const { merged_document, esigns, resources_documents_files, resources_videos_files } = order || {};
-  console.log('merged_document:', merged_document);
-
   const mergeDocument = merged_document?.url || rowData?.merged_document?.url || '';
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
   const vkycDocumentFiles = resources_documents_files || {};

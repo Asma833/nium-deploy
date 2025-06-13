@@ -311,11 +311,7 @@ const TableSearchFilter = ({
                   onValueChange={(value) => handleSelectChange(select.id, value)}
                 >
                   <SelectTrigger className="min-w-fit w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
-                    <SelectValue
-                      placeholder={
-                        select.placeholder || `Select ${select.label}`
-                      }
-                    />
+                    <SelectValue placeholder={select.placeholder || `Select ${select.label}`} />
                   </SelectTrigger>
                   <SelectContent>
                     {select.options.map((option) => (

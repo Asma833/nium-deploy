@@ -113,17 +113,7 @@ const ViewStatusTable: React.FC = () => {
     dataPath: 'transactions',
     totalRecordsPath: 'totalRecords',
   });
-  const openModal = (rowData: any) => {
-    setSelectedRowData(rowData);
-    setIsModalOpen(true);
-  };
 
-  const handleEdit = (rowData: any) => {
-    // Handle edit action - you can customize this based on your requirements
-    console.log('Edit clicked for:', rowData);
-    // For example, you might want to navigate to an edit page or open an edit modal
-    // navigate(`/edit-transaction/${rowData.nium_order_id}`);
-  };
   const handleDelete = (rowData: any) => {
     setItemToDelete(rowData);
     setIsDeleteDialogOpen(true);
@@ -154,8 +144,6 @@ const ViewStatusTable: React.FC = () => {
 
   // Table columns
   const tableColumns = ViewStatusTableColumns({
-    openModal,
-    handleEdit,
     handleDelete,
     isSendEsignLinkLoading,
     isSendVkycLinkLoading,

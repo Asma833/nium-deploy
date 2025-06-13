@@ -184,25 +184,18 @@ export function DynamicTable<T extends Record<string, any>>({
           return true;
         })
       : sortedData; // In dynamic mode, we don't filter locally
-  const {
-    paginatedData,
-    totalPages,
-    currentPage,
-    pageSize,
-    setPageSize,
-    setCurrentPage,
-  } = useTablePagination(filteredData, initialPageSize, pageSizeOption);
+  const { paginatedData, totalPages, currentPage, pageSize, setPageSize, setCurrentPage } = useTablePagination(
+    filteredData,
+    initialPageSize,
+    pageSizeOption
+  );
 
   // Track previous filtered data to avoid infinite loops
   const prevFilteredDataRef = useRef<T[]>([]);
 
   // Notify parent component when filtered data changes
   useEffect(() => {
-    if (
-      onFilteredDataChange &&
-      JSON.stringify(filteredData) !==
-        JSON.stringify(prevFilteredDataRef.current)
-    ) {
+    if (onFilteredDataChange && JSON.stringify(filteredData) !== JSON.stringify(prevFilteredDataRef.current)) {
       prevFilteredDataRef.current = filteredData;
       onFilteredDataChange(filteredData);
     }
