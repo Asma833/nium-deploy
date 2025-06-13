@@ -9,6 +9,8 @@ const adminComponents = {
   PartnerCreation: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
   UpdatePartner: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
   Maker: lazy(() => import('@/features/admin/pages/maker/MakerTablePage')),
+  CreateMaker: lazy(() => import('@/features/admin/pages/maker/maker-creation/MakerCreationPage')),
+  UpdateMaker: lazy(() => import('@/features/admin/pages/maker/maker-creation/MakerCreationPage')),
   ViewAll: lazy(() => import('@/features/admin/pages/view-all/view-table/ViewAllTablePage')),
 };
 
@@ -37,9 +39,21 @@ export const adminRoutes = [
     roles: ['admin'],
     permission: '',
   },
-   {
+  {
     path: ROUTES.ADMIN.MAKER,
     element: adminComponents.Maker,
+    roles: ['admin'],
+    permission: '',
+  },
+  {
+    path: ROUTES.ADMIN.CREATE_MAKER,
+    element: adminComponents.CreateMaker,
+    roles: ['admin'],
+    permission: '',
+  },
+  {
+    path: ROUTES.ADMIN.UPDATE_MAKER,
+    element: adminComponents.UpdateMaker,
     roles: ['admin'],
     permission: '',
   },

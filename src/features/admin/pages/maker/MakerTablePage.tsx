@@ -20,38 +20,30 @@ const MakerTablePage = () => {
   const {
     data,
     isLoading: userLoading,
-    error: userError
+    error: userError,
   } = useGetData<User[]>({
     endpoint: API.NUSERS.USER.LIST,
     queryKey: queryKeys.user.allUsers,
     dataPath: '',
   });
 
-  // Transform data if needed
+  // Transform and filter data
   const users = React.useMemo(() => {
     if (!data) return [];
 
-    return data && typeof data === 'object' && !Array.isArray(data)
-      ? (Object.values(data) as Record<string, any>[])
-      : Array.isArray(data)
-        ? (data as Record<string, any>[])
-        : [];
+    const normalizedData =
+      typeof data === 'object' && !Array.isArray(data)
+        ? (Object.values(data) as Record<string, any>[])
+        : Array.isArray(data)
+          ? (data as Record<string, any>[])
+          : [];
+
+    return normalizedData.filter((user) => user?.role?.name?.toLowerCase() === 'maker');
   }, [data]);
 
-  const handleAddNewUser = () => {
-    navigate('/admin/makers/create');
-  };
-
-
   return (
-     <TableTabsLayout tabs={makerTabs}>
-    <NuserCreationTable
-      userData={users}
-      userLoading={userLoading}
-      userError={!!userError}
-     
-      disableColumns={[]}
-    />
+    <TableTabsLayout tabs={makerTabs}>
+      <NuserCreationTable role="maker" userData={users} userLoading={false} userError={false} disableColumns={[]} />
     </TableTabsLayout>
   );
 };

@@ -13,11 +13,16 @@ import { useUpdateAPI } from '@/features/admin/hooks/useUserUpdate';
 import { useProductOptions } from '@/features/admin/hooks/useProductOptions';
 import { UserFormData } from '@/features/admin/types/user.types';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { userFormConfig } from './user-form.config';
-import { userSchema } from './user-form.schema';
 import { useCreateUser } from '@/features/admin/hooks/useCreateUser';
 
-const UserCreationFormPage = () => {
+interface UserCreationFormPageProps {
+  formConfig: any;
+  schema: any;
+  role: string;
+  title?: string;
+}
+
+const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationFormPageProps) => {
   const { productOptions } = useProductOptions();
   const { id } = useParams();
   const { getBusinessType } = useCurrentUser();
@@ -25,18 +30,20 @@ const UserCreationFormPage = () => {
   const { setTitle } = usePageTitle();
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
+  const pageTitle = title || (isEditMode ? `Edit ${role}` : `Create ${role}`);
 
-  const { mutate: updateUser } = useUpdateAPI();
+  const { mutate: updateUser } = useUpdateAPI({ role });
   const { mutate: createUser, isLoading } = useCreateUser(
-    { role: 'checker' },
+    { role: role.toLowerCase() },
     {
       onUserCreateSuccess: () => {
         reset({});
       },
     }
   );
+
   const methods = useForm({
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       email: '',
       password: '',
@@ -53,8 +60,8 @@ const UserCreationFormPage = () => {
   } = methods;
 
   useEffect(() => {
-    setTitle(isEditMode ? 'Edit User' : 'Create User');
-  }, [setTitle]);
+    setTitle(pageTitle);
+  }, [setTitle, pageTitle]);
 
   useEffect(() => {
     if (selectedRow && Object.keys(selectedRow).length > 0) {
@@ -81,12 +88,12 @@ const UserCreationFormPage = () => {
     <>
       <FormProvider methods={methods}>
         <FormContentWrapper className="p-2 rounded-lg w-4/5 mr-auto bg-transparent">
-          <h2 className="text-xl font-bold mb-4">{isEditMode ? 'Edit User' : 'Create User'}</h2>
+          <h2 className="text-xl font-bold mb-4">{pageTitle}</h2>
           <Spacer>
             <FormFieldRow className="mb-4">
               <FieldWrapper>
                 {getController({
-                  ...userFormConfig.fields.email,
+                  ...formConfig.fields.email,
                   name: 'email',
                   control,
                   errors,
@@ -95,8 +102,8 @@ const UserCreationFormPage = () => {
               {/* <FieldWrapper>
                 <div>
                   {getController({
-                    ...userFormConfig.fields.businessType,
-                    label: userFormConfig.fields.businessType.label || 'Business Type',
+                    ...formConfig.fields.businessType,
+                    label: formConfig.fields.businessType.label || 'Business Type',
                     name: 'businessType',
                     control,
                     errors,
@@ -105,13 +112,21 @@ const UserCreationFormPage = () => {
               </FieldWrapper> */}
             </FormFieldRow>
             <FormFieldRow className="mb-4">
-              {Object.entries(userFormConfig.fields)
+              {Object.entries(formConfig.fields)
                 .slice(2, 5)
                 .map(([name, field]) => (
-                  <FieldWrapper key={name}>{getController({ ...field, name, control, errors })}</FieldWrapper>
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
                 ))}
             </FormFieldRow>
           </Spacer>
+
           <div className="flex justify-start space-x-2 mt-4">
             <button
               type="submit"

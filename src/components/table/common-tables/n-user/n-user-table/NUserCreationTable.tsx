@@ -12,10 +12,12 @@ interface NUserCreationTableProps {
   userLoading: boolean;
   userError: boolean;
   disableColumns?: string[];
+  role: string;
 }
 
 const NuserCreationTable: React.FC<NUserCreationTableProps> = ({
   userData,
+  role,
   userLoading,
   disableColumns = [],
 }) => {
@@ -37,32 +39,27 @@ const NuserCreationTable: React.FC<NUserCreationTableProps> = ({
   const handleNavigate = (path: string, rowData: string) => {
     navigate(path, { state: { selectedRow: rowData } });
   };
-  
+
   const filterApi = useFilterApi({
     endpoint: API.NUSERS.USER.LIST,
     baseQueryParams: {},
   });
-  
-  const columns = GetUserTableColumns(handleStatusChange, handleNavigate);
-  
+
+  const columns = GetUserTableColumns(handleStatusChange, handleNavigate, role);
+
   // Filter columns if disableColumns is provided
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));
-  
+
   return (
-   
-      <div className="dynamic-table-wrap">
-        <div className="flex flex-col">
-          <div
-            className={cn(
-              'mb-4 flex items-center',
-              !filterApi.loading ? 'hidden' : '',
-              !filterApi.error ? 'hidden' : ''
-            )}
-          >
-            {filterApi.loading && <span className="text-blue-500">Loading data...</span>}
-            {filterApi.error && <span className="text-red-500">Error loading data</span>}
-          </div>
+    <div className="dynamic-table-wrap">
+      <div className="flex flex-col">
+        <div
+          className={cn('mb-4 flex items-center', !filterApi.loading ? 'hidden' : '', !filterApi.error ? 'hidden' : '')}
+        >
+          {filterApi.loading && <span className="text-blue-500">Loading data...</span>}
+          {filterApi.error && <span className="text-red-500">Error loading data</span>}
         </div>
+      </div>
       <DynamicTable
         columns={tableColumns}
         data={userData || []}
@@ -79,7 +76,6 @@ const NuserCreationTable: React.FC<NUserCreationTableProps> = ({
         }}
       />
     </div>
-   
   );
 };
 

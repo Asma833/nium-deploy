@@ -26,7 +26,7 @@ const UserCreationFormPage = () => {
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
 
-  const { mutate: updateUser } = useUpdateAPI();
+  const { mutate: updateUser } = useUpdateAPI({ role: 'checker' });
   const { mutate: createUser, isLoading } = useCreateUser(
     { role: 'checker' },
     {

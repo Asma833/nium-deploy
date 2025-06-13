@@ -18,7 +18,8 @@ export const useCreateUser = (
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const { getBankAccountId, getBranchId, getBusinessType } = useCurrentUser();
   const mapFormDataToApiPayload = async (formData: UserCreationRequest): Promise<UserApiPayload> => {
-    const roleId = getRoleId('checker');
+    const userRole = role ? role : 'user';
+    const roleId = getRoleId(userRole);
     return {
       role_id: roleId || '',
       email: formData.email,
@@ -40,7 +41,8 @@ export const useCreateUser = (
     onSuccess: (data: UserApiPayload) => {
       toast.success('User created successfully');
       onUserCreateSuccess(data);
-      navigate('/admin/users');
+      const url = role === 'maker' ? '/admin/maker' : '/admin/users';
+      navigate(url);
     },
     onError: (error: Error) => {
       toast.error(
