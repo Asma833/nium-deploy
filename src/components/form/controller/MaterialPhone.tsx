@@ -10,7 +10,14 @@ interface MaterialPhoneProps {
   forcedValue?: string;
 }
 
-export const MaterialPhone = ({ name, label, disabled = false, baseStyle, className }: MaterialPhoneProps) => {
+export const MaterialPhone = ({
+  name,
+  label,
+  disabled = false,
+  forcedValue,
+  baseStyle,
+  className,
+}: MaterialPhoneProps) => {
   const { control } = useFormContext();
 
   return (
@@ -21,7 +28,7 @@ export const MaterialPhone = ({ name, label, disabled = false, baseStyle, classN
       render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
-          value={value ?? ''}
+          value={(forcedValue ? forcedValue : value) || ''}
           onChange={(e) => {
             // Remove all non-numeric characters
             const numericValue = e.target.value.replace(/\D/g, '');

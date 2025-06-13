@@ -29,12 +29,17 @@ interface UploadedDocument {
 interface UploadDocumentsProps {
   partnerOrderId: string;
   onUploadComplete?: (success: boolean) => void;
+  onESignGenerated?: (success: boolean) => void;
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId, onUploadComplete }) => {
+export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
+  partnerOrderId,
+  onUploadComplete,
+  onESignGenerated,
+}) => {
   const { documentTypes, loading } = useGetDocumentTypes();
   const uploadDocumentMutation = useUploadDocument();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
@@ -121,11 +126,16 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
           doc.documentTypeId === currentDocument.documentTypeId ? { ...doc, isUploaded: true, isUploading: false } : doc
         )
       );
-
       setShowUploadDialog(false);
       setCurrentDocument(null);
       toast.success(`${currentDocument.documentTypeName} uploaded successfully`);
-      onUploadComplete?.(true);
+
+      // Call the appropriate callback based on mergeDoc value
+      if (mergeDoc) {
+        onESignGenerated?.(true);
+      } else {
+        onUploadComplete?.(true);
+      }
     } catch (error) {
       console.error('Error uploading document:', error);
 
@@ -139,7 +149,13 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
       toast.error(`Failed to upload ${currentDocument.documentTypeName}`);
       setShowUploadDialog(false);
       setCurrentDocument(null);
-      onUploadComplete?.(false);
+
+      // Call the appropriate callback based on mergeDoc value for error handling
+      if (mergeDoc) {
+        onESignGenerated?.(false);
+      } else {
+        onUploadComplete?.(false);
+      }
     }
   };
 
@@ -232,7 +248,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
                             Uploading...
                           </>
                         ) : (
-                          'Submit Document'
+                          'Upload Document'
                         )}
                       </Button>
                     )}
@@ -279,8 +295,21 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Upload Document</DialogTitle>
-            <DialogDescription>Choose how you want to process this document.</DialogDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <DialogTitle>Upload Document</DialogTitle>
+                <DialogDescription>Choose how you want to process this document.</DialogDescription>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 p-0"
+                onClick={() => setShowUploadDialog(false)}
+                aria-label="Close"
+              >
+                <X size={50} viewBox="0 0 20 20" className="h-16 w-16 text-primary" />
+              </Button>
+            </div>
           </DialogHeader>
           <div className="py-4">
             <p className="text-sm text-gray-600 mb-4">
@@ -294,7 +323,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
               </div>
             )}
           </div>
-          <DialogFooter className="gap-2">
+          <DialogFooter className="sm:flex-row sm:justify-center gap-2">
             <Button
               variant="outline"
               onClick={() => handleUploadWithMerge(false)}
@@ -303,7 +332,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({ partnerOrderId
               {uploadDocumentMutation.isPending ? 'Uploading...' : 'Continue Upload'}
             </Button>
             <Button onClick={() => handleUploadWithMerge(true)} disabled={uploadDocumentMutation.isPending}>
-              {uploadDocumentMutation.isPending ? 'Processing...' : 'Submit with Merge Document'}
+              {uploadDocumentMutation.isPending ? 'Processing...' : 'Generate E-Sign Link'}
             </Button>
           </DialogFooter>
         </DialogContent>

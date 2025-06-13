@@ -21,7 +21,7 @@ export const ROUTES = {
       },
     },
     NUSER: '/users',
-    MAKER:'/maker',
+    MAKER: '/maker',
     CREATE_MAKER: '/maker/create-maker',
     UPDATE_MAKER: '/maker/update-maker/:id',
     CREATEUSER: '/users/create-user',
@@ -41,6 +41,7 @@ export const ROUTES = {
   MAKER: {
     CREATE_TRANSACTION: '/create-transaction',
     UPDATE_TRANSACTION: '/update-transaction',
+    VIEW_TRANSACTION: '/view-transaction',
     VIEW_STATUS: '/view-status',
   },
 } as const;

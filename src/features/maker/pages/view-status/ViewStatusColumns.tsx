@@ -165,7 +165,7 @@ export const ViewStatusColumns = ({
             <Button
               size={'sm'}
               className="ml-2 "
-              onClick={() => navigate(`/maker/update-transaction`)}
+              onClick={() => navigate(`/maker/update-transaction?partner-order-id=${rowData?.partner_order_id}`)}
             >
               <ArrowUpFromLine size={20} className="text-foreground" />
             </Button>

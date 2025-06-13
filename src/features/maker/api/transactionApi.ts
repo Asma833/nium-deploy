@@ -11,3 +11,11 @@ export const createTransaction = (data: CreateTransactionRequest) => {
     },
   });
 };
+
+export const deleteTransaction = (orderId: string) => {
+  return axiosInstance.delete(API.ORDERS.DELETE(orderId), {
+    headers: {
+      accept: '*/*',
+    },
+  });
+};

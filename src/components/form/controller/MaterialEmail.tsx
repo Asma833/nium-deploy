@@ -7,21 +7,29 @@ interface MaterialEmailProps {
   baseStyle?: any;
   className?: string;
   disabled?: boolean;
+  forcedValue?: string;
 }
 
-export const MaterialEmail = ({ name, label, disabled = false, baseStyle, className }: MaterialEmailProps) => {
+export const MaterialEmail = ({
+  name,
+  label,
+  disabled = false,
+  forcedValue,
+  baseStyle,
+  className,
+}: MaterialEmailProps) => {
   const { control } = useFormContext();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue="" // Add default value
+      defaultValue=""
       render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
           disabled={disabled}
-          value={value ?? ''} // Ensure value is never undefined
+          value={(forcedValue ? forcedValue : value) || ''}
           onChange={(e) => {
             onChange(e.target.value || ''); // Handle empty string case
           }}

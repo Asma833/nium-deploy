@@ -7,9 +7,17 @@ interface MaterialNumberProps {
   baseStyle?: any;
   className?: string;
   disabled?: boolean;
+  forcedValue?: string | number;
 }
 
-export const MaterialNumber = ({ name, label, disabled = false, baseStyle, className }: MaterialNumberProps) => {
+export const MaterialNumber = ({
+  name,
+  label,
+  disabled = false,
+  forcedValue,
+  baseStyle,
+  className,
+}: MaterialNumberProps) => {
   const { control } = useFormContext();
 
   return (
@@ -20,7 +28,7 @@ export const MaterialNumber = ({ name, label, disabled = false, baseStyle, class
       render={({ field: { value, onChange, ...field }, fieldState: { error } }) => (
         <TextField
           {...field}
-          value={value ?? ''}
+          value={(forcedValue ? forcedValue : value) || ''}
           onChange={(e) => {
             const val = e.target.value;
             onChange(val === '' ? '' : val);

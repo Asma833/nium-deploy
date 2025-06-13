@@ -23,6 +23,7 @@ export const MaterialSelect = ({
   label,
   disabled = false,
   options,
+  forcedValue,
   baseStyle,
   className,
   placeholder,
@@ -53,14 +54,12 @@ export const MaterialSelect = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
-          // Log for debugging
-
           return (
             <FormControl fullWidth error={!!error}>
               <InputLabel>{label}</InputLabel>
               <Select
                 {...field}
-                value={value || ''}
+                value={(forcedValue ? forcedValue : value) || ''}
                 onChange={(e) => {
                   onChange(e.target.value);
                 }}

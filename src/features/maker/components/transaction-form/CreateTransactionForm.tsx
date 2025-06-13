@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,20 +23,34 @@ import FromSectionTitle from '@/components/common/FromSectionTitle';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
 import { transformFormDataToApiRequest } from '../../utils/transformFormData';
+import { cn } from '@/utils/cn';
+import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
+import { TransactionOrderData } from '@/types/common.type';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
 const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
+  const [searchParams] = useSearchParams();
+  const partnerOrderIdParam = searchParams.get('partner-order-id') || '';
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
-  const [partnerOrderId, setPartnerOrderId] = useState<string>('');
+  const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
   const [showUploadSection, setShowUploadSection] = useState(false);
 
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { transactionTypes } = useGetTransactionType();
   const { purposeTypes } = useGetPurposes();
   const createTransactionMutation = useCreateTransaction();
-
+  const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+  const typedAllTransactionsData = allTransactionsData as TransactionOrderData[];
+  // extract the incident checker comments from the selected transaction data
+  const seletedRowTransactionData = typedAllTransactionsData?.find(
+    (transaction: TransactionOrderData) => transaction.partner_order_id === partnerOrderId
+  );
+  const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
+  // Format transaction types and purpose types for form controller
   const formatedTransactionTypes = transactionTypes.map((type) => ({
     id: parseInt(type.id) || 0,
     label: type.text,
@@ -46,7 +61,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
     label: type.text,
     value: type.text,
   }));
-
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
     transactionTypes: formatedTransactionTypes,
@@ -66,10 +80,21 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-  console.log('Form errors:', errors);
 
-  // Watch for form changes to debug
-  const watchedValues = watch();
+  const handleRegenerateEsignLink = (pOrderId: string): void => {
+    sendEsignLink(
+      { partner_order_id: pOrderId || '' },
+      {
+        onSuccess: () => {
+          toast.success('E-sign link regenerated successfully');
+        },
+        onError: () => {
+          toast.error('Failed to regenerate e-sign link');
+        },
+      }
+    );
+  };
+
   const onSubmit = async (formData: TransactionFormData) => {
     try {
       // Transform form data to API request
@@ -137,70 +162,120 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       toast.error('Please check the form and try again');
     }
   };
+  // Determine the mode of the form
+  const isUpdatePage = mode === TransactionMode.UPDATE;
+  const isViewPage = mode === TransactionMode.VIEW;
 
   return (
     <Fragment>
       <FormProvider methods={methods}>
-        <FormContentWrapper className="w-full bg-transparent">
-          <Spacer>
-            <FormFieldRow className={fieldWrapperBaseStyle} rowCols={4}>
-              {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                // Get the correct error path for each field
-                const errorPath = field.name.split('.');
-                const fieldError = errorPath.reduce((acc: any, path: string) => acc?.[path], errors);
-                console.log('fieldError:', fieldError?.[key]);
+        {(!isUpdatePage || isViewPage) && (
+          <FormContentWrapper className="w-full bg-transparent">
+            <Spacer>
+              <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4')} rowCols={4}>
+                {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
+                  // Get the correct error path for each field
+                  const errorPath = field.name.split('.');
+                  const fieldError = errorPath.reduce((acc: any, path: string) => acc?.[path], errors);
+                  console.log('fieldError:', fieldError?.[key]);
 
-                // Safely access nested error messages for applicantDetails fields
-                let errorMessage: string | undefined = undefined;
-                if (field.name.startsWith('applicantDetails.')) {
-                  const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
-                  const applicantDetailError = errors.applicantDetails?.[subKey];
-                  errorMessage =
-                    applicantDetailError &&
-                    typeof applicantDetailError === 'object' &&
-                    'message' in applicantDetailError
-                      ? (applicantDetailError as { message?: string }).message
-                      : undefined;
-                } else {
-                  errorMessage = (errors as any)?.[field.name]?.message;
-                }
+                  // Safely access nested error messages for applicantDetails fields
+                  let errorMessage: string | undefined = undefined;
+                  if (field.name.startsWith('applicantDetails.')) {
+                    const subKey = field.name.split('.')[1] as keyof typeof errors.applicantDetails;
+                    const applicantDetailError = errors.applicantDetails?.[subKey];
+                    errorMessage =
+                      applicantDetailError &&
+                      typeof applicantDetailError === 'object' &&
+                      'message' in applicantDetailError
+                        ? (applicantDetailError as { message?: string }).message
+                        : undefined;
+                  } else {
+                    errorMessage = (errors as any)?.[field.name]?.message;
+                  } // For view mode, get value from seletedRowTransactionData
+                  let value = undefined;
+                  if (isViewPage && seletedRowTransactionData) {
+                    // Map field.name to the corresponding property in seletedRowTransactionData
+                    // Based on TransactionOrderData type structure
+                    const fieldMap: Record<string, string> = {
+                      'applicantDetails.applicantName': 'customer_name',
+                      'applicantDetails.applicantPanNumber': 'customer_pan',
+                      'applicantDetails.email': 'customer_email',
+                      'applicantDetails.mobileNumber': 'customer_phone',
+                      'applicantDetails.partnerOrderId': 'partner_order_id',
+                      'applicantDetails.isVKycRequired': 'is_v_kyc_required',
+                      'applicantDetails.transactionType': 'transaction_type_name',
+                      'applicantDetails.purposeType': 'purpose_type_name',
+                    };
+                    console.log('Field Map:', fieldMap);
+                    const dataKey = fieldMap[field.name];
+                    console.log('dataKey:', dataKey);
+                    console.log('dataKey:typeof', typeof dataKey);
 
-                return (
-                  <FieldWrapper key={key}>
-                    {getController({
-                      ...field,
-                      control,
-                      errors,
-                      disabled: mode === TransactionMode.UPDATE,
-                    })}
-                  </FieldWrapper>
-                );
-              })}
-            </FormFieldRow>
-            {mode !== TransactionMode.UPDATE && (
-              <FormFieldRow>
-                <Button className="min-w-60" onClick={handleFormSubmit}>
-                  Generate Order
-                </Button>
-              </FormFieldRow>
-            )}
-            {(showUploadSection && partnerOrderId) || mode === TransactionMode.UPDATE ? (
-              <FormFieldRow className="mt-4">
-                <UploadDocuments
-                  partnerOrderId={partnerOrderId}
-                  onUploadComplete={(success) => {
-                    if (success) {
-                      console.log('Documents uploaded successfully');
+                    if (
+                      dataKey &&
+                      seletedRowTransactionData[dataKey as keyof typeof seletedRowTransactionData] !== undefined
+                    ) {
+                      value = seletedRowTransactionData[dataKey as keyof typeof seletedRowTransactionData];
+
+                      // Special handling for boolean fields that need to be converted to strings
+                      if (field.name === 'applicantDetails.isVKycRequired' && typeof value === 'boolean') {
+                        value = value ? 'true' : 'false';
+                      }
                     }
-                  }}
-                />
+                    if (dataKey === 'transaction_type_name') {
+                      value = seletedRowTransactionData.transaction_type_name?.name || '';
+                    }
+                    if (dataKey === 'purpose_type_name') {
+                      value = seletedRowTransactionData.purpose_type_name?.purpose_name || '';
+                    }
+
+                    // Debug logging
+                    console.log(`Field: ${field.name}, DataKey: ${dataKey}, Value: ${value}, Type: ${typeof value}`);
+                  }
+
+                  return (
+                    <FieldWrapper key={key} className={String(value)}>
+                      {getController({
+                        ...field,
+                        control,
+                        errors,
+                        disabled: isUpdatePage || isViewPage,
+                        ...(isViewPage && value !== undefined ? { forcedValue: value } : {}),
+                      })}
+                    </FieldWrapper>
+                  );
+                })}
               </FormFieldRow>
-            ) : null}
-          </Spacer>
-        </FormContentWrapper>
+            </Spacer>
+          </FormContentWrapper>
+        )}
+        {!isUpdatePage && !isViewPage && (
+          <FormFieldRow>
+            <Button className="min-w-60" onClick={handleFormSubmit}>
+              Generate Order
+            </Button>
+          </FormFieldRow>
+        )}
+        {isViewPage && (
+          <FormFieldRow className="mb-4 w-full">
+            <div>
+              Comment: <span className="text-red-500">{checkerComments}</span>
+            </div>
+          </FormFieldRow>
+        )}
+
+        {(showUploadSection && partnerOrderId) || isUpdatePage || isViewPage ? (
+          <FormFieldRow>
+            <UploadDocuments
+              partnerOrderId={partnerOrderId}
+              onESignGenerated={() => {
+                handleRegenerateEsignLink(partnerOrderId);
+              }}
+            />
+          </FormFieldRow>
+        ) : null}
       </FormProvider>
-      {/* <FromSectionTitle>Rejection Summary</FromSectionTitle> */}
-      {/* <RejectionSummary className="mb-4" rejectionComments={[]} /> */}{' '}
       <DialogWrapper
         isOpen={isDialogOpen}
         setIsOpen={setIsDialogOpen}
