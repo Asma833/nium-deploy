@@ -5,7 +5,7 @@ export const makerComponents = {
   CreateTransaction: lazy(() => import('@/features/maker/pages/create-transaction/CreateTransaction')),
   Update: lazy(() => import('@/features/maker/pages/update-doc-transaction/UpdateDocTransaction')),
   ViewTransaction: lazy(() => import('@/features/maker/pages/view-transaction/ViewTransaction')),
-  ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatus')),
+  ViewStatus: lazy(() => import('@/features/maker/pages/view-status/ViewStatusPage')),
   EditTransaction: lazy(() => import('@/features/maker/pages/edit-transaction/EditTransaction')),
 };
 export const makerRoutes = [
