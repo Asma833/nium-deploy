@@ -269,8 +269,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   } = useGetCheckerOrdersByPartnerId(partnerOrderId);
 
   const { merged_document, esigns, resources_documents_files, resources_videos_files } = order || {};
+  console.log('merged_document:', merged_document);
 
-  const mergeDocument = merged_document?.url || '';
+  const mergeDocument = merged_document?.url || rowData?.merged_document?.url || '';
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
   const vkycDocumentFiles = resources_documents_files || {};
   const vkycVideoFiles = resources_videos_files?.customer || '';
@@ -283,9 +284,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = (
-    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc'
-  ) => {
+  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc') => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
     } else if (docType === 'vkycDocument' && vkycDocumentFilesArray.length > 0) {
@@ -398,31 +397,23 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' &&
-              pageId === 'viewAllIncident' &&
-              (esignStatus === 'completed' || esignStatus === 'rejected') && (
-                <Button
-                  type="button"
-                  onClick={handleViewDocument}
-                  className="disabled:opacity-60"
-                >
-                  View Document
-                </Button>
-              )}
-            {isEsignDocumentLink &&
-              (pageId === 'updateIncident' ||
-                pageId === 'completedIncident') && (
-                <Button
-                  type="button"
-                  onClick={() => {
-                    handleDownloadDocument('mergeDoc');
-                  }}
-                  disabled={!isEsignDocumentLink}
-                  className="disabled:opacity-60"
-                >
-                  eSign Document
-                </Button>
-              )}
+            {mode === 'view' && pageId === 'viewAllIncident' && rowData?.merged_document !== null && (
+              <Button type="button" onClick={handleViewDocument} className="disabled:opacity-60">
+                View Document
+              </Button>
+            )}
+            {isEsignDocumentLink && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              <Button
+                type="button"
+                onClick={() => {
+                  handleDownloadDocument('mergeDoc');
+                }}
+                disabled={!isEsignDocumentLink}
+                className="disabled:opacity-60"
+              >
+                eSign Document
+              </Button>
+            )}
 
             {Array.isArray(vkycDocumentFilesArray) &&
               vkycDocumentFilesArray.length > 0 &&

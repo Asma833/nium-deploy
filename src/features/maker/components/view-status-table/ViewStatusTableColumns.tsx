@@ -189,22 +189,25 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => (
         <div className="flex gap-1">
           <TooltipActionButton
-            onClick={() => navigate(`/maker/view-transaction?partner-order-id=${rowData.partner_order_id}`)}
+            onClick={() => navigate(`/maker/view-transaction?partner-order-id=${rowData.partner_order_id}&action=view`)}
             icon={<Eye size={16} />}
             tooltipText="view"
             variant="view"
           />
           <TooltipActionButton
-            onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}`)}
+            onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}&action=edit`)}
             icon={<Edit size={16} />}
             tooltipText="Edit"
             variant="edit"
           />
           <TooltipActionButton
-            onClick={() => navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}`)}
+            onClick={() =>
+              navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}&action=update`)
+            }
             icon={<Upload size={16} />}
             tooltipText="Upload Document"
             variant="upload"
+            disabled={true}
           />
           <TooltipActionButton
             onClick={() => handleDelete(rowData)}
