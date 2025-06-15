@@ -18,7 +18,7 @@ export const setGlobalQueryClient = (queryClient: QueryClient): void => {
 export const clearAllQueryCache = async (): Promise<void> => {
   if (globalQueryClient) {
     await globalQueryClient.clear();
-    console.log('Query cache cleared for user logout');
+    console.info('Query cache cleared for user logout');
   } else {
     console.warn('Global query client not available for cache clearing');
   }
@@ -41,6 +41,5 @@ export const invalidateUserQueries = async (): Promise<void> => {
       globalQueryClient.invalidateQueries({ queryKey: ['user'] }),
       globalQueryClient.invalidateQueries({ queryKey: ['userStatusUpdate'] }),
     ]);
-    console.log('User-specific queries invalidated');
   }
 };

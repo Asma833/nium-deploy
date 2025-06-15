@@ -100,7 +100,6 @@ export function DynamicTable<T extends Record<string, any>>({
   // Clear dynamic data when user changes to prevent data leakage
   useEffect(() => {
     if (previousUserKeyRef.current !== currentUserKey) {
-      console.log('User changed, clearing dynamic table data');
       setDynamicData([]);
       // Reset filters when user changes
       setFilters({
