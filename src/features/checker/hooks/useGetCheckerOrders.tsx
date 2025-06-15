@@ -11,12 +11,11 @@ export const useGetCheckerOrders = (
   autoFetch: boolean = true
 ) => {
   const [transactionType, setTransactionType] = useState<TransactionType>(initialTransactionType);
-
   const { getUserHashedKey } = useCurrentUser();
   const hashCheckerId = getUserHashedKey();
 
-  // Define query key
-  const queryKey = ['checkerOrders', transactionType];
+  // Define query key with user-specific identifier to prevent cache conflicts between users
+  const queryKey = ['checkerOrders', hashCheckerId, transactionType];
   // Use TanStack Query for data fetching
   const {
     data,
