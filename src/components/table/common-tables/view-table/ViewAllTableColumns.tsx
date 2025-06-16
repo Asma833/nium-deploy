@@ -174,32 +174,6 @@ export const GetTransactionTableColumns = ({
         })()}
       />
     ),
-  },
-  {
-    key: 'generate_esign_link',
-    id: 'generate_esign_link',
-    name: 'Generate VKYC Link',
-    className: 'min-w-0 max-w-[100px]',
-    cell: (_: unknown, rowData: any) => (
-      <SignLinkButton
-        id={rowData.nium_order_id}
-        loading={isSendVkycLinkLoading && loadingOrderId === rowData.nium_order_id}
-        copyLinkUrl={rowData.v_kyc_link}
-        tooltipText={'Generate VKYC Link'}
-        buttonIconType="refresh"
-        onClick={() => handleRegenerateVkycLink(rowData)}
-        disabled={(() => {
-          const { incident_status, v_kyc_status } = rowData || {};
-          const disabledVkycStatuses = ['expired', 'rejected', 'not generated'];
-
-          return (
-            incident_status === null ||
-            incident_status === undefined ||
-            Boolean(incident_status) ||
-            disabledVkycStatuses.includes(v_kyc_status)
-          );
-        })()}
-      />
-    ),
-  },
+  }
+  
 ];
