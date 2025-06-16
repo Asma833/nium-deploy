@@ -2,15 +2,15 @@ import { userFormConfig } from '@/components/table/common-tables/n-user/user-cre
 import { userSchema } from '@/components/table/common-tables/n-user/user-creation-form/user-form.schema';
 import UserCreationFormPage from '@/components/table/common-tables/n-user/user-creation-form/UserCreationFormPage';
 
-const MakerCreationPage = () => {
+const CheckerCreationPage = () => {
   return (
      <UserCreationFormPage
       formConfig={userFormConfig}  
       schema={userSchema}         
-      role="maker"                 
-      title="Create Maker"
+      role="checker"                 
+      title="Create Checker"
     />
   );
 };
 
-export default MakerCreationPage;
+export default CheckerCreationPage;

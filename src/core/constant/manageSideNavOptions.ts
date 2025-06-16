@@ -13,12 +13,12 @@ export interface NavigationItem {
 export const SideNavOptions = {
   admin: [
     {
-      title: 'N-User',
+      title: 'Checker',
       path: getNavPath('ADMIN', ROUTES.ADMIN.NUSER),
       icon: LayoutDashboard,
     },
     {
-      title: 'Create Maker',
+      title: 'Maker',
       path: getNavPath('ADMIN', ROUTES.ADMIN.MAKER),
       icon: LayoutDashboard,
     },

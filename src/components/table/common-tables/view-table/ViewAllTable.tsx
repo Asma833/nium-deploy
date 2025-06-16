@@ -10,6 +10,7 @@ import { IncidentMode, IncidentPageId, Order, Orders } from '@/features/checker/
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
+import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -20,6 +21,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
 }) => {
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
@@ -44,7 +46,22 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       }
     );
   };
-
+ const handleRegenerateVkycLink = (rowData: Order): void => {
+    if (rowData.nium_order_id) {
+      setLoadingOrderId(rowData.nium_order_id);
+    }
+    sendVkycLink(
+      { partner_order_id: rowData.partner_order_id || '' },
+      {
+        onSuccess: () => {
+          setLoadingOrderId('');
+        },
+        onError: () => {
+          setLoadingOrderId('');
+        },
+      }
+    );
+  };
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
@@ -124,6 +141,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const columns = GetTransactionTableColumns({
     handleRegenerateEsignLink,
     isSendEsignLinkLoading,
+    isSendVkycLinkLoading,
+    handleRegenerateVkycLink,
     loadingOrderId,
     openModal,
   });

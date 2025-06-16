@@ -4,10 +4,10 @@ import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterA
 import { API } from '@/core/constant/apis';
 import { useUpdateStatusAPI } from '@/features/admin/hooks/useUserUpdateStatus';
 import { cn } from '@/utils/cn';
-import { GetUserTableColumns } from './NUserCreationTableColumns';
+import { GetUserTableColumns } from './UserCreationTableColumns';
 
 // Create an interface for the props
-interface NUserCreationTableProps {
+interface UserCreationTableProps {
   userData: any[];
   userLoading: boolean;
   userError: boolean;
@@ -15,7 +15,7 @@ interface NUserCreationTableProps {
   role: string;
 }
 
-const NuserCreationTable: React.FC<NUserCreationTableProps> = ({
+const UserCreationTable: React.FC<UserCreationTableProps> = ({
   userData,
   role,
   userLoading,
@@ -79,4 +79,4 @@ const NuserCreationTable: React.FC<NUserCreationTableProps> = ({
   );
 };
 
-export default NuserCreationTable;
+export default UserCreationTable;

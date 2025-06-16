@@ -11,9 +11,7 @@ const TableTabsLayout = (props: TableTabsLayoutProps) => {
   // Default tabs if none provided
   const defaultTabs = [
     { label: 'List', path: '/admin/users' },
-    { label: 'Create User', path: '/admin/users/create-user' },
-    { label: 'List', path: '/admin/maker' },
-    { label: 'Create User', path: '/admin/maker/create-maker' },
+    { label: 'Create Checker', path: '/admin/users/create-user' },
   ];
 
   const navigationTabs = tabs || defaultTabs;

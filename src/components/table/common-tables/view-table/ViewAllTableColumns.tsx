@@ -9,14 +9,18 @@ import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
 export const GetTransactionTableColumns = ({
   handleRegenerateEsignLink,
-  isSendEsignLinkLoading,
-  loadingOrderId,
+  handleRegenerateVkycLink,
   openModal,
+  isSendVkycLinkLoading = false,
+  isSendEsignLinkLoading = false,
+  loadingOrderId = null,
 }: {
   handleRegenerateEsignLink: (rowData: any) => void;
-  isSendEsignLinkLoading: boolean;
-  loadingOrderId: string;
+  handleRegenerateVkycLink: (rowData: any) => void;
   openModal: (rowData: any) => void;
+  isSendEsignLinkLoading?: boolean;
+  isSendVkycLinkLoading?: boolean;
+  loadingOrderId?: string | null;
 }) => [
   {
     key: 'nium_order_id',
@@ -170,5 +174,6 @@ export const GetTransactionTableColumns = ({
         })()}
       />
     ),
-  },
+  }
+  
 ];

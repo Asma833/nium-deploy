@@ -1,16 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/queryKeys';
 import { User } from '@/features/auth/types/auth.types';
 import NuserCreationTable from '@/components/table/common-tables/n-user/n-user-table/UserCreationTable';
 import TableTabsLayout from '../../components/table/TableTabsLayout';
-import { makerTabs } from '../../config/table-tabs-nav.config';
+import { userTabs } from '../../config/table-tabs-nav.config';
 
-const MakerTablePage = () => {
-  const navigate = useNavigate();
-
+const CheckerTablePage = () => {
   // Fetch user data
   const {
     data,
@@ -33,14 +32,14 @@ const MakerTablePage = () => {
           ? (data as Record<string, any>[])
           : [];
 
-    return normalizedData.filter((user) => user?.role?.name?.toLowerCase() === 'maker');
+    return normalizedData.filter((user) => user?.role?.name?.toLowerCase() === 'checker');
   }, [data]);
 
   return (
-    <TableTabsLayout tabs={makerTabs}>
-      <NuserCreationTable role="maker" userData={users} userLoading={false} userError={false} disableColumns={[]} />
+    <TableTabsLayout tabs={userTabs}>
+      <NuserCreationTable role="checker" userData={users} userLoading={false} userError={false} disableColumns={[]} />
     </TableTabsLayout>
   );
 };
 
-export default MakerTablePage;
+export default CheckerTablePage;

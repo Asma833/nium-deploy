@@ -2,9 +2,9 @@ import { lazy } from 'react';
 import { ROUTES } from '../../constant/routePaths';
 
 const adminComponents = {
-  User: lazy(() => import('@/features/admin/pages/n-user/n-user-table/NUserCreationTable')),
-  UserCreation: lazy(() => import('@/features/admin/pages/n-user/user-creation-form/page')),
-  UpdateUser: lazy(() => import('@/features/admin/pages/n-user/user-creation-form/page')),
+  User: lazy(() => import('@/features/admin/pages/n-user/CheckerTablePage')),
+  UserCreation: lazy(() => import('@/features/admin/pages/n-user/n-user-creation/UserCreationPage')),
+  UpdateUser: lazy(() => import('@/features/admin/pages/n-user/n-user-creation/UserCreationPage')),
   Partner: lazy(() => import('@/features/admin/pages/partners/partner-table/PartnerCreationTable')),
   PartnerCreation: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
   UpdatePartner: lazy(() => import('@/features/admin/pages/partners/partner-creation-form/page')),
