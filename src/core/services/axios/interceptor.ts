@@ -6,6 +6,7 @@ import {
   encryptRequestInterceptor,
   decryptResponseInterceptor,
 } from '@/core/services/encryption/encryptionInterceptor';
+import { clearAllQueryCache } from '@/core/services/query/queryCacheManager';
 
 interface RefreshTokenResponse {
   data: {
@@ -114,6 +115,10 @@ export const setupInterceptors = (axiosInstance: AxiosInstance) => {
             return axiosInstance(originalRequest);
           } catch (refreshError) {
             processQueue(refreshError, null);
+
+            // Clear query cache before logout to prevent data leakage
+            await clearAllQueryCache();
+
             store.dispatch(logout());
             return Promise.reject(refreshError);
           } finally {

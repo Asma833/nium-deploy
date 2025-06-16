@@ -1,23 +1,22 @@
+import { useNavigate } from 'react-router';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
-import ViewButton from '@/components/common/ViewButton';
-import { Button } from '@/components/ui/button';
+import TooltipActionButton from '@/components/common/TooltipActionButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { ArrowUpFromLine } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { Edit, Upload, Trash2, Eye } from 'lucide-react';
 
-export const ViewStatusColumns = ({
+export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
   handleRegenerateVkycLink,
-  openModal,
+  handleDelete,
   isSendVkycLinkLoading = false,
   isSendEsignLinkLoading = false,
   loadingOrderId = null,
 }: {
   handleRegenerateEsignLink: (rowData: any) => void;
   handleRegenerateVkycLink: (rowData: any) => void;
-  openModal: (rowData: any) => void;
+  handleDelete: (rowData: any) => void;
   isSendEsignLinkLoading?: boolean;
   isSendVkycLinkLoading?: boolean;
   loadingOrderId?: string | null;
@@ -182,16 +181,35 @@ export const ViewStatusColumns = ({
       name: 'Action',
       className: 'min-w-0 p-2',
       cell: (_: unknown, rowData: any) => (
-        <ViewButton
-          onClick={() => {
-            openModal(rowData);
-          }}
-          tooltipText={`View`}
-          orderId={rowData.nium_order_id}
-          disabled={false}
-          buttonType="view_details"
-          buttonIconType="view"
-        />
+        <div className="flex gap-1">
+          <TooltipActionButton
+            onClick={() => navigate(`/maker/view-transaction?partner-order-id=${rowData.partner_order_id}&action=view`)}
+            icon={<Eye size={16} />}
+            tooltipText="view"
+            variant="view"
+          />
+          <TooltipActionButton
+            onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}&action=edit`)}
+            icon={<Edit size={16} />}
+            tooltipText="Edit"
+            variant="edit"
+          />
+          <TooltipActionButton
+            onClick={() =>
+              navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}&action=update`)
+            }
+            icon={<Upload size={16} />}
+            tooltipText="Upload Document"
+            variant="upload"
+            disabled={rowData.merged_document !== null}
+          />
+          <TooltipActionButton
+            onClick={() => handleDelete(rowData)}
+            icon={<Trash2 size={16} />}
+            tooltipText="Delete"
+            variant="delete"
+          />
+        </div>
       ),
     },
   ];

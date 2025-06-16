@@ -54,11 +54,7 @@ const CompletedTransactionTable = () => {
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
-      incident_status: order.incident_status
-        ? 'Approved'
-        : !order.incident_status
-          ? 'Rejected'
-          : 'Pending',
+      incident_status: order.incident_status ? 'Approved' : !order.incident_status ? 'Rejected' : 'Pending',
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
@@ -81,8 +77,7 @@ const CompletedTransactionTable = () => {
   };
   const handleExportToCSV = () => {
     // Use filtered data if available, otherwise fall back to all data
-    const dataToExport =
-      filteredData.length > 0 ? filteredData : getTableData();
+    const dataToExport = filteredData.length > 0 ? filteredData : getTableData();
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,

@@ -25,6 +25,6 @@ export enum TransactionMode {
   UPDATE = 'update',
 }
 
-export type CreateTransactionFormProps = {
+export type TransactionFormProps = {
   mode?: TransactionMode;
 };

@@ -20,7 +20,9 @@ export const MaterialRadioGroup = <T extends FieldValues>({
 }: MaterialRadioGroupProps<T>) => {
   return (
     <FormControl component="fieldset">
-      <FormLabel component="legend">{label}</FormLabel>
+      <FormLabel component="legend" className="!text-foreground">
+        {label}
+      </FormLabel>
       <Controller
         name={name}
         render={({ field }) => {
@@ -33,7 +35,7 @@ export const MaterialRadioGroup = <T extends FieldValues>({
                     value={(forcedValue ? forcedValue : value) || ''}
                     control={
                       <Radio
-                        icon={<Circle size={'20'} />}
+                        icon={<Circle size={'20'} className="text-foreground" />}
                         checked={field.value === value}
                         checkedIcon={<CircleCheck className="text-primary" size={'20'} />}
                         disabled={disabled}

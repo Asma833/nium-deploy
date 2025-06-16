@@ -1,6 +1,5 @@
-import { Fragment, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Fragment, useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -15,34 +14,36 @@ import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
 import useGetTransactionType from '@/hooks/useGetTransactionType';
 import useGetPurposes from '@/hooks/useGetPurposes';
-import { CreateTransactionFormProps, TransactionMode } from './transaction-form.types';
+import { TransactionFormProps, TransactionMode } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
-import RejectionSummary from '@/components/common/RejectionSummary';
-import FromSectionTitle from '@/components/common/FromSectionTitle';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
-import { transformFormDataToApiRequest } from '../../utils/transformFormData';
+import { useUpdateOrder } from '../../hooks/useUpdateOrder';
+import { transformFormDataToApiRequest, transformFormDataToUpdateRequest } from '../../utils/transformFormData';
 import { cn } from '@/utils/cn';
 import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { TransactionOrderData } from '@/types/common.type';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
-const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
+const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const partnerOrderIdParam = searchParams.get('partner-order-id') || '';
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
   const [showUploadSection, setShowUploadSection] = useState(false);
-
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { transactionTypes } = useGetTransactionType();
   const { purposeTypes } = useGetPurposes();
+  const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
+  const updateOrderMutation = useUpdateOrder();
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const typedAllTransactionsData = allTransactionsData as TransactionOrderData[];
   // extract the incident checker comments from the selected transaction data
@@ -71,15 +72,45 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
     defaultValues: transactionFormDefaults,
     mode: 'onChange',
   });
-
   const {
     control,
     getValues,
     reset,
-    watch,
+    setValue,
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
+
+  // Determine the mode of the form
+  const isUpdatePage = mode === TransactionMode.UPDATE;
+  const isViewPage = mode === TransactionMode.VIEW;
+  const isEditPage = mode === TransactionMode.EDIT;
+
+  // Initialize form values when data is loaded for edit/view mode
+  useEffect(() => {
+    if ((isEditPage || isViewPage) && seletedRowTransactionData && !isLoading) {
+      // Map the transaction data to form structure
+      const formValues: Partial<TransactionFormData> = {
+        applicantDetails: {
+          applicantName: seletedRowTransactionData.customer_name || '',
+          applicantPanNumber: seletedRowTransactionData.customer_pan || '',
+          email: seletedRowTransactionData.customer_email || '',
+          mobileNumber: seletedRowTransactionData.customer_phone || '',
+          partnerOrderId: seletedRowTransactionData.partner_order_id || '',
+          isVKycRequired: seletedRowTransactionData.is_v_kyc_required ? 'true' : 'false',
+          transactionType: seletedRowTransactionData.transaction_type_name?.name || '',
+          purposeType: seletedRowTransactionData.purpose_type_name?.purpose_name || '',
+        },
+      };
+
+      // Set form values using React Hook Form's setValue
+      Object.entries(formValues.applicantDetails || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+          setValue(`applicantDetails.${key}` as any, value);
+        }
+      });
+    }
+  }, [seletedRowTransactionData, isLoading, isEditPage, isViewPage, setValue]);
 
   const handleRegenerateEsignLink = (pOrderId: string): void => {
     sendEsignLink(
@@ -87,6 +118,7 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       {
         onSuccess: () => {
           toast.success('E-sign link regenerated successfully');
+          navigate(`/maker/view-status`);
         },
         onError: () => {
           toast.error('Failed to regenerate e-sign link');
@@ -94,25 +126,42 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       }
     );
   };
-
   const onSubmit = async (formData: TransactionFormData) => {
     try {
-      // Transform form data to API request
-      const apiRequestData = transformFormDataToApiRequest(formData, transactionTypes, purposeTypes);
-      // Call the API
-      const response = await createTransactionMutation.mutateAsync(apiRequestData);
+      if (isEditPage) {
+        // Handle update operation
+        const updateRequestData = transformFormDataToUpdateRequest(
+          formData,
+          transactionTypes,
+          purposeTypes,
+          getUserHashedKey() || 'unknown-user'
+        );
 
-      // Extract response data based on your API specification
-      const partnerOrder = response.data?.partner_order_id || formData.applicantDetails.partnerOrderId || 'PO123';
-      const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
-      setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
-      setNiumForexOrderId(niumOrder);
-      setPartnerOrderId(partnerOrder);
-      setShowUploadSection(true);
-      setIsDialogOpen(true);
+        await updateOrderMutation.mutateAsync({
+          partnerOrderId: formData.applicantDetails.partnerOrderId || '',
+          data: updateRequestData,
+        });
 
-      // Reset form after successful submission
-      reset(transactionFormDefaults);
+        // Show success message (handled by the mutation's onSuccess)
+        // Optionally refresh data or navigate
+        refreshData();
+      } else {
+        // Handle create operation
+        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypes, purposeTypes);
+        const response = await createTransactionMutation.mutateAsync(apiRequestData);
+
+        // Extract response data based on your API specification
+        const partnerOrder = response.data?.partner_order_id || formData.applicantDetails.partnerOrderId || 'PO123';
+        const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
+        setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
+        setNiumForexOrderId(niumOrder);
+        setPartnerOrderId(partnerOrder);
+        setShowUploadSection(true);
+        setIsDialogOpen(true);
+
+        // Reset form after successful submission
+        reset(transactionFormDefaults);
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       // Handle error (show toast, etc.)
@@ -162,9 +211,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
       toast.error('Please check the form and try again');
     }
   };
-  // Determine the mode of the form
-  const isUpdatePage = mode === TransactionMode.UPDATE;
-  const isViewPage = mode === TransactionMode.VIEW;
 
   return (
     <Fragment>
@@ -174,11 +220,6 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
             <Spacer>
               <FormFieldRow className={cn(fieldWrapperBaseStyle, 'mb-4')} rowCols={4}>
                 {Object.entries(formControllerMeta.fields.applicantDetails).map(([key, field]) => {
-                  // Get the correct error path for each field
-                  const errorPath = field.name.split('.');
-                  const fieldError = errorPath.reduce((acc: any, path: string) => acc?.[path], errors);
-                  console.log('fieldError:', fieldError?.[key]);
-
                   // Safely access nested error messages for applicantDetails fields
                   let errorMessage: string | undefined = undefined;
                   if (field.name.startsWith('applicantDetails.')) {
@@ -192,56 +233,18 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
                         : undefined;
                   } else {
                     errorMessage = (errors as any)?.[field.name]?.message;
-                  } // For view mode, get value from seletedRowTransactionData
-                  let value = undefined;
-                  if (isViewPage && seletedRowTransactionData) {
-                    // Map field.name to the corresponding property in seletedRowTransactionData
-                    // Based on TransactionOrderData type structure
-                    const fieldMap: Record<string, string> = {
-                      'applicantDetails.applicantName': 'customer_name',
-                      'applicantDetails.applicantPanNumber': 'customer_pan',
-                      'applicantDetails.email': 'customer_email',
-                      'applicantDetails.mobileNumber': 'customer_phone',
-                      'applicantDetails.partnerOrderId': 'partner_order_id',
-                      'applicantDetails.isVKycRequired': 'is_v_kyc_required',
-                      'applicantDetails.transactionType': 'transaction_type_name',
-                      'applicantDetails.purposeType': 'purpose_type_name',
-                    };
-                    console.log('Field Map:', fieldMap);
-                    const dataKey = fieldMap[field.name];
-                    console.log('dataKey:', dataKey);
-                    console.log('dataKey:typeof', typeof dataKey);
-
-                    if (
-                      dataKey &&
-                      seletedRowTransactionData[dataKey as keyof typeof seletedRowTransactionData] !== undefined
-                    ) {
-                      value = seletedRowTransactionData[dataKey as keyof typeof seletedRowTransactionData];
-
-                      // Special handling for boolean fields that need to be converted to strings
-                      if (field.name === 'applicantDetails.isVKycRequired' && typeof value === 'boolean') {
-                        value = value ? 'true' : 'false';
-                      }
-                    }
-                    if (dataKey === 'transaction_type_name') {
-                      value = seletedRowTransactionData.transaction_type_name?.name || '';
-                    }
-                    if (dataKey === 'purpose_type_name') {
-                      value = seletedRowTransactionData.purpose_type_name?.purpose_name || '';
-                    }
-
-                    // Debug logging
-                    console.log(`Field: ${field.name}, DataKey: ${dataKey}, Value: ${value}, Type: ${typeof value}`);
                   }
 
                   return (
-                    <FieldWrapper key={key} className={String(value)}>
+                    <FieldWrapper key={key} className={fieldWrapperBaseStyle}>
                       {getController({
                         ...field,
                         control,
                         errors,
-                        disabled: isUpdatePage || isViewPage,
-                        ...(isViewPage && value !== undefined ? { forcedValue: value } : {}),
+                        disabled:
+                          isUpdatePage ||
+                          isViewPage ||
+                          (isEditPage && field.name === 'applicantDetails.partnerOrderId'),
                       })}
                     </FieldWrapper>
                   );
@@ -249,24 +252,33 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
               </FormFieldRow>
             </Spacer>
           </FormContentWrapper>
-        )}
+        )}{' '}
         {!isUpdatePage && !isViewPage && (
           <FormFieldRow>
-            <Button className="min-w-60" onClick={handleFormSubmit}>
-              Generate Order
+            <Button
+              className="min-w-60"
+              onClick={handleFormSubmit}
+              disabled={isEditPage ? updateOrderMutation.isPending : createTransactionMutation.isPending}
+            >
+              {isEditPage
+                ? updateOrderMutation.isPending
+                  ? 'Updating...'
+                  : 'Update Order'
+                : createTransactionMutation.isPending
+                  ? 'Generating...'
+                  : 'Generate Order'}
             </Button>
           </FormFieldRow>
         )}
-        {isViewPage && (
+        {isViewPage && checkerComments && (
           <FormFieldRow className="mb-4 w-full">
             <div>
               Comment: <span className="text-red-500">{checkerComments}</span>
             </div>
           </FormFieldRow>
         )}
-
         {(showUploadSection && partnerOrderId) || isUpdatePage || isViewPage ? (
-          <FormFieldRow>
+          <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
               onESignGenerated={() => {
@@ -276,38 +288,14 @@ const CreateTransactionForm = ({ mode }: CreateTransactionFormProps) => {
           </FormFieldRow>
         ) : null}
       </FormProvider>
-      <DialogWrapper
-        isOpen={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
-        renderContent={
-          <div className="flex flex-col justify-center items-center gap-4 text-lg min-h-[200px] text-gray-700">
-            <Check className="text-primary font-extrabold w-12 h-12 border rounded-full p-1" />
-            <div className="text-center space-y-2">
-              <div>
-                <span className="text-gray-600">Partner Order ID: </span>
-                <span className="font-bold text-dark">{createdTransactionId}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Nium Forex Order ID: </span>
-                <span className="font-bold text-dark">{niumForexOrderId}</span>
-              </div>
-              <div className="text-green-600 font-medium mt-4">Order created successfully!</div>
-            </div>
-          </div>
-        }
-        showFooter={false}
-        showHeader={false}
-        isLoading={isSubmitting}
-        iconType="default"
-        triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
-        className="sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto"
-        onSave={handleSubmit((data) => {
-          reset(transactionFormDefaults);
-        })}
-        footerBtnText="Submit"
+      <TransactionCreatedDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        createdTransactionId={createdTransactionId}
+        niumForexOrderId={niumForexOrderId}
       />
     </Fragment>
   );
 };
 
-export default CreateTransactionForm;
+export default TransactionForm;

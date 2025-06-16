@@ -1,8 +1,8 @@
 import TransactionForm from '../../components/transaction-form/TransactionForm';
 import { TransactionMode } from '../../components/transaction-form/transaction-form.types';
 
-const ViewTransaction = () => {
-  return <TransactionForm mode={TransactionMode.VIEW} />;
+const UpdateTransaction = () => {
+  return <TransactionForm mode={TransactionMode.EDIT} />;
 };
 
-export default ViewTransaction;
+export default UpdateTransaction;

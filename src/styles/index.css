@@ -202,8 +202,17 @@
   @apply text-foreground;
 }
 .light .MuiInputBase-input.Mui-disabled {
-  background-color: rgb(249 249 249);
+  background-color: rgb(230, 230, 230);
   -webkit-text-fill-color: rgb(0 0 0 / 72%);
+}
+.light .MuiInputBase-root.MuiOutlinedInput-root.Mui-disabled {
+  background-color: rgb(230, 230, 230);
+}
+.dark .MuiInputBase-input.Mui-disabled {
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72);
+}
+.MuiInputBase-root.MuiOutlinedInput-root.Mui-disabled {
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72);
 }
 
 .MuiPickersArrowSwitcher-button {
