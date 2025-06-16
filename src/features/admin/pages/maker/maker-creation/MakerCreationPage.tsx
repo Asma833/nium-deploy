@@ -7,12 +7,7 @@ import { makerTabs } from '@/features/admin/config/table-tabs-nav.config';
 const MakerCreationPage = () => {
   return (
     <TableTabsLayout tabs={makerTabs}>
-     <UserCreationFormPage
-      formConfig={userFormConfig}  
-      schema={userSchema}         
-      role="maker"                 
-      title="Create Maker"
-    />
+      <UserCreationFormPage formConfig={userFormConfig} schema={userSchema} role="maker" title="Create Maker" />
     </TableTabsLayout>
   );
 };

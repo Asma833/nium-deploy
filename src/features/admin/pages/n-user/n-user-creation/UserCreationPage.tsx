@@ -6,13 +6,8 @@ import { userTabs } from '@/features/admin/config/table-tabs-nav.config';
 
 const CheckerCreationPage = () => {
   return (
-     <TableTabsLayout tabs={userTabs}>
-     <UserCreationFormPage
-      formConfig={userFormConfig}  
-      schema={userSchema}         
-      role="checker"                 
-      title="Create Checker"
-    />
+    <TableTabsLayout tabs={userTabs}>
+      <UserCreationFormPage formConfig={userFormConfig} schema={userSchema} role="checker" title="Create Checker" />
     </TableTabsLayout>
   );
 };
