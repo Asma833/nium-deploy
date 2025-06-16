@@ -113,7 +113,21 @@ const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationF
             </FormFieldRow>
             <FormFieldRow className="mb-4">
               {Object.entries(formConfig.fields)
-                .slice(2, 5)
+                .slice(2, 3)
+                .map(([name, field]) => (
+                  <FieldWrapper key={name}>
+                    {getController({
+                      ...(typeof field === 'object' && field !== null ? field : {}),
+                      name,
+                      control,
+                      errors,
+                    })}
+                  </FieldWrapper>
+                ))}
+            </FormFieldRow>
+            <FormFieldRow className="mb-4">
+              {Object.entries(formConfig.fields)
+                .slice(3, 4)
                 .map(([name, field]) => (
                   <FieldWrapper key={name}>
                     {getController({
