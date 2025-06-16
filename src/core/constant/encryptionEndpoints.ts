@@ -73,11 +73,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Upload documents endpoint',
   },
-  'generate-order': {
-    endpoint: API.MAKER.GENERATE_ORDER,
-    matchType: 'exact-only' as const,
-    description: 'Generate Order endpoint',
-  },
+  // 'generate-order': {
+  //   endpoint: API.MAKER.GENERATE_ORDER,
+  //   matchType: 'exact-only' as const,
+  //   description: 'Generate Order endpoint',
+  // },
 
   'generate-vkyc': {
     endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,

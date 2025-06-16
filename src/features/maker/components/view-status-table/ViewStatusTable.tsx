@@ -11,8 +11,6 @@ import { ViewStatusTableColumns } from './ViewStatusTableColumns';
 import { useDeleteTransaction } from '../../hooks/useDeleteTransaction';
 
 const ViewStatusTable: React.FC = () => {
-  // const [loading, setIsLoading] = useState(false);
-  // const [hasError, setHasError] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
@@ -158,7 +156,7 @@ const ViewStatusTable: React.FC = () => {
         columns={tableColumns}
         data={tableData}
         defaultSortColumn=""
-        // loading={isLoading}
+        loading={isLoading}
         paginationMode={'static'}
         onPageChange={
           isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
