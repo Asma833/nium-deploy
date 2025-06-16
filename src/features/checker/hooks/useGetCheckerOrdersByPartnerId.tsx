@@ -10,9 +10,8 @@ export const useGetCheckerOrdersByPartnerId = (partnerOrderId: string, autoFetch
   // Get the current user once
   const { user } = useCurrentUser();
   const userHashedKey = user?.hashed_key;
-
-  // Define query key with partnerOrderId for proper caching
-  const queryKey = ['checkerOrdersByPartnerId', partnerOrderId];
+  // Define query key with user and partner-specific identifiers to prevent cache conflicts
+  const queryKey = ['checkerOrdersByPartnerId', userHashedKey, partnerOrderId];
 
   // Use TanStack Query for data fetching
   const {

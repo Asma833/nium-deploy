@@ -10,6 +10,7 @@ import { SetFilters } from '@/components/types/filter.types';
 import { Button } from '@/components/ui/button';
 import { TablePagination } from './TablePagination';
 import TableDataLoader from './TableDataLoader';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
 
 const formatDate = (date: Date | string | undefined) => {
   if (!date) return '';
@@ -91,6 +92,26 @@ export function DynamicTable<T extends Record<string, any>>({
   const [internalLoading, setInternalLoading] = useState(false);
   const [dynamicData, setDynamicData] = useState<T[]>([]);
 
+  // Add user change detection to clear stale data
+  const { getUserHashedKey } = useCurrentUser();
+  const currentUserKey = getUserHashedKey();
+  const previousUserKeyRef = useRef<string | undefined>(currentUserKey);
+
+  // Clear dynamic data when user changes to prevent data leakage
+  useEffect(() => {
+    if (previousUserKeyRef.current !== currentUserKey) {
+      setDynamicData([]);
+      // Reset filters when user changes
+      setFilters({
+        search: '',
+        status: 'all',
+        role: '',
+        dateRange: { from: undefined, to: undefined },
+        customFilterValues: {},
+      });
+      previousUserKeyRef.current = currentUserKey;
+    }
+  }, [currentUserKey]);
   // Use dynamic data if in dynamic mode, otherwise use filtered data
   const mode = filter?.mode || 'static';
   const loading = externalLoading || internalLoading;

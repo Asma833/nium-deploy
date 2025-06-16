@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -13,6 +13,7 @@ import ErrorBoundary from './components/error-boundary/ErrorBoundary';
 import { MUIProviders } from './providers/MUIProviders';
 import { Toaster } from './components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { setGlobalQueryClient } from './core/services/query/queryCacheManager';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +25,11 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  // Set the global query client for cache management
+  useEffect(() => {
+    setGlobalQueryClient(queryClient);
+  }, []);
+
   return (
     <MUIProviders>
       <ThemeProvider>
