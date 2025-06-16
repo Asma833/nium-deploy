@@ -21,6 +21,9 @@ export const useGetAllOrders = (initialTransactionType: TransactionType = 'all',
   const transactionTypeRef = useRef(transactionType);
   transactionTypeRef.current = transactionType;
 
+  // Track if initial fetch has happened to prevent double fetching
+  const initialFetchDone = useRef(false);
+
   // Function to fetch data with GET request
   const fetchData = useCallback(async () => {
     if (!userHashedKey) {
@@ -58,19 +61,19 @@ export const useGetAllOrders = (initialTransactionType: TransactionType = 'all',
       setTransactionType(newType);
     };
   }, []);
-
   // Watch for transaction type changes to trigger a new fetch
   useEffect(() => {
-    if (loading) return; // Prevent double fetching when autoFetch is true
+    if (loading || !initialFetchDone.current) return; // Prevent double fetching when autoFetch is true
     fetchData();
   }, [transactionType, fetchData]);
 
   // Auto-fetch on mount if enabled
   useEffect(() => {
-    if (autoFetch) {
+    if (autoFetch && userHashedKey && !initialFetchDone.current) {
+      initialFetchDone.current = true;
       fetchData();
     }
-  }, [fetchData, autoFetch]);
+  }, [autoFetch, userHashedKey]); // Removed fetchData from dependencies
 
   return {
     data,
