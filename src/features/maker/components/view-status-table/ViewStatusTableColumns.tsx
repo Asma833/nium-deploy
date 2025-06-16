@@ -5,6 +5,7 @@ import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { Edit, Upload, Trash2, Eye } from 'lucide-react';
+import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -72,17 +73,18 @@ export const ViewStatusTableColumns = ({
       name: 'Purpose',
       className: 'min-w-0 p-2',
     },
+
     {
-      key: 'incident_status',
-      id: 'incident_status',
-      name: 'Transaction Status',
+      key: 'e_sign_status',
+      id: 'e_sign_status',
+      name: 'Esign Status',
       className: 'min-w-0 p-2',
       cell: (_: any, value: any) => <EsignStatusCell rowData={value} />,
     },
     {
-      key: 'e_sign_status',
-      id: 'e_sign_status',
-      name: 'E Sign Status',
+      key: 'e_sign_link',
+      id: 'e_sign_link',
+      name: 'E Sign Link',
       className: 'min-w-0 p-2',
       cell: (_: any, rowData: any) => {
         const { merged_document, nium_order_id, e_sign_link, e_sign_status, e_sign_link_status } = rowData;
@@ -174,6 +176,13 @@ export const ViewStatusTableColumns = ({
           />
         );
       },
+    },
+    {
+      key: 'incident_status',
+      id: 'incident_status',
+      name: 'Incident Status',
+      className: 'min-w-0 p-2',
+      cell: (_: any, value: any) => <IncidentStatusCell rowData={value} />,
     },
     {
       key: 'view_action',

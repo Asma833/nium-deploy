@@ -26,7 +26,6 @@ import { TransactionOrderData } from '@/types/common.type';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import React from 'react';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
@@ -47,29 +46,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const updateOrderMutation = useUpdateOrder();
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
-  // Transform data to array format - handle both array and object with 'orders' property
-  // const typedAllTransactionsData = useMemo(() => {
-
-  //   if (!allTransactionsData) return [];
-
-  //   // If already an array
-  //   if (Array.isArray(allTransactionsData)) {
-  //     return allTransactionsData as TransactionOrderData[];
-  //   }
-
-  //   // If object with 'orders' property
-  //   if (typeof allTransactionsData === 'object' && 'orders' in allTransactionsData) {
-  //     console.log('All Transactions Data:', allTransactionsData);
-  //     const orders = (allTransactionsData as any).orders;
-  //     if (Array.isArray(orders)) {
-  //       return orders as TransactionOrderData[];
-  //     }
-  //   }
-
-  //   return [];
-  // }, [allTransactionsData]);
-
-  const typedAllTransactionsData = React.useMemo(() => {
+  const typedAllTransactionsData = useMemo(() => {
     if (!allTransactionsData) return [];
 
     const normalizedData =
@@ -85,7 +62,20 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const seletedRowTransactionData = typedAllTransactionsData?.find(
     (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
   );
+
+  const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
+  const vkycVideoUrl = seletedRowTransactionData?.vkycs[0]?.resources_videos_files || '';
+  console.log('seletedRowTransactionData:', seletedRowTransactionData);
+  const vkycDocumentUrl = seletedRowTransactionData?.vkycs[0]?.resources_documents_files || '';
   const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
+  // incidentStatus: true = approved, false = rejected, null = pending
+  const incidentStatus =
+    seletedRowTransactionData?.incident_status === true
+      ? true
+      : seletedRowTransactionData?.incident_status === false
+        ? false
+        : null;
+  console.log('incidentStatus:', incidentStatus);
   // Format transaction types and purpose types for form controller
   const formatedTransactionTypes = transactionTypes.map((type) => ({
     id: parseInt(type.id) || 0,
@@ -247,6 +237,38 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
   };
 
+  const handleView = (docUrl: string, docType: 'mergeDoc' | 'vkycDoc' | 'vkycVideo') => {
+    if (docUrl && Array.isArray(docUrl)) {
+      if (docUrl.length === 1) {
+        window.open(docUrl[0], '_blank');
+      } else {
+        // Create a simple HTML page with links to all documents
+        const htmlContent = `
+      <html>
+        <head><title>Multiple Documents</title></head>
+        <body>
+          <h2>Documents to Open:</h2>
+          ${docUrl
+            .map(
+              (url, i) => `
+            <p><a href="${url}" target="_blank">Document ${i + 1}</a></p>
+          `
+            )
+            .join('')}
+        </body>
+      </html>
+    `;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+    } else {
+      if (docUrl && docType === 'mergeDoc') {
+        window.open(docUrl, '_blank');
+      }
+    }
+  };
+
   return (
     <Fragment>
       <FormProvider methods={methods}>
@@ -312,7 +334,42 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        {(showUploadSection && partnerOrderId) || isUpdatePage || isViewPage ? (
+        <div className="flex gap-2 items-start w-full mb-4">
+          {mode === 'view' && mergedDocumentUrl && (
+            <div className="flex items-start">
+              <Button
+                type="button"
+                onClick={() => handleView(mergedDocumentUrl, 'mergeDoc')}
+                className="disabled:opacity-60"
+              >
+                View Document
+              </Button>
+            </div>
+          )}
+          {mode === 'view' && vkycDocumentUrl.length > 0 && (
+            <div className="flex items-start gap-2">
+              <Button
+                type="button"
+                onClick={() => handleView(vkycDocumentUrl, 'vkycDoc')}
+                className="disabled:opacity-60"
+              >
+                VKyc Document
+              </Button>
+            </div>
+          )}
+          {mode === 'view' && vkycVideoUrl.length > 0 && (
+            <div className="flex items-start gap-2">
+              <Button
+                type="button"
+                onClick={() => handleView(vkycVideoUrl, 'vkycVideo')}
+                className="disabled:opacity-60"
+              >
+                VKyc Video
+              </Button>
+            </div>
+          )}
+        </div>
+        {(showUploadSection && partnerOrderId) || isUpdatePage || incidentStatus === false ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}

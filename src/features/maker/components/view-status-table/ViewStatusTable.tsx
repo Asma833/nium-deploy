@@ -155,7 +155,8 @@ const ViewStatusTable: React.FC = () => {
       <DynamicTable
         columns={tableColumns}
         data={tableData}
-        defaultSortColumn=""
+        defaultSortColumn="created_at"
+        defaultSortDirection="desc"
         loading={isLoading}
         paginationMode={'static'}
         onPageChange={
