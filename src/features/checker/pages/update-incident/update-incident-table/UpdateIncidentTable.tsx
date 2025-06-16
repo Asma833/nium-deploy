@@ -30,7 +30,6 @@ const UpdateIncidentCreationTable = () => {
   const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();
 
   // Fetch data using the updated hook
-  // const { data, isLoading, error, refetch } = useGetUpdateIncident(requestData);
   const {
     data,
     loading: isLoading,
@@ -82,7 +81,6 @@ const UpdateIncidentCreationTable = () => {
         columns={columns}
         data={tableData}
         defaultSortColumn="nium_order_id"
-        defaultSortDirection="asc"
         loading={pagination.loading}
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={

@@ -81,7 +81,6 @@ const PartnerCreationTable = () => {
         data={users}
         tableWrapperClass="bg-background p-5 rounded-md"
         defaultSortColumn="niumId"
-        defaultSortDirection="asc"
         renderLeftSideActions={() => (
           <Button onClick={handleCreateUser} className="bg-primary text-white px-4">
             {' '}

@@ -50,8 +50,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const [partnerOrderId, setPartnerOrderId] = useState('');
 
   // State to track if we should show the buy/sell field
-  // const [showBuySell, setShowBuySell] = useState(true);
-
   const methods = useForm<UpdateIncidentRequest>({
     resolver: zodResolver(updateIncidentFormSchema),
     defaultValues: {
@@ -105,7 +103,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
     setIsRejected(false);
     setDocumentUrl(null);
     setShowNiumInvoice(true);
-    // setShowBuySell(true);
   };
 
   // Reset form when modal is closed
@@ -138,8 +135,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   useEffect(() => {
     if (rowData) {
       const buySellValue = rowData?.transaction_mode;
-      // const shouldShowBuySell = buySellValue !== null;
-      // setShowBuySell(shouldShowBuySell);
       setIsVkycDownloadLink(rowData.is_v_kyc_required ?? false);
       setIsEsignDocumentLink(rowData.is_esign_required ?? false);
       setPartnerOrderId(rowData.partner_order_id || '');
@@ -308,13 +303,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       toast.error('No document available for download');
     }
   };
-
-  // Download handler for VKYC Document
-  // const handleDownloadVideo = () => {
-  //   if (documentUrl) {
-  //     window.open(documentUrl, '_blank');
-  //   }
-  // };
 
   // Custom handler for the Approve checkbox
   const handleApproveChange = (checked: boolean) => {

@@ -83,7 +83,6 @@ export type UpdateIncidentResponse = {
 };
 
 export type UpdateGetRequestData = {
-  checkerId: string;
   transaction_type: string;
 };
 

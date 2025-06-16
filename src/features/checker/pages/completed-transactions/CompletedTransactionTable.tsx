@@ -121,7 +121,6 @@ const CompletedTransactionTable = () => {
           hasError: hasError,
         }}
         defaultSortColumn="niumId"
-        defaultSortDirection="asc"
         loading={isLoading}
         paginationMode="static"
         totalRecords={totalRecords}

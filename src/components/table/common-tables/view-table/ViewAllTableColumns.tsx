@@ -174,6 +174,5 @@ export const GetTransactionTableColumns = ({
         })()}
       />
     ),
-  }
-  
+  },
 ];

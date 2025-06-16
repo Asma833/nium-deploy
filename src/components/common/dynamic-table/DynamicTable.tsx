@@ -70,7 +70,7 @@ export function DynamicTable<T extends Record<string, any>>({
   renderLeftSideActions,
   data: initialData,
   initialPageSize = 10,
-  defaultSortColumn,
+  defaultSortColumn = '',
   defaultSortDirection = 'desc',
   pageSizeOption = [10, 15, 20, 25, 50],
   onRowClick,

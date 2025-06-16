@@ -46,7 +46,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       }
     );
   };
- const handleRegenerateVkycLink = (rowData: Order): void => {
+  const handleRegenerateVkycLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
       setLoadingOrderId(rowData.nium_order_id);
     }
@@ -155,7 +155,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         columns={tableColumns}
         data={tableData}
         defaultSortColumn="niumId"
-        defaultSortDirection="asc"
         loading={isLoading}
         refreshAction={{
           isRefreshButtonVisible: true,

@@ -15,12 +15,7 @@ interface UserCreationTableProps {
   role: string;
 }
 
-const UserCreationTable: React.FC<UserCreationTableProps> = ({
-  userData,
-  role,
-  userLoading,
-  disableColumns = [],
-}) => {
+const UserCreationTable: React.FC<UserCreationTableProps> = ({ userData, role, userLoading, disableColumns = [] }) => {
   const navigate = useNavigate();
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
@@ -64,7 +59,6 @@ const UserCreationTable: React.FC<UserCreationTableProps> = ({
         columns={tableColumns}
         data={userData || []}
         defaultSortColumn="niumId"
-        defaultSortDirection="asc"
         loading={userLoading || filterApi.loading}
         totalRecords={userData?.length || 0}
         filter={{
