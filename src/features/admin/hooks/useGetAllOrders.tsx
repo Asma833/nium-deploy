@@ -55,12 +55,6 @@ export const useGetAllOrders = (initialTransactionType: TransactionType = 'all',
     }
   }, [userHashedKey]);
 
-  // fetch data again
-  const changeTransactionType = useCallback((newType: TransactionType) => {
-    return () => {
-      setTransactionType(newType);
-    };
-  }, []);
   // Watch for transaction type changes to trigger a new fetch
   useEffect(() => {
     if (loading || !initialFetchDone.current) return; // Prevent double fetching when autoFetch is true
