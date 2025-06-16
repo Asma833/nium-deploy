@@ -26,6 +26,7 @@ import { TransactionOrderData } from '@/types/common.type';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
+import React from 'react';
 
 const fieldWrapperBaseStyle = 'mb-2';
 
@@ -47,25 +48,39 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
   // Transform data to array format - handle both array and object with 'orders' property
-  const typedAllTransactionsData = useMemo(() => {
+  // const typedAllTransactionsData = useMemo(() => {
+
+  //   if (!allTransactionsData) return [];
+
+  //   // If already an array
+  //   if (Array.isArray(allTransactionsData)) {
+  //     return allTransactionsData as TransactionOrderData[];
+  //   }
+
+  //   // If object with 'orders' property
+  //   if (typeof allTransactionsData === 'object' && 'orders' in allTransactionsData) {
+  //     console.log('All Transactions Data:', allTransactionsData);
+  //     const orders = (allTransactionsData as any).orders;
+  //     if (Array.isArray(orders)) {
+  //       return orders as TransactionOrderData[];
+  //     }
+  //   }
+
+  //   return [];
+  // }, [allTransactionsData]);
+
+  const typedAllTransactionsData = React.useMemo(() => {
     if (!allTransactionsData) return [];
 
-    // If already an array
-    if (Array.isArray(allTransactionsData)) {
-      return allTransactionsData as TransactionOrderData[];
-    }
+    const normalizedData =
+      typeof allTransactionsData === 'object' && !Array.isArray(allTransactionsData)
+        ? (Object.values(allTransactionsData) as Record<string, any>[])
+        : Array.isArray(allTransactionsData)
+          ? (allTransactionsData as Record<string, any>[])
+          : [];
 
-    // If object with 'orders' property
-    if (typeof allTransactionsData === 'object' && 'orders' in allTransactionsData) {
-      const orders = (allTransactionsData as any).orders;
-      if (Array.isArray(orders)) {
-        return orders as TransactionOrderData[];
-      }
-    }
-
-    return [];
+    return normalizedData;
   }, [allTransactionsData]);
-
   // extract the incident checker comments from the selected transaction data
   const seletedRowTransactionData = typedAllTransactionsData?.find(
     (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
