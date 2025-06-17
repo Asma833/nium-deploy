@@ -122,10 +122,13 @@ export const TablePagination = ({
 
           {pageNumbers.map((page, index) => {
             const isCurrentPage = page === currentPage;
-            const isFirstPage = index === 0;
-            const isLastPage = index === pageNumbers.length - 1;
-            const showEllipsisBefore = isFirstPage && page > 1 && page !== 2;
-            const showEllipsisAfter = isLastPage && page < totalPages && page !== totalPages - 1;
+            const prevPage = index > 0 ? pageNumbers[index - 1] : null;
+            const nextPage = index < pageNumbers.length - 1 ? pageNumbers[index + 1] : null;
+
+            // Show ellipsis before current page if there's a gap > 1 from previous page
+            const showEllipsisBefore = prevPage !== null && page - prevPage > 1;
+            // Show ellipsis after current page if there's a gap > 1 to next page
+            const showEllipsisAfter = nextPage !== null && nextPage - page > 1;
 
             return (
               <React.Fragment key={page}>
@@ -140,7 +143,7 @@ export const TablePagination = ({
                     {page}
                   </Button>
                 </PaginationItem>
-                {showEllipsisAfter && <PaginationItem>...</PaginationItem>}
+                {/* {showEllipsisAfter && <PaginationItem>...</PaginationItem>} */}
               </React.Fragment>
             );
           })}
