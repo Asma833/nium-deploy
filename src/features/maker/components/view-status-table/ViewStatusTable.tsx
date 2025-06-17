@@ -9,31 +9,47 @@ import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import { ViewStatusTableColumns } from './ViewStatusTableColumns';
 import { useDeleteTransaction } from '../../hooks/useDeleteTransaction';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+
+const fetchOrderStatus = async (partnerOrderId: string) => {
+  const { data } = await axios.get(`/api/orders/${partnerOrderId}/status`);
+  return data;
+};
 
 const ViewStatusTable: React.FC = () => {
-  // const [loading, setIsLoading] = useState(false);
-  // const [hasError, setHasError] = useState(false);
-  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [selectedRowData, setSelectedRowData] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<Order | null>(null);
+  const [latestPartnerOrderId, setLatestPartnerOrderId] = useState<string>('');
+
+  const queryClient = useQueryClient();
+
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const { mutate, isPending: isDeleting } = useDeleteTransaction();
 
+  const {
+    refetch: refetchOrderStatus,
+    isFetching: isFetchingOrderStatus,
+  } = useQuery({
+    queryKey: ['orderStatus', latestPartnerOrderId],
+    queryFn: () => fetchOrderStatus(latestPartnerOrderId),
+    enabled: false,
+  });
+
   const tableData = useMemo(() => {
     if (!data) return [];
 
-    // If already an array
     if (Array.isArray(data)) {
       return (data as Order[]).filter(
         (item): item is Order => !!item && typeof item === 'object' && 'created_at' in item
       );
     }
 
-    // If object with 'orders' property
     if (typeof data === 'object' && 'orders' in data) {
       const orders = (data as any).orders;
       if (Array.isArray(orders)) {
@@ -47,7 +63,6 @@ const ViewStatusTable: React.FC = () => {
       return [];
     }
 
-    // If object of objects
     if (typeof data === 'object') {
       return Object.values(data).filter(
         (item: any): item is Order => !!item && typeof item === 'object' && 'created_at' in item
@@ -57,18 +72,10 @@ const ViewStatusTable: React.FC = () => {
     return [];
   }, [data]);
 
-  // Format error message consistently
   const errorMessage = useMemo(() => {
     if (!error) return '';
-
-    if (typeof error === 'string') {
-      return error;
-    }
-
-    if (error && typeof error === 'object' && 'message' in error) {
-      return (error as Error).message;
-    }
-
+    if (typeof error === 'string') return error;
+    if (error && typeof error === 'object' && 'message' in error) return (error as Error).message;
     return 'An unexpected error occurred';
   }, [error]);
 
@@ -88,15 +95,22 @@ const ViewStatusTable: React.FC = () => {
       }
     );
   };
+
   const handleRegenerateVkycLink = (rowData: Order): void => {
     if (rowData.nium_order_id) {
       setLoadingOrderId(rowData.nium_order_id);
     }
+
     sendVkycLink(
       { partner_order_id: rowData.partner_order_id || '' },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           setLoadingOrderId('');
+          if (rowData.partner_order_id) {
+            setLatestPartnerOrderId(rowData.partner_order_id);
+            const { data } = await refetchOrderStatus();
+            console.log('Order Status GET Success:', data);
+          }
         },
         onError: () => {
           setLoadingOrderId('');
@@ -104,33 +118,21 @@ const ViewStatusTable: React.FC = () => {
       }
     );
   };
-  const isPaginationDynamic = false;
 
-  // Use the dynamic pagination hook for fallback
-  const pagination = useDynamicPagination({
-    endpoint: '',
-    initialPageSize: 10,
-    dataPath: 'transactions',
-    totalRecordsPath: 'totalRecords',
-  });
-
-  const handleDelete = (rowData: any) => {
+  const handleDelete = (rowData: Order) => {
     setItemToDelete(rowData);
     setIsDeleteDialogOpen(true);
   };
+
   const handleDeleteConfirm = async () => {
     if (!itemToDelete) return;
-
-    mutate(itemToDelete.partner_order_id, {
+    mutate(itemToDelete.partner_order_id || '', {
       onSuccess: () => {
         setIsDeleteDialogOpen(false);
         setItemToDelete(null);
-        // Refresh the data to reflect the deletion
         refreshData();
       },
       onError: () => {
-        // Error handling is already done in the hook with toast
-        // Just reset the dialog state
         setIsDeleteDialogOpen(false);
         setItemToDelete(null);
       },
@@ -142,14 +144,22 @@ const ViewStatusTable: React.FC = () => {
     setItemToDelete(null);
   };
 
-  // Table columns
   const tableColumns = ViewStatusTableColumns({
     handleDelete,
     isSendEsignLinkLoading,
-    isSendVkycLinkLoading,
+    isSendVkycLinkLoading: isSendVkycLinkLoading || isFetchingOrderStatus,
     loadingOrderId,
     handleRegenerateEsignLink,
     handleRegenerateVkycLink,
+  });
+
+  const isPaginationDynamic = false;
+
+  const pagination = useDynamicPagination({
+    endpoint: '',
+    initialPageSize: 10,
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
   });
 
   return (
@@ -158,8 +168,7 @@ const ViewStatusTable: React.FC = () => {
         columns={tableColumns}
         data={tableData}
         defaultSortColumn=""
-        // loading={isLoading}
-        paginationMode={'static'}
+        paginationMode="static"
         onPageChange={
           isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
@@ -176,7 +185,12 @@ const ViewStatusTable: React.FC = () => {
         }}
       />
       {isModalOpen && selectedRowData && (
-        <DialogWrapper title="View Status" isOpen={isModalOpen} setIsOpen={setIsModalOpen} renderContent={''} />
+        <DialogWrapper
+          title="View Status"
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          renderContent={''}
+        />
       )}
       <DeleteConfirmationDialog
         open={isDeleteDialogOpen}
