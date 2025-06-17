@@ -74,10 +74,7 @@ const UserCreationTable: React.FC<UserCreationTableProps> = ({
           filterOption: true,
           mode: 'static',
           renderFilterOptions: {
-            search: true,
-            dateRange: true,
-            applyAction: true,
-            resetAction: true,
+            search: true
           },
         }}
         onFilteredDataChange={setFilteredData}
