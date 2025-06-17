@@ -37,7 +37,7 @@ export const encryptRequestInterceptor = async (
       return config;
     }
 
-    if (method === 'get') {
+    if (method === 'get' || method === 'delete') {
       const aesKey = encryptionService.generateAESKey();
       const iv = encryptionService.generateIV();
 

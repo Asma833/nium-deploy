@@ -27,7 +27,7 @@ export const ViewStatusTableColumns = ({
     {
       key: 'nium_order_id',
       id: 'nium_order_id',
-      name: 'Transaction No',
+      name: 'Order ID',
       className: 'min-w-0 p-2',
     },
     {
