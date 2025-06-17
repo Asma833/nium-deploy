@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
 import { API } from '@/core/constant/apis';
@@ -13,10 +14,18 @@ interface UserCreationTableProps {
   userError: boolean;
   disableColumns?: string[];
   role: string;
+  totalRecords?: number; // Added optional totalRecords prop
 }
 
-const UserCreationTable: React.FC<UserCreationTableProps> = ({ userData, role, userLoading, disableColumns = [] }) => {
+const UserCreationTable: React.FC<UserCreationTableProps> = ({
+  userData,
+  role,
+  userLoading,
+  disableColumns = [],
+  totalRecords,
+}) => {
   const navigate = useNavigate();
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   const { mutate: updateStatus } = useUpdateStatusAPI();
 
@@ -54,12 +63,12 @@ const UserCreationTable: React.FC<UserCreationTableProps> = ({ userData, role, u
           {filterApi.loading && <span className="text-blue-500">Loading data...</span>}
           {filterApi.error && <span className="text-red-500">Error loading data</span>}
         </div>
-      </div>
+      </div>{' '}
       <DynamicTable
         columns={tableColumns}
         data={userData || []}
         loading={userLoading || filterApi.loading}
-        totalRecords={userData?.length || 0}
+        totalRecords={filteredData.length > 0 ? filteredData.length : totalRecords || userData?.length || 0}
         paginationMode={'static'}
         filter={{
           filterOption: true,
@@ -71,6 +80,7 @@ const UserCreationTable: React.FC<UserCreationTableProps> = ({ userData, role, u
             resetAction: true,
           },
         }}
+        onFilteredDataChange={setFilteredData}
       />
     </div>
   );

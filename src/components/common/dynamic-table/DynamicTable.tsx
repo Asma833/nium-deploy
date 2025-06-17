@@ -294,7 +294,6 @@ export function DynamicTable<T extends Record<string, any>>({
           </div>
         </div>
       )}
-
       <div className="flex sm:items-center justify-between w-full md:flex-row flex-col">
         {renderLeftSideActions && <div className="flex-1 py-2">{renderLeftSideActions()}</div>}
         {(filter || renderComponents) && (
@@ -317,7 +316,6 @@ export function DynamicTable<T extends Record<string, any>>({
           </div>
         )}
       </div>
-
       <div className={cn('overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm', tableWrapperClass)}>
         <div className="border border-gray-200 overflow-clip">
           <Table className="odz-table w-full overflow-auto">
@@ -385,8 +383,7 @@ export function DynamicTable<T extends Record<string, any>>({
             </TableBody>
           </Table>
         </div>
-      </div>
-
+      </div>{' '}
       {initialData?.length !== 0 && (
         <TablePagination
           currentPage={currentPage}
@@ -396,7 +393,7 @@ export function DynamicTable<T extends Record<string, any>>({
           setPageSize={setPageSize}
           setCurrentPage={handlePageChange}
           filteredDataLength={filteredData.length}
-          totalRecords={totalRecords ? totalRecords : filteredData.length}
+          totalRecords={mode === 'static' && filters.search ? filteredData.length : totalRecords || filteredData.length}
         />
       )}
     </div>

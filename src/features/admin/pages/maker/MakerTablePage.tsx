@@ -38,7 +38,13 @@ const MakerTablePage = () => {
 
   return (
     <TableTabsLayout tabs={makerTabs}>
-      <NuserCreationTable role="maker" userData={users} userLoading={false} userError={false} disableColumns={[]} />
+      <NuserCreationTable
+        role="maker"
+        userData={users}
+        userLoading={userLoading}
+        userError={!!userError}
+        disableColumns={[]}
+      />
     </TableTabsLayout>
   );
 };
