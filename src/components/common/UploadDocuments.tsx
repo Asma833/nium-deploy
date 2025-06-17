@@ -185,8 +185,8 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         {documentTypes
           .sort((a, b) => {
             // Place "All Documents" at the beginning
-            if (a.text === 'All Documents') return -1;
-            if (b.text === 'All Documents') return 1;
+            if (a.text.includes('All Document')) return -1;
+            if (b.text.includes('All Document')) return 1;
             // For other documents, maintain alphabetical order
             return a.text.localeCompare(b.text);
           })
