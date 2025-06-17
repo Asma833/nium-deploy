@@ -22,7 +22,7 @@ interface UserCreationFormPageProps {
   title?: string;
 }
 
-const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationFormPageProps) => {
+const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPageProps) => {
   const { productOptions } = useProductOptions();
   const { id } = useParams();
   const { getBusinessType } = useCurrentUser();
@@ -30,7 +30,7 @@ const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationF
   const { setTitle } = usePageTitle();
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
-  const pageTitle = title || (isEditMode ? `Edit ${role}` : `Create ${role}`);
+  const pageTitle = (isEditMode ? `Edit ${role}` : `Create ${role}`);
 
   const { mutate: updateUser } = useUpdateAPI({ role });
   const { mutate: createUser, isLoading } = useCreateUser(
@@ -87,8 +87,8 @@ const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationF
   return (
     <>
       <FormProvider methods={methods}>
-        <FormContentWrapper className="p-2 rounded-lg w-4/5 mr-auto bg-transparent">
-          <h2 className="text-xl font-bold mb-4">{pageTitle}</h2>
+        <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent">
+          <h2 className="text-xl font-bold mb-4 title-case">{pageTitle}</h2>
           <Spacer>
             <FormFieldRow className="mb-4">
               <FieldWrapper>
@@ -111,7 +111,7 @@ const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationF
                 </div>
               </FieldWrapper> */}
             </FormFieldRow>
-            <FormFieldRow className="mb-4">
+            <FormFieldRow className="mb-4 mt-1">
               {Object.entries(formConfig.fields)
                 .slice(2, 3)
                 .map(([name, field]) => (
@@ -125,7 +125,7 @@ const UserCreationFormPage = ({ formConfig, schema, role, title }: UserCreationF
                   </FieldWrapper>
                 ))}
             </FormFieldRow>
-            <FormFieldRow className="mb-4">
+            <FormFieldRow className="mb-4 mt-2">
               {Object.entries(formConfig.fields)
                 .slice(3, 4)
                 .map(([name, field]) => (

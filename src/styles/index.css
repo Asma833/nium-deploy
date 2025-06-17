@@ -324,3 +324,6 @@ html[class='dark'] {
 .table-border-b {
   border-bottom: 1px solid rgb(218, 218, 218);
 }
+.title-case {
+  text-transform: capitalize;
+}
