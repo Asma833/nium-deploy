@@ -58,14 +58,17 @@ const UserCreationTable: React.FC<UserCreationTableProps> = ({ userData, role, u
       <DynamicTable
         columns={tableColumns}
         data={userData || []}
-        defaultSortColumn="niumId"
         loading={userLoading || filterApi.loading}
         totalRecords={userData?.length || 0}
+        paginationMode={'static'}
         filter={{
           filterOption: true,
           mode: 'static',
           renderFilterOptions: {
             search: true,
+            dateRange: true,
+            applyAction: true,
+            resetAction: true,
           },
         }}
       />

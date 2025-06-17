@@ -31,13 +31,13 @@ export const SKIP_ENCRYPTION_PATTERNS = [
  * HTTP methods that should never be encrypted
  * Only DELETE, HEAD, and OPTIONS requests skip encryption entirely
  */
-export const SKIP_ENCRYPTION_METHODS = ['delete', 'head', 'options'] as const;
+export const SKIP_ENCRYPTION_METHODS = ['head', 'options'] as const;
 
 /**
  * HTTP methods that should be encrypted (when they have data)
  * POST, PUT, PATCH encrypt request body; GET needs encryption headers for encrypted responses
  */
-export const ENCRYPT_METHODS = ['get', 'post', 'put', 'patch'] as const;
+export const ENCRYPT_METHODS = ['get', 'post', 'put', 'patch', 'delete'] as const;
 
 /**
  * Helper function to check if an endpoint should skip encryption
