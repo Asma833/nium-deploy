@@ -154,7 +154,6 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       <DynamicTable
         columns={tableColumns}
         data={tableData}
-        defaultSortColumn="niumId"
         loading={isLoading}
         refreshAction={{
           isRefreshButtonVisible: true,

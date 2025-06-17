@@ -33,16 +33,6 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Forgot password endpoint',
   },
-  'get-checker-orders-by-partner-order-id': {
-    endpoint: API.ORDERS.CHECKER_ORDERS_BY_PARTNER_ID,
-    matchType: 'exact-only' as const,
-    description: 'Fetch checker orders by partner order ID',
-  },
-  'update-order-details': {
-    endpoint: API.ORDERS.UPDATE_ORDER_DETAILS,
-    matchType: 'exact-only' as const,
-    description: 'Update order details endpoint',
-  },
   'unassign-orders': {
     endpoint: API.CHECKER.UPDATE_INCIDENT.UNASSIGN,
     matchType: 'standard' as const,
@@ -58,27 +48,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Generate e-sign link endpoint',
   },
-  // orders: {
-  //   endpoint: API.ORDERS.LIST,
-  //   matchType: 'standard' as const,
-  //   description: 'Order list endpoint',
-  // },
-  // 'checker-orders': {
-  //   endpoint: API.ORDERS.CHECKER_ORDERS,
-  //   matchType: 'standard' as const,
-  //   description: 'Checker order list endpoint',
-  // },
   'upload-documents': {
     endpoint: API.DOCUMENTS.UPLOAD,
     matchType: 'exact-only' as const,
     description: 'Upload documents endpoint',
   },
-  // 'generate-order': {
-  //   endpoint: API.MAKER.GENERATE_ORDER,
-  //   matchType: 'exact-only' as const,
-  //   description: 'Generate Order endpoint',
-  // },
-
   'generate-vkyc': {
     endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,
     matchType: 'standard' as const,

@@ -65,7 +65,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
   const vkycVideoUrl = seletedRowTransactionData?.vkycs[0]?.resources_videos_files || '';
-  console.log('seletedRowTransactionData:', seletedRowTransactionData);
   const vkycDocumentUrl = seletedRowTransactionData?.vkycs[0]?.resources_documents_files || '';
   const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
   // incidentStatus: true = approved, false = rejected, null = pending
@@ -75,7 +74,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       : seletedRowTransactionData?.incident_status === false
         ? false
         : null;
-  console.log('incidentStatus:', incidentStatus);
   // Format transaction types and purpose types for form controller
   const formatedTransactionTypes = transactionTypes.map((type) => ({
     id: parseInt(type.id) || 0,
