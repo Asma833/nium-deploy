@@ -181,7 +181,7 @@ export const ViewStatusTableColumns = ({
     return (
       <SignLinkButton
         id={nium_order_id}
-        copyLinkUrl={v_kyc_link || ''}
+        copyLinkUrl={rowData.v_kyc_link || ''}
         loading={isLoading}
         toastInfoText="VKYC Link copied successfully!"
         disabled={isDisabled}
