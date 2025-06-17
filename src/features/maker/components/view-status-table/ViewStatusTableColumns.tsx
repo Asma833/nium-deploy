@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { SignLinkButton } from '@/components/common/SignLinkButton';
 import TooltipActionButton from '@/components/common/TooltipActionButton';
@@ -22,6 +23,7 @@ export const ViewStatusTableColumns = ({
   loadingOrderId?: string | null;
 }) => {
   const navigate = useNavigate();
+  const [hasGeneratedLink, setHasGeneratedLink] = useState(false);
   return [
     {
       key: 'nium_order_id',
@@ -119,7 +121,7 @@ export const ViewStatusTableColumns = ({
         return (
           <SignLinkButton
             id={nium_order_id}
-            copyLinkUrl={e_sign_link || ''}
+            copyLinkUrl={rowData.e_sign_link || ''}
             loading={isLoading}
             toastInfoText="E Sign link copied successfully!"
             disabled={isDisabled}
@@ -139,41 +141,58 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
     },
 
-    {
-      key: 'v_kyc_link',
-      id: 'v_kyc_link',
-      name: 'VKYC Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => {
-        const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
-        const isActionNeeded =
-          is_v_kyc_required === true &&
-          (v_kyc_status !== 'pending' || v_kyc_status !== 'completed' || v_kyc_status === 'rejected' || v_kyc_status === null) &&
-          v_kyc_link === null;
+  {
+  key: 'v_kyc_link',
+  id: 'v_kyc_link',
+  name: 'VKYC Link',
+  className: 'min-w-0 max-w-[80px]',
+  cell: (_: unknown, rowData: any) => {
+    // Create a local state to track if we've just generated a link
+   
+    
+    const { v_kyc_status, e_sign_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+    
+    // Modify action needed to respect the local state
+    const isActionNeeded =
+      !hasGeneratedLink && // Don't show refresh button if we just generated a link
+      is_v_kyc_required === true &&
+      (v_kyc_status !== 'pending' || v_kyc_status !== 'completed' || v_kyc_status === 'rejected' || v_kyc_status === null) &&
+      v_kyc_link === null;
 
-        const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || v_kyc_status === null ;
+    const isDisabled = v_kyc_status === 'completed' || v_kyc_status === 'N/A' || v_kyc_status === null ;
 
-        // Determine tooltip text
-        const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
+    // Determine tooltip text
+    const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
 
-        // Determine if loading state applies to this row
-        const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
+    // Determine if loading state applies to this row
+    const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
+    
+    // Create wrapper function for regenerating link
+    const handleGenerateLink = async () => {
+      try {
+        await handleRegenerateVkycLink(rowData);
+        // When link generation is successful, update our local state
+        setHasGeneratedLink(true);
+      } catch (error) {
+        console.error("Error generating VKYC link:", error);
+      }
+    };
 
-        return (
-          <SignLinkButton
-            id={nium_order_id}
-            copyLinkUrl={v_kyc_link || ''}
-            loading={isLoading}
-            toastInfoText="VKYC Link copied successfully!"
-            disabled={isDisabled}
-            {...(isActionNeeded ? { onClick: () => handleRegenerateVkycLink(rowData) } : {})}
-            tooltipText={tooltipText}
-            buttonType={isActionNeeded ? 'refresh' : 'copy_link'}
-            buttonIconType={isActionNeeded ? 'refresh' : 'copy_link'}
-          />
-        );
-      },
-    },
+    return (
+      <SignLinkButton
+        id={nium_order_id}
+        copyLinkUrl={v_kyc_link || ''}
+        loading={isLoading}
+        toastInfoText="VKYC Link copied successfully!"
+        disabled={isDisabled}
+        {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
+        tooltipText={tooltipText}
+        buttonType={(isLoading || hasGeneratedLink) ? 'copy_link' : (isActionNeeded ? 'refresh' : 'copy_link')}
+        buttonIconType={(isLoading || hasGeneratedLink) ? 'copy_link' : (isActionNeeded ? 'refresh' : 'copy_link')}
+      />
+    );
+  },
+},
     {
       key: 'view_action',
       id: 'view_action',
