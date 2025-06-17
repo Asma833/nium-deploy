@@ -22,7 +22,7 @@ export const transactionFormSchema = z.object({
         'Applicant name must be between 2-100 characters'
       )
       // Second refine for character validation
-      .refine((val) => !val || /^[a-zA-Z\s]*$/.test(val), 'Applicant name must contain only letters and spaces'),
+      .refine((val) => !val || /^[a-zA-Z\s]*$/.test(val), 'Only letters and spaces allowed.'),
     applicantPanNumber: z
       .string()
       .optional()
@@ -73,7 +73,7 @@ export const transactionFormSubmissionSchema = z.object({
       .string()
       .min(2, 'Applicant name must be at least 2 characters')
       .max(100, 'Applicant name must not exceed 100 characters')
-      .regex(/^[a-zA-Z\s]+$/, 'Applicant name must contain only letters and spaces'),
+      .regex(/^[a-zA-Z\s]+$/, 'Only letters and spaces allowed.'),
     applicantPanNumber: z
       .string()
       .min(10, 'PAN number must be 10 characters')
