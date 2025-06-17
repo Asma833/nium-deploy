@@ -182,38 +182,94 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       </div>
 
       <div className="flex flex-wrap  gap-4">
-        {documentTypes.map((docType) => {
-          const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
+        {documentTypes
+          .sort((a, b) => {
+            // Place "All Documents" at the beginning
+            if (a.text === 'All Documents') return -1;
+            if (b.text === 'All Documents') return 1;
+            // For other documents, maintain alphabetical order
+            return a.text.localeCompare(b.text);
+          })
+          .map((docType) => {
+            const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
 
-          return (
-            <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-4 shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium">{docType.text}</CardTitle>
-                {uploadedDoc && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute top-2 right-2 h-6 w-6 p-0"
-                    onClick={() => handleRemoveDocument(docType.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                )}
-              </CardHeader>
-              <CardContent className="pt-0">
-                {uploadedDoc ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      {uploadedDoc.isUploaded ? (
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                      ) : (
-                        <FileText className="h-4 w-4 text-blue-600" />
+            return (
+              <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-4 shadow-sm">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">{docType.text}</CardTitle>
+                  {uploadedDoc && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute top-2 right-2 h-6 w-6 p-0"
+                      onClick={() => handleRemoveDocument(docType.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </CardHeader>
+                <CardContent className="pt-0">
+                  {uploadedDoc ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-sm">
+                        {uploadedDoc.isUploaded ? (
+                          <CheckCircle className="h-4 w-4 text-green-600" />
+                        ) : (
+                          <FileText className="h-4 w-4 text-blue-600" />
+                        )}
+                        <span className="truncate">{uploadedDoc.file.name}</span>
+                      </div>
+                      <div className="text-xs text-gray-500">{formatFileSize(uploadedDoc.file.size)}</div>
+
+                      <div className="flex gap-2">
+                        <input
+                          type="file"
+                          accept=".pdf,.jpg,.jpeg,.png,.gif"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              handleFileUpload(file, docType.id, docType.text);
+                            }
+                          }}
+                          className="hidden"
+                          id={`file-${docType.id}`}
+                        />
+                        <label
+                          htmlFor={`file-${docType.id}`}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100"
+                        >
+                          <Upload className="h-3 w-3" />
+                          Replace
+                        </label>
+                      </div>
+
+                      {!uploadedDoc.isUploaded && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleSubmitDocument(uploadedDoc)}
+                          disabled={uploadedDoc.isUploading}
+                          className="w-full"
+                        >
+                          {uploadedDoc.isUploading ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            'Upload Document'
+                          )}
+                        </Button>
                       )}
-                      <span className="truncate">{uploadedDoc.file.name}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">{formatFileSize(uploadedDoc.file.size)}</div>
 
-                    <div className="flex gap-2">
+                      {uploadedDoc.isUploaded && (
+                        <div className="flex items-center gap-2 text-sm text-green-600">
+                          <CheckCircle className="h-4 w-4" />
+                          <span>Document uploaded successfully</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
                       <input
                         type="file"
                         accept=".pdf,.jpg,.jpeg,.png,.gif"
@@ -228,68 +284,20 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                       />
                       <label
                         htmlFor={`file-${docType.id}`}
-                        className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100"
+                        className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50"
                       >
-                        <Upload className="h-3 w-3" />
-                        Replace
+                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
+                        <span className="text-sm text-gray-600">Click to upload</span>
+                        <span className="text-xs text-gray-500 mt-1">
+                          PDF, JPG, PNG (max {formatFileSize(MAX_FILE_SIZE)})
+                        </span>
                       </label>
                     </div>
-
-                    {!uploadedDoc.isUploaded && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleSubmitDocument(uploadedDoc)}
-                        disabled={uploadedDoc.isUploading}
-                        className="w-full"
-                      >
-                        {uploadedDoc.isUploading ? (
-                          <>
-                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Uploading...
-                          </>
-                        ) : (
-                          'Upload Document'
-                        )}
-                      </Button>
-                    )}
-
-                    {uploadedDoc.isUploaded && (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>Document uploaded successfully</span>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png,.gif"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handleFileUpload(file, docType.id, docType.text);
-                        }
-                      }}
-                      className="hidden"
-                      id={`file-${docType.id}`}
-                    />
-                    <label
-                      htmlFor={`file-${docType.id}`}
-                      className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50"
-                    >
-                      <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-600">Click to upload</span>
-                      <span className="text-xs text-gray-500 mt-1">
-                        PDF, JPG, PNG (max {formatFileSize(MAX_FILE_SIZE)})
-                      </span>
-                    </label>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
       </div>
 
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
