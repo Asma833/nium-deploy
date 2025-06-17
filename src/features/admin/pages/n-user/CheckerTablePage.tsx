@@ -1,6 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/queryKeys';
@@ -37,7 +35,13 @@ const CheckerTablePage = () => {
 
   return (
     <TableTabsLayout tabs={userTabs}>
-      <NuserCreationTable role="checker" userData={users} userLoading={false} userError={false} disableColumns={[]} />
+      <NuserCreationTable
+        role="checker"
+        userData={users}
+        userLoading={userLoading}
+        userError={!!userError}
+        disableColumns={[]}
+      />
     </TableTabsLayout>
   );
 };
