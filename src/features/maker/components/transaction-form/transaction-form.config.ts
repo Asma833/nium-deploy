@@ -15,7 +15,14 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
 
   const purposeOptions = purposeTypes.reduce(
     (acc, type) => {
-      acc[type.value] = { label: type.label };
+      // Convert the label to title case
+      const titleCaseLabel = type.label
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      acc[type.value] = { label: titleCaseLabel };
       return acc;
     },
     {} as Record<string, { label: string; selected?: boolean }>

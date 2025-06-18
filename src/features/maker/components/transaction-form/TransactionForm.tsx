@@ -27,7 +27,7 @@ import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import TransactionCreatedDialog from '../dialogs/TransactionCreatedDialog';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 
-const fieldWrapperBaseStyle = 'mb-4';
+const fieldWrapperBaseStyle = 'mb-5';
 
 const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [searchParams] = useSearchParams();
