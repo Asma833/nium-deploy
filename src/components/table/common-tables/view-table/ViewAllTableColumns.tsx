@@ -165,12 +165,7 @@ export const GetTransactionTableColumns = ({
           const { incident_status, e_sign_status } = rowData || {};
           const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
 
-          return (
-            incident_status === null ||
-            incident_status === undefined ||
-            Boolean(incident_status) ||
-            disabledEsignStatuses.includes(e_sign_status)
-          );
+          return Boolean(incident_status) || disabledEsignStatuses.includes(e_sign_status);
         })()}
       />
     ),
