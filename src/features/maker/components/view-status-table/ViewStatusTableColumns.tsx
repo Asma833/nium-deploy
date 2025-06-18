@@ -89,7 +89,8 @@ export const ViewStatusTableColumns = ({
       name: 'E Sign Link',
       className: 'min-w-0 p-2',
       cell: (_: any, rowData: any) => {
-        const { merged_document, nium_order_id, e_sign_link, e_sign_status, e_sign_link_status } = rowData;
+        const { merged_document, nium_order_id, e_sign_link, e_sign_status, e_sign_link_status, is_esign_required } =
+          rowData;
 
         // No action can be taken if there's no merged document
         if (merged_document === null) {
@@ -109,10 +110,15 @@ export const ViewStatusTableColumns = ({
 
         // Check if we need to generate a new link (no existing link or status requires regeneration)
         const needsGeneration =
-          e_sign_link_status === 'expired' || e_sign_status === 'rejected' || e_sign_status === 'expired';
+          e_sign_link_status === 'expired' ||
+          e_sign_status === 'rejected' ||
+          e_sign_link === null ||
+          e_sign_status === 'expired';
 
         // Button should be disabled if e-sign is completed and no regeneration is needed
-        const isDisabled = e_sign_status === 'completed' && !needsGeneration;
+        const isDisabled =
+          (e_sign_status === 'completed' && !needsGeneration) ||
+          (is_esign_required === true && e_sign_link === null && !needsGeneration);
 
         // Determine if loading state applies to this row
         const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
@@ -155,7 +161,7 @@ export const ViewStatusTableColumns = ({
         const isDisabled =
           is_v_kyc_required === false ||
           v_kyc_status === 'completed' ||
-          (is_v_kyc_required === false && v_kyc_link === null && isActionNeeded === false);
+          (is_v_kyc_required === true && v_kyc_link === null && !isActionNeeded);
 
         // Determine tooltip text
         const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
