@@ -1,6 +1,7 @@
 export const HEADER_KEYS = {
   PARTNER_ID: import.meta.env.VITE_PARTNER_ID,
   API_KEY: import.meta.env.VITE_API_KEY,
+  
 };
 
 export const API = {
