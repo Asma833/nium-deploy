@@ -13,25 +13,19 @@ const fileSchema = z.object({
 export const transactionFormSchema = z.object({
   // Applicant Information
   applicantDetails: z.object({
-  applicantName: z
-    .string()
-    .optional()
-    .or(z.literal(''))
-    // First refine to prevent initial spaces
-    .refine(
-      (val) => !val || !val.startsWith(' '),
-      'Applicant name cannot start with a space'
-    )
-    // Second refine for length validation
-    .refine(
-      (val) => !val || (val.length >= 2 && val.length <= 100),
-      'Applicant name must be between 2-100 characters'
-    )
-    // Third refine for character validation
-    .refine(
-      (val) => !val || /^[a-zA-Z\s]*$/.test(val),
-      'Only letters and spaces allowed.'
-    ),
+    applicantName: z
+      .string()
+      .optional()
+      .or(z.literal(''))
+      // First refine to prevent initial spaces
+      .refine((val) => !val || !val.startsWith(' '), 'Applicant name cannot start with a space')
+      // Second refine for length validation
+      .refine(
+        (val) => !val || (val.length >= 2 && val.length <= 100),
+        'Applicant name must be between 2-100 characters'
+      )
+      // Third refine for character validation
+      .refine((val) => !val || /^[a-zA-Z\s]*$/.test(val), 'Only letters and spaces allowed.'),
     applicantPanNumber: z
       .string()
       .optional()
@@ -57,10 +51,7 @@ export const transactionFormSchema = z.object({
       .string()
       .optional()
       .or(z.literal(''))
-      .refine(
-        (val) => !val || !val.startsWith(' '),
-        'Partner Order ID cannot start with a space'
-      )
+      .refine((val) => !val || !val.startsWith(' '), 'Partner Order ID cannot start with a space')
       .refine((val) => !val || val.length >= 3, 'Partner Order ID must be at least 3 characters'),
 
     isVKycRequired: z
@@ -93,20 +84,15 @@ export const transactionFormSubmissionSchema = z.object({
       .max(10, 'PAN number must be 10 characters')
       .regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format (e.g., ABCDE1234F)'),
 
-    email: z.string()
-  .min(1, 'Email is required')
-  .email('Invalid email format')
-  .refine(
-    (email) => {
-      const localPart = email.split('@')[0];
-      return !localPart.startsWith('-');
-    },
-    'Email address cannot start with a hyphen'
-  )
-  .refine(
-    (email) => !email.includes(','),
-    'Email address cannot contain commas'
-  ),
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Invalid email format')
+      .refine((email) => {
+        const localPart = email.split('@')[0];
+        return !localPart.startsWith('-');
+      }, 'Email address cannot start with a hyphen')
+      .refine((email) => !email.includes(','), 'Email address cannot contain commas'),
 
     mobileNumber: z
       .string()
