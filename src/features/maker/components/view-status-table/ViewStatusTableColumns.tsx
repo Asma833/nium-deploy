@@ -159,9 +159,9 @@ export const ViewStatusTableColumns = ({
         const isActionNeeded = v_kyc_status === 'N/A' || v_kyc_status === 'expired';
 
         const isDisabled =
-          is_v_kyc_required === false ||
+          !is_v_kyc_required ||
           v_kyc_status === 'completed' ||
-          (is_v_kyc_required === true && v_kyc_link === null && !isActionNeeded);
+          (is_v_kyc_required && v_kyc_link === null && !isActionNeeded);
 
         // Determine tooltip text
         const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';

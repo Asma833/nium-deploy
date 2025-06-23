@@ -30,7 +30,7 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
   const { setTitle } = usePageTitle();
   const location = useLocation();
   const selectedRow = (location.state as any)?.selectedRow || null;
-  const pageTitle = (isEditMode ? `Edit ${role}` : `Create ${role}`);
+  const pageTitle = isEditMode ? `Edit ${role}` : `Create ${role}`;
 
   const { mutate: updateUser } = useUpdateAPI({ role });
   const { mutate: createUser, isLoading } = useCreateUser(

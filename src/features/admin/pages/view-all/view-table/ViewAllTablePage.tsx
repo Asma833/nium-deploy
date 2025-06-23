@@ -7,6 +7,7 @@ import { Order } from '@/features/checker/types/updateIncident.types';
 const ViewAllTablePage = () => {
   usePageTitle('View All Orders');
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+
   const tableData = useMemo(() => {
     if (!data) return [];
 

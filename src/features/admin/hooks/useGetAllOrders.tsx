@@ -8,7 +8,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 type TransactionType = 'all' | 'completed';
 
 export const useGetAllOrders = (initialTransactionType: TransactionType = 'all', autoFetch: boolean = true) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState<boolean>(autoFetch);
   const [error, setError] = useState<string | null>(null);
   const [transactionType, setTransactionType] = useState<TransactionType>(initialTransactionType);
@@ -36,9 +36,15 @@ export const useGetAllOrders = (initialTransactionType: TransactionType = 'all',
     setError(null);
 
     try {
-      const { data } = await axiosInstance.get(API.ORDERS.LIST);
+      const endpoint =
+        transactionTypeRef.current === 'all'
+          ? API.ORDERS.LIST
+          : `${API.ORDERS.LIST}?type=${transactionTypeRef.current}`;
 
-      setData(data);
+      const { data } = await axiosInstance.get(endpoint);
+      const apiData = data.data;
+
+      setData(apiData);
     } catch (err) {
       // More detailed error logging for authentication issues
       if (axios.isAxiosError(err) && err.response?.status === 401) {
