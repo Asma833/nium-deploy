@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { setupInterceptors } from './interceptor';
+import { HEADER_KEYS } from '@/core/constant/apis';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL || '',
   headers: {
     'Content-Type': 'application/json',
-    'x-partner-id': import.meta.env.VITE_X_PARTNER_ID,
+    partner_id: HEADER_KEYS.PARTNER_ID,
   },
 });
 
