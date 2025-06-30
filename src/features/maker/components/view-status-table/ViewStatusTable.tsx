@@ -54,7 +54,6 @@ const ViewStatusTable: React.FC = () => {
 
     return [];
   }, [data]);
-  console.log('tableData', tableData);
 
   // Format error message consistently
   const errorMessage = useMemo(() => {

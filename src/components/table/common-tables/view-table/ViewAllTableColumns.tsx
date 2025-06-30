@@ -162,10 +162,10 @@ export const GetTransactionTableColumns = ({
         buttonIconType="refresh"
         onClick={() => handleRegenerateEsignLink(rowData)}
         disabled={(() => {
-          const { incident_status, e_sign_status } = rowData || {};
+          const { incident_status, e_sign_status, merged_document, e_sign_link } = rowData || {};
           const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
 
-          return Boolean(incident_status) || disabledEsignStatuses.includes(e_sign_status);
+          return Boolean(incident_status) || disabledEsignStatuses.includes(e_sign_status) || !merged_document;
         })()}
       />
     ),
