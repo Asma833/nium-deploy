@@ -71,7 +71,7 @@ export const MaterialSelect = ({
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
-                  return Array.isArray(selected) ? toTitleCase(selected.join(', ')) : toTitleCase(selected);
+                  return Array.isArray(selected) ? toTitleCase(selected.join(', ')) : selected;
                 }}
               >
                 <MenuItem disabled value="">
