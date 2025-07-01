@@ -31,14 +31,14 @@ export const useUpdateAPI = ({ role }: { role: string }) => {
       return await userApi.userUpdate(payload);
     },
     onSuccess: () => {
-      const successMessage = role === 'maker' ? 'Maker user updated successfully' : 'Checker user updated successfully';
+      const successMessage = role === 'maker' ? 'Maker updated successfully' : 'Checker updated successfully';
       toast.success(successMessage);
       const url = role === 'maker' ? '/admin/maker' : '/admin/users';
       navigate(url);
     },
     onError: (error: Error) => {
       const errorMessage =
-        error.message || role === 'maker' ? 'Maker user update failed' : 'Checker user update failed';
+        error.message || role === 'maker' ? 'Maker update failed' : 'Checker update failed';
       toast.error(errorMessage);
     },
   });

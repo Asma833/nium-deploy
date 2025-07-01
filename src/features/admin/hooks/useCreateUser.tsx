@@ -39,16 +39,19 @@ export const useCreateUser = (
       return apiPayload;
     },
     onSuccess: (data: UserApiPayload) => {
-      toast.success('User created successfully');
+      const successMessage = role === 'maker' ? 'Maker created successfully' : 'Checker created successfully';
+      toast.success(successMessage);
       onUserCreateSuccess(data);
       const url = role === 'maker' ? '/admin/maker' : '/admin/users';
       navigate(url);
     },
     onError: (error: Error) => {
+      const errorMessage =
+        error.message || role === 'maker' ? 'Maker creation failed' : 'Checker creation failed';
       toast.error(
         error.message === 'Request failed with status code 409'
           ? 'Email already exist'
-          : error.message || 'User creation failed'
+          : error.message || errorMessage
       );
     },
   });
