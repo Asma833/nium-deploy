@@ -385,13 +385,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           )}
         </div>
-        {(showUploadSection && partnerOrderId) || isUpdatePage || incidentStatus === false ? (
+        {(showUploadSection && partnerOrderId) || isUpdatePage || !incidentStatus ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
               onESignGenerated={() => {
                 handleRegenerateEsignLink(partnerOrderId);
               }}
+              isResubmission={isUpdatePage && !incidentStatus}
             />
           </FormFieldRow>
         ) : null}

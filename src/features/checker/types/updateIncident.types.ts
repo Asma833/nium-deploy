@@ -185,7 +185,7 @@ export type Order = {
   customer_email?: string;
   customer_phone?: string;
   customer_pan?: string;
-  order_status?: string;
+  order_status?: string | null | boolean;
   e_sign_status?: string;
   e_sign_link?: string | null;
   e_sign_link_status?: string | null;

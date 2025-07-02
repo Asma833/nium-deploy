@@ -30,6 +30,7 @@ interface UploadDocumentsProps {
   partnerOrderId: string;
   onUploadComplete?: (success: boolean) => void;
   onESignGenerated?: (success: boolean) => void;
+  isResubmission?: boolean;
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
@@ -39,6 +40,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   partnerOrderId,
   onUploadComplete,
   onESignGenerated,
+  isResubmission = false, // Added isResubmission prop for handling resubmissions
 }) => {
   const { documentTypes, loading } = useGetDocumentTypes();
   const uploadDocumentMutation = useUploadDocument();
