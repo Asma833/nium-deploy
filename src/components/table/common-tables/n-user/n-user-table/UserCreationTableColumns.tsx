@@ -13,28 +13,30 @@ export const GetUserTableColumns = (
       id: 'email',
       name: 'Email',
     },
+     //disabling for this phase
+
     // {
     //   key: 'createdAt',
     //   id: 'createdAt',
     //   name: 'Creation Date',
     // },
-    {
-      key: 'status',
-      id: 'status',
-      name: 'Status',
-      cell: (_, row: any) => {
-        return (
-          <div className="flex flex-col items-center">
-            <Switch
-              checked={row?.is_active}
-              onCheckedChange={(checked) => {
-                handleStatusChange(row, checked);
-              }}
-            />
-          </div>
-        );
-      },
-    },
+    // {
+    //   key: 'status',
+    //   id: 'status',
+    //   name: 'Status',
+    //   cell: (_, row: any) => {
+    //     return (
+    //       <div className="flex flex-col items-center">
+    //         <Switch
+    //           checked={row?.is_active}
+    //           onCheckedChange={(checked) => {
+    //             handleStatusChange(row, checked);
+    //           }}
+    //         />
+    //       </div>
+    //     );
+    //   },
+    // },
 
     {
       key: 'actions',
