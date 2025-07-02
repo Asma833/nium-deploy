@@ -315,7 +315,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
                         disabled:
                           isUpdatePage ||
                           isViewPage ||
-                          (isEditPage && field.name === 'applicantDetails.partnerOrderId'),
+                          (isEditPage && field.name === 'applicantDetails.partnerOrderId') ||
+                          ((isEditPage || isUpdatePage) && field.name === 'applicantDetails.isVKycRequired'),
                       })}
                     </FieldWrapper>
                   );
@@ -343,8 +344,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         )}
         {isViewPage && checkerComments && (
           <FormFieldRow className="mb-4 w-full">
-            <div>
-              Comment: <span className="text-red-500">{checkerComments}</span>
+            <div className="flex flex-col gap-2 w-full bg-[#e6e6e6] p-3 rounded-md">
+              <strong className="text-gray-600">Rejection Summary:</strong>{' '}
+              <span className="text-red-500">{checkerComments}</span>
             </div>
           </FormFieldRow>
         )}

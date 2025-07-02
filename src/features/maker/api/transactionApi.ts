@@ -29,3 +29,12 @@ export const updateOrder = (partnerOrderId: string, data: UpdateOrderRequest) =>
     },
   });
 };
+
+export const updateDocument = (formData: FormData) => {
+  return axiosInstance.put(API.DOCUMENTS.UPDATE, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      accept: '*/*',
+    },
+  });
+};

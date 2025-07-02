@@ -87,6 +87,7 @@ export const API = {
   DOCUMENTS: {
     UPLOAD: `/documents/upload`,
     UPLOAD_WITH_MERGE: `/documents/upload-with-merge`,
+    UPDATE: `/documents/update`,
   },
   PRODUCTS: {
     GET_PRODUCTS: '/products',
