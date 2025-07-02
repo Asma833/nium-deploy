@@ -30,12 +30,12 @@ const publicPaths = [
   ROUTES.AUTH.RESET_PASSWORD,
 ];
 
-const allowedRoles = Object.values(ROLES);
+const defaultAllowedRoles = Object.values(ROLES);
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   allowedRoles = [],
-  roles = allowedRoles,
+  roles = defaultAllowedRoles,
 }) => {
   const { user, isAuthenticated, isLoading } = useSelector(selectAuthState);
   const location = useLocation();
