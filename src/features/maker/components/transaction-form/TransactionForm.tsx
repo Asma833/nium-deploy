@@ -67,8 +67,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   );
 
   const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
-  const vkycVideoUrl = seletedRowTransactionData?.vkycs[0]?.resources_videos_files || '';
-  const vkycDocumentUrl = seletedRowTransactionData?.vkycs[0]?.resources_documents_files || '';
+  const vkycVideoUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_videos_files || '';
+  const vkycDocumentUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_documents_files || '';
   const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
   // incidentStatus: true = approved, false = rejected, null = pending
   const incidentStatus =
@@ -164,7 +164,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         );
 
         await updateOrderMutation.mutateAsync({
-          partnerOrderId: formData.applicantDetails.partnerOrderId || '',
+          partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
           data: updateRequestData,
         });
 
@@ -177,7 +177,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
         if (formData?.applicantDetails?.isVKycRequired?.toLowerCase() === 'true' && response?.status === 201) {
           sendVkycLink(
-            { partner_order_id: response.data?.partner_order_id || formData.applicantDetails.partnerOrderId },
+            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
             {
               onError: () => {
                 toast.error('Failed to generated VKYC link');
@@ -187,7 +187,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         }
 
         // Extract response data based on your API specification
-        const partnerOrder = response.data?.partner_order_id || formData.applicantDetails.partnerOrderId || 'PO123';
+        const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
         const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
         setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
         setNiumForexOrderId(niumOrder);
