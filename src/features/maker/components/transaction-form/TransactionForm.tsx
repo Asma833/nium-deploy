@@ -65,6 +65,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const seletedRowTransactionData = typedAllTransactionsData?.find(
     (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
   );
+  console.log('seletedRowTransactionData:', seletedRowTransactionData);
 
   const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
   const vkycVideoUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_videos_files || '';
@@ -123,7 +124,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           email: seletedRowTransactionData.customer_email || '',
           mobileNumber: seletedRowTransactionData.customer_phone || '',
           partnerOrderId: seletedRowTransactionData.partner_order_id || '',
-          isVKycRequired: seletedRowTransactionData.is_v_kyc_required ? 'true' : 'false',
+          isVKycRequired: seletedRowTransactionData.is_v_kyc_required || false,
           transactionType: seletedRowTransactionData.transaction_type_name?.name || '',
           purposeType: seletedRowTransactionData.purpose_type_name?.purpose_name || '',
         },
@@ -175,7 +176,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         // Handle create operation
         const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
-        if (formData?.applicantDetails?.isVKycRequired?.toLowerCase() === 'true' && response?.status === 201) {
+        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
           sendVkycLink(
             { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
             {

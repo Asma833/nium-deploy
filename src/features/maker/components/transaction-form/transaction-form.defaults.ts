@@ -8,7 +8,7 @@ export const transactionFormDefaults = {
     email: '',
     mobileNumber: '',
     partnerOrderId: '',
-    isVKycRequired: 'false', // Default to 'false'
+    isVKycRequired: false, // Default to false
   },
   uploadDocuments: {
     pan: [],
