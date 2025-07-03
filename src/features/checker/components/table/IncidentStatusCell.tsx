@@ -1,14 +1,13 @@
-import _ from 'lodash';
 import { Order } from '../../types/updateIncident.types';
 
 const IncidentStatusCell = ({ rowData }: { rowData: Order }) => {
+  const status = rowData.order_status;
+
   return (
     <span>
-      {rowData.order_status === null || rowData.order_status === undefined || rowData.order_status === false ? (
+      {!status || status === 'pending' ? (
         <span className="status-badge pending">Pending</span>
-      ) : rowData.order_status === 'pending' ? (
-        <span className="status-badge pending">Pending</span>
-      ) : rowData.order_status === 'approved' ? (
+      ) : status === 'approved' ? (
         <span className="status-badge approved">Approved</span>
       ) : (
         <span className="status-badge rejected">Rejected</span>
