@@ -56,6 +56,7 @@ const ViewAllTablePage = () => {
 
     return 'An unexpected error occurred';
   }, [error]);
+
   return (
     <ViewAllTable
       tableData={tableData}
