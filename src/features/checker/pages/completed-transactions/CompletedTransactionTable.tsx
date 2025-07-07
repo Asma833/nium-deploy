@@ -54,7 +54,7 @@ const CompletedTransactionTable = () => {
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
-      incident_status: order.incident_status ? 'Approved' : !order.incident_status ? 'Rejected' : 'Pending',
+          order_status: order.order_status,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
@@ -109,6 +109,7 @@ const CompletedTransactionTable = () => {
 
     return 0;
   })();
+  console.log('getTableData', getTableData());
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable

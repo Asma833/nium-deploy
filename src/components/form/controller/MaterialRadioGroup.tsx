@@ -27,8 +27,21 @@ export const MaterialRadioGroup = <T extends FieldValues>({
         name={name}
         render={({ field }) => {
           return (
-            <RadioGroup {...field}>
+            <RadioGroup
+              {...field}
+              onChange={(e) => {
+                const value = e.target.value;
+                // Convert string to boolean for boolean fields
+                if (value === 'true' || value === 'false') {
+                  field.onChange(value === 'true');
+                } else {
+                  field.onChange(value);
+                }
+              }}
+            >
               {Object.entries(options).map(([value, option]) => {
+                // For boolean comparison, convert field.value to string
+                const fieldValueAsString = typeof field.value === 'boolean' ? field.value.toString() : field.value;
                 return (
                   <FormControlLabel
                     key={value}
@@ -36,7 +49,7 @@ export const MaterialRadioGroup = <T extends FieldValues>({
                     control={
                       <Radio
                         icon={<Circle size={'20'} className="text-foreground" />}
-                        checked={field.value === value}
+                        checked={fieldValueAsString === value}
                         checkedIcon={<CircleCheck className="text-primary" size={'20'} />}
                         disabled={disabled}
                       />

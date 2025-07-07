@@ -42,6 +42,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [showUploadSection, setShowUploadSection] = useState(false);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+  console.log('purposeTypeOptions:', purposeTypeOptions);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
@@ -123,7 +124,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           email: seletedRowTransactionData.customer_email || '',
           mobileNumber: seletedRowTransactionData.customer_phone || '',
           partnerOrderId: seletedRowTransactionData.partner_order_id || '',
-          isVKycRequired: seletedRowTransactionData.is_v_kyc_required ? 'true' : 'false',
+          isVKycRequired: seletedRowTransactionData.is_v_kyc_required || false,
           transactionType: seletedRowTransactionData.transaction_type_name?.name || '',
           purposeType: seletedRowTransactionData.purpose_type_name?.purpose_name || '',
         },
@@ -175,7 +176,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         // Handle create operation
         const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
-        if (formData?.applicantDetails?.isVKycRequired?.toLowerCase() === 'true' && response?.status === 201) {
+        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
           sendVkycLink(
             { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
             {

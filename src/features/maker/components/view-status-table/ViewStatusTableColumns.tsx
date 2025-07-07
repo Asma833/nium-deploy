@@ -6,7 +6,7 @@ import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { Edit, Upload, Trash2, Eye } from 'lucide-react';
-import IncidentStatusCell from '@/features/checker/components/table/IncidentStatusCell';
+import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -89,8 +89,15 @@ export const ViewStatusTableColumns = ({
       name: 'E Sign Link',
       className: 'min-w-0 p-2',
       cell: (_: any, rowData: any) => {
-        const { merged_document, nium_order_id, e_sign_link, e_sign_status, e_sign_link_status, is_esign_required } =
-          rowData;
+        const {
+          merged_document,
+          nium_order_id,
+          e_sign_link,
+          e_sign_status,
+          e_sign_link_status,
+          is_esign_required,
+          order_status,
+        } = rowData;
 
         // No action can be taken if there's no merged document
         if (merged_document === null) {
@@ -111,10 +118,10 @@ export const ViewStatusTableColumns = ({
         // Check if we need to generate a new link (no existing link or status requires regeneration)
         const needsGeneration =
           e_sign_link_status === 'expired' ||
-          e_sign_status === 'rejected' ||
           e_sign_link === null ||
-          e_sign_status === 'expired';
-
+          e_sign_status === 'rejected' ||
+          e_sign_status === 'expired' ||
+          order_status === 'rejected';
         // Button should be disabled if e-sign is completed and no regeneration is needed
         const isDisabled =
           (e_sign_status === 'completed' && !needsGeneration) ||
@@ -204,7 +211,7 @@ export const ViewStatusTableColumns = ({
       id: 'incident_status',
       name: 'Incident Status',
       className: 'min-w-0 p-2',
-      cell: (_: any, value: any) => <IncidentStatusCell rowData={value} />,
+      cell: (_: any, value: any) => <OrderStatusCell rowData={value} />,
     },
     {
       key: 'view_action',
@@ -223,6 +230,7 @@ export const ViewStatusTableColumns = ({
             onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}&action=edit`)}
             icon={<Edit size={16} />}
             tooltipText="Edit"
+            disabled={rowData.e_sign_status === 'completed' || rowData.e_sign_status === 'active'}
             variant="edit"
           />
           <TooltipActionButton

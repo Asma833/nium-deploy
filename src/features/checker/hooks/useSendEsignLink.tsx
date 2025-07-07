@@ -1,10 +1,10 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { updateIncidentApi } from '../api/updateIncidentApi';
-import { EsignLinkRequest } from '../types/updateIncident.types';
+import { EsignLinkRequest, TransactionType } from '../types/updateIncident.types';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 
-export const useSendEsignLink = () => {
+export const useSendEsignLink = (transactionType?: TransactionType) => {
   const { invalidateMultipleQueries } = useQueryInvalidator();
   const { mutate, isPending, error } = useMutation<void, Error, EsignLinkRequest>({
     mutationFn: async (userData: any) => {
@@ -12,8 +12,10 @@ export const useSendEsignLink = () => {
     },
     onSuccess: () => {
       toast.success('Esign link generated successfully');
-      invalidateMultipleQueries([['updateIncident'], ['orders']]);
+      const queriesToInvalidate = [['updateIncident'], ['orders'], ['checkerOrders']];
+      invalidateMultipleQueries(queriesToInvalidate, { exact: false });
     },
+
     onError: (error: Error) => {
       toast.error(error.message || 'Esign link sharing failed');
     },

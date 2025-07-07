@@ -54,11 +54,7 @@ export const transactionFormSchema = z.object({
       .refine((val) => !val || !val.startsWith(' '), 'Partner Order ID cannot start with a space')
       .refine((val) => !val || val.length >= 3, 'Partner Order ID must be at least 3 characters'),
 
-    isVKycRequired: z
-      .string()
-      .optional()
-      .or(z.literal(''))
-      .refine((val) => !val || ['true', 'false'].includes(val), 'Please select Yes or No for V-KYC requirement'),
+    isVKycRequired: z.boolean().optional(),
 
     // Transaction Details
     transactionType: z.string().optional().or(z.literal('')),
@@ -103,10 +99,10 @@ export const transactionFormSubmissionSchema = z.object({
       .string()
       .min(3, 'Partner Order ID must be at least 3 characters')
       .min(1, 'Partner Order ID is required'),
-    isVKycRequired: z
-      .string()
-      .min(1, 'V-KYC selection is required')
-      .refine((val) => ['true', 'false'].includes(val), 'Please select Yes or No for V-KYC requirement'),
+    isVKycRequired: z.boolean({
+      required_error: 'V-KYC selection is required',
+      invalid_type_error: 'Please select Yes or No for V-KYC requirement',
+    }),
 
     transactionType: z.string().min(1, 'Transaction type is required'),
 

@@ -80,13 +80,11 @@ const UpdateIncidentCreationTable = () => {
       <DynamicTable
         columns={columns}
         data={tableData}
-        defaultSortColumn="nium_order_id"
         loading={pagination.loading}
-        paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         onPageChange={
           isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
-        totalRecords={pagination.totalRecords}
+        paginationMode={'static'}
         refreshAction={{
           isRefreshButtonVisible: true,
           onRefresh: refreshData,

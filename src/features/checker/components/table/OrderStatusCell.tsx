@@ -1,15 +1,14 @@
+import _ from 'lodash';
 import { Order } from '../../types/updateIncident.types';
 
-const IncidentStatusCell = ({ rowData }: { rowData: Order }) => {
-  console.log('IncidentStatusCell rowData', rowData);
-
+const OrderStatusCell = ({ rowData }: { rowData: Order }) => {
   return (
     <span>
-      {!rowData.incident_status ? (
+      {!rowData.order_status ? (
         <span className="status-badge pending">Pending</span>
-      ) : rowData.incident_status === 'pending' ? (
+      ) : rowData.order_status === 'pending' ? (
         <span className="status-badge pending">Pending</span>
-      ) : rowData.incident_status === 'approved' ? (
+      ) : rowData.order_status === 'completed' ? (
         <span className="status-badge approved">Approved</span>
       ) : (
         <span className="status-badge rejected">Rejected</span>
@@ -18,4 +17,4 @@ const IncidentStatusCell = ({ rowData }: { rowData: Order }) => {
   );
 };
 
-export default IncidentStatusCell;
+export default OrderStatusCell;

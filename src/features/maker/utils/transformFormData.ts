@@ -23,7 +23,7 @@ export const transformFormDataToApiRequest = (
     partner_order_id: formData.applicantDetails.partnerOrderId || '',
     transaction_type_id: selectedTransactionType?.typeId || '',
     is_e_sign_required: true, // Always true as per requirement
-    is_v_kyc_required: formData.applicantDetails.isVKycRequired === 'true',
+    is_v_kyc_required: formData.applicantDetails.isVKycRequired || false,
     purpose_type_id: selectedPurposeType?.typeId || '',
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
@@ -53,7 +53,7 @@ export const transformFormDataToUpdateRequest = (
   return {
     transaction_type: selectedTransactionType?.typeId || '',
     purpose_type: selectedPurposeType?.typeId || '',
-    is_v_kyc_required: formData.applicantDetails.isVKycRequired === 'true',
+    is_v_kyc_required: formData.applicantDetails.isVKycRequired || false,
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
     customer_phone: formData.applicantDetails.mobileNumber || '',
