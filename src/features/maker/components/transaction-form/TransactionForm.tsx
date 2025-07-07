@@ -143,11 +143,11 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       { partner_order_id: pOrderId || '' },
       {
         onSuccess: () => {
-          toast.success('E-sign link regenerated successfully');
+          toast.success('E-sign link generated successfully');
           navigate(`/maker/view-status`);
         },
         onError: () => {
-          toast.error('Failed to regenerate e-sign link');
+          toast.error('Failed to generate e-sign link');
         },
       }
     );
