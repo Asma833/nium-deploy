@@ -221,13 +221,6 @@ export const ViewStatusTableColumns = ({
             variant="view"
           />
           <TooltipActionButton
-            onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}&action=edit`)}
-            icon={<Edit size={16} />}
-            tooltipText="Edit"
-            disabled={rowData.e_sign_status === 'completed' || rowData.e_sign_status === 'active'}
-            variant="edit"
-          />
-          <TooltipActionButton
             onClick={() =>
               navigate(`/maker/update-transaction?partner-order-id=${rowData.partner_order_id}&action=update`)
             }
