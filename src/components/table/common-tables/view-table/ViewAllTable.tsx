@@ -151,6 +151,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   useEffect(() => {
     refreshData();
   }, [refreshData]);
+
   return (
     <div className="dynamic-table-wrap">
       {' '}

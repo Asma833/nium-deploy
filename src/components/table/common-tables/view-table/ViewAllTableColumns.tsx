@@ -1,4 +1,5 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
+import { DISABLED_ESIGN_STATUSES, EsignStatus } from '@/components/types/status';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -6,7 +7,6 @@ import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { nullable } from 'zod';
 
 export const GetTransactionTableColumns = ({
   handleRegenerateEsignLink,
@@ -23,9 +23,9 @@ export const GetTransactionTableColumns = ({
   isSendVkycLinkLoading?: boolean;
   loadingOrderId?: string | null;
 }) => {
-  const isLinkDisabled = (link: string | null | undefined, status: string | undefined) =>
-    !link || status === 'not generated' || status === 'completed';
-
+  const isLinkDisabled = (link: string | null | undefined, status: string | undefined): boolean => {
+    return !link || DISABLED_ESIGN_STATUSES.includes(status as EsignStatus);
+  };
   return [
     {
       key: 'nium_order_id',

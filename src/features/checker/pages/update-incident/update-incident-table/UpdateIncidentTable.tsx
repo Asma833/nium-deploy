@@ -66,9 +66,11 @@ const UpdateIncidentCreationTable = () => {
 
   const columns = GetTransactionTableColumns(openModal, handleUnassign, isUnassignPending);
   const tableData = data && data.orders && data.orders.length > 0 ? data.orders : [];
+
   useEffect(() => {
     refreshData();
   }, [refreshData]);
+
   return (
     <div className="dynamic-table-wrap">
       <div
