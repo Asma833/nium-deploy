@@ -20,6 +20,8 @@ export const ORDER_STATUSES = {
   REJECTED: 'rejected',
 } as const;
 
+export const DISABLED_ORDER_STATUSES = [null, undefined, 'completed'];
+
 export const ORDER_STATUS_LABELS: Record<string, string> = {
   [ORDER_STATUSES.PENDING]: 'Pending',
   [ORDER_STATUSES.COMPLETED]: 'Approved',

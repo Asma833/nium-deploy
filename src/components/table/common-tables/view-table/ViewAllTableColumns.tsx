@@ -1,5 +1,5 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
-import { DISABLED_ESIGN_STATUSES, EsignStatus } from '@/components/types/status';
+import { DISABLED_ESIGN_STATUSES, DISABLED_ORDER_STATUSES, EsignStatus } from '@/components/types/status';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -163,19 +163,13 @@ export const GetTransactionTableColumns = ({
           id={rowData.nium_order_id}
           loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
           copyLinkUrl={rowData.v_kyc_link}
-          tooltipText={'Generate Esign Link'}
+          tooltipText="Generate Esign Link"
           buttonIconType="refresh"
           onClick={() => handleRegenerateEsignLink(rowData)}
           disabled={(() => {
             const { e_sign_status, order_status } = rowData || {};
-            const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
-            const disabledOrderStatuses = [null, undefined, 'completed'];
 
-            return (
-              disabledOrderStatuses.includes(order_status) ||
-              Boolean(order_status) ||
-              disabledEsignStatuses.includes(e_sign_status)
-            );
+            return DISABLED_ORDER_STATUSES.includes(order_status) || DISABLED_ESIGN_STATUSES.includes(e_sign_status);
           })()}
         />
       ),
