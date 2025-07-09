@@ -5,7 +5,7 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { Order } from '@/features/checker/types/updateIncident.types';
 
 const ViewAllTablePage = () => {
-  usePageTitle('View All Orders');
+  console.log('ViewAllTablePage: Rendering==>');
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
 
   const tableData = useMemo(() => {
