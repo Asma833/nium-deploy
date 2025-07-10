@@ -30,7 +30,6 @@ export const MaterialSelect = ({
 }: MaterialSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
-  console.log('options:', options);
 
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {

@@ -13,7 +13,8 @@ export const useSendEsignLink = (transactionType?: TransactionType) => {
     onSuccess: () => {
       toast.success('Esign link generated successfully');
       const queriesToInvalidate = [['updateIncident'], ['orders'], ['checkerOrders']];
-      invalidateMultipleQueries(queriesToInvalidate, { exact: false });
+      // Add refetchType: 'all' to ensure the queries are refetched immediately
+      invalidateMultipleQueries(queriesToInvalidate, { exact: false, refetchType: 'all' });
     },
 
     onError: (error: Error) => {

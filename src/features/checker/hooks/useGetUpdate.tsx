@@ -19,6 +19,9 @@ export const useGetUpdateIncident = (incidentData: UpdateGetRequestData) => {
       }
     },
     enabled: !!incidentData,
+    refetchOnMount: true,
+    retry: 1,
+    staleTime: 0,
   });
 
   return { ...query, fetchData: query.refetch };

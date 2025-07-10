@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
@@ -66,6 +66,10 @@ const UpdateIncidentCreationTable = () => {
 
   const columns = GetTransactionTableColumns(openModal, handleUnassign, isUnassignPending);
   const tableData = data && data.orders && data.orders.length > 0 ? data.orders : [];
+
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
 
   return (
     <div className="dynamic-table-wrap">

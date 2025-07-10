@@ -1,20 +1,19 @@
-import _ from 'lodash';
+import { ORDER_STATUS_CLASSNAMES, ORDER_STATUS_LABELS, ORDER_STATUSES } from '@/components/types/status';
 import { Order } from '../../types/updateIncident.types';
+import _ from 'lodash';
 
-const OrderStatusCell = ({ rowData }: { rowData: Order }) => {
-  return (
-    <span>
-      {!rowData.order_status ? (
-        <span className="status-badge pending">Pending</span>
-      ) : rowData.order_status === 'pending' ? (
-        <span className="status-badge pending">Pending</span>
-      ) : rowData.order_status === 'completed' ? (
-        <span className="status-badge approved">Approved</span>
-      ) : (
-        <span className="status-badge rejected">Rejected</span>
-      )}
-    </span>
-  );
+type Props = {
+  rowData: Order;
+};
+
+const OrderStatusCell = ({ rowData }: Props) => {
+  const rawStatus = _.toLower(String(rowData.order_status || '')) || ORDER_STATUSES.PENDING;
+
+  const isKnownStatus = rawStatus in ORDER_STATUS_LABELS;
+
+  const statusKey = isKnownStatus ? rawStatus : ORDER_STATUSES.PENDING;
+
+  return <span className={ORDER_STATUS_CLASSNAMES[statusKey]}>{ORDER_STATUS_LABELS[statusKey]}</span>;
 };
 
 export default OrderStatusCell;

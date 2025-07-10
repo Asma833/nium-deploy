@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { Button } from '@/components/ui/button';
 import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
@@ -7,7 +7,7 @@ import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
-import { IncidentPageId, IncidentMode, TransactionTypeEnum } from '../../types/updateIncident.types';
+import { IncidentPageId, IncidentMode, TransactionTypeEnum, Order } from '../../types/updateIncident.types';
 
 const CompletedTransactionTable = () => {
   const {
@@ -16,6 +16,56 @@ const CompletedTransactionTable = () => {
     error: checkerOrdersError,
     fetchData: refreshData,
   } = useGetCheckerOrders(TransactionTypeEnum.COMPLETED, true);
+
+  const tableData = useMemo(() => {
+    if (!checkerOrdersData) return [];
+
+    // More robust order validation function
+    const isValidOrder = (item: any): item is Order => {
+      return (
+        !!item &&
+        typeof item === 'object' &&
+        // Check for essential order properties - be more flexible with created_at
+        (item.nium_order_id || item.partner_order_id || item.customer_pan)
+      );
+    };
+
+    let result: Order[] = [];
+
+    // If already an array
+    if (Array.isArray(checkerOrdersData)) {
+      result = (checkerOrdersData as Order[]).filter(isValidOrder);
+    }
+    // If object with 'orders' property
+    else if (typeof checkerOrdersData === 'object' && 'orders' in checkerOrdersData) {
+      const orders = (checkerOrdersData as any).orders;
+      if (Array.isArray(orders)) {
+        result = orders.filter(isValidOrder);
+      } else if (orders && typeof orders === 'object') {
+        result = Object.values(orders).filter(isValidOrder);
+      }
+    }
+    // If object of objects
+    else if (typeof checkerOrdersData === 'object') {
+      result = Object.values(checkerOrdersData).filter(isValidOrder);
+    }
+    return result;
+  }, [checkerOrdersData]);
+
+  // Format error message consistently
+  const errorMessage = useMemo(() => {
+    if (!checkerOrdersError) return '';
+
+    if (typeof checkerOrdersError === 'string') {
+      return checkerOrdersError;
+    }
+
+    if (checkerOrdersError && typeof checkerOrdersError === 'object' && 'message' in checkerOrdersError) {
+      return (checkerOrdersError as Error).message;
+    }
+
+    return 'An unexpected error occurred';
+  }, [checkerOrdersError]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -54,7 +104,7 @@ const CompletedTransactionTable = () => {
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
-          order_status: order.order_status,
+      order_status: order.order_status,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
@@ -63,15 +113,8 @@ const CompletedTransactionTable = () => {
     };
   }; // Get data directly from checker orders data
   const getTableData = () => {
-    if (checkerOrdersData) {
-      // If it's an array, use it directly
-      if (Array.isArray(checkerOrdersData)) {
-        return checkerOrdersData.map(transformOrderForTable);
-      }
-      // If it has an orders property (nested data structure)
-      if (checkerOrdersData.orders && Array.isArray(checkerOrdersData.orders)) {
-        return checkerOrdersData.orders.map(transformOrderForTable);
-      }
+    if (Array.isArray(tableData) && tableData.length > 0) {
+      return tableData.map(transformOrderForTable);
     }
     return [];
   };
@@ -88,7 +131,7 @@ const CompletedTransactionTable = () => {
   };
   // Check for loading and error states
   const isLoading = checkerOrdersLoading;
-  const hasError = !!checkerOrdersError; // Get total records
+  const hasError = !!errorMessage; // Get total records
   const totalRecords = (() => {
     if (!checkerOrdersData) return 0;
 
@@ -109,7 +152,7 @@ const CompletedTransactionTable = () => {
 
     return 0;
   })();
-  console.log('getTableData', getTableData());
+
   return (
     <div className="dynamic-table-wrap">
       <DynamicTable

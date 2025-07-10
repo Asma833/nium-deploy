@@ -12,7 +12,10 @@ export const useSendVkycLink = () => {
     },
     onSuccess: () => {
       toast.success('Vkyc link generated successfully');
-      invalidateMultipleQueries([['updateIncident'], ['orders'], ['checkerOrders']], { exact: false });
+      invalidateMultipleQueries([['updateIncident'], ['orders'], ['checkerOrders']], {
+        exact: false,
+        refetchType: 'all',
+      });
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Vkyc link sharing failed');

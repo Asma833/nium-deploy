@@ -21,7 +21,7 @@ interface ConfirmationAlertProps {
 
 export function ConfirmationAlert({
   children,
-  title,
+  title = '',
   description,
   onConfirm,
   isLoading = false,

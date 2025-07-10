@@ -46,12 +46,6 @@ export const ViewStatusTableColumns = ({
       className: 'min-w-0',
     },
     {
-      key: 'expiry_date',
-      id: 'expiry_date',
-      name: 'Expiry Date',
-      className: 'min-w-0 p-2',
-    },
-    {
       key: 'customer_name',
       id: 'customer_name',
       name: 'Applicant Name',
@@ -225,13 +219,6 @@ export const ViewStatusTableColumns = ({
             icon={<Eye size={16} />}
             tooltipText="view"
             variant="view"
-          />
-          <TooltipActionButton
-            onClick={() => navigate(`/maker/edit-transaction?partner-order-id=${rowData.partner_order_id}&action=edit`)}
-            icon={<Edit size={16} />}
-            tooltipText="Edit"
-            disabled={rowData.e_sign_status === 'completed' || rowData.e_sign_status === 'active'}
-            variant="edit"
           />
           <TooltipActionButton
             onClick={() =>

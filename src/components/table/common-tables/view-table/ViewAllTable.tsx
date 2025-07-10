@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Button } from '@/components/ui/button';
@@ -39,6 +39,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       {
         onSuccess: () => {
           setLoadingOrderId('');
+          // Explicitly refresh the data after successful e-sign link generation
+          refreshData();
         },
         onError: () => {
           setLoadingOrderId('');
@@ -55,6 +57,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       {
         onSuccess: () => {
           setLoadingOrderId('');
+          // Explicitly refresh the data after successful VKYC link generation
+          refreshData();
         },
         onError: () => {
           setLoadingOrderId('');
@@ -148,6 +152,11 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   });
 
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));
+
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
+
   return (
     <div className="dynamic-table-wrap">
       {' '}

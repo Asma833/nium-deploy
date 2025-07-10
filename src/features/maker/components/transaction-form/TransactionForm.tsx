@@ -42,7 +42,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [showUploadSection, setShowUploadSection] = useState(false);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
-  console.log('purposeTypeOptions:', purposeTypeOptions);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
@@ -68,16 +67,19 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   );
 
   const mergedDocumentUrl = seletedRowTransactionData?.merged_document?.url || '';
-  const vkycVideoUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_videos_files || '';
-  const vkycDocumentUrl = seletedRowTransactionData?.vkycs?.[0]?.resources_documents_files || '';
+  const vkycVideoUrl =
+    seletedRowTransactionData?.vkycs?.length && seletedRowTransactionData.vkycs.length > 0
+      ? seletedRowTransactionData.vkycs[0]?.resources_videos_files || ''
+      : '';
+  const vkycDocumentUrl =
+    seletedRowTransactionData?.vkycs?.length && seletedRowTransactionData.vkycs.length > 0
+      ? seletedRowTransactionData.vkycs[0]?.resources_documents_files || ''
+      : '';
+
   const checkerComments = seletedRowTransactionData?.incident_checker_comments || '';
-  // incidentStatus: true = approved, false = rejected, null = pending
-  const incidentStatus =
-    seletedRowTransactionData?.incident_status === true
-      ? true
-      : seletedRowTransactionData?.incident_status === false
-        ? false
-        : null;
+
+  const orderStatus = seletedRowTransactionData?.order_status === 'completed';
+
   // Format transaction types and purpose types for form controller
   const formatedTransactionTypes = transactionTypeOptions.map((type) => ({
     typeId: type.typeId,
@@ -113,6 +115,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const isViewPage = mode === TransactionMode.VIEW;
   const isEditPage = mode === TransactionMode.EDIT;
 
+  const shouldShowSection =
+    (showUploadSection && partnerOrderId) || (isUpdatePage && !orderStatus) || (isViewPage && !orderStatus);
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
     if ((isEditPage || isViewPage) && seletedRowTransactionData && !isLoading) {
@@ -144,11 +148,11 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       { partner_order_id: pOrderId || '' },
       {
         onSuccess: () => {
-          toast.success('E-sign link regenerated successfully');
+          toast.success('E-sign link generated successfully');
           navigate(`/maker/view-status`);
         },
         onError: () => {
-          toast.error('Failed to regenerate e-sign link');
+          toast.error('Failed to generate e-sign link');
         },
       }
     );
@@ -386,14 +390,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           )}
         </div>
-        {(showUploadSection && partnerOrderId) || isUpdatePage || !incidentStatus ? (
+        {shouldShowSection ? (
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
               onESignGenerated={() => {
                 handleRegenerateEsignLink(partnerOrderId);
               }}
-              isResubmission={isUpdatePage && !incidentStatus}
+              isResubmission={isUpdatePage && !orderStatus}
             />
           </FormFieldRow>
         ) : null}

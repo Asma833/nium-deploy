@@ -1,4 +1,5 @@
 import { SignLinkButton } from '@/components/common/SignLinkButton';
+import { DISABLED_ESIGN_STATUSES, EsignStatus } from '@/components/types/status';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -6,7 +7,6 @@ import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
-import { nullable } from 'zod';
 
 export const GetTransactionTableColumns = ({
   handleRegenerateEsignLink,
@@ -23,16 +23,8 @@ export const GetTransactionTableColumns = ({
   isSendVkycLinkLoading?: boolean;
   loadingOrderId?: string | null;
 }) => {
-  const isLinkDisabled = (link: string | null | undefined, status: string | undefined) =>
-    !link || status === 'not generated' || status === 'completed';
-
-  const isGenerateEsignLinkDisabled = (rowData: any) => {
-    const { order_status, merged_document, e_sign_link } = rowData || {};
-    console.log(
-      'isGenerateEsignLinkDisabled',
-      order_status === 'completed' || !merged_document || Boolean(e_sign_link)
-    );
-    return e_sign_link !== 'completed' || !merged_document;
+  const isLinkDisabled = (link: string | null | undefined, status: string | undefined): boolean => {
+    return !link || DISABLED_ESIGN_STATUSES.includes(status as EsignStatus);
   };
   return [
     {
@@ -175,10 +167,15 @@ export const GetTransactionTableColumns = ({
           buttonIconType="refresh"
           onClick={() => handleRegenerateEsignLink(rowData)}
           disabled={(() => {
-            const { order_status, e_sign_status, merged_document, e_sign_link } = rowData || {};
-            const disabledEsignStatuses = ['expired', 'rejected', 'not generated', 'completed'];
+            const { e_sign_status, order_status } = rowData || {};
+            const disabledEsignStatuses = ['expired', 'rejected', 'not generated'];
+            const disabledOrderStatuses = [null, undefined, 'completed'];
 
-            return order_status === 'completed' || disabledEsignStatuses.includes(e_sign_status) || !merged_document;
+            return (
+              disabledOrderStatuses.includes(order_status) ||
+              Boolean(order_status) ||
+              disabledEsignStatuses.includes(e_sign_status)
+            );
           })()}
         />
       ),
