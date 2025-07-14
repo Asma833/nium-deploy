@@ -8,6 +8,7 @@ import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
 import { IncidentPageId, IncidentMode, TransactionTypeEnum, Order } from '../../types/updateIncident.types';
+import { formatDate } from '@/utils/dateFormat';
 
 const CompletedTransactionTable = () => {
   const {
@@ -84,8 +85,7 @@ const CompletedTransactionTable = () => {
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || '',
-      created_at:
-        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleString(),
+      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDate(order.created_at),
       partner_id: order.partner_id || '',
       partner_order_id: order.partner_order_id || '',
       customer_name: order.customer_name || '',
@@ -98,17 +98,17 @@ const CompletedTransactionTable = () => {
       e_sign_customer_completion_date:
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
-          : new Date(order.e_sign_customer_completion_date).toLocaleString(),
+          : formatDate(order.e_sign_customer_completion_date),
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
-          : new Date(order.v_kyc_customer_completion_date).toLocaleString(),
+          : formatDate(order.v_kyc_customer_completion_date),
       order_status: order.order_status,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
-          : new Date(order.incident_completion_date).toLocaleString(),
+          : formatDate(order.incident_completion_date),
       nium_invoice_number: order.nium_invoice_number || '',
     };
   }; // Get data directly from checker orders data

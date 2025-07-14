@@ -83,7 +83,7 @@ export const GetTransactionTableColumns = ({
     {
       key: 'e_sign_customer_completion_date',
       id: 'e_sign_customer_completion_date',
-      name: 'E-Sign Status Completion Date',
+      name: 'E-Sign Completion Date',
       className: 'min-w-0',
       cell: (_: unknown, rowData: { e_sign_customer_completion_date?: string }) => (
         <span>{formatDateWithFallback(rowData.e_sign_customer_completion_date)}</span>

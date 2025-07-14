@@ -288,7 +288,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   return (
     <div>
       <h1 className={cn('text-xl font-bold capitalize pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
-        {pageTitle} Transaction
+        {pageTitle || 'Create'} Transaction
       </h1>
       <FormProvider methods={methods}>
         {(!isUpdatePage || isViewPage) && (
