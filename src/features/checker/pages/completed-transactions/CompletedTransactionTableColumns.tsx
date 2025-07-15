@@ -3,6 +3,7 @@ import VKycStatusCell from '../../components/table/VKycStatusCell';
 import EsignStatusCell from '../../components/table/EsignStatusCell';
 import NiumOrderID from '../../components/table/NiumOrderIdCell';
 import OrderStatusCell from '../../components/table/OrderStatusCell';
+import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
 export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
@@ -18,7 +19,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     name: 'Order Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { created_at?: string }) => (
-      <span>{rowData.created_at ? formatDate(rowData.created_at) : null}</span>
+      <span>{formatDate(rowData.created_at)}</span>
     ),
   },
   {
@@ -59,7 +60,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     className: 'min-w-0',
     cell: (_: unknown, rowData: { e_sign_customer_completion_date?: string }) => (
       <span>
-        {rowData.e_sign_customer_completion_date ? formatDate(rowData.e_sign_customer_completion_date) : null}
+        {formatDateWithFallback(rowData.e_sign_customer_completion_date)}
       </span>
     ),
   },
@@ -76,7 +77,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     name: 'VKYC Completion Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { v_kyc_customer_completion_date?: string }) => (
-      <span>{rowData.v_kyc_customer_completion_date ? formatDate(rowData.v_kyc_customer_completion_date) : null}</span>
+      <span>{formatDateWithFallback(rowData.v_kyc_customer_completion_date)}</span>
     ),
   },
   {
@@ -92,7 +93,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     name: 'Incident Completion Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { incident_completion_date?: string }) => (
-      <span>{rowData.incident_completion_date ? formatDate(rowData.incident_completion_date) : null}</span>
+      <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
     ),
   },
   {

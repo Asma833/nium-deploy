@@ -48,12 +48,6 @@ export const GetTransactionTableColumns = ({
       className: 'min-w-0',
     },
     {
-      key: 'partner_id',
-      id: 'partner_id',
-      name: 'Partner ID',
-      className: 'min-w-0',
-    },
-    {
       key: 'customer_pan',
       id: 'customer_pan',
       name: 'Customer PAN',
@@ -106,8 +100,8 @@ export const GetTransactionTableColumns = ({
       ),
     },
     {
-      key: 'incident_status',
-      id: 'incident_status',
+      key: 'order_status',
+      id: 'order_status',
       name: 'Incident Status',
       className: 'min-w-0',
       cell: (_: unknown, rowData: any) => <OrderStatusCell rowData={rowData} />,

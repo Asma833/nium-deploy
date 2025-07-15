@@ -86,7 +86,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || 'N/A',
-      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDate(order.created_at),
+      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : new Date(order.created_at).toLocaleDateString('en-GB'),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
       customer_pan: order.customer_pan || 'N/A',
@@ -101,21 +101,21 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
           : order.e_sign_customer_completion_date
-            ? formatDate(order.e_sign_customer_completion_date)
+            ? new Date(order.e_sign_customer_completion_date).toLocaleDateString('en-GB')
             : 'N/A',
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           : order.v_kyc_customer_completion_date
-            ? formatDate(order.v_kyc_customer_completion_date)
+            ? new Date(order.v_kyc_customer_completion_date).toLocaleDateString('en-GB')
             : 'N/A',
-      incident_status: order.order_status || 'N/A',
+      order_status: order.order_status === 'completed' ? 'approved' :order.order_status  || 'N/A',
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
           : order.incident_completion_date
-            ? formatDate(order.incident_completion_date)
+            ? new Date(order.incident_completion_date).toLocaleDateString('en-GB')
             : 'N/A',
     };
   };

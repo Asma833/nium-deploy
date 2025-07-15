@@ -9,6 +9,7 @@ import UpdateIncidentDialog from '../../components/update-incident-dialog/Update
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
 import { IncidentPageId, IncidentMode, TransactionTypeEnum, Order } from '../../types/updateIncident.types';
 import { formatDate } from '@/utils/dateFormat';
+import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 
 const CompletedTransactionTable = () => {
   const {
@@ -85,8 +86,7 @@ const CompletedTransactionTable = () => {
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || '',
-      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDate(order.created_at),
-      partner_id: order.partner_id || '',
+      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || '',
       customer_name: order.customer_name || '',
       customer_pan: order.customer_pan || '',
@@ -98,26 +98,29 @@ const CompletedTransactionTable = () => {
       e_sign_customer_completion_date:
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
-          : formatDate(order.e_sign_customer_completion_date),
+          :formatDateWithFallback(order.e_sign_customer_completion_date),
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
-          : formatDate(order.v_kyc_customer_completion_date),
-      order_status: order.order_status,
+          :formatDateWithFallback(order.v_kyc_customer_completion_date),
+      order_status: order.order_status === 'completed' ? 'approved' : order.order_status || 'N/A',
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
-          : formatDate(order.incident_completion_date),
+          : order.incident_completion_date,
       nium_invoice_number: order.nium_invoice_number || '',
     };
-  }; // Get data directly from checker orders data
+  }; 
+  // Get data directly from checker orders data
+   
   const getTableData = () => {
     if (Array.isArray(tableData) && tableData.length > 0) {
       return tableData.map(transformOrderForTable);
     }
     return [];
   };
+
   const handleExportToCSV = () => {
     // Use filtered data if available, otherwise fall back to all data
     const dataToExport = filteredData.length > 0 ? filteredData : getTableData();
