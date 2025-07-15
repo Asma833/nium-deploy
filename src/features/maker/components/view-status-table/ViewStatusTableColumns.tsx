@@ -121,7 +121,7 @@ export const ViewStatusTableColumns = ({
           (e_sign_status === ESIGN_STATUSES.COMPLETED &&
             order_status === ORDER_STATUSES.REJECTED &&
             !needsGeneration) ||
-          (is_esign_required === true && !e_sign_link && !needsGeneration);
+          (is_esign_required && !e_sign_link && !needsGeneration);
         const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
         const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
         const buttonType = needsGeneration ? 'refresh' : 'copy_link';
