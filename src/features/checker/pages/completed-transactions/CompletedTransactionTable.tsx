@@ -10,6 +10,7 @@ import { useDynamicOptions } from '../../hooks/useDynamicOptions';
 import { IncidentPageId, IncidentMode, TransactionTypeEnum, Order } from '../../types/updateIncident.types';
 import { formatDate } from '@/utils/dateFormat';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 
 const CompletedTransactionTable = () => {
   const {
@@ -104,7 +105,7 @@ const CompletedTransactionTable = () => {
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
           :formatDateWithFallback(order.v_kyc_customer_completion_date),
-      order_status: order.order_status === 'completed' ? 'approved' : order.order_status || 'N/A',
+      order_status: STATUS_MAP[order.order_status] || STATUS_TYPES.NA,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'

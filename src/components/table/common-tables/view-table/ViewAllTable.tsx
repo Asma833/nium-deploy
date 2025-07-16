@@ -12,6 +12,7 @@ import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -109,7 +110,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
           : order.v_kyc_customer_completion_date
             ? formatDateWithFallback(order.v_kyc_customer_completion_date)
             : 'N/A',
-      order_status: order.order_status === 'completed' ? 'approved' :order.order_status  || 'N/A',
+      order_status: STATUS_MAP[order.order_status] || STATUS_TYPES.NA,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
           ? 'N/A'
