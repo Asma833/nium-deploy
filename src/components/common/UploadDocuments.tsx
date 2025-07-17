@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, FileText, X, CheckCircle, Loader2 } from 'lucide-react';
@@ -34,13 +34,15 @@ interface UploadDocumentsProps {
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 10MB
-
+const FILE_SIZE = {
+  OTHER_DOC_MAX: 1 * 1024 * 1024,
+  ALL_DOC_MAX: 5 * 1024 * 1024,
+};
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   partnerOrderId,
   onUploadComplete,
   onESignGenerated,
-  isResubmission = false, // Added isResubmission prop for handling resubmissions
+  isResubmission = false,
 }) => {
   const { documentTypes, loading } = useGetDocumentTypes();
   const uploadDocumentMutation = useUploadDocument();
@@ -57,14 +59,18 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       }
 
       // Validate file size
-      if (file.size > MAX_FILE_SIZE) {
-        toast.error(`File size too large. Maximum size: ${formatFileSize(MAX_FILE_SIZE)}`);
+      if (file.size > FILE_SIZE.OTHER_DOC_MAX && documentTypeName !== 'All Documents') {
+        toast.error(`File size too large. Maximum size: ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)}`);
+        return;
+      }
+      if (file.size > FILE_SIZE.ALL_DOC_MAX && documentTypeName === 'All Documents') {
+        toast.error(`File size too large. Maximum size: ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)}`);
         return;
       }
 
       // Convert to base64
       const base64 = await convertFileToBase64(file);
-
+      console.log(documentTypeName, 'documentTypeName');
       const newDocument: UploadedDocument = {
         file,
         documentTypeId,
@@ -183,17 +189,20 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap  gap-4">
+      <div className="flex flex-wrap gap-4">
         {documentTypes
           .sort((a, b) => {
-            // Place "All Documents" at the beginning
             if (a.text.includes('All Document')) return -1;
             if (b.text.includes('All Document')) return 1;
-            // For other documents, maintain alphabetical order
             return a.text.localeCompare(b.text);
           })
           .map((docType) => {
             const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
+            const isAllDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName === 'All Documents');
+            const isOtherDocumentUploaded = uploadedDocuments.some((doc) => doc.documentTypeName !== 'All Documents');
+            const isDisabled =
+              (docType.text === 'All Documents' && isOtherDocumentUploaded) ||
+              (docType.text !== 'All Documents' && isAllDocumentUploaded);
 
             return (
               <Card key={docType.id} className="relative flex-1 min-w-[250px] max-w-[250px] p-4 shadow-sm">
@@ -227,6 +236,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                         <input
                           type="file"
                           accept=".pdf,.jpg,.jpeg,.png,.gif"
+                          disabled={isDisabled}
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
@@ -238,7 +248,21 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                         />
                         <label
                           htmlFor={`file-${docType.id}`}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded-md cursor-pointer hover:bg-gray-100"
+                          onClick={(e) => {
+                            if (isDisabled) {
+                              e.preventDefault();
+                              toast.warning(
+                                docType.text === 'All Documents'
+                                  ? 'Cannot upload All Documents when individual documents are selected.'
+                                  : 'Cannot upload individual documents when All Documents is selected.'
+                              );
+                            }
+                          }}
+                          className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-md ${
+                            isDisabled
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
+                              : 'bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-100 border'
+                          }`}
                         >
                           <Upload className="h-3 w-3" />
                           Replace
@@ -275,6 +299,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                       <input
                         type="file"
                         accept=".pdf,.jpg,.jpeg,.png,.gif"
+                        disabled={isDisabled}
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
@@ -286,12 +311,28 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                       />
                       <label
                         htmlFor={`file-${docType.id}`}
-                        className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50"
+                        onClick={(e) => {
+                          if (isDisabled) {
+                            e.preventDefault();
+                            toast.warning(
+                              docType.text === 'All Documents'
+                                ? 'Cannot upload All Documents when individual documents are selected.'
+                                : 'Cannot upload individual documents when All Documents is selected.'
+                            );
+                          }
+                        }}
+                        className={`flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg ${
+                          isDisabled
+                            ? 'border-gray-300 bg-gray-100 cursor-not-allowed text-gray-400'
+                            : 'border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 text-gray-600'
+                        }`}
                       >
-                        <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-600">Click to upload</span>
-                        <span className="text-xs text-gray-500 mt-1">
-                          PDF, JPG, PNG (max {formatFileSize(MAX_FILE_SIZE)})
+                        <Upload className="h-8 w-8 mb-2" />
+                        <span className="text-sm">Click to upload</span>
+                        <span className="text-xs mt-1">
+                          {docType.text === 'All Documents'
+                            ? `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)})`
+                            : `PDF, JPG, PNG (max ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)})`}
                         </span>
                       </label>
                     </div>
