@@ -194,8 +194,8 @@ export const ViewStatusTableColumns = ({
       },
     },
     {
-      key: 'incident_status',
-      id: 'incident_status',
+      key: 'order_status',
+      id: 'order_status',
       name: 'Incident Status',
       className: 'min-w-0 p-2',
       cell: (_: any, value: any) => <OrderStatusCell rowData={value} />,
@@ -228,6 +228,7 @@ export const ViewStatusTableColumns = ({
             icon={<Trash2 size={16} />}
             tooltipText="Delete"
             variant="delete"
+            disabled={rowData.merged_document !== null}
           />
         </div>
       ),

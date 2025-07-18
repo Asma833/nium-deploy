@@ -20,7 +20,11 @@ const ViewStatusTable: React.FC = () => {
   const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
   const { mutate, isPending: isDeleting } = useDeleteTransaction();
-
+  const incidentStatusOptions = [
+    { value: 'completed', label: 'Approved' },
+    { value: 'rejected', label: 'Rejected' },
+    { value: 'pending', label: 'Pending' },
+  ];
   const tableData = useMemo(() => {
     if (!data) return [];
 
@@ -177,6 +181,14 @@ const ViewStatusTable: React.FC = () => {
             dateRange: true,
             applyAction: true,
             resetAction: true,
+            selects: [
+              {
+                id: 'order_status',
+                label: 'Incident Status',
+                placeholder: 'Select Incident Status',
+                options: incidentStatusOptions,
+              },
+            ],
           },
         }}
       />
