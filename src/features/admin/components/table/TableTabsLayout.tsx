@@ -10,7 +10,7 @@ const TableTabsLayout = (props: TableTabsLayoutProps) => {
 
   // Default tabs if none provided
   const defaultTabs = [
-    { label: 'List', path: '/admin/users' },
+    { label: 'Checker List', path: '/admin/users' },
     { label: 'Create Checker', path: '/admin/users/create-user' },
   ];
 

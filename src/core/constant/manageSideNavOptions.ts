@@ -36,7 +36,7 @@ export const SideNavOptions = {
     //   disabled: true,
     // },
     {
-      title: 'View All',
+      title: 'View All Transactions',
       path: getNavPath('ADMIN', ROUTES.ADMIN.VIEWALL),
       icon: Eye,
     },
@@ -50,7 +50,7 @@ export const SideNavOptions = {
     //   disabled: true,
     // },
     {
-      title: 'View All',
+      title: 'View All Transactions',
       path: getNavPath('CHECKER', ROUTES.CHECKER.VIEWALL),
       icon: Eye,
     },
