@@ -93,11 +93,12 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     value: type.value,
   }));
   const handlePurposeTypeId = () => {
-    if (purposeTypeOptions.length >= 0) {
-      const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
-      return purposeType ? purposeType.typeId : '';
-    }
-    return '';
+    // if (purposeTypeOptions.length >= 0) {
+    //   const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
+    //   return purposeType ? purposeType.typeId : '';
+    // }
+    // return '';
+    return 'f2a2fc1a-c31a-47f8-b8f1-9b35f3083730';
   };
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
@@ -166,100 +167,100 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     );
   };
   const onSubmit = async (formData: TransactionFormData) => {
-    setPurposeTypeId(formData.applicantDetails.purposeType ?? '');
-    try {
-      if (isEditPage) {
-        // Handle update operation
-        const updateRequestData = transformFormDataToUpdateRequest(
-          formData,
-          transactionTypeOptions,
-          purposeTypeOptions,
-          getUserHashedKey() || 'unknown-user'
-        );
+    setPurposeTypeId('f2a2fc1a-c31a-47f8-b8f1-9b35f3083730');
+    // try {
+    //   if (isEditPage) {
+    //     // Handle update operation
+    //     const updateRequestData = transformFormDataToUpdateRequest(
+    //       formData,
+    //       transactionTypeOptions,
+    //       purposeTypeOptions,
+    //       getUserHashedKey() || 'unknown-user'
+    //     );
 
-        await updateOrderMutation.mutateAsync({
-          partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
-          data: updateRequestData,
-        });
+    //     await updateOrderMutation.mutateAsync({
+    //       partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
+    //       data: updateRequestData,
+    //     });
 
-        // Show success message (handled by the mutation's onSuccess)
-        // Optionally refresh data or navigate
-        refreshData();
-      } else {
-        // Handle create operation
-        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
-        const response = await createTransactionMutation.mutateAsync(apiRequestData);
-        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-          sendVkycLink(
-            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-            {
-              onError: () => {
-                toast.error('Failed to generated VKYC link');
-              },
-            }
-          );
-        }
+    //     // Show success message (handled by the mutation's onSuccess)
+    //     // Optionally refresh data or navigate
+    //     refreshData();
+    //   } else {
+    //     // Handle create operation
+    //     const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
+    //     const response = await createTransactionMutation.mutateAsync(apiRequestData);
+    //     if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
+    //       sendVkycLink(
+    //         { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
+    //         {
+    //           onError: () => {
+    //             toast.error('Failed to generated VKYC link');
+    //           },
+    //         }
+    //       );
+    //     }
 
-        // Extract response data based on your API specification
-        const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
-        const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
-        setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
-        setNiumForexOrderId(niumOrder);
-        setPartnerOrderId(partnerOrder);
-        setShowUploadSection(true);
-        setIsDialogOpen(true);
+    //     // Extract response data based on your API specification
+    //     const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
+    //     const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
+    //     setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
+    //     setNiumForexOrderId(niumOrder);
+    //     setPartnerOrderId(partnerOrder);
+    //     setShowUploadSection(true);
+    //     setIsDialogOpen(true);
 
-        // Reset form after successful submission
-        reset(transactionFormDefaults);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      // Handle error (show toast, etc.)
-    }
+    //     // Reset form after successful submission
+    //     reset(transactionFormDefaults);
+    //   }
+    // } catch (error) {
+    //   console.error('Form submission error:', error);
+    //   // Handle error (show toast, etc.)
+    // }
   };
   const handleFormSubmit = async () => {
-    try {
-      // Get current form values
-      const currentValues = getValues();
+    // try {
+    //   // Get current form values
+    //   const currentValues = getValues();
 
-      // Validate using the strict submission schema
-      const validationResult = transactionFormSubmissionSchema.safeParse(currentValues);
+    //   // Validate using the strict submission schema
+    //   const validationResult = transactionFormSubmissionSchema.safeParse(currentValues);
 
-      if (!validationResult.success) {
-        // Extract and display validation errors with user-friendly field names
-        const fieldNameMap: Record<string, string> = {
-          'applicantDetails.applicantName': 'Applicant Name',
-          'applicantDetails.applicantPanNumber': 'Applicant PAN Number',
-          'applicantDetails.email': 'Email',
-          'applicantDetails.mobileNumber': 'Mobile Number',
-          'applicantDetails.partnerOrderId': 'Partner Order ID',
-          'applicantDetails.isVKycRequired': 'V-KYC Required',
-          'applicantDetails.transactionType': 'Transaction Type',
-          'applicantDetails.purposeType': 'Purpose Type',
-          'uploadDocuments.pan': 'PAN Document',
-        };
+    //   if (!validationResult.success) {
+    //     // Extract and display validation errors with user-friendly field names
+    //     const fieldNameMap: Record<string, string> = {
+    //       'applicantDetails.applicantName': 'Applicant Name',
+    //       'applicantDetails.applicantPanNumber': 'Applicant PAN Number',
+    //       'applicantDetails.email': 'Email',
+    //       'applicantDetails.mobileNumber': 'Mobile Number',
+    //       'applicantDetails.partnerOrderId': 'Partner Order ID',
+    //       'applicantDetails.isVKycRequired': 'V-KYC Required',
+    //       'applicantDetails.transactionType': 'Transaction Type',
+    //       'applicantDetails.purposeType': 'Purpose Type',
+    //       'uploadDocuments.pan': 'PAN Document',
+    //     };
 
-        const errorMessages = validationResult.error.errors.map((err) => {
-          const fieldPath = err.path.join('.');
-          const friendlyFieldName = fieldNameMap[fieldPath] || fieldPath;
-          return `${friendlyFieldName}: ${err.message}`;
-        });
+    //     const errorMessages = validationResult.error.errors.map((err) => {
+    //       const fieldPath = err.path.join('.');
+    //       const friendlyFieldName = fieldNameMap[fieldPath] || fieldPath;
+    //       return `${friendlyFieldName}: ${err.message}`;
+    //     });
 
-        // Show the first error in a toast
-        toast.error(errorMessages[0] || 'Please fill in all required fields');
+    //     // Show the first error in a toast
+    //     toast.error(errorMessages[0] || 'Please fill in all required fields');
 
-        // Log all errors for debugging
-        console.error('Validation errors:', errorMessages);
+    //     // Log all errors for debugging
+    //     console.error('Validation errors:', errorMessages);
 
-        return; // Don't proceed with submission
-      }
+    //     return; // Don't proceed with submission
+    //   }
 
-      // If validation passes, trigger form submission
-      handleSubmit(onSubmit)();
-    } catch (error) {
-      console.error('Form validation error:', error);
-      toast.error('Please check the form and try again');
-    }
+    //   // If validation passes, trigger form submission
+     handleSubmit(onSubmit)();
+    // } catch (error) {
+    //   console.error('Form validation error:', error);
+    //   toast.error('Please check the form and try again');
+    // }
   };
 
   const handleView = (docUrl: string, docType: 'mergeDoc' | 'vkycDoc' | 'vkycVideo') => {
@@ -410,7 +411,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             />
           </FormFieldRow>
         ) : null} */}
-       {handlePurposeTypeId() && (
+       {/* {handlePurposeTypeId() && ( */}
+         
           <FormFieldRow className="w-full">
             <UploadDocuments
               partnerOrderId={partnerOrderId}
@@ -421,7 +423,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
               isResubmission={isUpdatePage && !orderStatus}
             />
           </FormFieldRow>
-       )}
+       {/* )} */}
       </FormProvider>
       <TransactionCreatedDialog
         isDialogOpen={isDialogOpen}

@@ -184,7 +184,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       </div>
     );
   }
-
+  console.log(documentTypes,"documentTypes")
   return (
     <div className="space-y-6 w-full">
       <div className="w-full flex items-start flex-col">
