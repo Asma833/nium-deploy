@@ -1,4 +1,4 @@
-import { FieldType } from '@/types/common.type';
+import { FieldType } from '@/types/enums';
 import { FormControllerMetaOptions } from './transaction-form.types';
 
 export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) => {

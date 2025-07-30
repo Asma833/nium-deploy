@@ -1,3 +1,5 @@
+import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
+
 export type UpdateIncidentRequest = {
   fields: {
     // Original fields
@@ -33,19 +35,6 @@ export type UpdateIncidentSelectedRowData = Order & {
     reject: boolean;
   };
 };
-
-export enum IncidentPageId {
-  UPDATE = 'updateIncident',
-  VIEW_ALL = 'viewAllIncident',
-  ASSIGN = 'assignIncident',
-  COMPLETED = 'completedIncident',
-}
-
-export enum IncidentMode {
-  EDIT = 'edit',
-  VIEW = 'view',
-  EDIT_INVOICE = 'editInvoice',
-}
 
 export type UpdateIncidentDialogProps = {
   mode: IncidentMode;
@@ -254,13 +243,6 @@ export type OrderRowData = {
 export type Orders = {
   [key: string]: Order;
 };
-
-export enum TransactionTypeEnum {
-  ALL = 'all',
-  COMPLETED = 'completed',
-  PENDING = 'pending',
-  REJECTED = 'rejected',
-}
 
 export type TransactionType =
   | TransactionTypeEnum.ALL

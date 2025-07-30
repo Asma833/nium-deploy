@@ -1,10 +1,4 @@
-enum FieldType {
-  Text = 'text',
-  Email = 'email',
-  Password = 'password',
-  Checkbox = 'checkbox',
-  Select = 'select',
-}
+import { FieldType } from "@/types/enums";
 
 interface FormField {
   label: string;

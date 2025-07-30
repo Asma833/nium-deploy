@@ -6,16 +6,12 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
 import { cn } from '@/utils/cn';
 import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
-import {
-  IncidentMode,
-  IncidentPageId,
-  Order,
-  TransactionTypeEnum,
-} from '@/features/checker/types/updateIncident.types';
+import { Order } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { API } from '@/core/constant/apis';
+import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 
 const UpdateIncidentCreationTable = () => {
   const [selectedRowData, setSelectedRowData] = useState<any>(null);

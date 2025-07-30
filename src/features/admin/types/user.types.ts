@@ -1,4 +1,5 @@
-import { FieldType, FormField } from '@/types/common.type';
+import { FormField } from '@/types/common.type';
+import { FieldType } from '@/types/enums';
 
 export type UserCreationRequest = {
   role_id: string;

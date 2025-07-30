@@ -1,6 +1,7 @@
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import UpdateIncidentForm from '../../pages/update-incident/incident-form/UpdateIncidentForm';
-import { IncidentMode, UpdateIncidentDialogProps } from '../../types/updateIncident.types';
+import { UpdateIncidentDialogProps } from '../../types/updateIncident.types';
+import { IncidentMode } from '@/types/enums';
 
 const UpdateIncidentDialog = (props: UpdateIncidentDialogProps) => {
   const { pageId, mode, selectedRowData, isModalOpen, setIsModalOpen } = props;

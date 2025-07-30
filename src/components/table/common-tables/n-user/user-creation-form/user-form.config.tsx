@@ -1,5 +1,5 @@
 import { UserFormConfig } from '@/features/admin/types/user.types';
-import { FieldType } from '@/types/common.type';
+import { FieldType } from '@/types/enums';
 
 export const userFormConfig: UserFormConfig = {
   sectionTitle: 'Create User',

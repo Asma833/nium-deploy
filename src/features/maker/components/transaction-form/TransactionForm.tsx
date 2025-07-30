@@ -12,7 +12,7 @@ import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper
 import { transactionFormSchema, transactionFormSubmissionSchema, TransactionFormData } from './transaction-form.schema';
 import { getFormControllerMeta } from './transaction-form.config';
 import { transactionFormDefaults } from './transaction-form.defaults';
-import { TransactionFormProps, TransactionMode } from './transaction-form.types';
+import { TransactionFormProps } from './transaction-form.types';
 import { Button } from '@/components/ui/button';
 import { UploadDocuments } from '@/components/common/UploadDocuments';
 import { useCreateTransaction } from '../../hooks/useCreateTransaction';
@@ -27,6 +27,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { API } from '@/core/constant/apis';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
+import { TransactionMode } from '@/types/enums';
 
 const fieldWrapperBaseStyle = 'mb-5';
 
@@ -256,7 +257,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     //   }
 
     //   // If validation passes, trigger form submission
-     handleSubmit(onSubmit)();
+    handleSubmit(onSubmit)();
     // } catch (error) {
     //   console.error('Form validation error:', error);
     //   toast.error('Please check the form and try again');
@@ -411,19 +412,18 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             />
           </FormFieldRow>
         ) : null} */}
-       {/* {handlePurposeTypeId() && ( */}
-         
-          <FormFieldRow className="w-full">
-            <UploadDocuments
-              partnerOrderId={partnerOrderId}
-              purposeTypeId={handlePurposeTypeId()}
-              onESignGenerated={() => {
-                handleRegenerateEsignLink(partnerOrderId);
-              }}
-              isResubmission={isUpdatePage && !orderStatus}
-            />
-          </FormFieldRow>
-       {/* )} */}
+        {/* {handlePurposeTypeId() && ( */}
+        <FormFieldRow className="w-full">
+          <UploadDocuments
+            partnerOrderId={partnerOrderId}
+            purposeTypeId={handlePurposeTypeId()}
+            onESignGenerated={() => {
+              handleRegenerateEsignLink(partnerOrderId);
+            }}
+            isResubmission={isUpdatePage && !orderStatus}
+          />
+        </FormFieldRow>
+        {/* )} */}
       </FormProvider>
       <TransactionCreatedDialog
         isDialogOpen={isDialogOpen}

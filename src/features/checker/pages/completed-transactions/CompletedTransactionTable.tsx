@@ -7,10 +7,11 @@ import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
 import { API } from '@/core/constant/apis';
 import UpdateIncidentDialog from '../../components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '../../hooks/useDynamicOptions';
-import { IncidentPageId, IncidentMode, TransactionTypeEnum, Order } from '../../types/updateIncident.types';
+import { Order } from '../../types/updateIncident.types';
 import { formatDate } from '@/utils/dateFormat';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
+import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 
 const CompletedTransactionTable = () => {
   const {
@@ -87,7 +88,8 @@ const CompletedTransactionTable = () => {
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || '',
-      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
+      created_at:
+        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || '',
       customer_name: order.customer_name || '',
       customer_pan: order.customer_pan || '',
@@ -99,12 +101,12 @@ const CompletedTransactionTable = () => {
       e_sign_customer_completion_date:
         order.e_sign_customer_completion_date === 'N/A' || order.e_sign_customer_completion_date === 'NA'
           ? 'N/A'
-          :formatDateWithFallback(order.e_sign_customer_completion_date),
+          : formatDateWithFallback(order.e_sign_customer_completion_date),
       v_kyc_status: order.v_kyc_status || null,
       v_kyc_customer_completion_date:
         order.v_kyc_customer_completion_date === 'N/A' || order.v_kyc_customer_completion_date === 'NA'
           ? 'N/A'
-          :formatDateWithFallback(order.v_kyc_customer_completion_date),
+          : formatDateWithFallback(order.v_kyc_customer_completion_date),
       order_status: order.order_status,
       incident_completion_date:
         order.incident_completion_date === 'N/A' || order.incident_completion_date === 'NA'
@@ -112,9 +114,9 @@ const CompletedTransactionTable = () => {
           : order.incident_completion_date,
       nium_invoice_number: order.nium_invoice_number || '',
     };
-  }; 
+  };
   // Get data directly from checker orders data
-   
+
   const getTableData = () => {
     if (Array.isArray(tableData) && tableData.length > 0) {
       return tableData.map(transformOrderForTable);

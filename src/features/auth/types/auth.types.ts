@@ -1,8 +1,4 @@
-export enum Role {
-  ADMIN = 'admin',
-  MAKER = 'maker',
-  CHECKER = 'checker',
-}
+import { Role } from "@/types/enums";
 
 export type Permission = 'view_dashboard' | 'manage_agents' | 'view_transactions' | 'approve_transactions';
 

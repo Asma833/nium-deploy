@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/core/services/axios/axiosInstance';
 import { API } from '@/core/constant/apis';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
-import { Order, TransactionType, TransactionTypeEnum } from '../types/updateIncident.types';
+import { Order, TransactionType } from '../types/updateIncident.types';
+import { TransactionTypeEnum } from '@/types/enums';
 
 export const useGetCheckerOrders = (
   initialTransactionType: TransactionType = TransactionTypeEnum.ALL,

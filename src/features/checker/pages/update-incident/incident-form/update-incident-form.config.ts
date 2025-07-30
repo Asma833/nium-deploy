@@ -1,10 +1,4 @@
-enum FieldType {
-  Text = 'text',
-  TextArea = 'textarea',
-  Email = 'email',
-  Password = 'password',
-  Checkbox = 'checkbox',
-}
+import { FieldType } from "@/types/enums";
 
 export const sectionTitle = 'Transaction Form';
 

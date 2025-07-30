@@ -1,3 +1,5 @@
+import { TransactionMode } from "@/types/enums";
+
 export type DocumentConfig = {
   id: string;
   label: string;
@@ -19,12 +21,6 @@ export type FormControllerMetaOptions = {
   purposeTypes?: OptionType[];
 };
 
-export enum TransactionMode {
-  CREATE = 'create',
-  EDIT = 'edit',
-  VIEW = 'view',
-  UPDATE = 'update',
-}
 
 export type TransactionFormProps = {
   mode?: TransactionMode;

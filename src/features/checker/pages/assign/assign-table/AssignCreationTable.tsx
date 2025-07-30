@@ -11,8 +11,8 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
 import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
-import { IncidentMode, IncidentPageId } from '@/features/checker/types/updateIncident.types';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { IncidentMode, IncidentPageId } from '@/types/enums';
 
 const AssignCreationTable = () => {
   const { invalidateMultipleQueries } = useQueryInvalidator();

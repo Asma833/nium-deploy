@@ -6,13 +6,14 @@ import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { IncidentMode, IncidentPageId, Order, Orders } from '@/features/checker/types/updateIncident.types';
+import {  Order, Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
+import { IncidentMode, IncidentPageId } from '@/types/enums';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
