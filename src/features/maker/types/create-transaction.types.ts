@@ -8,6 +8,7 @@ export type CreateTransactionRequest = {
   customer_email: string;
   customer_phone: string;
   customer_pan: string;
+  paid_by: string;
 };
 
 export type TransactionCreatedDialogProps = {

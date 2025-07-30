@@ -22,6 +22,15 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     {} as Record<string, { label: string; selected?: boolean }>
   );
 
+  
+  const paidByOptions: Record<string, { label: string; selected?: boolean }> = {
+    self: { label: 'Self' },
+    father: { label: 'Father' },
+    mother: { label: 'Mother' },
+    brother: { label: 'Brother' },
+    sister: { label: 'Sister' }
+  };
+
   // Set first option as selected if available
   if (transactionTypes.length > 0) {
     transactionOptions[transactionTypes[0].value].selected = true;
@@ -29,7 +38,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
   if (purposeTypes.length > 0) {
     purposeOptions[purposeTypes[0].value].selected = true;
   }
-
+  
   return {
     sectionTitle: 'Create Transaction',
     description: 'Fill in the details to create a new transaction',
@@ -51,10 +60,10 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
         },
         applicantPanNumber: {
           name: 'applicantDetails.applicantPanNumber',
-          label: 'Applicant PAN Number',
+          label: 'Applicant Name As Per Aadhar',
           type: FieldType.Text,
           required: true,
-          placeholder: 'Enter Applicant PAN Number',
+          placeholder: 'Enter Applicant Name As Per Aadhar',
           uppercase: true,
         },
         transactionType: {
@@ -73,7 +82,14 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
           placeholder: 'Select Purpose',
           options: Object.keys(purposeOptions).length > 0 ? purposeOptions : {},
         },
-
+        paidBy: {
+          name: 'applicantDetails.paidBy',
+          label: 'Paid By',
+          type: FieldType.Select,
+          required: true,
+          placeholder: 'Select Paid By',
+          options: Object.keys(paidByOptions).length > 0 ? paidByOptions : {},
+        },
         email: {
           name: 'applicantDetails.email',
           label: 'Email',

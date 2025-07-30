@@ -60,6 +60,7 @@ export const transactionFormSchema = z.object({
     transactionType: z.string().optional().or(z.literal('')),
 
     purposeType: z.string().optional().or(z.literal('')),
+    paidBy: z.string().optional().or(z.literal('')),
   }),
   // Document Uploads
 });

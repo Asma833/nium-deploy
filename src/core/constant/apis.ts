@@ -57,7 +57,7 @@ export const API = {
     },
   },
   MAKER: {
-    GENERATE_ORDER: `/orders/generate-order`,
+    GENERATE_ORDER: `/fxorders/generate-order`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,

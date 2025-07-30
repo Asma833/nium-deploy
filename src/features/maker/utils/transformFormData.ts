@@ -18,7 +18,6 @@ export const transformFormDataToApiRequest = (
 
   // Find the purpose type ID by matching the text
   const selectedPurposeType = purposeTypes.find((type) => type.value === formData.applicantDetails.purposeType);
-  ///console.log('selectedPurposeType:', formData.applicantDetails.purposeType, selectedPurposeType);
   return {
     partner_order_id: formData.applicantDetails.partnerOrderId || '',
     transaction_type_id: selectedTransactionType?.typeId || '',
@@ -29,6 +28,7 @@ export const transformFormDataToApiRequest = (
     customer_email: formData.applicantDetails.email || '',
     customer_phone: formData.applicantDetails.mobileNumber || '',
     customer_pan: formData.applicantDetails.applicantPanNumber || '',
+    paid_by: formData.applicantDetails.paidBy || '',
   };
 };
 

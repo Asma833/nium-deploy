@@ -57,7 +57,7 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.CHECKER.UPDATE_INCIDENT.REGENERATE_VKYC_LINK,
     matchType: 'standard' as const,
     description: 'Generate vkyc link endpoint',
-  },
+  }
 } as const;
 
 /**
