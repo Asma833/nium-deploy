@@ -95,7 +95,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const handlePurposeTypeId = () => {
     if (purposeTypeOptions.length >= 0) {
       const purposeType = purposeTypeOptions.find((type) => type.value === purposeTypeId);
-      console.log('purposeType:', purposeType);
       return purposeType ? purposeType.typeId : '';
     }
     return '';
@@ -167,57 +166,56 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     );
   };
   const onSubmit = async (formData: TransactionFormData) => {
-    console.log('Form submitted with data:', formData);
     setPurposeTypeId(formData.applicantDetails.purposeType ?? '');
-    // try {
-    //   if (isEditPage) {
-    //     // Handle update operation
-    //     const updateRequestData = transformFormDataToUpdateRequest(
-    //       formData,
-    //       transactionTypeOptions,
-    //       purposeTypeOptions,
-    //       getUserHashedKey() || 'unknown-user'
-    //     );
+    try {
+      if (isEditPage) {
+        // Handle update operation
+        const updateRequestData = transformFormDataToUpdateRequest(
+          formData,
+          transactionTypeOptions,
+          purposeTypeOptions,
+          getUserHashedKey() || 'unknown-user'
+        );
 
-    //     await updateOrderMutation.mutateAsync({
-    //       partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
-    //       data: updateRequestData,
-    //     });
+        await updateOrderMutation.mutateAsync({
+          partnerOrderId: formData?.applicantDetails.partnerOrderId || '',
+          data: updateRequestData,
+        });
 
-    //     // Show success message (handled by the mutation's onSuccess)
-    //     // Optionally refresh data or navigate
-    //     refreshData();
-    //   } else {
-    //     // Handle create operation
-    //     const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
-    //     const response = await createTransactionMutation.mutateAsync(apiRequestData);
-    //     if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-    //       sendVkycLink(
-    //         { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-    //         {
-    //           onError: () => {
-    //             toast.error('Failed to generated VKYC link');
-    //           },
-    //         }
-    //       );
-    //     }
+        // Show success message (handled by the mutation's onSuccess)
+        // Optionally refresh data or navigate
+        refreshData();
+      } else {
+        // Handle create operation
+        const apiRequestData = transformFormDataToApiRequest(formData, transactionTypeOptions, purposeTypeOptions);
+        const response = await createTransactionMutation.mutateAsync(apiRequestData);
+        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
+          sendVkycLink(
+            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
+            {
+              onError: () => {
+                toast.error('Failed to generated VKYC link');
+              },
+            }
+          );
+        }
 
-    //     // Extract response data based on your API specification
-    //     const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
-    //     const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
-    //     setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
-    //     setNiumForexOrderId(niumOrder);
-    //     setPartnerOrderId(partnerOrder);
-    //     setShowUploadSection(true);
-    //     setIsDialogOpen(true);
+        // Extract response data based on your API specification
+        const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || 'PO123';
+        const niumOrder = response.data?.nium_forex_order_id || 'NIUMF123';
+        setCreatedTransactionId(partnerOrder); // Using partner_order_id as transaction ID
+        setNiumForexOrderId(niumOrder);
+        setPartnerOrderId(partnerOrder);
+        setShowUploadSection(true);
+        setIsDialogOpen(true);
 
-    //     // Reset form after successful submission
-    //     reset(transactionFormDefaults);
-    //   }
-    // } catch (error) {
-    //   console.error('Form submission error:', error);
-    //   // Handle error (show toast, etc.)
-    // }
+        // Reset form after successful submission
+        reset(transactionFormDefaults);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      // Handle error (show toast, etc.)
+    }
   };
   const handleFormSubmit = async () => {
     try {
@@ -295,7 +293,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       }
     }
   };
-  console.log('seletedRowTransactionData:', handlePurposeTypeId());
   return (
     <div>
       <h1 className={cn('text-xl font-bold capitalize pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>

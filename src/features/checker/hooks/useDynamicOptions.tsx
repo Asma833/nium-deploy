@@ -16,13 +16,12 @@ export const useDynamicOptions = (apiUrl: string) => {
       try {
         setLoading(true);
         const { data } = await axiosInstance.get(apiUrl);
-
-        const formattedOptions = data.map((item: any) => ({
+        const options = data.data ? data.data : data;
+        const formattedOptions = options?.map((item: any) => ({
           typeId: item.transaction_type_id || item.id,
           label: item.transaction_name || item.purpose_name,
           value: item.transaction_name || item.purpose_name,
         }));
-
         setOptions(formattedOptions);
         setError(null);
       } catch (err: any) {

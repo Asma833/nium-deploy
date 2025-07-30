@@ -46,7 +46,6 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   isResubmission = false,
   purposeTypeId, 
 }) => {
-  console.log('purposeTypeId:', purposeTypeId);
   const { documentTypes, loading } = useGetDocumentTypes(purposeTypeId);
   const uploadDocumentMutation = useUploadDocument();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
@@ -75,7 +74,6 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
      
       // Convert to base64
       const base64 = await convertFileToBase64(file);
-      // console.log(documentTypeName, 'documentTypeName');
       const newDocument: UploadedDocument = {
         file,
         documentTypeId,
@@ -88,7 +86,6 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       // Check if document type already exists
       const existingIndex = uploadedDocuments.findIndex((doc) => doc.documentTypeId === documentTypeId);
       setCurrentIndex(existingIndex);
-      console.log(existingIndex,"existingIndex")
       if (existingIndex >= 0) {
         // Replace existing document
         const updatedDocuments = [...uploadedDocuments];
