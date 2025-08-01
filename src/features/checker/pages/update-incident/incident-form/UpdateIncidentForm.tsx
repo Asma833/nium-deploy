@@ -268,6 +268,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const esignFile = esigns?.[0]?.esign_file_details?.esign_file || '';
   const vkycDocumentFiles = resources_documents_files || {};
   const vkycVideoFiles = resources_videos_files?.customer || '';
+  const agentVkycVideo = resources_videos_files?.agent || '';
   const vkycDocumentFilesArray = Object.values(vkycDocumentFiles);
 
   const handleViewDocument = () => {
@@ -420,7 +421,17 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 disabled={!vkycVideoFiles}
                 className="disabled:opacity-60"
               >
-                VKYC Video
+                VKYC Customer Video
+              </Button>
+            )}
+             {agentVkycVideo && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              <Button
+                type="button"
+                onClick={() => handleDownloadDocument('vkycVideo')}
+                disabled={!agentVkycVideo}
+                className="disabled:opacity-60"
+              >
+                VKYC Agent Video
               </Button>
             )}
           </FormFieldRow>
