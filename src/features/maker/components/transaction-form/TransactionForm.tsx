@@ -34,7 +34,6 @@ import { useCreateTransaction } from '../../hooks/useCreateTransaction';
 import { useUpdateOrder } from '../../hooks/useUpdateOrder';
 import { useCreateTransactionPurposeMap } from '../../hooks/useTransactionPurposeMap';
 import useGetDocByTransPurpose from '../../hooks/useGetDocByTransPurpose';
-import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
@@ -45,88 +44,15 @@ import { useGetData } from '@/hooks/useGetData';
 import { API } from '@/core/constant/apis';
 import { queryKeys } from '@/core/constant/queryKeys';
 import { TransactionMode } from '@/types/enums';
-import { TransactionOrderData } from '@/types/common.type';
 
 // Utils
 import { transformFormDataToApiRequest, transformFormDataToUpdateRequest } from '../../utils/transformFormData';
 import { cn } from '@/utils/cn';
+import useTransactionData from '../../hooks/useTransactionData';
+import handleViewDocument from '../../utils/handleViewDocument';
 
 // Constants
 const FIELD_WRAPPER_BASE_STYLE = 'mb-5';
-
-// Utility functions
-const handleViewDocument = (docUrl: string | string[], docType: 'mergeDoc' | 'vkycDoc' | 'vkycVideo') => {
-  if (docUrl && Array.isArray(docUrl)) {
-    if (docUrl.length === 1) {
-      window.open(docUrl[0], '_blank');
-    } else {
-      const htmlContent = `
-        <html>
-          <head><title>Multiple Documents</title></head>
-          <body>
-            <h2>Documents to Open:</h2>
-            ${docUrl
-              .map(
-                (url, i) => `<p><a href="${url}" target="_blank">Document ${i + 1}</a></p>`
-              )
-              .join('')}
-          </body>
-        </html>
-      `;
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-    }
-  } else if (docUrl && docType === 'mergeDoc') {
-    window.open(docUrl, '_blank');
-  }
-};
-
-// Custom hook for transaction data management
-const useTransactionData = (partnerOrderId: string) => {
-  const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
-
-  const typedAllTransactionsData = useMemo(() => {
-    if (!allTransactionsData) return [];
-
-    const normalizedData =
-      typeof allTransactionsData === 'object' && !Array.isArray(allTransactionsData)
-        ? (Object.values(allTransactionsData) as Record<string, any>[])
-        : Array.isArray(allTransactionsData)
-          ? (allTransactionsData as Record<string, any>[])
-          : [];
-
-    return normalizedData;
-  }, [allTransactionsData]);
-
-  const selectedRowTransactionData = typedAllTransactionsData?.find(
-    (transaction: TransactionOrderData) => transaction?.partner_order_id === partnerOrderId
-  );
-
-  const documentUrls = useMemo(() => {
-    if (!selectedRowTransactionData) return {};
-
-    return {
-      mergedDocument: selectedRowTransactionData?.merged_document?.url || '',
-      vkycVideo: selectedRowTransactionData?.vkycs?.length > 0
-        ? selectedRowTransactionData.vkycs[0]?.resources_videos_files || ''
-        : '',
-      vkycDocument: selectedRowTransactionData?.vkycs?.length > 0
-        ? selectedRowTransactionData.vkycs[0]?.resources_documents_files || ''
-        : '',
-    };
-  }, [selectedRowTransactionData]);
-
-  return {
-    selectedRowTransactionData,
-    documentUrls,
-    isLoading,
-    error,
-    refreshData,
-    checkerComments: selectedRowTransactionData?.incident_checker_comments || '',
-    orderStatus: selectedRowTransactionData?.order_status === 'completed',
-  };
-};
 
 const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Navigation and URL params
@@ -138,20 +64,22 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Form state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isOrderGenerated, setIsOrderGenerated] = useState<boolean>(false);
-  
+
   // Transaction state
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
-  
+
   // Document and purpose state
   const [showUploadSection, setShowUploadSection] = useState(false);
   const [selectedMapDocId, setSelectedMapDocId] = useState<string>('');
-  const [filteredPurposesBySelectedTnxType, setFilteredPurposesBySelectedTnxType] = useState<TransactionPurposeMap[]>([]);
+  const [filteredPurposesBySelectedTnxType, setFilteredPurposesBySelectedTnxType] = useState<TransactionPurposeMap[]>(
+    []
+  );
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
   const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
   const [purposeTypeId, setPurposeTypeId] = useState<string>('');
-  
+
   // Refs for performance optimization
   const lastProcessedCombination = useRef<string>('');
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -161,7 +89,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const { getUserHashedKey } = useCurrentUser();
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
-  
+
   // Transaction operations
   const createTransactionMutation = useCreateTransaction();
   const updateOrderMutation = useUpdateOrder();
@@ -169,17 +97,23 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Data fetching hooks
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
-  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus } = 
+  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus } =
     useTransactionData(partnerOrderId);
 
-  const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<TransactionPurposeMap[]>({
+  const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
+    TransactionPurposeMap[]
+  >({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
     queryKey: queryKeys.transaction.transactionPurposeMap,
     dataPath: 'data',
     enabled: !!currentTransactionTypeId,
   });
 
-  const { docsByTransPurpose, isLoading: isDocsLoading, refetch: refetchDocs } = useGetDocByTransPurpose({
+  const {
+    docsByTransPurpose,
+    isLoading: isDocsLoading,
+    refetch: refetchDocs,
+  } = useGetDocByTransPurpose({
     mappedDocPurposeId: selectedMapDocId,
   });
 
@@ -226,7 +160,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     mode: 'onChange',
   });
 
-  const { control, getValues, reset, setValue, formState: { errors }, handleSubmit } = methods;
+  const {
+    control,
+    getValues,
+    reset,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = methods;
 
   // Mode determination
   const isUpdatePage = mode === TransactionMode.UPDATE;
@@ -256,9 +197,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     if (watchedPaidBy === 'self') {
       return baseDocs.filter((doc) => doc.code !== 'OTHER');
     } else if (watchedPaidBy && watchedPaidBy !== 'self') {
-      return baseDocs.map((doc) => 
-        doc.code === 'OTHER' ? { ...doc, is_mandatory: true } : doc
-      );
+      return baseDocs.map((doc) => (doc.code === 'OTHER' ? { ...doc, is_mandatory: true } : doc));
     }
 
     return baseDocs;
@@ -404,7 +343,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           watchedPurposeHashKey
         );
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
-        
+
         if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
           sendVkycLink(
             { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
@@ -485,7 +424,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         )}
       </div>
       <FormProvider methods={methods}>
-        {(!isUpdatePage || isViewPage) && (
+        {
+          // {(!isUpdatePage || isViewPage) && (
           <FormContentWrapper className="w-full bg-transparent">
             <Spacer>
               <FormFieldRow className={cn(FIELD_WRAPPER_BASE_STYLE, 'mb-4 px-0')} rowCols={4}>
@@ -526,7 +466,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
               </FormFieldRow>
             </Spacer>
           </FormContentWrapper>
-        )}{' '}
+        }{' '}
         {!isUpdatePage && !isViewPage && !isOrderGenerated && (
           <FormFieldRow className="px-2">
             <Button

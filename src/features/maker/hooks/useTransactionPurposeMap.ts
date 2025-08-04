@@ -12,9 +12,6 @@ export const useCreateTransactionPurposeMap = () => {
     mutationFn: (data: CreateTransactionPurposeMapRequest) => {
       return createTransactionPurposeMap(data);
     },
-    onSuccess: (response) => {
-      console.log('Transaction purpose mapping created successfully:', response.data);
-    },
     onError: (error: any) => {
       console.error('Transaction purpose mapping creation failed:', error);
       
@@ -24,7 +21,7 @@ export const useCreateTransactionPurposeMap = () => {
                               error?.response?.data?.message?.includes('duplicate');
       
       if (isDuplicateError) {
-        console.log('Mapping already exists, proceeding with document fetch...');
+        console.warn('Mapping already exists, proceeding with document fetch...');
       } else {
         toast.error('Failed to create transaction purpose mapping');
       }
