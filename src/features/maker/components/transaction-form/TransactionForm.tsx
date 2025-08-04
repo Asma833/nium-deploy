@@ -55,6 +55,11 @@ import handleViewDocument from '../../utils/handleViewDocument';
 const FIELD_WRAPPER_BASE_STYLE = 'mb-5';
 
 const TransactionForm = ({ mode }: TransactionFormProps) => {
+  // Mode determination
+  const isUpdatePage = mode === TransactionMode.UPDATE;
+  const isViewPage = mode === TransactionMode.VIEW;
+  const isEditPage = mode === TransactionMode.EDIT;
+
   // Navigation and URL params
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -84,6 +89,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const lastProcessedCombination = useRef<string>('');
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const isInitialLoad = useRef<boolean>(true);
+  const isFormInitialized = useRef<boolean>(false);
 
   // Hooks for external operations
   const { getUserHashedKey } = useCurrentUser();
@@ -101,14 +107,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     useTransactionData(partnerOrderId);
 
   const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
-    TransactionPurposeMap[]
+  TransactionPurposeMap[]
   >({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
     queryKey: queryKeys.transaction.transactionPurposeMap,
     dataPath: 'data',
     enabled: !!currentTransactionTypeId,
   });
-
+  
   const {
     docsByTransPurpose,
     isLoading: isDocsLoading,
@@ -169,11 +175,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     handleSubmit,
   } = methods;
 
-  // Mode determination
-  const isUpdatePage = mode === TransactionMode.UPDATE;
-  const isViewPage = mode === TransactionMode.VIEW;
-  const isEditPage = mode === TransactionMode.EDIT;
-
   // Watch form values
   const { watch } = methods;
   const watchedTransactionType = watch('applicantDetails.transactionType');
@@ -185,8 +186,12 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const watchedTransactionTypeId = selectedTransactionType?.typeId || '';
   const watchedTransactionTypeHashKey = selectedTransactionType?.hashKey || '';
 
-  // Get selected purpose type data
-  const selectedPurposeType = formattedPurposeTypes?.find((type) => type.value === watchedPurposeType);
+  // Get selected purpose type data - only when formattedPurposeTypes is available
+  const selectedPurposeType = useMemo(() => {
+    if (!formattedPurposeTypes || !watchedPurposeType) return null;
+    return formattedPurposeTypes.find((type) => type.value === watchedPurposeType) || null;
+  }, [formattedPurposeTypes, watchedPurposeType]);
+
   const watchedPurposeTypeDocId = selectedPurposeType?.transactionPurposeMapId || '';
   const watchedPurposeHashKey = selectedPurposeType?.purposeHashKey || '';
 
@@ -203,9 +208,59 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     return baseDocs;
   }, [docsByTransPurpose, watchedPaidBy]);
 
+  // Initialize transaction type ID early for update/edit/view pages to enable purpose data fetching
+  useEffect(() => {
+    if (
+      (isUpdatePage || isEditPage || isViewPage) && 
+      selectedRowTransactionData && 
+      formattedTransactionTypes &&
+      !currentTransactionTypeId // Only set if not already set
+    ) {
+      const transactionTypeName = selectedRowTransactionData.transaction_type_name?.name;
+      if (transactionTypeName) {
+        const matchedType = formattedTransactionTypes.find(type => type.value === transactionTypeName);
+        if (matchedType?.typeId) {
+          setCurrentTransactionTypeId(matchedType.typeId);
+        }
+      }
+    }
+  }, [
+    selectedRowTransactionData, 
+    formattedTransactionTypes, 
+    isUpdatePage, 
+    isEditPage, 
+    isViewPage,
+    currentTransactionTypeId
+  ]);
+
+  // Handle transaction type changes from form input (for create mode)
+  useEffect(() => {
+    if (!isUpdatePage && !isEditPage && !isViewPage) {
+      setCurrentTransactionTypeId(watchedTransactionTypeId);
+    }
+  }, [watchedTransactionTypeId, isUpdatePage, isEditPage, isViewPage]);
+
+  // Filter purposes when transaction purpose data or current transaction type changes
+  useEffect(() => {
+    if (transactionPurposeMapData && currentTransactionTypeId) {
+      const filteredPurposes = transactionPurposeMapData.filter(
+        (data: any) => data?.purpose?.transactionType?.hashed_key === currentTransactionTypeId
+      );
+      setFilteredPurposesBySelectedTnxType(filteredPurposes);
+    } else {
+      setFilteredPurposesBySelectedTnxType([]);
+    }
+  }, [transactionPurposeMapData, currentTransactionTypeId]);
+
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
-    if ((isEditPage || isViewPage) && selectedRowTransactionData && !isLoading) {
+    if (
+      (isEditPage || isViewPage || isUpdatePage) && 
+      selectedRowTransactionData && 
+      !isLoading &&
+      formattedTransactionTypes &&
+      !isFormInitialized.current // Prevent multiple initializations
+    ) {
       const formValues: Partial<TransactionFormData> = {
         applicantDetails: {
           applicantName: selectedRowTransactionData.customer_name || '',
@@ -224,35 +279,36 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           setValue(`applicantDetails.${key}` as any, value);
         }
       });
+      
+      isFormInitialized.current = true;
     }
-  }, [selectedRowTransactionData, isLoading, isEditPage, isViewPage, setValue]);
-
-  // Handle transaction type changes and update purposes
-  useEffect(() => {
-    setCurrentTransactionTypeId(watchedTransactionTypeId);
-    if (transactionPurposeMapData && watchedTransactionTypeId) {
-      const filteredPurposes = transactionPurposeMapData.filter(
-        (data: any) => data?.purpose?.transactionType?.hashed_key === watchedTransactionTypeId
-      );
-      setFilteredPurposesBySelectedTnxType(filteredPurposes);
-    } else {
-      setFilteredPurposesBySelectedTnxType([]);
-    }
-  }, [watchedTransactionTypeId, transactionPurposeMapData]);
+  }, [
+    selectedRowTransactionData, 
+    isLoading, 
+    isEditPage, 
+    isViewPage, 
+    isUpdatePage,
+    setValue, 
+    formattedTransactionTypes
+  ]);
 
   // Handle purpose type changes and update document mapping
   useEffect(() => {
     if (watchedPurposeType && watchedPurposeTypeDocId) {
       setSelectedMapDocId(watchedPurposeTypeDocId);
-      if (selectedMapDocId && refetchDocs) {
-        refetchDocs();
-      }
     }
-  }, [watchedPurposeType, watchedPurposeTypeDocId, selectedMapDocId, refetchDocs]);
+  }, [watchedPurposeType, watchedPurposeTypeDocId]);
 
-  // Reset purpose field when transaction type changes
+  // Refetch documents when selectedMapDocId changes
   useEffect(() => {
-    if (isInitialLoad.current || isEditPage || isViewPage) {
+    if (selectedMapDocId && refetchDocs) {
+      refetchDocs();
+    }
+  }, [selectedMapDocId, refetchDocs]);
+
+  // Reset purpose field when transaction type changes (but not on edit/view/update pages)
+  useEffect(() => {
+    if (isInitialLoad.current || isEditPage || isViewPage || isUpdatePage) {
       isInitialLoad.current = false;
       return;
     }
@@ -261,18 +317,19 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       setValue('applicantDetails.purposeType', '');
       setSelectedMapDocId('');
     }
-  }, [watchedTransactionType, setValue, isEditPage, isViewPage]);
+  }, [watchedTransactionType, setValue, isEditPage, isViewPage, isUpdatePage]);
 
   // Cleanup on unmount or mode change
   useEffect(() => {
     return () => {
       lastProcessedCombination.current = '';
       isInitialLoad.current = true;
+      isFormInitialized.current = false;
       if (debounceTimeout.current) {
         clearTimeout(debounceTimeout.current);
       }
     };
-  }, [isViewPage, isEditPage]);
+  }, [isViewPage, isEditPage, isUpdatePage]);
 
   const handleRegenerateEsignLink = (pOrderId: string): void => {
     sendEsignLink(
