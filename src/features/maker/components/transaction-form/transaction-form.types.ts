@@ -23,6 +23,7 @@ export type Option = TransactionPurposeMap & {
   typeId: string;
   label: string;
   value: string;
+  hashedKey?: string;
   purposeHashKey?: string;
   transactionPurposeMapId?: string;
 };

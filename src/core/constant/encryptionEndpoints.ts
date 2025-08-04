@@ -68,11 +68,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Merge documents endpoint',
   },
-  'g-order': {
-    endpoint: API.MAKER.GENERATE_ORDER,
-    matchType: 'exact-only' as const,
-    description: 'Generate order endpoint',
-  }
+  // 'g-order': {
+  //   endpoint: API.MAKER.GENERATE_ORDER,
+  //   matchType: 'exact-only' as const,
+  //   description: 'Generate order endpoint',
+  // }
 } as const;
 
 /**
