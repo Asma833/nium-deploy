@@ -271,6 +271,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           isVKycRequired: selectedRowTransactionData.is_v_kyc_required || false,
           transactionType: selectedRowTransactionData.transaction_type_name?.name || '',
           purposeType: selectedRowTransactionData.purpose_type_name?.purpose_name || '',
+          paidBy: selectedRowTransactionData.paid_by || '',
         },
       };
 
@@ -314,6 +315,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
 
     if (watchedTransactionType) {
+      refetchTransactionPurposeMap?.()
       setValue('applicantDetails.purposeType', '');
       setSelectedMapDocId('');
     }
