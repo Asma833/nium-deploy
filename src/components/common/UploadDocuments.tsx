@@ -8,6 +8,7 @@ import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fi
 import { toast } from 'sonner';
 import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 
 interface MappedDocument {
   id: string;
@@ -50,22 +51,17 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   purposeTypeId,
   mappedDocuments = [],
 }) => {
-  const { documentTypes, refetch, loading } = useGetDocumentTypes({
-    id: purposeTypeId,
-    enable: !!purposeTypeId,
-  });
   const uploadDocumentMutation = useUploadDocument();
   const mergePdfMutation = useMergePdf();
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log('Purpose Type ID:', purposeTypeId);
 
-  // useEffect(() => {
-  //   // Refetch document types when purposeTypeId changes
-  //   if (purposeTypeId) {
-  //     refetch();
-  //   }
-  // }, [purposeTypeId, refetch]);
+  // Data fetching hooks
+  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  const { documentTypes, refetch, loading } = useGetDocumentTypes({
+    id: purposeTypeId,
+    enable: !!purposeTypeId,
+  });
 
   // Disable upload if Partner Order ID is not available
   const isUploadDisabled = !partnerOrderId || partnerOrderId.trim() === '';
@@ -237,6 +233,19 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       const mergeResponse = await mergePdfMutation.mutateAsync({
         partner_order_id: partnerOrderId,
       });
+      sendEsignLink(
+        { partner_order_id: partnerOrderId || '' },
+        {
+          onSuccess: () => {
+            setIsSubmitting(false);
+            toast.success('E-sign link generated successfully');
+            onESignGenerated?.(true);
+          },
+          onError: () => {
+            toast.error('Failed to generate e-sign link');
+          },
+        }
+      );
 
       toast.success('Documents merged successfully');
       onESignGenerated?.(true);
@@ -349,27 +358,22 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {documentsToRender.map((docType) => {
           const uploadedDoc = uploadedDocuments.find((doc) => doc.documentTypeId === docType.id);
-          
+
           // Use the code from the sorted documentsToRender array
           const docCode = docType.code;
-          console.log('docCode:', docCode)
-          
           // Check if All Documents (code 'AD') is uploaded
           const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
             return uploadedMappedDoc?.code === 'AD';
           });
-          
+
           // Check if any other document (not 'AD') is uploaded
           const isOtherDocumentUploaded = uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
             return uploadedMappedDoc?.code !== 'AD';
           });
-          
-          const isDisabled = isAllDocumentUploaded 
-            // isUploadDisabled ||
-            // (docCode === 'AD' && isOtherDocumentUploaded) 
-            // || (docCode !== 'AD' && isAllDocumentUploaded);
+
+          const isDisabled = isAllDocumentUploaded || isUploadDisabled;
 
           return (
             <div key={docType.id} className="space-y-2">
