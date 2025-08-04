@@ -10,14 +10,22 @@ export type DocumentConfig = {
 };
 
 export type OptionType = {
+  id?: string;
   label: string;
   value: string;
   purposeHashKey?: string;
   typeId?: string;
+  transactionPurposeMapId?: string;
 };
 
-export type Option = TransactionPurposeMap & { id?: string; typeId: string; label: string; value: string };
-
+export type Option = TransactionPurposeMap & {
+  id?: string;
+  typeId: string;
+  label: string;
+  value: string;
+  purposeHashKey?: string;
+  transactionPurposeMapId?: string;
+};
 
 export type FormControllerMetaOptions = {
   transactionTypes?: OptionType[];
@@ -28,10 +36,11 @@ export type TransactionFormProps = {
   mode?: TransactionMode;
 };
 
-
 export type TransactionPurposeMap = {
   id: string;
+
   transaction_type_id: string;
+  transaction_purpose_map_id?: string;
   purpose_id: string;
   created_by: string;
   updated_by: string | null;
@@ -59,7 +68,6 @@ export type TransactionPurposeMap = {
     updated_at: string;
   };
 };
-
 
 export type DocumentsByMappedId = {
   id: string;

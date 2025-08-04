@@ -94,9 +94,10 @@ export const API = {
     GET_PRODUCTS: '/products',
   },
   TRANSACTION: {
-    GET_ALL_TRANSACTIONS: `/transaction_type/all`,
+    GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
     GET_TRANSACTIONS_TYPES: `/transaction_type`,
     GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
+    GET_MAPPED_PURPOSES_BY_ID: (id: string) => `/transaction-purpose-map/purposes/${id}`,
   },
   PURPOSE: {
     GET_PURPOSES: `/fx/purposes`,

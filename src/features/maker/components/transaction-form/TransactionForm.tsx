@@ -54,17 +54,18 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   console.log('filteredPurposesBySelectedTnxType:', filteredPurposesBySelectedTnxType);
   const [purposeTypeId, setPurposeTypeId] = useState<string>('');
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
+  console.log('currentTransactionTypeId:', currentTransactionTypeId)
   const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
   const [isOrderGenerated, setIsOrderGenerated] = useState<boolean>(false);
   const lastProcessedCombination = useRef<string>('');
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const isInitialLoad = useRef<boolean>(true);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { options: purposeTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_MAPPED_PURPOSES);
+  // const { options: purposeTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_MAPPED_PURPOSES);
 
   // console.log('transactionPurposeMapData:', transactionPurposeMapData)
   // console.log('purposeTypeOptions:', purposeTypeOptions)
-  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_TRANSACTIONS_TYPES);
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
   // console.log('transactionTypeOptions:', transactionTypeOptions);
   const { getUserHashedKey } = useCurrentUser();
   const createTransactionMutation = useCreateTransaction();
@@ -73,11 +74,15 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const createTransactionPurposeMapMutation = useCreateTransactionPurposeMap();
   // Initially disabled
   const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+
   const { data: transactionPurposeMapData } = useGetData<TransactionPurposeMap[]>({
-    endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES,
+    endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
     queryKey: queryKeys.transaction.transactionPurposeMap,
     dataPath: 'data',
+    enabled: !!currentTransactionTypeId,
   });
+  
+  console.log('transactionPurposeMapData:', transactionPurposeMapData)
   const {
     docsByTransPurpose,
     isLoading: isDocsLoading,
@@ -126,24 +131,34 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     label: type.value,
     value: type.value,
   }));
-  const formatedPurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
-    mappedDocId: type.id || '',
+  const formatedPurposeTypes = transactionPurposeMapData?.map((type) => ({
+    mappedDocId: type?.id || '',
+    transactionPurposeMapId: type?.transaction_purpose_map_id || '',
     typeId: type.purpose.id,
     purposeHashKey: type.purpose?.hashed_key || '',
     label: type.purpose.purpose_name,
     purposeCode: type.purpose?.purpose_code || '',
     value: type.purpose.purpose_name,
   }));
+  // const formatedPurposeTypes = filteredPurpo`sesBySelectedTnxType.map((type) => ({
+  //   mappedDocId: type.id || '',
+  //   typeId: type.purpose.id,
+  //   purposeHashKey: type.purpose?.hashed_key || '',
+  //   label: type.purpose.purpose_name,
+  //   purposeCode: type.purpose?.purpose_code || '',
+  //   value: type.purpose.purpose_name,
+  // }));
   
   // Create purpose types compatible with transform function
   const transformCompatiblePurposeTypes = filteredPurposesBySelectedTnxType.map((type) => ({
     ...type,
-    typeId: type.purpose.id,
+    typeId: type.purpose.hashed_key,
     label: type.purpose.purpose_name,
     value: type.purpose.purpose_name,
   }));
   
   console.log('formatedPurposeTypes:', formatedPurposeTypes);
+  console.log('filteredPurposesBySelectedTnxType:', filteredPurposesBySelectedTnxType);
   console.log('transformCompatiblePurposeTypes:', transformCompatiblePurposeTypes);
 
   const handlePurposeTypeId = () => {
@@ -169,8 +184,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Generate dynamic form config
   const formControllerMeta = getFormControllerMeta({
     transactionTypes: formatedTransactionTypes,
-    purposeTypes: formatedPurposeTypes,
+    purposeTypes: formatedPurposeTypes ?? [],
   });
+  
   const methods = useForm<TransactionFormData>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: transactionFormDefaults,
@@ -195,11 +211,14 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const watchedTransactionType = watch('applicantDetails.transactionType');
   // Get the typeId from watchedTransactionType
   const selectedTransactionType = formatedTransactionTypes.find((type) => type.value === watchedTransactionType);
+  console.log('selectedTransactionType:', selectedTransactionType)
 
   const watchedTransactionTypeId = selectedTransactionType?.typeId || '';
+  console.log('watchedTransactionTypeId:', watchedTransactionTypeId)
   const watchedPurposeType = watch('applicantDetails.purposeType');
-  const selectedPurposeType = formatedPurposeTypes.find((type) => type.value === watchedPurposeType);
-  const watchedPurposeTypeDocId = selectedPurposeType?.mappedDocId || '';
+  const selectedPurposeType = formatedPurposeTypes?.find((type) => type.value === watchedPurposeType);
+  console.log('selectedPurposeType:', selectedPurposeType)
+  const watchedPurposeTypeDocId = selectedPurposeType?.transactionPurposeMapId || '';
   console.log('watchedPurposeTypeDocId:', watchedPurposeTypeDocId);
 
   // Watch for changes in paidBy field to control OTHER document behavior
@@ -263,11 +282,12 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   }, [seletedRowTransactionData, isLoading, isEditPage, isViewPage, setValue]);
 
   useEffect(() => {
+    setCurrentTransactionTypeId(watchedTransactionTypeId);
     if (transactionPurposeMapData && watchedTransactionTypeId) {
       setFilteredPurposesBySelectedTnxType(() => [
-        ...transactionPurposeMapData.filter((purpose: TransactionPurposeMap) => {
-          // console.log('Filtering purpose:', purpose);
-          return purpose.transactionType.hashed_key === watchedTransactionTypeId;
+        ...transactionPurposeMapData.filter((data: any) => {
+          console.log('Filtering purpose:', data);
+          return data?.purpose?.transactionType?.hashed_key === watchedTransactionTypeId;
         }),
       ]);
     } else {
@@ -283,6 +303,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       }
     }
   }, [watchedPurposeType, watchedPurposeTypeDocId]);
+  // console.log('watchedPurposeTypeDocId:', watchedPurposeTypeDocId)
 
   // Effect to handle transaction type and purpose type changes
   useEffect(() => {

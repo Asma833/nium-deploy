@@ -18,7 +18,8 @@ export const transformFormDataToApiRequest = (
 
   // Find the purpose type ID by matching the text
   const selectedPurposeType = purposeTypes.find((type) => type.value === formData.applicantDetails.purposeType);
-  
+  console.log('transformFormDataToApiRequestpurposeTypes:', purposeTypes)
+  console.log('transformFormDataToApiRequestselectedPurposeType:', selectedPurposeType)
   console.log('Transform Debug - purposeType from form:', formData.applicantDetails.purposeType);
   console.log('Transform Debug - purposeTypes array:', purposeTypes);
   console.log('Transform Debug - selectedPurposeType:', selectedPurposeType);
