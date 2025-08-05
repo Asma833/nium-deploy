@@ -82,8 +82,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     []
   );
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
-  const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
-  const [purposeTypeId, setPurposeTypeId] = useState<string>('');
 
   // Refs for performance optimization
   const lastProcessedCombination = useRef<string>('');
@@ -379,7 +377,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     toast.success('Ready to create a new transaction');
   };
   const onSubmit = async (formData: TransactionFormData) => {
-    setPurposeTypeId('f2a2fc1a-c31a-47f8-b8f1-9b35f3083730');
     try {
       if (isEditPage) {
         const updateRequestData = transformFormDataToUpdateRequest(
@@ -484,7 +481,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       </div>
       <FormProvider methods={methods}>
         {
-          // {(!isUpdatePage || isViewPage) && (
           <FormContentWrapper className="w-full bg-transparent">
             <Spacer>
               <FormFieldRow className={cn(FIELD_WRAPPER_BASE_STYLE, 'mb-4 px-0')} rowCols={4}>
@@ -603,19 +599,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        {/* {shouldShowSection ? (
-          <FormFieldRow className="w-full">
-            <UploadDocuments
-              partnerOrderId={partnerOrderId}
-              purposeTypeId={seletedRowTransactionData?.purpose_type_id}
-              onESignGenerated={() => {
-                handleRegenerateEsignLink(partnerOrderId);
-              }}
-              isResubmission={isUpdatePage && !orderStatus}
-            />
-          </FormFieldRow>
-        ) : null} */}
-        {/* {handlePurposeTypeId() && ( */}
         <FormFieldRow className="w-full">
           {(createTransactionPurposeMapMutation.isPending || isDocsLoading) && (
             <div className="flex items-center justify-center gap-3 mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg shadow-sm">
@@ -635,7 +618,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             isResubmission={isUpdatePage && !orderStatus}
           />
         </FormFieldRow>
-        {/* )} */}
       </FormProvider>
       <TransactionCreatedDialog
         isDialogOpen={isDialogOpen}
