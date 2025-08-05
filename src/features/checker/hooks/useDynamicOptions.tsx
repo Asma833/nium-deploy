@@ -16,13 +16,13 @@ export const useDynamicOptions = (apiUrl: string) => {
       try {
         setLoading(true);
         const { data } = await axiosInstance.get(apiUrl);
-        const options = data.data ? data.data : data;
+        const options = data?.data ?? data;
         const formattedOptions = options?.map((item: any) => ({
           id: item.id || '',
-          typeId: item.transaction_type_id,
+          typeId: item.transaction_type_id || '',
           hashedKey: item.hashed_key || '',
-          label: item.transaction_name || item.purpose_name,
-          value: item.transaction_name || item.purpose_name,
+          label: item.transaction_name || item.purpose_name || '',
+          value: item.transaction_name || item.purpose_name || '',
         }));
         setOptions(formattedOptions);
         setError(null);
