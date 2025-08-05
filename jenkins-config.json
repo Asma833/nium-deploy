@@ -1,0 +1,14 @@
+{
+  "development": {
+    "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
+  },
+  "qa": {
+    "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
+  },
+  "pre-prod": {
+    "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
+  },
+  "production": {
+    "SECRET_NAME": "arn:aws:secretsmanager:ap-south-1:187296086360:secret:Nium-forex-agent-portal-frontend-Preprod-rXRymC"
+  }
+}

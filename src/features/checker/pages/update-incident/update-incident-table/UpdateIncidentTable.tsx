@@ -1,0 +1,139 @@
+import { useEffect, useState } from 'react';
+import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
+import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
+import { useFilterApi } from '@/components/common/dynamic-table/hooks/useFilterApi';
+import { useCurrentUser } from '@/utils/getUserFromRedux';
+import useUnassignChecker from '@/features/checker/hooks/useUnassignChecker';
+import { cn } from '@/utils/cn';
+import { GetTransactionTableColumns } from './UpdateIncidentTableColumns';
+import { Order } from '@/features/checker/types/updateIncident.types';
+import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
+import useGetCheckerOrders from '@/features/checker/hooks/useGetCheckerOrders';
+import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
+import { API } from '@/core/constant/apis';
+import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
+
+const UpdateIncidentCreationTable = () => {
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { getUserHashedKey } = useCurrentUser();
+  const currentUserHashedKey = getUserHashedKey();
+  const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
+
+  const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
+
+  // Call the hook at the top level of the component
+  const { handleUnassign: unassignChecker, isPending: isUnassignPending } = useUnassignChecker();
+
+  // Fetch data using the updated hook
+  const {
+    data,
+    loading: isLoading,
+    error,
+    fetchData: refreshData,
+  } = useGetCheckerOrders(TransactionTypeEnum.PENDING, true);
+
+  const isTableFilterDynamic = false;
+  const isPaginationDynamic = false;
+
+  // Use the dynamic pagination hook
+  const pagination = useDynamicPagination({
+    endpoint: '',
+    initialPageSize: 10,
+    dataPath: 'transactions',
+    totalRecordsPath: 'totalRecords',
+  });
+
+  const openModal = (rowData: any) => {
+    setSelectedRowData(rowData);
+    setIsModalOpen(true);
+  };
+
+  const filterApi = useFilterApi({
+    endpoint: '',
+    baseQueryParams: {},
+  });
+
+  const handleUnassign = (rowData: Order): void => {
+    if (currentUserHashedKey && rowData.partner_order_id) {
+      unassignChecker(rowData.partner_order_id, currentUserHashedKey);
+    }
+  };
+
+  const columns = GetTransactionTableColumns(openModal, handleUnassign, isUnassignPending);
+  const tableData = data && data.orders && data.orders.length > 0 ? data.orders : [];
+
+  useEffect(() => {
+    refreshData();
+  }, [refreshData]);
+
+  return (
+    <div className="dynamic-table-wrap">
+      <div
+        className={cn('mb-4 flex items-center', !filterApi.loading ? 'hidden' : '', !filterApi.error ? 'hidden' : '')}
+      >
+        {(filterApi.loading || pagination.loading || isLoading) && (
+          <span className="text-blue-500">Loading data...</span>
+        )}
+        {(filterApi.error || pagination.error || error) && <span className="text-red-500">Error loading data</span>}
+      </div>{' '}
+      <DynamicTable
+        columns={columns}
+        data={tableData}
+        loading={pagination.loading}
+        onPageChange={
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
+        }
+        paginationMode={'static'}
+        refreshAction={{
+          isRefreshButtonVisible: true,
+          onRefresh: refreshData,
+          isLoading: isLoading,
+          hasError: error,
+        }}
+        filter={{
+          filterOption: true,
+          dateFilterColumn: 'created_at',
+          mode: isTableFilterDynamic ? 'dynamic' : 'static',
+          renderFilterOptions: {
+            search: true,
+            dateRange: true,
+            applyAction: true,
+            resetAction: true,
+            selects: [
+              {
+                id: 'purpose_type_name.purpose_name',
+                label: 'Purpose Type',
+                placeholder: 'Select',
+                options: purposeTypeOptions,
+              },
+              {
+                id: 'transaction_type_name.name',
+                label: 'Transaction Type',
+                placeholder: 'Select',
+                options: transactionTypeOptions,
+              },
+            ],
+          },
+          // Dynamic callbacks - API functions
+          dynamicCallbacks: isTableFilterDynamic
+            ? {
+                onSearch: filterApi.search,
+              }
+            : undefined,
+        }}
+      />
+      {isModalOpen && (
+        <UpdateIncidentDialog
+          pageId={IncidentPageId.UPDATE}
+          mode={IncidentMode.EDIT}
+          selectedRowData={selectedRowData}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
+    </div>
+  );
+};
+
+export default UpdateIncidentCreationTable;
