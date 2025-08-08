@@ -36,6 +36,11 @@ export const SideNavOptions = {
     //   disabled: true,
     // },
     {
+      title: 'Purpose Master',
+      path: getNavPath('ADMIN', ROUTES.ADMIN.MASTER.PURPOSE_MASTER),
+      icon: Eye,
+    },
+    {
       title: 'View All Transactions',
       path: getNavPath('ADMIN', ROUTES.ADMIN.VIEWALL),
       icon: Eye,
