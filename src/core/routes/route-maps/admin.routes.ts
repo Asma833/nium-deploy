@@ -77,4 +77,22 @@ export const adminRoutes = [
     roles: [baseRole],
     permission: '',
   },
+    {
+    path: ROUTES.ADMIN.MASTER.PURPOSE_MASTER,
+    element: adminComponents.PurposeMaster,
+    roles: ['admin'],
+    permission: '',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.DOCUMENT_MASTER,
+    element: adminComponents.DocumentMaster,
+    roles: ['admin'],
+    permission: '',
+  },
+  {
+    path: ROUTES.ADMIN.MASTER.CREATE_PURPOSE_MASTER,
+    element: adminComponents.PurposeMasterCreation,
+    roles:['admin'],
+    permission:'',
+  },
 ];
