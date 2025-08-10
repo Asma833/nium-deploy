@@ -238,6 +238,7 @@ const PurposeDocumentsTable = () => {
               triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
               title={dialogTitle}
               isOpen={isModalOpen}
+              className="md:max-w-[60%]"
               setIsOpen={(open) => {
                 setIsModalOpen(open);
                 if (!open) {
