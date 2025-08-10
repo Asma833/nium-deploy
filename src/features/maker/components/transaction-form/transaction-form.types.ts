@@ -32,6 +32,9 @@ export type FormControllerMetaOptions = {
   transactionTypes?: OptionType[];
   purposeTypes?: OptionType[];
 };
+export type TransactionOptions = {
+   transactionTypes?: OptionType[];
+};
 
 export type TransactionFormProps = {
   mode?: TransactionMode;
