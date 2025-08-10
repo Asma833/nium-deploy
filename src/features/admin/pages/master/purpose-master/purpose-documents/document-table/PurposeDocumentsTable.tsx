@@ -76,9 +76,7 @@ const PurposeDocumentsTable = () => {
     totalRecordsPath: 'totalRecords',
   });
   
-  const handleEditDocuments = () => {
-    // console.log('Edit Documents clicked');
-  };
+  
 
   const handleDelete = (rowData: any) => {
     setItemToDelete(rowData);

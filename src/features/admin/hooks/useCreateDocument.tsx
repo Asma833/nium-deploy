@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { DocumentApiPayload } from '../../types/document.type';
-import { documentMasterApi } from '../../action/documentMasterApi';
+import { DocumentApiPayload } from '../types/document.type';
+import { documentMasterApi } from '../action/documentMasterApi';
 
 export const useCreateDocument = ({ onDocumentCreateSuccess }: { onDocumentCreateSuccess: (data: DocumentApiPayload) => void }
 ) => {

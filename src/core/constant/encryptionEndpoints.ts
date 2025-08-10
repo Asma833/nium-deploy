@@ -67,6 +67,16 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.DOCUMENTS.MERGE_PDF,
     matchType: 'exact-only' as const,
     description: 'Merge documents endpoint',
+  },
+  'create-purpose':{
+    endpoint: API.PURPOSE.CREATE_PURPOSE,
+    matchType: 'standard' as const,
+    description: 'Create purpose endpoint',
+  },
+  'add-document':{
+    endpoint: API.DOCUMENT_MASTER.CREATE_DOCUMENT,
+    matchType: 'standard' as const,
+    description: 'Add document endpoint',
   }
 } as const;
 

@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { purposeMasterApi } from '../../action/purposeMasterApi';
+import { purposeMasterApi } from '../action/purposeMasterApi';
 
 export const useUpdatePurposeMaster = ({ onPurposeUpdateSuccess }: { onPurposeUpdateSuccess: () => void }) => {
   const navigate = useNavigate();

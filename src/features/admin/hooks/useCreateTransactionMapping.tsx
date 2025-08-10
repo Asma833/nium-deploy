@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { TransactionMappingPayload } from '../../types/transaction.types';
-import { purposeMasterApi } from '../../action/purposeMasterApi';
+import { TransactionMappingPayload } from '../types/transaction.types';
+import { purposeMasterApi } from '../action/purposeMasterApi';
 
 export const useCreateTransactionMapping = ({ onTransactionMappingSuccess }: { onTransactionMappingSuccess: (data: TransactionMappingPayload) => void }
 ) => {

@@ -10,7 +10,7 @@ purposeMasterCreation :async (purposeData: PurposeApiPayload): Promise<PurposeAp
 },
 updatePurpose : async (purposeData: UpdatePurposeApiPayload): Promise<UpdatePurposeApiPayload> => {
 	const { id, ...updateData } = purposeData;
-    const { data } = await axiosInstance.put<UpdatePurposeApiPayload>(API.PURPOSE.UPDATE_PURPOSE + `/${id}`, updateData);
+    const { data } = await axiosInstance.put<UpdatePurposeApiPayload>(API.PURPOSE.UPDATE_PURPOSE + `${id}`, updateData);
     return data;
 },
 transactionMapping : async (transactionData: TransactionMappingPayload): Promise<TransactionMappingPayload> => {

@@ -1,7 +1,7 @@
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
-import { DocumentMappingPaylod } from '../../types/document.type';
-import { documentMasterApi } from '../../action/documentMasterApi';
+import { DocumentMappingPaylod } from '../types/document.type';
+import { documentMasterApi } from '../action/documentMasterApi';
 
 export const useCreateDocumentTransactionMap =  (
   { onCreateSuccess }: { onCreateSuccess: (data: DocumentMappingPaylod) => void }

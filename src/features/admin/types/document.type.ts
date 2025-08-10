@@ -2,6 +2,7 @@ export type DocumentApiPayload = {
   name:string,
   type?: string,
   code:string,
+  id?:string,
  display_name: string,
   fields_required?: {
     number: string,

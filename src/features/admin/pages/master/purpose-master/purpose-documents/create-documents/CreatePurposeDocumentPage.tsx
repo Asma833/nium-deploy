@@ -9,7 +9,7 @@ import { getController } from '@/components/form/utils/getController';
 import Spacer from '@/components/form/wrapper/Spacer';
 import { PurposeDocumentFormConfig } from './create-purpose-document-form.config';
 import { useCreateDocument } from '@/features/admin/hooks/useCreateDocument';
-import { useUpdateDocument } from '@/features/admin/hooks/useUpdateDocument';
+import { useUpdateMapDocument } from '@/features/admin/hooks/useUpdateDocument';
 
 const CreatePurposeDocumentPage = (
   { 
@@ -41,7 +41,7 @@ const CreatePurposeDocumentPage = (
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
-    const { mutate: updateDocument } = useUpdateDocument({
+    const { mutate: updateDocument } = useUpdateMapDocument({
       onDocumentUpdateSuccess: () => {
         reset({});
         setIsModalOpen(false);
@@ -58,7 +58,9 @@ const CreatePurposeDocumentPage = (
 
   const handleFormSubmit = handleSubmit((data) => {
     if (isEditMode) {
-      updateDocument({ id: rowData.id, ...data });
+      console.log("Updating document with data:",rowData.id, data);
+      updateDocument({ id: rowData.id, data });
+      
     } else {
        addDocument({
          ...data,
@@ -67,11 +69,7 @@ const CreatePurposeDocumentPage = (
        });
     }
   });
-  // useEffect(() => {
-  //   const title = isEditMode ? 'Edit Document' : 'Add Document';
-  //   setDialogTitle(title);
-  // }, [isEditMode, setDialogTitle]);
-
+  
   useEffect(() => {
     if (rowData) {
       reset({

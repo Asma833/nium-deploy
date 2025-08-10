@@ -68,6 +68,7 @@ export function DynamicTable<T extends Record<string, any>>({
   columns,
   tableWrapperClass,
   renderLeftSideActions,
+  renderRightSideActions,
   data: initialData,
   initialPageSize = 10,
   defaultSortColumn = '',
@@ -294,7 +295,7 @@ export function DynamicTable<T extends Record<string, any>>({
           </div>
         </div>
       )}
-      <div className="flex sm:items-center justify-between w-full md:flex-row flex-col">
+      <div className="flex flex-wrap justify-end items-center w-full gap-4 md:flex-row flex-col">
         {renderLeftSideActions && <div className="flex-1 py-2">{renderLeftSideActions()}</div>}
         {(filter || renderComponents) && (
           <div className="w-full sm:flex-1 items-center sm:py-2">
@@ -315,6 +316,7 @@ export function DynamicTable<T extends Record<string, any>>({
             {renderComponents && <div>{renderComponents}</div>}
           </div>
         )}
+        {renderRightSideActions && <div className="flex flex-row justify-end py-2">{renderRightSideActions()}</div>}
       </div>
       <div className={cn('overflow-x-auto w-full bg-[--table-bg] rounded-lg shadow-sm', tableWrapperClass)}>
         <div className="border border-gray-200 overflow-clip">

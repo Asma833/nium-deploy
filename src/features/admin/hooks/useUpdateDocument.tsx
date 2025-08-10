@@ -1,17 +1,17 @@
-import { toast } from 'sonner';
-import { useMutation } from '@tanstack/react-query';
-import { documentMasterApi } from '../../action/documentMasterApi';
+import { useMutation } from "@tanstack/react-query";
+import { documentMasterApi } from "../action/documentMasterApi";
+import { toast } from "sonner";
 
-export const useUpdateDocument = ({ onDocumentUpdateSuccess }: { onDocumentUpdateSuccess: () => void }) => {
+export const useUpdateMapDocument = ({ onDocumentUpdateSuccess }: { onDocumentUpdateSuccess: () => void }) => {
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async ({ id,data }: any) => {
+    mutationFn: async ({ id, data }: { id: string; data: any }) => {
       const payload = {
-        name: data.name,
-        code: data.code,
-        display_name: data.display_name,
-        description: data.description,
+        name: data?.name,
+        code: data?.code,
+        display_name: data?.display_name,
+        description: data?.description,
       };
-
+      console.log("Updating document with ID:", id, "and payload:", payload);
       return await documentMasterApi.updateDocument(id, payload);
     },
     onSuccess: () => {
@@ -20,7 +20,8 @@ export const useUpdateDocument = ({ onDocumentUpdateSuccess }: { onDocumentUpdat
       onDocumentUpdateSuccess();
     },
     onError: (error: Error) => {
-      const errorMessage = (error.message = 'Document update failed');
+      console.error('Update error:', error);
+      const errorMessage = error.message || 'Document update failed';
       toast.error(errorMessage);
     },
   });
