@@ -16,12 +16,14 @@ interface MaterialSelectProps {
   placeholder?: string;
   disabled?: boolean;
   forcedValue?: string;
+  required?: boolean;
 }
 
 export const MaterialSelect = ({
   name,
   label,
   disabled = false,
+  required = false,
   options,
   forcedValue,
   baseStyle,
@@ -56,7 +58,9 @@ export const MaterialSelect = ({
         render={({ field: { value, onChange, ...field }, fieldState: { error } }) => {
           return (
             <FormControl fullWidth error={!!error}>
-              <InputLabel>{label}</InputLabel>
+              <InputLabel>
+                {<span> {label} {required && <span>*</span>}</span>}
+              </InputLabel>
               <Select
                 {...field}
                 value={(forcedValue ? forcedValue : value) || ''}

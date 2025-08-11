@@ -109,7 +109,7 @@ export const getController = (field: any) => {
         />
       );
     case 'select':
-      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} />;
+      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} required={field.required} />;
     case 'date':
       return <MaterialDatePicker {...baseProps} {...styledProps} error={field.error} />;
     case 'radio':

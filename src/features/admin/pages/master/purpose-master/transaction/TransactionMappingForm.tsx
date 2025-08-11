@@ -79,7 +79,7 @@ const TransactionMapping = (
                     ...(typeof field === 'object' && field !== null ? field : {}),
                     name,
                     control,
-                    errors,
+                    errors
                   })}
                 </FieldWrapper>
               ))}
