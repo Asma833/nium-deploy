@@ -10,7 +10,7 @@ const FieldWrapper = ({ id, children, className = '', flexdirection, error, ...p
         {props.label && <span className={cn('fieldWrapper-label text-sm mb-2', props.labelClass)}>{props.label}</span>}
         <div
           className={cn(
-            'gap-5 flex',
+            'flex',
             flexdirection ? 'md:flex-' + flexdirection : 'md:flex-col',
             props.childrenClass,
             'flex-col'

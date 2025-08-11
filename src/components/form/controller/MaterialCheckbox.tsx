@@ -9,6 +9,10 @@ interface MaterialCheckboxProps {
   handleCheckboxChange: (key: string, checked: boolean) => void;
   isMulti: boolean;
   defaultSelected?: Record<string, boolean>;
+  classNames?: {
+    wrapper?: string;
+    formGroup?: string;
+  };
 }
 
 export const MaterialCheckbox = ({
@@ -17,6 +21,10 @@ export const MaterialCheckbox = ({
   handleCheckboxChange,
   isMulti,
   defaultSelected = {},
+  classNames={
+    wrapper:'',
+    formGroup:''
+  }
 }: MaterialCheckboxProps) => {
   const { control, setValue, trigger } = useFormContext();
 
@@ -37,8 +45,8 @@ export const MaterialCheckbox = ({
       control={control}
       defaultValue={getDefaultValues()}
       render={({ field }) => (
-        <div>
-          <FormGroup style={{ zoom: 0.8 }}>
+        <div className={classNames.wrapper}>
+          <FormGroup style={{ zoom: 0.9 }} className={classNames?.formGroup ?? ''}>
             {Object.entries(options).map(([key, option]) => {
               const isChecked = field.value?.[key] || false;
 

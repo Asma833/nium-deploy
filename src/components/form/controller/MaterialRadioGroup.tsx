@@ -9,6 +9,7 @@ type MaterialRadioGroupProps<T extends FieldValues> = {
   options: { [key: string]: { label: string; checked?: boolean } };
   disabled?: boolean;
   forcedValue?: string;
+  onChange?: (value: string) => void;
 };
 
 export const MaterialRadioGroup = <T extends FieldValues>({
@@ -17,6 +18,7 @@ export const MaterialRadioGroup = <T extends FieldValues>({
   label,
   options,
   forcedValue,
+  onChange,
 }: MaterialRadioGroupProps<T>) => {
   return (
     <FormControl component="fieldset">
@@ -52,6 +54,12 @@ export const MaterialRadioGroup = <T extends FieldValues>({
                         checked={fieldValueAsString === value}
                         checkedIcon={<CircleCheck className="text-primary" size={'20'} />}
                         disabled={disabled}
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                          if (onChange) {
+                            onChange(e.target.value);
+                          }
+                        }}
                       />
                     }
                     label={option.label}
