@@ -77,6 +77,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     endpoint: API.DOCUMENT_MASTER.CREATE_DOCUMENT,
     matchType: 'standard' as const,
     description: 'Add document endpoint',
+  },
+  'document-map':{
+    endpoint: API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING,
+    matchType: 'standard' as const,
+    description: 'Document mapping endpoint',
   }
 } as const;
 

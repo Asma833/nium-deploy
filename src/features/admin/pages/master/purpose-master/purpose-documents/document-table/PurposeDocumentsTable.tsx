@@ -118,11 +118,11 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
-  const handleRequirementChange = (rowId: string, isChecked: boolean) => {
-    // Update the requirement value for the specific document
+  const handleMandatoryChange = (rowId: string, isChecked: boolean) => {
+    // Update the mandatory value for the specific document
     const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, requirement: isChecked, isSelected: isChecked || doc.backRequirement };
+        return { ...doc, mandatory: isChecked, isSelected: isChecked || doc.backmandatory };
       }
       return doc;
     });
@@ -130,11 +130,11 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
-  const handleBackRequirementChange = (rowId: string, isChecked: boolean) => {
-    // Update the back requirement value for the specific document
+  const handleBackMandatoryChange = (rowId: string, isChecked: boolean) => {
+    // Update the back mandatory value for the specific document
     const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, backRequirement: isChecked, isSelected: isChecked || doc.requirement};
+        return { ...doc, backmandatory: isChecked, isSelected: isChecked || doc.mandatory};
       }
       return doc;
     });
@@ -146,8 +146,8 @@ const PurposeDocumentsTable = () => {
     handleDelete,
     handleEditDocument,
     handleSelectionChange,
-    handleRequirementChange,
-    handleBackRequirementChange,
+    handleMandatoryChange,
+    handleBackMandatoryChange,
   });
 
   // State and handlers for DeleteConfirmationDialog
@@ -161,7 +161,7 @@ const PurposeDocumentsTable = () => {
       }
       const updatedData = formateDataArray.map((doc) => {
         if (doc.id) {
-          return { ...doc, requirement: false, backRequirement: false, isSelected: false };
+          return { ...doc, mandatory: false, backmandatory: false, isSelected: false };
         }
         return doc;
       });
@@ -183,8 +183,8 @@ const PurposeDocumentsTable = () => {
       .map((doc) => ({
         transaction_purpose_map_id: selectedType.typeId,
         document_id: doc.id,
-        isBackRequired: doc.backRequirement === 'back-required',
-        is_mandatory: doc.requirement === 'mandatory',
+        isBackRequired: doc.backmandatory ?? false,
+        is_mandatory: doc.mandatory ?? false,
       }));
 
     if (selectedDocuments.length === 0) {

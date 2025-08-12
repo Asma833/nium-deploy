@@ -5,14 +5,14 @@ export const PurposeDocumentColumn = ({
   handleDelete,
   handleEditDocument,
   handleSelectionChange,
-  handleRequirementChange,
-  handleBackRequirementChange,
+  handleMandatoryChange,
+  handleBackMandatoryChange,
 }: {
   handleDelete: (rowData: any) => void;
   handleEditDocument: (rowData: any) => void;
   handleSelectionChange: (rowId: string, isSelected: boolean) => void;
-  handleRequirementChange: (rowId: string, isChecked: boolean) => void;
-  handleBackRequirementChange: (rowId: string, isChecked: boolean) => void;
+  handleMandatoryChange: (rowId: string, isChecked: boolean) => void;
+  handleBackMandatoryChange: (rowId: string, isChecked: boolean) => void;
 }) => {
   return [
     {
@@ -20,11 +20,11 @@ export const PurposeDocumentColumn = ({
       id: 'select',
       name: 'Select',
       className: 'min-w-0 p-2',
-      cell: (value: boolean, row: any) => {
+      cell: (_:any, row: any) => {
         return (
           <CustomCheckbox
             rowId={row.id}
-            value={row.isSelected ? true : false}
+            value={row.isSelected ?? false}
             label=""
             requirementType="select"
             onChange={handleSelectionChange}
@@ -42,13 +42,13 @@ export const PurposeDocumentColumn = ({
       key: 'requirement',
       id: 'requirement',
       name: 'Mandatory',
-      cell: (value: string, row: any) => (
+      cell: (_:any, row: any) => (
         <CustomCheckbox
           rowId={row.id}
-          value={value ? true : false}
+          value={row.requirement ?? false}
           label="Mandatory"
           requirementType="mandatory"
-          onChange={handleRequirementChange}
+          onChange={handleMandatoryChange}
         />
       ),
     },
@@ -56,13 +56,13 @@ export const PurposeDocumentColumn = ({
       key: 'backRequirement',
       id: 'backRequirement',
       name: 'Back Required',
-      cell: (value: string, row: any) => (
+      cell: (_:any, row: any) => (
         <CustomCheckbox
           rowId={row.id}
-          value={value ? true : false}
+          value={row.backRequirement ?? false}
           label="Back Required"
           requirementType="back-required"
-          onChange={handleBackRequirementChange}
+          onChange={handleBackMandatoryChange}
         />
       ),
     },
