@@ -56,7 +56,6 @@ const CreatePurposeDocumentPage = ({
 
   const handleFormSubmit = handleSubmit((data) => {
     if (isEditMode) {
-      console.log('Updating document with data:', rowData.id, data);
       updateDocument({ id: rowData.id, data });
     } else {
       addDocument({

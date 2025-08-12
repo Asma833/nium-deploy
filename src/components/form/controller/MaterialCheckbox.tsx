@@ -229,11 +229,6 @@ export const MaterialCheckbox = ({
 
                           // Set the entire parent object
                           setValue(parentPath, parentObj, { shouldDirty: true, shouldTouch: true });
-
-                          // For debugging
-                          console.log(`Setting nested field ${fieldName}:`, updatedValue);
-                          console.log(`Parent object (${parentPath}):`, parentObj);
-                          console.log(`Complete form values:`, getValues());
                         } else {
                           // For regular fields, just set the value directly
                           setValue(fieldName, updatedValue, {
@@ -241,7 +236,6 @@ export const MaterialCheckbox = ({
                             shouldTouch: true,
                             shouldValidate: true,
                           });
-                          console.log(`Setting ${fieldName} to:`, updatedValue);
                         }
 
                         // Call handleCheckboxChange with the key and checked state if it exists

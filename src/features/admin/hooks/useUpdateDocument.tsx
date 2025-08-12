@@ -11,7 +11,6 @@ export const useUpdateMapDocument = ({ onDocumentUpdateSuccess }: { onDocumentUp
         display_name: data?.display_name,
         description: data?.description,
       };
-      console.log("Updating document with ID:", id, "and payload:", payload);
       return await documentMasterApi.updateDocument(id, payload);
     },
     onSuccess: () => {
