@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useMemo } from 'react';
 import { cn } from '@/utils/cn';
 import { toTitleCase } from '@/utils/textFormater';
 import { ErrorMessage } from '../ErrorMessage';
@@ -32,6 +33,21 @@ export const MaterialSelect = ({
 }: MaterialSelectProps) => {
   const { control } = useFormContext();
   const isArrayOptions = Array.isArray(options);
+
+  // Generate stable, unique keys for array options to avoid duplicate key warnings.
+  // Strategy: use provided id or value as base. If duplicates occur, append an incrementing suffix.
+  const processedArrayOptions = useMemo(() => {
+    if (!isArrayOptions) return [];
+    const counts: Record<string, number> = {};
+    return (options as Array<{ id?: string; value: string; label: string; selected?: boolean; typeId?: string }>).map(
+      (opt) => {
+        const base = (opt.id ?? opt.value).toString();
+        counts[base] = (counts[base] || 0) + 1;
+        const key = counts[base] > 1 ? `${base}__${counts[base]}` : base;
+        return { ...opt, _key: key } as typeof opt & { _key: string };
+      }
+    );
+  }, [options, isArrayOptions]);
 
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
@@ -86,16 +102,8 @@ export const MaterialSelect = ({
                   <em>{placeholder}</em>
                 </MenuItem>
                 {isArrayOptions
-                  ? (
-                      options as Array<{
-                        id?: string;
-                        value: string;
-                        label: string;
-                        selected?: boolean;
-                        typeId?: string;
-                      }>
-                    ).map((option) => (
-                      <MenuItem key={option.id ? option.id : option.value} value={option.value}>
+                  ? processedArrayOptions.map((option) => (
+                      <MenuItem key={option._key} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))

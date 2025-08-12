@@ -19,6 +19,7 @@ import { useTransactionPurposeMap } from '@/features/checker/hooks/useTransactio
 import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
 import { API } from '@/core/constant/apis';
+import { DocumentsResponse } from '@/features/admin/types/purpose.types';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
@@ -29,10 +30,6 @@ const PurposeDocumentsTable = () => {
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const { options: transactionPurposeTypeOptions } = useTransactionPurposeMap(API.PURPOSE.TRANSACTION_MAPPING);
   const config = purposeDocumentFormConfig(transactionPurposeTypeOptions);
-  interface DocumentsResponse {
-    data?: any[];
-    [key: string]: any;
-  }
 
   const {
     data,
@@ -134,7 +131,7 @@ const PurposeDocumentsTable = () => {
     // Update the back mandatory value for the specific document
     const updatedData = formateDataArray.map((doc) => {
       if (doc.id === rowId) {
-        return { ...doc, backmandatory: isChecked, isSelected: isChecked || doc.mandatory};
+        return { ...doc, backmandatory: isChecked, isSelected: isChecked || doc.mandatory };
       }
       return doc;
     });

@@ -18,3 +18,8 @@ export type PurposeMasterTablePageRowData = {
     updated_by: string;
     updated_at: string;
 }
+
+export type DocumentsResponse = {
+  data?: any[];
+  [key: string]: any;
+}

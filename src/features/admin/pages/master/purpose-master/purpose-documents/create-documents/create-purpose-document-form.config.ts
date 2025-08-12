@@ -1,6 +1,7 @@
-import { FieldType } from "@/types/enums";
+import { TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
+import { FieldType } from '@/types/enums';
 
-export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] = []) => ({
+export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: TransactionPurposeMap[] = []) => ({
   sectionTitle: 'Create Document',
   fields: {
     name: {
@@ -19,7 +20,7 @@ export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] =
       label: 'Document Code',
       type: FieldType.Text,
       required: true,
-      placeholder: 'Enter Document Code' 
+      placeholder: 'Enter Document Code',
     },
     description: {
       label: 'Document Description',
@@ -27,9 +28,8 @@ export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] =
       required: true,
       placeholder: 'Enter Document Description',
     },
-       
   },
-  documentField:{
+  documentField: {
     transaction_type: {
       name: 'transaction_type',
       label: 'Select Transaction-Purpose',
@@ -39,9 +39,5 @@ export const purposeDocumentFormConfig = (transactionPurposeTypeOptions: any[] =
       options: transactionPurposeTypeOptions,
       className: 'w-full p-4',
     },
-  }
+  },
 });
-
-
-
-
