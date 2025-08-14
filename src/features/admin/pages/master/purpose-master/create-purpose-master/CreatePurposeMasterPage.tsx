@@ -32,6 +32,8 @@ const CreatePurposeMasterPage = ({ setDialogTitle , rowData,refetch, setIsModalO
   const { mutate: createPurpose, isLoading } = useCreatePurposeMaster({
     onPurposeCreateSuccess: () => {
       reset({});
+      setIsModalOpen(false);
+      refetch();
     },
   });
 const { mutate: updatePurpose } = useUpdatePurposeMaster(
