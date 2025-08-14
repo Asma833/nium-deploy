@@ -37,7 +37,7 @@ export const MaterialSelect = ({
   // Generate stable, unique keys for array options to avoid duplicate key warnings.
   // Strategy: use provided id or value as base. If duplicates occur, append an incrementing suffix.
   const processedArrayOptions = useMemo(() => {
-    if (!isArrayOptions) return [];
+    if (!isArrayOptions || !options) return [];
     const counts: Record<string, number> = {};
     return (options as Array<{ id?: string; value: string; label: string; selected?: boolean; typeId?: string }>).map(
       (opt) => {
@@ -51,6 +51,8 @@ export const MaterialSelect = ({
 
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
+    if (!options) return '';
+    
     if (isArrayOptions) {
       const selectedOption = (options as Array<{ value: string; label: string; selected?: boolean }>).find(
         (option) => option.selected
@@ -91,9 +93,23 @@ export const MaterialSelect = ({
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
+                  
+                  // Find the label for the selected value
+                  let displayValue = selected;
+                  if (!options) {
+                    // If options is null/undefined, just show the selected value
+                    displayValue = selected;
+                  } else if (isArrayOptions) {
+                    const selectedOption = processedArrayOptions.find(option => option.value === selected);
+                    displayValue = selectedOption ? selectedOption.label : selected;
+                  } else {
+                    const selectedEntry = Object.entries(options).find(([value]) => value === selected);
+                    displayValue = selectedEntry ? selectedEntry[1].label : selected;
+                  }
+                  
                   return (
                     <span className="block truncate">
-                      {Array.isArray(selected) ? toTitleCase(selected.join(', ')) : selected}
+                      {Array.isArray(displayValue) ? toTitleCase(displayValue.join(', ')) : displayValue}
                     </span>
                   );
                 }}
@@ -107,7 +123,7 @@ export const MaterialSelect = ({
                         {option.label}
                       </MenuItem>
                     ))
-                  : Object.entries(options).map(([value, { label }]) => (
+                  : options ? Object.entries(options).map(([value, { label }]) => (
                       <MenuItem
                         key={value}
                         value={value}
@@ -115,7 +131,7 @@ export const MaterialSelect = ({
                       >
                         <span className="block truncate">{label}</span>
                       </MenuItem>
-                    ))}
+                    )) : null}
               </Select>
             </FormControl>
           );

@@ -83,7 +83,7 @@ const CreatePurposeDocumentPage = ({
         <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent w-full">
           <Spacer>
             <FormFieldRow className="mt-1" rowCols={2}>
-              {Object.entries(purposeDocumentFormConfig().fields).map(([name, field]) => (
+              {Object.entries(purposeDocumentFormConfig({}).fields).map(([name, field]) => (
                 <FieldWrapper key={name}>
                   {getController({
                     ...(typeof field === 'object' && field !== null ? field : {}),

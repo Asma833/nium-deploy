@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
@@ -15,11 +15,12 @@ import Spacer from '@/components/form/wrapper/Spacer';
 import { Button } from '@/components/ui/button';
 import { useGetData } from '@/hooks/useGetData';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
-import { useTransactionPurposeMap } from '@/features/checker/hooks/useTransactionPurposeMap';
 import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
 import { API } from '@/core/constant/apis';
 import { DocumentsResponse } from '@/features/admin/types/purpose.types';
+import { queryKeys } from '@/core/constant/queryKeys';
+import { TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
@@ -28,8 +29,46 @@ const PurposeDocumentsTable = () => {
   const [rowData, setRowData] = useState<any>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
-  const { options: transactionPurposeTypeOptions } = useTransactionPurposeMap(API.PURPOSE.TRANSACTION_MAPPING);
-  const config = purposeDocumentFormConfig(transactionPurposeTypeOptions);
+  const {
+    data: mappedPurposeTransactionTypesData,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetData({
+    endpoint: API.PURPOSE.TRANSACTION_MAPPING,
+    queryKey: queryKeys.masters.documentMapping,
+    dataPath: 'data',
+  });
+
+    console.log('Mapped Purpose Transaction Types Data:', mappedPurposeTransactionTypesData);
+
+  const methods = useForm();
+  const {
+    control,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = methods;
+
+  // Watch for transaction_type changes
+  const selectedTransactionType = watch('transaction_type');
+
+  // Clear purpose_type when transaction_type changes
+  const { setValue } = methods;
+  const [previousTransactionType, setPreviousTransactionType] = useState<string | null>(null);
+  
+  useEffect(() => {
+    // Only clear purpose_type if transaction_type actually changed (not on initial load)
+    if (selectedTransactionType && selectedTransactionType !== previousTransactionType) {
+      setValue('purpose_type', '');
+    }
+    setPreviousTransactionType(selectedTransactionType);
+  }, [selectedTransactionType, setValue, previousTransactionType]);
+
+  const config = purposeDocumentFormConfig({
+    mappedPurposeTransactionTypesData: (mappedPurposeTransactionTypesData as TransactionPurposeMap[]) || [],
+    selectedTransactionTypeId: selectedTransactionType
+  });
 
   const {
     data,
@@ -40,14 +79,6 @@ const PurposeDocumentsTable = () => {
     endpoint: API.DOCUMENT_MASTER.GET_DOCUMENTS,
     queryKey: ['getDocumentsList'],
   });
-
-  const methods = useForm();
-  const {
-    control,
-    reset,
-    formState: { errors, isSubmitting },
-    handleSubmit,
-  } = methods;
 
   const [formateDataArray, setFormateDataArray] = useState<any[]>([]);
 
@@ -167,18 +198,23 @@ const PurposeDocumentsTable = () => {
   });
 
   const handleSaveDocuments = handleSubmit((formValues) => {
-    // Find the selected object from dropdown options
-    const selectedType = transactionPurposeTypeOptions.find((type) => type.value === formValues.transaction_type);
+    // Find the selected mapping from the data
+    const mappingData = mappedPurposeTransactionTypesData as TransactionPurposeMap[];
+    const selectedMapping = mappingData?.find(
+      (item: TransactionPurposeMap) => 
+        item.transactionType.id === formValues.transaction_type && 
+        item.purpose.id === formValues.purpose_type
+    );
 
-    if (!selectedType?.typeId) {
-      toast.error('Please select a Transaction-Purpose Type.');
+    if (!selectedMapping?.id) {
+      toast.error('Please select both Transaction Type and Purpose Type.');
       return;
     }
 
     const selectedDocuments = formateDataArray
       .filter((doc) => doc.isSelected)
       .map((doc) => ({
-        transaction_purpose_map_id: selectedType.typeId,
+        transaction_purpose_map_id: selectedMapping.id,
         document_id: doc.id,
         isBackRequired: doc.backRequirement ?? false,
         is_mandatory: doc.requirement ?? false,
