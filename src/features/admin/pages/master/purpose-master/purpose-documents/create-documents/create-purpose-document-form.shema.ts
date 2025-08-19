@@ -20,9 +20,24 @@ export const purposeDocumentFormSchema = z.object({
     .refine(val => !val.startsWith(' '), { message: 'Cannot start with a space' }),
 
   description: z
-    .string()
-    .min(1, 'Document Description is required')
-    .max(200, 'Document Description must be less than 200 characters')
-    .regex(/^[A-Za-z][A-Za-z\s\-&,()]*$/, 'Document Description must start with an alphabet')
-    .refine(val => !val.startsWith(' '), { message: 'Cannot start with a space' }),
+  .string()
+  .optional()
+  .refine((val) => {
+    if (val && val.trim() !== '') {
+      return val.length <= 200;
+    }
+    return true;
+  }, { message: 'Document Description must be less than 200 characters' })
+  .refine((val) => {
+    if (val && val.trim() !== '') {
+      return /^[A-Za-z][A-Za-z\s\-&,()]*$/.test(val);
+    }
+    return true; 
+  }, { message: 'Document Description must start with an alphabet' })
+  .refine((val) => {
+    if (typeof val === 'string' && val.length > 0) {
+      return !val.startsWith(' ');
+    }
+    return true; 
+  }, { message: 'Cannot start with a space' }),
 });

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
@@ -39,7 +39,7 @@ const PurposeDocumentsTable = () => {
     dataPath: 'data',
   });
 
-    console.log('Mapped Purpose Transaction Types Data:', mappedPurposeTransactionTypesData);
+    // console.log('Mapped Purpose Transaction Types Data:', mappedPurposeTransactionTypesData);
 
   const methods = useForm();
   const {

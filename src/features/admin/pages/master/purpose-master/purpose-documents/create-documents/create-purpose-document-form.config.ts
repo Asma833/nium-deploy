@@ -62,7 +62,7 @@ export const purposeDocumentFormConfig = ({
     documentField: {
       transaction_type: {
         name: 'transaction_type',
-        label: 'Select transaction type',
+        label: 'Select Transaction Type',
         type: FieldType.Select,
         placeholder: 'Select transaction type',
         required: true,
