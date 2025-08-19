@@ -28,18 +28,14 @@ const PurposeMasterTablePage = () => {
   const formateDataArray = useMemo(() => {
     if (!data) return [];
 
-    if (Array.isArray(data)) {
-      return data.filter((item) => item != null);
+    // If API returns the common wrapper { data: [...], message, statusCode }
+    if (typeof data === 'object' && data !== null && Array.isArray((data as any).data)) {
+      return (data as any).data.filter((item: any) => item != null);
     }
 
-    // If data is an object, extract values and ensure they form a proper array
-    if (typeof data === 'object' && data !== null) {
-      // const values = Object.values(data as Record<string, any>);
-      return (
-        Object.values(data)
-          .flat()
-          .filter((item) => item != null) || []
-      );
+    // If data is already an array, use it directly
+    if (Array.isArray(data)) {
+      return data.filter((item) => item != null);
     }
 
     return [];

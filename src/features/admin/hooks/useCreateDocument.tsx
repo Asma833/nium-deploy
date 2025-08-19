@@ -31,7 +31,11 @@ export const useCreateDocument = ({ onDocumentCreateSuccess }: { onDocumentCreat
       onDocumentCreateSuccess(data);
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Document creation failed');
+      if (error && typeof (error as any).status === 'number' && (error as any).status === 409) {
+        toast.error('Document with the same code already exists');
+      } else {
+        toast.error(error.message || 'Document creation failed');
+      }
     },
   });
 

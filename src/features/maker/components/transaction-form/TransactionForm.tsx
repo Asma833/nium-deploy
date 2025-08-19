@@ -108,9 +108,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   TransactionPurposeMap[]
   >({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
-    queryKey: queryKeys.transaction.transactionPurposeMap,
+    queryKey: [...queryKeys.transaction.transactionPurposeMap, currentTransactionTypeId],
     dataPath: 'data',
-    enabled: !!currentTransactionTypeId,
+    enabled: !!currentTransactionTypeId && currentTransactionTypeId.length > 0,
   });
   
   const {
@@ -231,12 +231,25 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     currentTransactionTypeId
   ]);
 
-  // Handle transaction type changes from form input (for create mode)
+  // Handle transaction type changes from form input - Always update currentTransactionTypeId when transaction type changes
   useEffect(() => {
-    if (!isUpdatePage && !isEditPage && !isViewPage) {
-      setCurrentTransactionTypeId(watchedTransactionTypeId);
+    if (watchedTransactionTypeId) {
+      // Clear any existing timeout
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      // Debounce the transaction type ID update to prevent rapid API calls
+      debounceTimeout.current = setTimeout(() => {
+        // Only update if it's actually different to prevent unnecessary refetches
+        if (currentTransactionTypeId !== watchedTransactionTypeId) {
+          setCurrentTransactionTypeId(watchedTransactionTypeId);
+          // Clear filtered purposes immediately when transaction type changes
+          setFilteredPurposesBySelectedTnxType([]);
+        }
+      }, 100); // Small delay to debounce rapid changes
     }
-  }, [watchedTransactionTypeId, isUpdatePage, isEditPage, isViewPage]);
+  }, [watchedTransactionTypeId, currentTransactionTypeId]);
 
   // Filter purposes when transaction purpose data or current transaction type changes
   useEffect(() => {
@@ -249,6 +262,18 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       setFilteredPurposesBySelectedTnxType([]);
     }
   }, [transactionPurposeMapData, currentTransactionTypeId]);
+
+  // Manually refetch transaction purpose map when currentTransactionTypeId changes
+  useEffect(() => {
+    if (currentTransactionTypeId && refetchTransactionPurposeMap) {
+      // Small delay to ensure the query key has been updated
+      const timeoutId = setTimeout(() => {
+        refetchTransactionPurposeMap();
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+    return () => {}; // Ensure we always return a cleanup function
+  }, [currentTransactionTypeId, refetchTransactionPurposeMap]);
 
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
@@ -305,7 +330,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
   }, [selectedMapDocId, refetchDocs]);
 
-  // Reset purpose field when transaction type changes (but not on edit/view/update pages)
+  // Reset purpose field when transaction type changes (but not on edit/view/update pages during initial load)
   useEffect(() => {
     if (isInitialLoad.current || isEditPage || isViewPage || isUpdatePage) {
       isInitialLoad.current = false;
@@ -313,9 +338,11 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
 
     if (watchedTransactionType) {
-      refetchTransactionPurposeMap?.()
+      // Reset purpose field and selected document mapping immediately when transaction type changes
       setValue('applicantDetails.purposeType', '');
       setSelectedMapDocId('');
+      // Clear filtered purposes to prevent showing stale data
+      setFilteredPurposesBySelectedTnxType([]);
     }
   }, [watchedTransactionType, setValue, isEditPage, isViewPage, isUpdatePage]);
 
@@ -325,6 +352,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       lastProcessedCombination.current = '';
       isInitialLoad.current = true;
       isFormInitialized.current = false;
+      setCurrentTransactionTypeId(''); // Reset transaction type ID on cleanup
       if (debounceTimeout.current) {
         clearTimeout(debounceTimeout.current);
       }
@@ -357,6 +385,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     setShowUploadSection(false);
     setSelectedMapDocId('');
     setFilteredPurposesBySelectedTnxType([]);
+    setCurrentTransactionTypeId(''); // Reset transaction type ID
     toast.success('Transaction completed successfully!');
     // Navigate to status page
     navigate(`/maker/view-status`);
@@ -373,6 +402,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     setShowUploadSection(false);
     setSelectedMapDocId('');
     setFilteredPurposesBySelectedTnxType([]);
+    setCurrentTransactionTypeId(''); // Reset transaction type ID
     setIsDialogOpen(false);
     toast.success('Ready to create a new transaction');
   };
@@ -470,7 +500,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
 
   return (
-    <div>
+    <div className='w-full'>
       <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
         <h1 className="text-xl font-bold capitalize">{pageTitle || 'Create'} Transaction</h1>
       </div>
