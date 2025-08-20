@@ -4,13 +4,13 @@ export const purposeDocumentFormSchema = z.object({
   name: z
     .string()
     .min(1, 'Document Name is required')
-    .regex(/^[A-Za-z][A-Za-z\s\-&,()]*$/, 'Document Name must start with an alphabet')
+    .regex(/^[A-Za-z][A-Za-z0-9\s\-&,()]*$/, 'Document Name must start with an alphabet')
     .refine(val => !val.startsWith(' '), { message: 'Cannot start with a space' }),
 
   display_name: z
     .string()
     .min(1, 'Document Display Name is required')
-    .regex(/^[A-Za-z][A-Za-z\s\-&,()]*$/, 'Document Display Name must start with an alphabet')
+    .regex(/^[A-Za-z][A-Za-z0-9\s\-&,()]*$/, 'Document Display Name must start with an alphabet')
     .refine(val => !val.startsWith(' '), { message: 'Cannot start with a space' }),
 
   code: z
@@ -30,7 +30,7 @@ export const purposeDocumentFormSchema = z.object({
   }, { message: 'Document Description must be less than 200 characters' })
   .refine((val) => {
     if (val && val.trim() !== '') {
-      return /^[A-Za-z][A-Za-z\s\-&,()]*$/.test(val);
+      return /^[A-Za-z][A-Za-z0-9\s\-&,()]*$/.test(val);
     }
     return true; 
   }, { message: 'Document Description must start with an alphabet' })

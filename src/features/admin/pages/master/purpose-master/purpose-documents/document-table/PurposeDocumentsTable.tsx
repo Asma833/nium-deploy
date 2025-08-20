@@ -39,8 +39,6 @@ const PurposeDocumentsTable = () => {
     dataPath: 'data',
   });
 
-    // console.log('Mapped Purpose Transaction Types Data:', mappedPurposeTransactionTypesData);
-
   const methods = useForm();
   const {
     control,
@@ -56,7 +54,7 @@ const PurposeDocumentsTable = () => {
   // Clear purpose_type when transaction_type changes
   const { setValue } = methods;
   const [previousTransactionType, setPreviousTransactionType] = useState<string | null>(null);
-  
+
   useEffect(() => {
     // Only clear purpose_type if transaction_type actually changed (not on initial load)
     if (selectedTransactionType && selectedTransactionType !== previousTransactionType) {
@@ -67,7 +65,7 @@ const PurposeDocumentsTable = () => {
 
   const config = purposeDocumentFormConfig({
     mappedPurposeTransactionTypesData: (mappedPurposeTransactionTypesData as TransactionPurposeMap[]) || [],
-    selectedTransactionTypeId: selectedTransactionType
+    selectedTransactionTypeId: selectedTransactionType,
   });
 
   const {
@@ -201,9 +199,8 @@ const PurposeDocumentsTable = () => {
     // Find the selected mapping from the data
     const mappingData = mappedPurposeTransactionTypesData as TransactionPurposeMap[];
     const selectedMapping = mappingData?.find(
-      (item: TransactionPurposeMap) => 
-        item.transactionType.id === formValues.transaction_type && 
-        item.purpose.id === formValues.purpose_type
+      (item: TransactionPurposeMap) =>
+        item.transactionType.id === formValues.transaction_type && item.purpose.id === formValues.purpose_type
     );
 
     if (!selectedMapping?.id) {

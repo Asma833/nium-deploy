@@ -290,8 +290,9 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   const documentsToRender =
     mappedDocuments.length > 0
       ? mappedDocuments
-          .map((doc) => ({
+          .map((doc, index) => ({
             id: doc.document_id,
+            uniqueKey: `${doc.id}-${index}`, // Use the unique id from MappedDocument plus index for uniqueness
             name: doc.display_name || doc.name,
             isRequired: doc.is_mandatory,
             isBackRequired: doc.is_back_required,
@@ -305,8 +306,9 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
             if (a.code !== 'OTHER' && b.code === 'OTHER') return -1;
             return 0; // Keep original order for others
           })
-      : documentTypes.map((doc) => ({
+      : documentTypes.map((doc, index) => ({
           id: doc.id,
+          uniqueKey: `${doc.id}-${index}`, // Add uniqueKey for consistency
           name: doc.name,
           isRequired: true,
           isBackRequired: false,
@@ -376,7 +378,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           const isDisabled = isAllDocumentUploaded || isUploadDisabled;
 
           return (
-            <div key={docType.id} className="space-y-2">
+            <div key={docType.uniqueKey} className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 {docType.name}
                 {docType.isRequired && <span className="text-red-500 ml-1">*</span>}
