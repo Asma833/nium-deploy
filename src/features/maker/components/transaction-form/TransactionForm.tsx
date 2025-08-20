@@ -103,7 +103,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
   const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus,viewStatus } =
     useTransactionData(partnerOrderId);
-  // console.log(viewStatus,"viewStatus")
   const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
   TransactionPurposeMap[]
   >({

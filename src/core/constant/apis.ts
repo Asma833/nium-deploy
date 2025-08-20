@@ -23,7 +23,8 @@ export const API = {
   },
   ORDERS: {
     ORDERS: '/fxorders',
-    LIST: `/fxorders/maker`,
+    LIST: `/fxorders`,
+    GET_MAKER_ORDERS:`/fxorders/maker`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
