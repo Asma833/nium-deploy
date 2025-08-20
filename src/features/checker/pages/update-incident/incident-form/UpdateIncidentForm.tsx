@@ -279,7 +279,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc') => {
+  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' |'agentVideo' | 'mergeDoc') => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
     } else if (docType === 'vkycDocument' && vkycDocumentFilesArray.length > 0) {
@@ -290,15 +290,21 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       } else {
         toast.error('No VKYC document available for download');
       }
-    } else if (docType === 'vkycVideo' && vkycVideoFiles) {
+    } else if (docType === 'vkycVideo' && vkycVideoFiles ) {
       const videoUrl = vkycVideoFiles || '';
-
       if (videoUrl) {
         window.open(videoUrl, '_blank');
       } else {
         toast.error('No VKYC video available for download');
       }
-    } else if (docType === 'mergeDoc' && mergeDocument) {
+    } else if (docType === 'agentVideo' && agentVkycVideo) {
+      const videoUrl = agentVkycVideo || '';
+      if (videoUrl) {
+        window.open(videoUrl, '_blank');
+      } else {
+        toast.error('No VKYC video available for download');
+      }
+    }else if (docType === 'mergeDoc' && mergeDocument) {
       const docUrl = mergeDocument || '';
       window.open(docUrl, '_blank');
     } else {
@@ -428,7 +434,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             {agentVkycVideo && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
-                onClick={() => handleDownloadDocument('vkycVideo')}
+                onClick={() => handleDownloadDocument('agentVideo')}
                 disabled={!agentVkycVideo}
                 className="disabled:opacity-60"
               >

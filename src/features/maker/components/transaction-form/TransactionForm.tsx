@@ -101,9 +101,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Data fetching hooks
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
-  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus } =
+  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus,viewStatus } =
     useTransactionData(partnerOrderId);
-
+  console.log(viewStatus,"viewStatus")
   const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
   TransactionPurposeMap[]
   >({
@@ -641,6 +641,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             mappedDocuments={enhancedDocsByTransPurpose}
             onESignGenerated={handleDocumentSubmissionSuccess}
             isResubmission={isUpdatePage && !orderStatus}
+            disabled={mode === 'view' && !viewStatus}
           />
         </FormFieldRow>
       </FormProvider>

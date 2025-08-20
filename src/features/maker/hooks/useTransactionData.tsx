@@ -47,6 +47,7 @@ const useTransactionData = (partnerOrderId: string) => {
     refreshData,
     checkerComments: selectedRowTransactionData?.incident_checker_comments || '',
     orderStatus: selectedRowTransactionData?.order_status === 'completed',
+    viewStatus:selectedRowTransactionData?.order_status === 'rejected',
   };
 };
 
