@@ -8,6 +8,7 @@ interface MaterialEmailProps {
   className?: string;
   disabled?: boolean;
   forcedValue?: string;
+  required?:boolean;
 }
 
 export const MaterialEmail = ({
@@ -17,6 +18,7 @@ export const MaterialEmail = ({
   forcedValue,
   baseStyle,
   className,
+  required = false
 }: MaterialEmailProps) => {
   const { control } = useFormContext();
 
@@ -38,6 +40,7 @@ export const MaterialEmail = ({
           error={!!error}
           helperText={error?.message}
           sx={baseStyle}
+          required={required}
           className={className ?? ''}
           placeholder="Enter Email Address"
         />

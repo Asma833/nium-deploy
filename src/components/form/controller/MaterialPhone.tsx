@@ -8,6 +8,7 @@ interface MaterialPhoneProps {
   className?: string;
   disabled?: boolean;
   forcedValue?: string;
+  required?:boolean;
 }
 
 export const MaterialPhone = ({
@@ -17,6 +18,7 @@ export const MaterialPhone = ({
   forcedValue,
   baseStyle,
   className,
+  required = false
 }: MaterialPhoneProps) => {
   const { control } = useFormContext();
 
@@ -42,6 +44,7 @@ export const MaterialPhone = ({
           error={!!error}
           helperText={error?.message}
           sx={baseStyle}
+          required={required}
           className={className ?? ''}
           placeholder="Enter phone number"
           inputProps={{

@@ -24,6 +24,7 @@ export const getController = (field: any) => {
     className: field.className,
     classNames: field.classNames,
     id: field.id,
+    required:field.required
   };
 
   const styledProps = {
