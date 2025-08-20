@@ -115,58 +115,5 @@ export const GetTransactionTableColumns = ({
         <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
       ),
     },
-    {
-      key: 'e_sign_link',
-      id: 'e_sign_link',
-      name: 'E Sign Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          copyLinkUrl={rowData.e_sign_link}
-          toastInfoText={'E Sign link copied successfully!'}
-          disabled={isLinkDisabled(rowData.e_sign_link, rowData.e_sign_status)}
-          tooltipText={'Copy E sign Link'}
-          buttonType="copy_link"
-          buttonIconType="copy_link"
-        />
-      ),
-    },
-    {
-      key: 'v_kyc_link',
-      id: 'v_kyc_link',
-      name: 'VKYC Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          copyLinkUrl={rowData.v_kyc_link}
-          toastInfoText={'Vkyc Link link copied successfully!'}
-          disabled={isLinkDisabled(rowData.v_kyc_link, rowData.v_kyc_status)}
-          tooltipText={'Copy VKYC Link'}
-          buttonType="copy_link"
-          buttonIconType="copy_link"
-        />
-      ),
-    },
-    {
-      key: 'generate_esign_link',
-      id: 'generate_esign_link',
-      name: 'Generate Esign Link',
-      className: 'min-w-0 max-w-[100px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          id={rowData.nium_order_id}
-          loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
-          copyLinkUrl={rowData.v_kyc_link}
-          tooltipText="Generate Esign Link"
-          buttonIconType="refresh"
-          onClick={() => handleRegenerateEsignLink(rowData)}
-          disabled={(() => {
-            const { e_sign_status, order_status } = rowData || {};
-
-            return DISABLED_ORDER_STATUSES.includes(order_status) || DISABLED_ESIGN_STATUSES.includes(e_sign_status);
-          })()}
-        />
-      ),
-    },
   ];
 };
