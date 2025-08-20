@@ -2,13 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
-import useGetAllOrders from '@/features/admin/hooks/useGetAllOrders';
 import { Order } from '@/features/checker/types/updateIncident.types';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import { ViewStatusTableColumns } from './ViewStatusTableColumns';
 import { useDeleteTransaction } from '../../hooks/useDeleteTransaction';
+import useGetMakerOrders from '@/features/admin/hooks/useGetMakerOrders';
 
 const ViewStatusTable: React.FC = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -18,7 +18,7 @@ const ViewStatusTable: React.FC = () => {
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
   const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
-  const { data, loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+  const { data, loading: isLoading, error, fetchData: refreshData } = useGetMakerOrders();
   const { mutate, isPending: isDeleting } = useDeleteTransaction();
   const incidentStatusOptions = [
     { value: 'completed', label: 'Approved' },
