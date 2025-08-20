@@ -191,6 +191,22 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
 
   // Validate if all required documents are uploaded
   const validateRequiredDocuments = () => {
+    // Check if All Documents (AD) is uploaded
+    const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
+      const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
+      return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+    });
+
+    // If AD is uploaded, validation is considered complete
+    if (isAllDocumentUploaded) {
+      return {
+        isValid: true,
+        missing: [],
+        total: 1,
+        uploaded: 1,
+      };
+    }
+
     const documentsToRender =
       mappedDocuments.length > 0
         ? mappedDocuments.map((doc) => ({
@@ -198,15 +214,18 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
             name: doc.display_name || doc.name,
             isRequired: doc.is_mandatory,
             isBackRequired: doc.is_back_required,
+            code: doc.code,
           }))
         : documentTypes.map((doc) => ({
             id: doc.id,
             name: doc.name,
             isRequired: true, // Assume all documentTypes are required if no mapped docs
             isBackRequired: false,
+            code: undefined,
           }));
 
-    const requiredDocs = documentsToRender.filter((doc) => doc.isRequired);
+    // Filter out AD from required documents since we're checking individual docs
+    const requiredDocs = documentsToRender.filter((doc) => doc.isRequired && doc.code !== 'AD');
     const uploadedRequiredDocs = requiredDocs.filter((reqDoc) =>
       uploadedDocuments.some((uploadedDoc) => uploadedDoc.documentTypeId === reqDoc.id && uploadedDoc.isUploaded)
     );
@@ -373,9 +392,20 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
               <AlertCircle className="h-4 w-4 text-yellow-600" />
             )}
             <span className={`text-sm ${validation.isValid ? 'text-green-700' : 'text-yellow-700'}`}>
-              {validation.isValid
-                ? `All required documents uploaded (${validation.uploaded}/${validation.total})`
-                : `Required documents: ${validation.uploaded}/${validation.total} uploaded`}
+              {(() => {
+                const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
+                  const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
+                  return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+                });
+                
+                if (validation.isValid && isAllDocumentUploaded) {
+                  return "All Documents (AD) uploaded - validation complete";
+                } else if (validation.isValid) {
+                  return `All required documents uploaded (${validation.uploaded}/${validation.total})`;
+                } else {
+                  return `Required documents: ${validation.uploaded}/${validation.total} uploaded`;
+                }
+              })()}
             </span>
           </div>
         )}
