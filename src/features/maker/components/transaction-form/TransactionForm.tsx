@@ -74,6 +74,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
+  const [isVkycRequired, setIsVkycRequired] = useState<boolean>(false);
 
   // Document and purpose state
   const [showUploadSection, setShowUploadSection] = useState(false);
@@ -91,8 +92,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Hooks for external operations
   const { getUserHashedKey } = useCurrentUser();
-  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
+  // const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  // const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
 
   // Transaction operations
   const createTransactionMutation = useCreateTransaction();
@@ -358,20 +359,20 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     };
   }, [isViewPage, isEditPage, isUpdatePage]);
 
-  const handleRegenerateEsignLink = (pOrderId: string): void => {
-    sendEsignLink(
-      { partner_order_id: pOrderId || '' },
-      {
-        onSuccess: () => {
-          toast.success('E-sign link generated successfully');
-          navigate(`/maker/view-status`);
-        },
-        onError: () => {
-          toast.error('Failed to generate e-sign link');
-        },
-      }
-    );
-  };
+  // const handleRegenerateEsignLink = (pOrderId: string): void => {
+  //   sendEsignLink(
+  //     { partner_order_id: pOrderId || '' },
+  //     {
+  //       onSuccess: () => {
+  //         toast.success('E-sign link generated successfully');
+  //         navigate(`/maker/view-status`);
+  //       },
+  //       onError: () => {
+  //         toast.error('Failed to generate e-sign link');
+  //       },
+  //     }
+  //   );
+  // };
 
   // Handle successful document submission and reset form
   const handleDocumentSubmissionSuccess = () => {
@@ -379,6 +380,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     reset(transactionFormDefaults);
     setIsOrderGenerated(false);
     setPartnerOrderId('');
+    setIsVkycRequired(false);
     setCreatedTransactionId('');
     setNiumForexOrderId('');
     setShowUploadSection(false);
@@ -396,6 +398,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     reset(transactionFormDefaults);
     setIsOrderGenerated(false);
     setPartnerOrderId('');
+    setIsVkycRequired(false);
     setCreatedTransactionId('');
     setNiumForexOrderId('');
     setShowUploadSection(false);
@@ -429,22 +432,24 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         );
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
 
-        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-          sendVkycLink(
-            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-            {
-              onError: () => {
-                toast.error('Failed to generated VKYC link');
-              },
-            }
-          );
-        }
+        // if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
+        //   sendVkycLink(
+        //     { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
+        //     {
+        //       onError: () => {
+        //         toast.error('Failed to generated VKYC link');
+        //       },
+        //     }
+        //   );
+        // }
 
         const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || '';
         const niumOrder = response.data?.nium_forex_order_id || '';
+        const isVkycRequired = formData?.applicantDetails?.isVKycRequired || false;
         setCreatedTransactionId(partnerOrder);
         setNiumForexOrderId(niumOrder);
         setPartnerOrderId(partnerOrder);
+        setIsVkycRequired(isVkycRequired);
         setShowUploadSection(true);
         setIsDialogOpen(true);
         setIsOrderGenerated(true);
@@ -641,6 +646,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             onESignGenerated={handleDocumentSubmissionSuccess}
             isResubmission={isUpdatePage && !orderStatus}
             disabled={mode === 'view' && !viewStatus}
+            isVkycRequired={isVkycRequired}
           />
         </FormFieldRow>
       </FormProvider>

@@ -10,6 +10,7 @@ import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { cn } from '@/utils/cn';
+import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 
 interface MappedDocument {
   id: string;
@@ -32,6 +33,7 @@ interface UploadedDocument {
 
 interface UploadDocumentsProps {
   partnerOrderId: string;
+  isVkycRequired: boolean;
   onUploadComplete?: (success: boolean) => void;
   onESignGenerated?: (success: boolean) => void;
   isResubmission?: boolean;
@@ -47,6 +49,7 @@ const FILE_SIZE = {
 };
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   partnerOrderId,
+  isVkycRequired,
   onUploadComplete,
   onESignGenerated,
   isResubmission = false,
@@ -61,6 +64,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
 
   // Data fetching hooks
   const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
+  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const { documentTypes, refetch, loading } = useGetDocumentTypes({
     id: purposeTypeId,
     enable: !!purposeTypeId,
@@ -276,6 +280,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       const mergeResponse = await mergePdfMutation.mutateAsync({
         partner_order_id: partnerOrderId,
       });
+
       sendEsignLink(
         { partner_order_id: partnerOrderId || '' },
         {
@@ -289,6 +294,20 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           },
         }
       );
+
+      if (isVkycRequired) {
+        sendVkycLink(
+          { partner_order_id: partnerOrderId || '' },
+          {
+            onSuccess: () => {
+              toast.success('Video KYC link generated successfully');
+            },
+            onError: () => {
+              toast.error('Failed to generate Video KYC link');
+            },
+          }
+        );
+      }
 
       toast.success('Documents merged successfully');
       onESignGenerated?.(true);
