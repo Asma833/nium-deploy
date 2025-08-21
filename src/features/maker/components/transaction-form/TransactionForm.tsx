@@ -101,17 +101,17 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Data fetching hooks
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
-  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus,viewStatus } =
+  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus, viewStatus } =
     useTransactionData(partnerOrderId);
   const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
-  TransactionPurposeMap[]
+    TransactionPurposeMap[]
   >({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
     queryKey: [...queryKeys.transaction.transactionPurposeMap, currentTransactionTypeId],
     dataPath: 'data',
     enabled: !!currentTransactionTypeId && currentTransactionTypeId.length > 0,
   });
-  
+
   const {
     docsByTransPurpose,
     isLoading: isDocsLoading,
@@ -208,26 +208,26 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Initialize transaction type ID early for update/edit/view pages to enable purpose data fetching
   useEffect(() => {
     if (
-      (isUpdatePage || isEditPage || isViewPage) && 
-      selectedRowTransactionData && 
+      (isUpdatePage || isEditPage || isViewPage) &&
+      selectedRowTransactionData &&
       formattedTransactionTypes &&
       !currentTransactionTypeId // Only set if not already set
     ) {
       const transactionTypeName = selectedRowTransactionData.transaction_type_name?.name;
       if (transactionTypeName) {
-        const matchedType = formattedTransactionTypes.find(type => type.value === transactionTypeName);
+        const matchedType = formattedTransactionTypes.find((type) => type.value === transactionTypeName);
         if (matchedType?.typeId) {
           setCurrentTransactionTypeId(matchedType.typeId);
         }
       }
     }
   }, [
-    selectedRowTransactionData, 
-    formattedTransactionTypes, 
-    isUpdatePage, 
-    isEditPage, 
+    selectedRowTransactionData,
+    formattedTransactionTypes,
+    isUpdatePage,
+    isEditPage,
     isViewPage,
-    currentTransactionTypeId
+    currentTransactionTypeId,
   ]);
 
   // Handle transaction type changes from form input - Always update currentTransactionTypeId when transaction type changes
@@ -277,8 +277,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
     if (
-      (isEditPage || isViewPage || isUpdatePage) && 
-      selectedRowTransactionData && 
+      (isEditPage || isViewPage || isUpdatePage) &&
+      selectedRowTransactionData &&
       !isLoading &&
       formattedTransactionTypes &&
       !isFormInitialized.current // Prevent multiple initializations
@@ -302,17 +302,17 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           setValue(`applicantDetails.${key}` as any, value);
         }
       });
-      
+
       isFormInitialized.current = true;
     }
   }, [
-    selectedRowTransactionData, 
-    isLoading, 
-    isEditPage, 
-    isViewPage, 
+    selectedRowTransactionData,
+    isLoading,
+    isEditPage,
+    isViewPage,
     isUpdatePage,
-    setValue, 
-    formattedTransactionTypes
+    setValue,
+    formattedTransactionTypes,
   ]);
 
   // Handle purpose type changes and update document mapping
@@ -499,7 +499,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
         <h1 className="text-xl font-bold capitalize">{pageTitle || 'Create'} Transaction</h1>
       </div>

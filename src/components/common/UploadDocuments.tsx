@@ -397,9 +397,9 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                   const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
                   return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
                 });
-                
+
                 if (validation.isValid && isAllDocumentUploaded) {
-                  return "All Documents (AD) uploaded - validation complete";
+                  return 'All Documents (AD) uploaded - validation complete';
                 } else if (validation.isValid) {
                   return `All required documents uploaded (${validation.uploaded}/${validation.total})`;
                 } else {
@@ -481,10 +481,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
             >
               <label className="block text-sm font-medium text-forground">
                 {docType.name}
-                {docType.isRequired && <span className="text-red-500 ml-1">*</span>}
-                {/* {isAllDocumentUploaded && docCode !== 'OTHER' && docCode !== 'AD' && (
-                  <span className="text-xs text-gray-500 ml-2">disabled</span>
-                )} */}
+                {docType.isRequired && !isAllDocumentUploaded && <span className="text-red-500 ml-1">*</span>}
               </label>
 
               <div className="relative">
