@@ -34,8 +34,6 @@ import { useCreateTransaction } from '../../hooks/useCreateTransaction';
 import { useUpdateOrder } from '../../hooks/useUpdateOrder';
 import { useCreateTransactionPurposeMap } from '../../hooks/useTransactionPurposeMap';
 import useGetDocByTransPurpose from '../../hooks/useGetDocByTransPurpose';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
@@ -92,8 +90,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Hooks for external operations
   const { getUserHashedKey } = useCurrentUser();
-  // const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  // const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
 
   // Transaction operations
   const createTransactionMutation = useCreateTransaction();
@@ -359,21 +355,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     };
   }, [isViewPage, isEditPage, isUpdatePage]);
 
-  // const handleRegenerateEsignLink = (pOrderId: string): void => {
-  //   sendEsignLink(
-  //     { partner_order_id: pOrderId || '' },
-  //     {
-  //       onSuccess: () => {
-  //         toast.success('E-sign link generated successfully');
-  //         navigate(`/maker/view-status`);
-  //       },
-  //       onError: () => {
-  //         toast.error('Failed to generate e-sign link');
-  //       },
-  //     }
-  //   );
-  // };
-
   // Handle successful document submission and reset form
   const handleDocumentSubmissionSuccess = () => {
     // Reset form to defaults after successful document submission
@@ -431,17 +412,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           watchedPurposeHashKey
         );
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
-
-        // if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-        //   sendVkycLink(
-        //     { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-        //     {
-        //       onError: () => {
-        //         toast.error('Failed to generated VKYC link');
-        //       },
-        //     }
-        //   );
-        // }
 
         const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || '';
         const niumOrder = response.data?.nium_forex_order_id || '';

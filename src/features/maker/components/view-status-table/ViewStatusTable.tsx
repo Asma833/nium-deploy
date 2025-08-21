@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { DialogWrapper } from '@/components/common/DialogWrapper';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import { Order } from '@/features/checker/types/updateIncident.types';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
@@ -11,8 +10,6 @@ import { useDeleteTransaction } from '../../hooks/useDeleteTransaction';
 import useGetMakerOrders from '@/features/admin/hooks/useGetMakerOrders';
 
 const ViewStatusTable: React.FC = () => {
-  const [selectedRowData, setSelectedRowData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingOrderId, setLoadingOrderId] = useState<string>('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
@@ -192,9 +189,6 @@ const ViewStatusTable: React.FC = () => {
           },
         }}
       />
-      {isModalOpen && selectedRowData && (
-        <DialogWrapper title="View Status" isOpen={isModalOpen} setIsOpen={setIsModalOpen} renderContent={''} />
-      )}
       <DeleteConfirmationDialog
         open={isDeleteDialogOpen}
         title="Delete Transaction"

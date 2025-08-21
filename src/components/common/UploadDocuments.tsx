@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { useUploadDocument } from '@/hooks/useUploadDocuments';
 import { useMergePdf } from '@/hooks/useMergePdf';
 import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
-import { toast } from 'sonner';
 import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
