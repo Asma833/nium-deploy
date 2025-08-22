@@ -88,11 +88,11 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       }
 
       // Validate file size
-      if (file.size > FILE_SIZE.OTHER_DOC_MAX && documentTypeName.toLowerCase() !== 'all documents') {
+      if (file.size > FILE_SIZE.OTHER_DOC_MAX && documentTypeName?.toLowerCase() !== 'all documents') {
         toast.error(`File size too large. Maximum size: ${formatFileSize(FILE_SIZE.OTHER_DOC_MAX)}`);
         return;
       }
-      if (file.size > FILE_SIZE.ALL_DOC_MAX && documentTypeName.toLowerCase() === 'all documents') {
+      if (file.size > FILE_SIZE.ALL_DOC_MAX && documentTypeName?.toLowerCase() === 'all documents') {
         toast.error(`File size too large. Maximum size: ${formatFileSize(FILE_SIZE.ALL_DOC_MAX)}`);
         return;
       }

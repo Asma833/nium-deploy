@@ -12,11 +12,7 @@ export const documentMasterApi =  {
     return data;
   },
   deleteDocument:async (documentId: string) => {
-    return await axiosInstance.delete(API.DOCUMENT_MASTER.DELETE_DOCUMENT(documentId), {
-      headers: {
-        accept: '*/*',
-      },
-    });
+    return await axiosInstance.delete(API.DOCUMENT_MASTER.DELETE_DOCUMENT(documentId));
   },
   documentTransactionPurposeMapping: async (documentData: DocumentMappingPaylod): Promise<DocumentMappingPaylod> => {
     const { data } = await axiosInstance.post<DocumentMappingPaylod>(API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING, documentData);

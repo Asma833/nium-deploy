@@ -68,16 +68,6 @@ export const FileUpload = ({
                 className="n-filetype-hidden"
                 accept=".pdf,.jpg,.png"
               />
-              {/* <button
-                type="button"
-                className="bg-gray-150 w-full h-full flex text-gray-500 text-[12px] rounded overflow-hidden hover:bg-gray-200 cursor-pointer"
-              >
-                <span className="text-nowrap font-semibold border-r-2 border-gray-400 py-2 pr-3 pl-4">Choose File</span>
-                <span className="ml-2 text-gray-500 font-semibold px-2 py-2 text-left">
-                  {value && value.length > 0 && value[0]?.name ? value[0].name : 'No file chosen'}
-                </span>
-              </button> */}
-
               <button
                 type="button"
                 className="bg-gray-150 w-full flex items-center text-gray-700 text-[13px] rounded border border-gray-300 hover:bg-gray-200 cursor-pointer"

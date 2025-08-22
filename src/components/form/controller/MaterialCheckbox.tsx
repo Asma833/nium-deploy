@@ -3,6 +3,7 @@ import { FormGroup, FormControlLabel, Checkbox, Radio } from '@mui/material';
 import { Circle, CircleCheck, Square, CheckSquare, CircleDot, Disc, SquareCheck } from 'lucide-react';
 import { ErrorMessage } from '../ErrorMessage';
 import { CustomRadioIcon, CustomSquareCheckIcon } from '@/components/common/CustomCheckboxIcons';
+import { cn } from '@/utils/cn';
 
 type CheckboxVariant = 'square_check' | 'circle_check' | 'radio_style' | 'circle_check_filled' | 'square_check_filled';
 type CheckboxSize = 'small' | 'medium' | 'large';
@@ -185,7 +186,9 @@ export const MaterialCheckbox = ({
       defaultValue={getDefaultValues()}
       render={({ field }) => (
         <div className={classNames.wrapper}>
-          <FormGroup style={{ zoom: 0.9 }} className={classNames?.formGroup ?? ''}>
+          <FormGroup
+            className={cn('scale-90', classNames?.formGroup)}
+          >
             {Object.entries(options).map(([key, option]) => {
               const isChecked = field.value?.[key] || false;
               const icons = getIcons(isChecked);
