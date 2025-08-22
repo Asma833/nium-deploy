@@ -16,7 +16,7 @@ const CustomSquareCheckIcon: React.FC<CustomSquareCheckProps> = ({
   fill = '',
   selected = false,
 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" className={cn(className)}>
     {/* Background square */}
     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill={fill} />
 

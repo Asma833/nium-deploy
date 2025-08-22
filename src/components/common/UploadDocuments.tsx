@@ -155,7 +155,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
       toast.success(`${document.documentTypeName} uploaded successfully`);
 
       // Check if the uploaded document is "All Documents" (AD) and show additional info
-      const mappedDoc = mappedDocuments.find((mapped) => mapped.document_id === document.documentTypeId);
+      const mappedDoc = mappedDocuments?.find((mapped) => mapped.document_id === document.documentTypeId);
       if (mappedDoc?.code === 'AD') {
         setTimeout(() => {
           toast.info("All Documents uploaded - other document types are now disabled except 'OTHER'");
