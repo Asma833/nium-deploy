@@ -186,9 +186,7 @@ export const MaterialCheckbox = ({
       defaultValue={getDefaultValues()}
       render={({ field }) => (
         <div className={classNames.wrapper}>
-          <FormGroup
-            className={cn('scale-90', classNames?.formGroup)}
-          >
+          <FormGroup className={cn('scale-90', classNames?.formGroup)}>
             {Object.entries(options).map(([key, option]) => {
               const isChecked = field.value?.[key] || false;
               const icons = getIcons(isChecked);

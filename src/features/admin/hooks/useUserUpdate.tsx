@@ -37,8 +37,7 @@ export const useUpdateAPI = ({ role }: { role: string }) => {
       navigate(url);
     },
     onError: (error: Error) => {
-      const errorMessage =
-        error.message || role === 'maker' ? 'Maker update failed' : 'Checker update failed';
+      const errorMessage = error.message || role === 'maker' ? 'Maker update failed' : 'Checker update failed';
       toast.error(errorMessage);
     },
   });

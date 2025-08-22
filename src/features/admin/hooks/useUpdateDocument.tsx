@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
-import { documentMasterApi } from "../action/documentMasterApi";
-import { toast } from "sonner";
+import { useMutation } from '@tanstack/react-query';
+import { documentMasterApi } from '../action/documentMasterApi';
+import { toast } from 'sonner';
 
 export const useUpdateMapDocument = ({ onDocumentUpdateSuccess }: { onDocumentUpdateSuccess: () => void }) => {
   const { mutate, isPending, error } = useMutation({

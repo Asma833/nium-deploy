@@ -29,7 +29,7 @@ const PurposeDocumentsTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<DeletableItem |null>(null);
+  const [itemToDelete, setItemToDelete] = useState<DeletableItem | null>(null);
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,

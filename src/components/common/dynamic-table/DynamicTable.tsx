@@ -358,7 +358,10 @@ export function DynamicTable<T extends Record<string, any>>({
                           onClick={() => onRowClick?.(row)}
                         >
                           {columns.map((col: Column<T>) => (
-                            <TableCell className={cn("odz-table-cell text-center", col.className)} key={`${rowKey}-${col.key}`}>
+                            <TableCell
+                              className={cn('odz-table-cell text-center', col.className)}
+                              key={`${rowKey}-${col.key}`}
+                            >
                               {getCellContent(row, col)}
                             </TableCell>
                           ))}

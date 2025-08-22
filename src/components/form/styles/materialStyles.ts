@@ -1,4 +1,3 @@
-
 interface FieldWithStyleProps {
   height?: string;
   error?: boolean;

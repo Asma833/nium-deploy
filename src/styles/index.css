@@ -331,7 +331,7 @@ html[class='dark'] {
   z-index: 9999;
   pointer-events: all;
 }
-.MuiSvgIcon-root{
+.MuiSvgIcon-root {
   width: 28px !important;
   height: 28px !important;
 }

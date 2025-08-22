@@ -8,7 +8,7 @@ interface MaterialPhoneProps {
   className?: string;
   disabled?: boolean;
   forcedValue?: string;
-  required?:boolean;
+  required?: boolean;
 }
 
 export const MaterialPhone = ({
@@ -18,7 +18,7 @@ export const MaterialPhone = ({
   forcedValue,
   baseStyle,
   className,
-  required = false
+  required = false,
 }: MaterialPhoneProps) => {
   const { control } = useFormContext();
 

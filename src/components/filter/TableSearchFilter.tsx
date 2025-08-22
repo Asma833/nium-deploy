@@ -197,16 +197,13 @@ const TableSearchFilter = ({
     [status?.options]
   );
 
-  const handleSelectChange = useCallback(
-    (id: string, value: string) => {
-      const translated = value === EMPTY_SENTINEL ? '' : value;
-      setLocalCustomFilters((prev: typeof filters.customFilterValues) => ({
-        ...prev,
-        [id]: translated,
-      }));
-    },
-    []
-  );
+  const handleSelectChange = useCallback((id: string, value: string) => {
+    const translated = value === EMPTY_SENTINEL ? '' : value;
+    setLocalCustomFilters((prev: typeof filters.customFilterValues) => ({
+      ...prev,
+      [id]: translated,
+    }));
+  }, []);
 
   const handleDynamicFilter = useCallback(async () => {
     // Update the filters in the parent component

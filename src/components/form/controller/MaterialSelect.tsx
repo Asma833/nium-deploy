@@ -52,7 +52,7 @@ export const MaterialSelect = ({
   // Get default value from options based on 'selected' property
   const getDefaultValue = () => {
     if (!options) return '';
-    
+
     if (isArrayOptions) {
       const selectedOption = (options as Array<{ value: string; label: string; selected?: boolean }>).find(
         (option) => option.selected
@@ -77,7 +77,12 @@ export const MaterialSelect = ({
           return (
             <FormControl fullWidth error={!!error}>
               <InputLabel>
-                {<span> {label} {required && <span>*</span>}</span>}
+                {
+                  <span>
+                    {' '}
+                    {label} {required && <span>*</span>}
+                  </span>
+                }
               </InputLabel>
               <Select
                 {...field}
@@ -93,20 +98,20 @@ export const MaterialSelect = ({
                   if (!selected || selected === '') {
                     return <em>{placeholder}</em>;
                   }
-                  
+
                   // Find the label for the selected value
                   let displayValue = selected;
                   if (!options) {
                     // If options is null/undefined, just show the selected value
                     displayValue = selected;
                   } else if (isArrayOptions) {
-                    const selectedOption = processedArrayOptions.find(option => option.value === selected);
+                    const selectedOption = processedArrayOptions.find((option) => option.value === selected);
                     displayValue = selectedOption ? selectedOption.label : selected;
                   } else {
                     const selectedEntry = Object.entries(options).find(([value]) => value === selected);
                     displayValue = selectedEntry ? selectedEntry[1].label : selected;
                   }
-                  
+
                   return (
                     <span className="block truncate">
                       {Array.isArray(displayValue) ? toTitleCase(displayValue.join(', ')) : displayValue}
@@ -123,15 +128,17 @@ export const MaterialSelect = ({
                         {option.label}
                       </MenuItem>
                     ))
-                  : options ? Object.entries(options).map(([value, { label }]) => (
-                      <MenuItem
-                        key={value}
-                        value={value}
-                        className="!whitespace-nowrap !overflow-hidden !text-ellipsis max-w-full"
-                      >
-                        <span className="block truncate">{label}</span>
-                      </MenuItem>
-                    )) : null}
+                  : options
+                    ? Object.entries(options).map(([value, { label }]) => (
+                        <MenuItem
+                          key={value}
+                          value={value}
+                          className="!whitespace-nowrap !overflow-hidden !text-ellipsis max-w-full"
+                        >
+                          <span className="block truncate">{label}</span>
+                        </MenuItem>
+                      ))
+                    : null}
               </Select>
             </FormControl>
           );

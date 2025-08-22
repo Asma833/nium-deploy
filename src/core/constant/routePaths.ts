@@ -15,7 +15,7 @@ export const ROUTES = {
       AGENT_PROFILE: '/user-management/agent-profile-creation',
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
     },
-   MASTER: {
+    MASTER: {
       PURPOSE_MASTER: '/master/purpose-master',
       DOCUMENT_MASTER: '/master/purpose-master/document-mapping',
       CREATE_PURPOSE_MASTER: '/master/purpose-master/add-purpose',

@@ -24,7 +24,7 @@ export const getController = (field: any) => {
     className: field.className,
     classNames: field.classNames,
     id: field.id,
-    required:field.required
+    required: field.required,
   };
 
   const styledProps = {
@@ -110,7 +110,15 @@ export const getController = (field: any) => {
         />
       );
     case 'select':
-      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} required={field.required} />;
+      return (
+        <MaterialSelect
+          {...baseProps}
+          {...styledProps}
+          options={field.options}
+          placeholder={field.placeholder}
+          required={field.required}
+        />
+      );
     case 'date':
       return <MaterialDatePicker {...baseProps} {...styledProps} error={field.error} />;
     case 'radio':

@@ -13,5 +13,5 @@ export const queryKeys = {
   },
   masters: {
     documentMapping: ['masters', 'documentMapping'],
-  }
+  },
 };

@@ -31,7 +31,7 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
   if (transactionTypes.length > 0) {
     transactionOptions[transactionTypes[0].value].selected = true;
   }
-  
+
   return {
     sectionTitle: 'Create Transaction',
     description: 'Fill in the details to create a new transaction',

@@ -13,7 +13,7 @@ export interface DeleteConfirmationDialogProps {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   title?: string;
-  message?:  React.ReactNode;
+  message?: React.ReactNode;
   confirmText?: string;
   cancelText?: string;
   onConfirm?: () => void;

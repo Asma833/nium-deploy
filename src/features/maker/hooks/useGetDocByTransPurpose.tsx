@@ -9,7 +9,7 @@ type Props = {
 
 const useGetDocByTransPurpose = (props: Props) => {
   const enabled = !!props.mappedDocPurposeId;
-  
+
   // Only create the endpoint if we have a valid mappedDocPurposeId
   const endpoint = props.mappedDocPurposeId ? API.TRANSACTION_PURPOSE_MAP.GET_DOCUMENTS(props.mappedDocPurposeId) : '';
 

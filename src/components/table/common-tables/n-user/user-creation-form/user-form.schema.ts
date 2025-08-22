@@ -24,9 +24,10 @@ export const userSchema = z
       .regex(/[0-9]/, 'Password must contain at least one digit')
       .regex(/[@$!%*?&]/, 'A special character is required (e.g., ! @ # $ % ^ & ).')
       .regex(/^(?!-)/, 'Password cannot start with a hyphen'),
-    confirmPassword: z.string()
-    .min(1,'Confirm password is required')
-    .min(6, 'Confirm password must be at least 6 characters'),
+    confirmPassword: z
+      .string()
+      .min(1, 'Confirm password is required')
+      .min(6, 'Confirm password must be at least 6 characters'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

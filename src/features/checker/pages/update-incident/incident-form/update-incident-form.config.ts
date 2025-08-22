@@ -1,4 +1,4 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 export const sectionTitle = 'Transaction Form';
 

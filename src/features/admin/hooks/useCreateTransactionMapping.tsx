@@ -3,9 +3,12 @@ import { toast } from 'sonner';
 import { TransactionMappingPayload } from '../types/transaction.types';
 import { purposeMasterApi } from '../action/purposeMasterApi';
 
-export const useCreateTransactionMapping = ({ onTransactionMappingSuccess }: { onTransactionMappingSuccess: (data: TransactionMappingPayload) => void }
-) => {
-    const mapFormDataToApiPayload = (formData: TransactionMappingPayload): TransactionMappingPayload => {
+export const useCreateTransactionMapping = ({
+  onTransactionMappingSuccess,
+}: {
+  onTransactionMappingSuccess: (data: TransactionMappingPayload) => void;
+}) => {
+  const mapFormDataToApiPayload = (formData: TransactionMappingPayload): TransactionMappingPayload => {
     return {
       transaction_type_id: formData.transaction_type_id,
       purpose_id: formData.purpose_id,
@@ -28,5 +31,3 @@ export const useCreateTransactionMapping = ({ onTransactionMappingSuccess }: { o
 
   return { mutate, isLoading: isPending, error };
 };
-  
-

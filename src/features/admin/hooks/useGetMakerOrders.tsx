@@ -15,7 +15,8 @@ export const getAllOrdersQueryKey = (transactionType: TransactionType, userHashe
 
 // Fetch function for TanStack Query
 const fetchAllOrders = async (transactionType: TransactionType, userHashedKey: string) => {
-  const endpoint = transactionType === 'all' ? API.ORDERS.GET_MAKER_ORDERS : `${API.ORDERS.GET_MAKER_ORDERS}?type=${transactionType}`;
+  const endpoint =
+    transactionType === 'all' ? API.ORDERS.GET_MAKER_ORDERS : `${API.ORDERS.GET_MAKER_ORDERS}?type=${transactionType}`;
 
   const { data } = await axiosInstance.get(endpoint);
   return data.data;

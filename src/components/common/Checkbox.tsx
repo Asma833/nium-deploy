@@ -9,20 +9,14 @@ interface CustomCheckboxProps {
   onChange: (rowId: string, isChecked: boolean) => void; // Changed to boolean
 }
 
-export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
-  rowId,
-  value,
-  label,
-  requirementType,
-  onChange,
-}) => {
+export const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ rowId, value, label, requirementType, onChange }) => {
   return (
     <div className="flex flex-row gap-4 items-center justify-center">
       <label className="flex items-center gap-1">
         <Checkbox
           name={`${requirementType}-${rowId}`}
-          checked={value} 
-          onChange={(e) => onChange(rowId, e.target.checked)} 
+          checked={value}
+          onChange={(e) => onChange(rowId, e.target.checked)}
           sx={{
             color: '#E53888',
             '&.Mui-checked': {

@@ -3,12 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 import { DocumentMappingPaylod } from '../types/document.type';
 import { documentMasterApi } from '../action/documentMasterApi';
 
-export const useCreateDocumentTransactionMap =  (
-  { onCreateSuccess }: { onCreateSuccess: (data: DocumentMappingPaylod) => void }
-) => {
+export const useCreateDocumentTransactionMap = ({
+  onCreateSuccess,
+}: {
+  onCreateSuccess: (data: DocumentMappingPaylod) => void;
+}) => {
   const { mutate, isPending, error } = useMutation<DocumentMappingPaylod, Error, DocumentMappingPaylod>({
     mutationFn: async (documentData: DocumentMappingPaylod) => {
-      await documentMasterApi.documentTransactionPurposeMapping(documentData)
+      await documentMasterApi.documentTransactionPurposeMapping(documentData);
       return documentData;
     },
     onSuccess: (data: DocumentMappingPaylod) => {
@@ -22,4 +24,3 @@ export const useCreateDocumentTransactionMap =  (
 
   return { mutate, isLoading: isPending, error };
 };
-

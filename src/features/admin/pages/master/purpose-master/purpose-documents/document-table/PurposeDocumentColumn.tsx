@@ -20,7 +20,7 @@ export const PurposeDocumentColumn = ({
       id: 'select',
       name: 'Select',
       className: 'min-w-0 p-2',
-      cell: (_:any, row: any) => {
+      cell: (_: any, row: any) => {
         return (
           <CustomCheckbox
             rowId={row.id}
@@ -42,7 +42,7 @@ export const PurposeDocumentColumn = ({
       key: 'requirement',
       id: 'requirement',
       name: 'Mandatory',
-      cell: (_:any, row: any) => (
+      cell: (_: any, row: any) => (
         <CustomCheckbox
           rowId={row.id}
           value={row.requirement ?? false}
@@ -56,7 +56,7 @@ export const PurposeDocumentColumn = ({
       key: 'backRequirement',
       id: 'backRequirement',
       name: 'Back Required',
-      cell: (_:any, row: any) => (
+      cell: (_: any, row: any) => (
         <CustomCheckbox
           rowId={row.id}
           value={row.backRequirement ?? false}

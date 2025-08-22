@@ -127,11 +127,11 @@ export type NuserPayload = {
 };
 
 export type AgentBranchUserPayload = {
-  agent_eon_code : string;
-  primary_agent_name : string;
-  primary_agent_email : string;
-  agent_branch_user_name : string;
-  agent_branch_user_email : string;
-  agent_branch_user_mobile : string;
-  role : boolean | string; // Role can be boolean or string based on your logic
-}
+  agent_eon_code: string;
+  primary_agent_name: string;
+  primary_agent_email: string;
+  agent_branch_user_name: string;
+  agent_branch_user_email: string;
+  agent_branch_user_mobile: string;
+  role: boolean | string; // Role can be boolean or string based on your logic
+};

@@ -9,22 +9,26 @@ export const purposeDocumentFormConfig = ({
   selectedTransactionTypeId?: string;
 }) => {
   // Create unique transaction type options
-  const uniqueTransactionTypes = mappedPurposeTransactionTypesData?.reduce((acc, item) => {
-    const existingType = acc.find(t => t.value === item.transactionType.id);
-    if (!existingType) {
-      acc.push({
-        value: item.transactionType.id,
-        label: item.transactionType.name,
-        typeId: item.id,
-      });
-    }
-    return acc;
-  }, [] as Array<{ value: string; label: string; typeId: string }>);
+  const uniqueTransactionTypes = mappedPurposeTransactionTypesData?.reduce(
+    (acc, item) => {
+      const existingType = acc.find((t) => t.value === item.transactionType.id);
+      if (!existingType) {
+        acc.push({
+          value: item.transactionType.id,
+          label: item.transactionType.name,
+          typeId: item.id,
+        });
+      }
+      return acc;
+    },
+    [] as Array<{ value: string; label: string; typeId: string }>
+  );
 
   // Filter purpose types based on selected transaction type
   const purposeTypesForSelectedTransaction = selectedTransactionTypeId
-    ? mappedPurposeTransactionTypesData?.filter(item => item.transactionType.id === selectedTransactionTypeId)
-        .map(item => ({
+    ? mappedPurposeTransactionTypesData
+        ?.filter((item) => item.transactionType.id === selectedTransactionTypeId)
+        .map((item) => ({
           value: item.purpose.id,
           label: item.purpose.purpose_name,
           typeId: item.id,

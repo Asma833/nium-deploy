@@ -68,21 +68,21 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'exact-only' as const,
     description: 'Merge documents endpoint',
   },
-  'create-purpose':{
+  'create-purpose': {
     endpoint: API.PURPOSE.CREATE_PURPOSE,
     matchType: 'standard' as const,
     description: 'Create purpose endpoint',
   },
-  'add-document':{
+  'add-document': {
     endpoint: API.DOCUMENT_MASTER.CREATE_DOCUMENT,
     matchType: 'standard' as const,
     description: 'Add document endpoint',
   },
-  'document-map':{
+  'document-map': {
     endpoint: API.DOCUMENT_MASTER.DOC_PURPOSE_TRANS_MAPPING,
     matchType: 'standard' as const,
     description: 'Document mapping endpoint',
-  }
+  },
 } as const;
 
 /**

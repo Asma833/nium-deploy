@@ -12,10 +12,14 @@ const adminComponents = {
   CreateMaker: lazy(() => import('@/features/admin/pages/maker/maker-creation/MakerCreationPage')),
   UpdateMaker: lazy(() => import('@/features/admin/pages/maker/maker-creation/MakerCreationPage')),
   ViewAll: lazy(() => import('@/features/admin/pages/view-all/view-table/ViewAllTablePage')),
-  
-PurposeMaster: lazy(() => import('@/features/admin/pages/master/purpose-master/PurposeMasterTablePage')),
-PurposeMasterCreation: lazy(() => import('@/features/admin/pages/master/purpose-master/create-purpose-master/CreatePurposeMasterPage')),
-DocumentMaster: lazy(()=> import('@/features/admin/pages/master/purpose-master/purpose-documents/document-table/PurposeDocumentsTable')),
+
+  PurposeMaster: lazy(() => import('@/features/admin/pages/master/purpose-master/PurposeMasterTablePage')),
+  PurposeMasterCreation: lazy(
+    () => import('@/features/admin/pages/master/purpose-master/create-purpose-master/CreatePurposeMasterPage')
+  ),
+  DocumentMaster: lazy(
+    () => import('@/features/admin/pages/master/purpose-master/purpose-documents/document-table/PurposeDocumentsTable')
+  ),
 };
 
 const baseRole = ROLES.ADMIN; // Admin routes are accessible to admin role
@@ -81,7 +85,7 @@ export const adminRoutes = [
     roles: [baseRole],
     permission: '',
   },
-    {
+  {
     path: ROUTES.ADMIN.MASTER.PURPOSE_MASTER,
     element: adminComponents.PurposeMaster,
     roles: ['admin'],
@@ -96,7 +100,7 @@ export const adminRoutes = [
   {
     path: ROUTES.ADMIN.MASTER.CREATE_PURPOSE_MASTER,
     element: adminComponents.PurposeMasterCreation,
-    roles:['admin'],
-    permission:'',
+    roles: ['admin'],
+    permission: '',
   },
 ];

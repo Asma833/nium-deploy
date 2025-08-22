@@ -12,8 +12,17 @@ import { PurposeApiPayload } from '@/features/admin/types/purpose.types';
 import { useCreatePurposeMaster } from '@/features/admin/hooks/useCreatePurposeMaster';
 import { useUpdatePurposeMaster } from '@/features/admin/hooks/useUpdatePurposeMaster';
 
-const CreatePurposeMasterPage = ({ setDialogTitle , rowData,refetch, setIsModalOpen }: { setDialogTitle: (title: string) => void , rowData: any, refetch: () => void, setIsModalOpen: (isOpen: boolean) => void }) => {
-
+const CreatePurposeMasterPage = ({
+  setDialogTitle,
+  rowData,
+  refetch,
+  setIsModalOpen,
+}: {
+  setDialogTitle: (title: string) => void;
+  rowData: any;
+  refetch: () => void;
+  setIsModalOpen: (isOpen: boolean) => void;
+}) => {
   const isEditMode = !!rowData;
   const methods = useForm({
     resolver: zodResolver(purposeMasterSchema),
@@ -36,29 +45,27 @@ const CreatePurposeMasterPage = ({ setDialogTitle , rowData,refetch, setIsModalO
       refetch();
     },
   });
-const { mutate: updatePurpose } = useUpdatePurposeMaster(
-    {
-      onPurposeUpdateSuccess: () => {
-        setIsModalOpen(false);
-        refetch();
-      },
-    }
-);
+  const { mutate: updatePurpose } = useUpdatePurposeMaster({
+    onPurposeUpdateSuccess: () => {
+      setIsModalOpen(false);
+      refetch();
+    },
+  });
 
   const handleAddPurpose = handleSubmit(async (formdata: PurposeApiPayload) => {
     if (isEditMode) {
       await updatePurpose({ data: formdata, id: rowData.id });
     } else {
-    createPurpose({
-      ...formdata,
-    });
+      createPurpose({
+        ...formdata,
+      });
     }
   });
   useEffect(() => {
     const title = isEditMode ? 'Edit Purpose' : 'Add Purpose';
     setDialogTitle(title);
   }, [isEditMode, setDialogTitle]);
- 
+
   useEffect(() => {
     if (rowData) {
       reset({

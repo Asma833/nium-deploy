@@ -24,7 +24,7 @@ export const API = {
   ORDERS: {
     ORDERS: '/fxorders',
     LIST: `/fxorders`,
-    GET_MAKER_ORDERS:`/fxorders/maker`,
+    GET_MAKER_ORDERS: `/fxorders/maker`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
@@ -63,7 +63,7 @@ export const API = {
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
   },
-  USER_MANAGEMENT:{
+  USER_MANAGEMENT: {
     AGENT_BRANCH_USER: {
       LIST: `/agent-branch-users`,
       CREATE: `/agent-branch-users`,

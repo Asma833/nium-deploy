@@ -79,7 +79,6 @@ export const FileUpload = ({
                   {value && value.length > 0 && value[0]?.name ? value[0].name : 'No file chosen'}
                 </span>
               </button>
-
             </div>
           </label>
         </div>

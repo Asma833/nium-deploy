@@ -8,7 +8,7 @@ interface MaterialEmailProps {
   className?: string;
   disabled?: boolean;
   forcedValue?: string;
-  required?:boolean;
+  required?: boolean;
 }
 
 export const MaterialEmail = ({
@@ -18,7 +18,7 @@ export const MaterialEmail = ({
   forcedValue,
   baseStyle,
   className,
-  required = false
+  required = false,
 }: MaterialEmailProps) => {
   const { control } = useFormContext();
 

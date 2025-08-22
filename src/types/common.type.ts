@@ -1,5 +1,4 @@
-import { FieldType } from "./enums";
-
+import { FieldType } from './enums';
 
 export type FormField = {
   label: string;

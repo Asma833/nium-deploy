@@ -3,20 +3,22 @@ import { toast } from 'sonner';
 import { DocumentApiPayload } from '../types/document.type';
 import { documentMasterApi } from '../action/documentMasterApi';
 
-export const useCreateDocument = ({ onDocumentCreateSuccess }: { onDocumentCreateSuccess: (data: DocumentApiPayload) => void }
-) => {
+export const useCreateDocument = ({
+  onDocumentCreateSuccess,
+}: {
+  onDocumentCreateSuccess: (data: DocumentApiPayload) => void;
+}) => {
   const mapFormDataToApiPayload = async (formData: DocumentApiPayload): Promise<DocumentApiPayload> => {
-    return {   
-    name: formData.name,
-    type: "identity",
-    code:formData.code,
-    display_name:formData.display_name,
-    fields_required: {
-        number: "required",
-        dob: "optional"
-    },
-    description: formData.description,
-
+    return {
+      name: formData.name,
+      type: 'identity',
+      code: formData.code,
+      display_name: formData.display_name,
+      fields_required: {
+        number: 'required',
+        dob: 'optional',
+      },
+      description: formData.description,
     };
   };
 
@@ -41,5 +43,3 @@ export const useCreateDocument = ({ onDocumentCreateSuccess }: { onDocumentCreat
 
   return { mutate, isLoading: isPending, error };
 };
-  
-

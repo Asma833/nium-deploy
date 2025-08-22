@@ -6,7 +6,7 @@ import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
 import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import {  Order, Orders } from '@/features/checker/types/updateIncident.types';
+import { Order, Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
@@ -87,7 +87,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const transformOrderForTable = (order: any) => {
     return {
       nium_order_id: order.nium_order_id || 'N/A',
-      created_at: order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
+      created_at:
+        order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
       customer_pan: order.customer_pan || 'N/A',

@@ -1,9 +1,9 @@
-import axiosInstance from "@/core/services/axios/axiosInstance";
-import { useEffect, useRef, useState } from "react";
+import axiosInstance from '@/core/services/axios/axiosInstance';
+import { useEffect, useRef, useState } from 'react';
 import { Option } from '@/features/maker/components/transaction-form/transaction-form.types';
 
-export const useTransactionPurposeMap = (apiUrl : string) => {
-   const [options, setOptions] = useState<Option[]>([]);
+export const useTransactionPurposeMap = (apiUrl: string) => {
+  const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const hasFetched = useRef(false);
@@ -37,4 +37,4 @@ export const useTransactionPurposeMap = (apiUrl : string) => {
   }, [apiUrl]);
 
   return { options, loading, error };
-}
+};
