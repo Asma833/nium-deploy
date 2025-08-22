@@ -21,14 +21,15 @@ import { API } from '@/core/constant/apis';
 import { DocumentsResponse } from '@/features/admin/types/purpose.types';
 import { queryKeys } from '@/core/constant/queryKeys';
 import { TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
+import { DeletableItem } from '@/features/admin/types/document.type';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rowData, setRowData] = useState<any>(null);
+  const [rowData, setRowData] = useState(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<DeletableItem |null>(null);
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
@@ -78,17 +79,17 @@ const PurposeDocumentsTable = () => {
     queryKey: ['getDocumentsList'],
   });
 
-  const [formateDataArray, setFormateDataArray] = useState<any[]>([]);
+  const [formattedDataArray, setformattedDataArray] = useState<any[]>([]);
 
   useMemo(() => {
     const documentArray = data?.data;
 
     if (!documentArray || !Array.isArray(documentArray)) {
-      setFormateDataArray([]);
+      setformattedDataArray([]);
       return;
     }
 
-    setFormateDataArray(documentArray.filter((item) => item != null));
+    setformattedDataArray(documentArray.filter((item) => item != null));
   }, [data]);
 
   const isPaginationDynamic = false;
@@ -134,7 +135,7 @@ const PurposeDocumentsTable = () => {
   };
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
     // Update the selection status for the specific document
-    const updatedData = formateDataArray.map((doc) => {
+    const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
         return { ...doc, isSelected: isSelected };
       }
@@ -142,11 +143,11 @@ const PurposeDocumentsTable = () => {
     });
 
     // Update the state with the modified data
-    setFormateDataArray(updatedData);
+    setformattedDataArray(updatedData);
   };
   const handleMandatoryChange = (rowId: string, isChecked: boolean) => {
     // Update the mandatory value for the specific document
-    const updatedData = formateDataArray.map((doc) => {
+    const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
         return { ...doc, requirement: isChecked, isSelected: isChecked || doc.backRequirement };
       }
@@ -154,11 +155,11 @@ const PurposeDocumentsTable = () => {
     });
 
     // Update the state with the modified data
-    setFormateDataArray(updatedData);
+    setformattedDataArray(updatedData);
   };
   const handleBackMandatoryChange = (rowId: string, isChecked: boolean) => {
     // Update the back mandatory value for the specific document
-    const updatedData = formateDataArray.map((doc) => {
+    const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
         return { ...doc, backRequirement: isChecked, isSelected: isChecked || doc.requirement };
       }
@@ -166,7 +167,7 @@ const PurposeDocumentsTable = () => {
     });
 
     // Update the state with the modified data
-    setFormateDataArray(updatedData);
+    setformattedDataArray(updatedData);
   };
   const tableColumns = PurposeDocumentColumn({
     handleDelete,
@@ -185,13 +186,13 @@ const PurposeDocumentsTable = () => {
       if (typeof refreshData === 'function') {
         refreshData();
       }
-      const updatedData = formateDataArray.map((doc) => {
+      const updatedData = formattedDataArray.map((doc) => {
         if (doc.id) {
           return { ...doc, requirement: false, backRequirement: false, isSelected: false };
         }
         return doc;
       });
-      setFormateDataArray(updatedData);
+      setformattedDataArray(updatedData);
     },
   });
 
@@ -208,7 +209,7 @@ const PurposeDocumentsTable = () => {
       return;
     }
 
-    const selectedDocuments = formateDataArray
+    const selectedDocuments = formattedDataArray
       .filter((doc) => doc.isSelected)
       .map((doc) => ({
         transaction_purpose_map_id: selectedMapping.id,
@@ -248,7 +249,7 @@ const PurposeDocumentsTable = () => {
 
       <DynamicTable
         columns={tableColumns}
-        data={formateDataArray}
+        data={formattedDataArray}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
         renderLeftSideActions={() => <p className="pl-3 font-semibold">Required Documents</p>}

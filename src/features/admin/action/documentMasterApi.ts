@@ -11,8 +11,8 @@ export const documentMasterApi =  {
     const { data } = await axiosInstance.put<DocumentApiPayload>(API.DOCUMENT_MASTER.UPDATE_DOCUMENT + `/${documentId}`, documentData);
     return data;
   },
-  deleteDocument: (documentId: string) => {
-    return axiosInstance.delete(API.DOCUMENT_MASTER.DELETE_DOCUMENT(documentId), {
+  deleteDocument:async (documentId: string) => {
+    return await axiosInstance.delete(API.DOCUMENT_MASTER.DELETE_DOCUMENT(documentId), {
       headers: {
         accept: '*/*',
       },

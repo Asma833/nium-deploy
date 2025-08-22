@@ -60,7 +60,7 @@ const PurposeMasterTablePage = () => {
     setRowData(rowData);
   };
   const tableColumns = PurposeMasterTableColumn({ openTransactionMappingModal, handleEditPurpose });
-  const handleCreateUser = () => {
+  const handleNavigateToDocumentMapping = () => {
     navigate('/admin/master/purpose-master/document-mapping');
   };
 
@@ -99,7 +99,7 @@ const PurposeMasterTablePage = () => {
               footerBtnText=""
             />
 
-            <Button onClick={handleCreateUser} className="bg-primary text-white hover:bg-primary ml-4">
+            <Button onClick={handleNavigateToDocumentMapping} className="bg-primary text-white hover:bg-primary ml-4">
               <GitFork className="rotate-180" /> Document Mapping
             </Button>
           </>

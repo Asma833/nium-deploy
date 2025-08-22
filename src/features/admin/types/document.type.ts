@@ -11,7 +11,10 @@ export type DocumentApiPayload = {
   description: string
 
 }
-
+export type DeletableItem = {
+  id: string;
+  name: string;
+};
 
 export type DocumentMappingPaylod = {
   transaction_purpose_map_id:string,

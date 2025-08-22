@@ -23,18 +23,6 @@ const TransactionMapping = (
   }) => {
   // Use dynamic options from API
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS);
-  
-  // const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS);
-  
-  // Memoize formatted transaction types to prevent recreation on every render
-  const formatedTransactionTypes = useMemo(() => {
-    return transactionTypeOptions?.map((type) => ({
-      typeId: type.typeId,
-      label: type.value,
-      value: type.value,
-    }));
-  }, [transactionTypeOptions]);
-
   const methods = useForm({
     resolver: zodResolver(TransactionMappingSchema),
     defaultValues: {
@@ -48,7 +36,6 @@ const TransactionMapping = (
     formState: { errors, isSubmitting },
   } = methods;
 
-  const isEditMode = false; // Set this according to your logic
   const { mutate: createMapping, isLoading } = useCreateTransactionMapping({
     onTransactionMappingSuccess: () => {
       reset({});
@@ -89,7 +76,7 @@ const TransactionMapping = (
               onClick={handleFormSubmit}
               className="min-w-[150px]"
             >
-              {isSubmitting ? (isEditMode ? 'Updating...' : 'Submitting...') : isEditMode ? 'Update' : 'Submit'}
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </div>
         </div>

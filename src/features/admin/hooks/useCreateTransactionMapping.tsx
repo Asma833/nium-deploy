@@ -5,13 +5,12 @@ import { purposeMasterApi } from '../action/purposeMasterApi';
 
 export const useCreateTransactionMapping = ({ onTransactionMappingSuccess }: { onTransactionMappingSuccess: (data: TransactionMappingPayload) => void }
 ) => {
-  const mapFormDataToApiPayload = async (formData: TransactionMappingPayload): Promise<TransactionMappingPayload> => {
-    return {   
-    transaction_type_id: formData.transaction_type_id,
-    purpose_id: formData.purpose_id
+    const mapFormDataToApiPayload = (formData: TransactionMappingPayload): TransactionMappingPayload => {
+    return {
+      transaction_type_id: formData.transaction_type_id,
+      purpose_id: formData.purpose_id,
     };
   };
-
   const { mutate, isPending, error } = useMutation<TransactionMappingPayload, Error, TransactionMappingPayload>({
     mutationFn: async (documentData: TransactionMappingPayload) => {
       const apiPayload = await mapFormDataToApiPayload(documentData);
