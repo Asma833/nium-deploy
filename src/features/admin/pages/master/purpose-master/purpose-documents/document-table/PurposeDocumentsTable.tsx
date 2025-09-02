@@ -324,7 +324,6 @@ const PurposeDocumentsTable = () => {
       return;
     }
 
-    console.log('Saving documents:', selectedDocuments);
     mapDocument([...selectedDocuments]);
   });
 
