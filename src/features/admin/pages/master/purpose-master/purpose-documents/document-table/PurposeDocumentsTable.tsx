@@ -197,11 +197,11 @@ const PurposeDocumentsTable = () => {
     setItemToDelete(rowData);
     setIsDeleteDialogOpen(true);
   };
-  const handleDeleteConfirm = async () => {
-    console.log('Deleting item with mapping ID:', itemToDelete);
-    if (!itemToDelete) return;
+  const handleDeleteConfirm = async (selectedItem: any) => {
+    console.log('Deleting item with mapping ID:', selectedItem);
+    if (!selectedItem) return;
     //console.log('Deleting item with mapping ID:', itemToDelete);
-    mutate(itemToDelete.mappingId, {
+    mutate(selectedItem.mappingId, {
       onSuccess: () => {
         setIsDeleteDialogOpen(false);
         setItemToDelete(null);
@@ -226,28 +226,28 @@ const PurposeDocumentsTable = () => {
     reset(rowData);
     setRowData(rowData);
   };
+
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
-    // Update the selection status for the specific document
-    const updatedData = formattedDataArray.map((doc) => {
-      if (doc.id === rowId) {
-        setItemToDelete(doc);
-        return { ...doc, isSelected: isSelected };
-      }
-      return doc;
-    });
+    const selectedRowIndex = formattedDataArray.findIndex((doc) => doc.id === rowId);
+    const UpdatedFormattedArray = [...formattedDataArray];
+    const selectedItem = UpdatedFormattedArray[selectedRowIndex]
+    // Update selection State
+    selectedItem.isSelected = isSelected;
 
     // Update the state with the modified data
-    setformattedDataArray(updatedData);
+    setformattedDataArray(UpdatedFormattedArray);
+    // -----
 
     if (isSelected) {
       // Ensure form values are set before saving
       if (selectedTransactionType && selectedPurposeType) {
+        console.log(selectedRowIndex, UpdatedFormattedArray[selectedRowIndex]);
         handleSaveDocuments();
       } else {
         toast.error('Please select both Transaction Type and Purpose Type before saving.');
       }
     } else {
-      handleDeleteConfirm();
+      handleDeleteConfirm(selectedItem);
     }
   };
 
