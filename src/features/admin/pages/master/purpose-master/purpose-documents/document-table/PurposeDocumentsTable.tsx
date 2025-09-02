@@ -24,7 +24,6 @@ import { queryKeys } from '@/core/constant/queryKeys';
 import { TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
 
 const PurposeDocumentsTable = () => {
-  console.log('PurposeDocumentsTable:')
   const { mutate, isPending: isDeleting } = useDeleteDocument();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +55,12 @@ const PurposeDocumentsTable = () => {
 
   // Get the mapping ID for the selected transaction and purpose types
   const selectedMapping = React.useMemo(() => {
-    if (!selectedTransactionType || !selectedPurposeType || !mappedPurposeTransactionTypesData) {
+    if (
+      !selectedTransactionType ||
+      !selectedPurposeType ||
+      !mappedPurposeTransactionTypesData ||
+      !Array.isArray(mappedPurposeTransactionTypesData)
+    ) {
       return null;
     }
     return (mappedPurposeTransactionTypesData as TransactionPurposeMap[]).find(
@@ -65,9 +69,9 @@ const PurposeDocumentsTable = () => {
   }, [selectedTransactionType, selectedPurposeType, mappedPurposeTransactionTypesData]);
 
   // Fetch mapped documents for the selected transaction-purpose combination
-  const { docsByTransPurpose: mappedDocuments, isLoading: mappedDocsLoading } = useGetDocByTransPurpose(
-    selectedMapping?.id ? { mappedDocPurposeId: selectedMapping.id } : {}
-  );
+  const { docsByTransPurpose: mappedDocuments, isLoading: mappedDocsLoading } = useGetDocByTransPurpose({
+    mappedDocPurposeId: selectedMapping?.id,
+  });
 
   // Debug: Check for duplicate document_ids
   if (mappedDocuments && mappedDocuments.length > 0) {
