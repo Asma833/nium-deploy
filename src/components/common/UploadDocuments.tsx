@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { useUploadDocument } from '@/hooks/useUploadDocuments';
 import { useMergePdf } from '@/hooks/useMergePdf';
-import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
-import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
 import { cn } from '@/utils/cn';
 
 interface MappedDocument {
@@ -37,7 +37,7 @@ interface UploadDocumentsProps {
   isResubmission?: boolean;
   purposeTypeId: string;
   mappedDocuments?: MappedDocument[];
-  disabled?:boolean;
+  disabled?: boolean;
 }
 
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
@@ -45,6 +45,7 @@ const FILE_SIZE = {
   OTHER_DOC_MAX: 1 * 1024 * 1024,
   ALL_DOC_MAX: 5 * 1024 * 1024,
 };
+
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   partnerOrderId,
   onUploadComplete,
@@ -52,7 +53,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   isResubmission = false,
   purposeTypeId,
   mappedDocuments = [],
-  disabled
+  disabled,
 }) => {
   const uploadDocumentMutation = useUploadDocument();
   const mergePdfMutation = useMergePdf();
@@ -331,7 +332,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         </div> */}
 
         {/* Upload Status */}
-        {isUploadDisabled  && (
+        {isUploadDisabled && (
           <div className="flex items-center gap-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md w-full">
             <AlertCircle className="h-4 w-4 text-red-600" />
             <span className="text-sm text-red-700">
@@ -381,10 +382,10 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           const isDisabled = isAllDocumentUploaded || isUploadDisabled;
 
           return (
-            <div key={docType.uniqueKey} className={cn(
-            "space-y-2",
-            disabled && "pointer-events-none opacity-50 cursor-not-allowed"
-            )} >
+            <div
+              key={docType.uniqueKey}
+              className={cn('space-y-2', disabled && 'pointer-events-none opacity-50 cursor-not-allowed')}
+            >
               <label className="block text-sm font-medium text-gray-700">
                 {docType.name}
                 {docType.isRequired && <span className="text-red-500 ml-1">*</span>}

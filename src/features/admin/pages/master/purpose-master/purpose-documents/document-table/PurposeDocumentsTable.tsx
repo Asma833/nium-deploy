@@ -2,25 +2,26 @@ import { useMemo, useState, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { DialogWrapper } from '@/components/common/DialogWrapper';
-import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
-import { PurposeDocumentColumn } from './PurposeDocumentColumn';
 import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/useDynamicPagination';
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
-import { purposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
+import { Button } from '@/components/ui/button';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
-import { Button } from '@/components/ui/button';
-import { useGetData } from '@/hooks/useGetData';
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
+import useGetDocByTransPurpose from '@/features/maker/hooks/useGetDocByTransPurpose';
 import { API } from '@/core/constant/apis';
 import { DocumentsResponse } from '@/features/admin/types/purpose.types';
 import { queryKeys } from '@/core/constant/queryKeys';
 import { TransactionPurposeMap } from '@/features/maker/components/transaction-form/transaction-form.types';
+import { PurposeDocumentColumn } from './PurposeDocumentColumn';
+import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
+import { purposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
+import { useGetData } from '@/hooks/useGetData';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
@@ -50,6 +51,33 @@ const PurposeDocumentsTable = () => {
 
   // Watch for transaction_type changes
   const selectedTransactionType = watch('transaction_type');
+  const selectedPurposeType = watch('purpose_type');
+
+  // Get the mapping ID for the selected transaction and purpose types
+  // useMemo is used here to:
+  // 1) Avoid running an O(n) array search on every render when inputs haven't changed.
+  // 2) Keep the selected mapping object reference stable as long as the dependencies are the same,
+  //    which helps prevent unnecessary downstream effects/re-renders (e.g., data fetching hooks or effects
+  //    that depend on the mapping id).
+  // 3) Early return null when either transaction or purpose isn't selected to keep consumers simple and safe.
+  const selectedMapping = useMemo(() => {
+    if (
+      !selectedTransactionType ||
+      !selectedPurposeType ||
+      !mappedPurposeTransactionTypesData ||
+      !Array.isArray(mappedPurposeTransactionTypesData)
+    ) {
+      return null;
+    }
+    return (mappedPurposeTransactionTypesData as TransactionPurposeMap[]).find(
+      (item) => item.transactionType.id === selectedTransactionType && item.purpose.id === selectedPurposeType
+    );
+  }, [selectedTransactionType, selectedPurposeType, mappedPurposeTransactionTypesData]);
+
+  // Fetch mapped documents for the selected transaction-purpose combination
+  const { docsByTransPurpose: mappedDocuments, isLoading: mappedDocsLoading } = useGetDocByTransPurpose({
+    mappedDocPurposeId: selectedMapping?.id,
+  });
 
   // Clear purpose_type when transaction_type changes
   const { setValue } = methods;
@@ -80,7 +108,7 @@ const PurposeDocumentsTable = () => {
 
   const [formateDataArray, setFormateDataArray] = useState<any[]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     const documentArray = data?.data;
 
     if (!documentArray || !Array.isArray(documentArray)) {
@@ -88,8 +116,71 @@ const PurposeDocumentsTable = () => {
       return;
     }
 
-    setFormateDataArray(documentArray.filter((item) => item != null));
-  }, [data]);
+    // Filter out null items and merge with mapped document data
+    const baseDocuments = documentArray.filter((item) => item != null);
+
+    // If we have mapped documents, update the base documents with mapping info
+    if (mappedDocuments && mappedDocuments.length > 0) {
+      // Create a map to handle duplicate document_ids by taking the most recent or preferred mapping
+      const documentMappingMap = new Map();
+
+      mappedDocuments.forEach((mappedDoc) => {
+        const existingMapping = documentMappingMap.get(mappedDoc.document_id);
+
+        if (!existingMapping) {
+          // First occurrence of this document_id
+          documentMappingMap.set(mappedDoc.document_id, mappedDoc);
+        } else {
+          // Handle duplicate document_id - you can customize this logic
+          // For now, we'll merge the requirements (OR operation for boolean values)
+          const mergedMapping = {
+            ...mappedDoc,
+            is_mandatory: existingMapping.is_mandatory || mappedDoc.is_mandatory,
+            is_back_required: existingMapping.is_back_required || mappedDoc.is_back_required,
+            // Keep the first mapping ID for reference
+            id: existingMapping.id,
+          };
+          documentMappingMap.set(mappedDoc.document_id, mergedMapping);
+        }
+      });
+
+      const updatedDocuments = baseDocuments.map((doc) => {
+        // Find if this document is mapped using the deduplicated map
+        const mappedDoc = documentMappingMap.get(doc.id);
+
+        if (mappedDoc) {
+          return {
+            ...doc,
+            isSelected: true,
+            requirement: mappedDoc.is_mandatory,
+            backRequirement: mappedDoc.is_back_required,
+            mappingId: mappedDoc.id, // Store the mapping ID for potential updates
+          };
+        }
+
+        return {
+          ...doc,
+          isSelected: false,
+          requirement: false,
+          backRequirement: false,
+          mappingId: null,
+        };
+      });
+
+      setFormateDataArray(updatedDocuments);
+    } else {
+      // No mapped documents, reset all to unselected
+      const resetDocuments = baseDocuments.map((doc) => ({
+        ...doc,
+        isSelected: false,
+        requirement: false,
+        backRequirement: false,
+        mappingId: null,
+      }));
+
+      setFormateDataArray(resetDocuments);
+    }
+  }, [data, mappedDocuments]);
 
   const isPaginationDynamic = false;
 
@@ -168,12 +259,15 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setFormateDataArray(updatedData);
   };
+  const isTypeSelectionIncomplete = !selectedTransactionType || !selectedPurposeType;
+
   const tableColumns = PurposeDocumentColumn({
     handleDelete,
     handleEditDocument,
     handleSelectionChange,
     handleMandatoryChange,
     handleBackMandatoryChange,
+    disabled: isTypeSelectionIncomplete,
   });
 
   // State and handlers for DeleteConfirmationDialog
@@ -185,6 +279,12 @@ const PurposeDocumentsTable = () => {
       if (typeof refreshData === 'function') {
         refreshData();
       }
+      // Refetch mapped documents to update the UI
+      if (selectedMapping?.id) {
+        // The hook will automatically refetch when the mapping ID changes
+        // but we can also manually trigger a refetch if needed
+      }
+      // Reset the form state by clearing selections temporarily
       const updatedData = formateDataArray.map((doc) => {
         if (doc.id) {
           return { ...doc, requirement: false, backRequirement: false, isSelected: false };
@@ -192,18 +292,20 @@ const PurposeDocumentsTable = () => {
         return doc;
       });
       setFormateDataArray(updatedData);
+
+      toast.success('Document mapping saved successfully!');
     },
   });
 
   const handleSaveDocuments = handleSubmit((formValues) => {
     // Find the selected mapping from the data
     const mappingData = mappedPurposeTransactionTypesData as TransactionPurposeMap[];
-    const selectedMapping = mappingData?.find(
+    const selectedMappingData = mappingData?.find(
       (item: TransactionPurposeMap) =>
         item.transactionType.id === formValues.transaction_type && item.purpose.id === formValues.purpose_type
     );
 
-    if (!selectedMapping?.id) {
+    if (!selectedMappingData?.id) {
       toast.error('Please select both Transaction Type and Purpose Type.');
       return;
     }
@@ -211,7 +313,7 @@ const PurposeDocumentsTable = () => {
     const selectedDocuments = formateDataArray
       .filter((doc) => doc.isSelected)
       .map((doc) => ({
-        transaction_purpose_map_id: selectedMapping.id,
+        transaction_purpose_map_id: selectedMappingData.id,
         document_id: doc.id,
         isBackRequired: doc.backRequirement ?? false,
         is_mandatory: doc.requirement ?? false,
@@ -222,6 +324,7 @@ const PurposeDocumentsTable = () => {
       return;
     }
 
+    console.log('Saving documents:', selectedDocuments);
     mapDocument([...selectedDocuments]);
   });
 
@@ -251,7 +354,23 @@ const PurposeDocumentsTable = () => {
         data={formateDataArray}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
-        renderLeftSideActions={() => <p className="pl-3 font-semibold">Required Documents</p>}
+        renderLeftSideActions={() => {
+          // Calculate unique mapped documents count
+          const uniqueMappedDocsCount = mappedDocuments
+            ? new Set(mappedDocuments.map((doc) => doc.document_id)).size
+            : 0;
+
+          return (
+            <div className="flex items-center space-x-2">
+              <p className="pl-3 font-semibold">Required Documents</p>
+              {selectedMapping && (
+                <span className="text-sm text-muted-foreground bg-blue-100 px-2 py-1 rounded">
+                  {uniqueMappedDocsCount} mapped
+                </span>
+              )}
+            </div>
+          );
+        }}
         renderRightSideActions={() => (
           <>
             <DialogWrapper
@@ -294,8 +413,9 @@ const PurposeDocumentsTable = () => {
           type="submit"
           className="bg-primary text-white hover:bg-primary mt-4 ml-4 w-fit"
           onClick={handleSaveDocuments}
+          disabled={isLoading || mappedDocsLoading || isTypeSelectionIncomplete}
         >
-          {isLoading ? 'Saving...' : 'Save'}
+          {isLoading || mappedDocsLoading ? 'Loading...' : 'Save'}
         </Button>
       </div>
       <DeleteConfirmationDialog
