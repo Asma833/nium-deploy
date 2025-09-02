@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { FileText, X, CheckCircle, Loader2, AlertCircle } from 'lucide-react';
 import useGetDocumentTypes from '@/hooks/useGetDocumentTypes';
 import { useUploadDocument } from '@/hooks/useUploadDocuments';
 import { useMergePdf } from '@/hooks/useMergePdf';
-import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
+import { Button } from '@/components/ui/button';
+import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import FormFieldRow from '../form/wrapper/FormFieldRow';
 import FromSectionTitle from './FromSectionTitle';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
+import { convertFileToBase64, formatFileSize, isValidFileType } from '@/utils/fileUtils';
 import { cn } from '@/utils/cn';
 import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 
@@ -47,6 +47,7 @@ const FILE_SIZE = {
   OTHER_DOC_MAX: 1 * 1024 * 1024,
   ALL_DOC_MAX: 1 * 1024 * 1024,
 };
+
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
   partnerOrderId,
   isVkycRequired,
@@ -492,13 +493,9 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           return (
             <div
               key={docType.uniqueKey}
-              className={cn(
-                'space-y-2',
-                disabled && 'pointer-events-none opacity-50 cursor-not-allowed',
-                isDisabled && 'opacity-60'
-              )}
+              className={cn('space-y-2', disabled && 'pointer-events-none opacity-50 cursor-not-allowed')}
             >
-              <label className="block text-sm font-medium text-forground">
+              <label className="block text-sm font-medium text-gray-700">
                 {docType.name}
                 {docType.isRequired && !isAllDocumentUploaded && <span className="text-red-500 ml-1">*</span>}
               </label>

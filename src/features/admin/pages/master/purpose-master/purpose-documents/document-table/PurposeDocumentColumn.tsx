@@ -7,12 +7,14 @@ export const PurposeDocumentColumn = ({
   handleSelectionChange,
   handleMandatoryChange,
   handleBackMandatoryChange,
+  disabled: isDisabled = false,
 }: {
   handleDelete: (rowData: any) => void;
   handleEditDocument: (rowData: any) => void;
   handleSelectionChange: (rowId: string, isSelected: boolean) => void;
   handleMandatoryChange: (rowId: string, isChecked: boolean) => void;
   handleBackMandatoryChange: (rowId: string, isChecked: boolean) => void;
+  disabled?: boolean;
 }) => {
   return [
     {
@@ -28,6 +30,7 @@ export const PurposeDocumentColumn = ({
             label=""
             requirementType="select"
             onChange={handleSelectionChange}
+            disabled={isDisabled}
           />
         );
       },
@@ -49,6 +52,7 @@ export const PurposeDocumentColumn = ({
           label="Mandatory"
           requirementType="mandatory"
           onChange={handleMandatoryChange}
+          disabled={isDisabled}
         />
       ),
     },
@@ -63,6 +67,7 @@ export const PurposeDocumentColumn = ({
           label="Back Required"
           requirementType="back-required"
           onChange={handleBackMandatoryChange}
+          disabled={isDisabled}
         />
       ),
     },
