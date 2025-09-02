@@ -229,25 +229,30 @@ const PurposeDocumentsTable = () => {
 
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
     const selectedRowIndex = formattedDataArray.findIndex((doc) => doc.id === rowId);
-    const UpdatedFormattedArray = [...formattedDataArray];
-    const selectedItem = UpdatedFormattedArray[selectedRowIndex]
-    // Update selection State
-    selectedItem.isSelected = isSelected;
 
-    // Update the state with the modified data
-    setformattedDataArray(UpdatedFormattedArray);
-    // -----
+    if (selectedRowIndex !== -1) {
+      const UpdatedFormattedArray = [...formattedDataArray];
+      const selectedItem = UpdatedFormattedArray[selectedRowIndex];
+      // Update selection State
+      selectedItem.isSelected = isSelected;
 
-    if (isSelected) {
-      // Ensure form values are set before saving
-      if (selectedTransactionType && selectedPurposeType) {
-        console.log(selectedRowIndex, UpdatedFormattedArray[selectedRowIndex]);
-        handleSaveDocuments();
+      // Update the state with the modified data
+      setformattedDataArray(UpdatedFormattedArray);
+      // -----
+
+      if (isSelected) {
+        // Ensure form values are set before saving
+        if (selectedTransactionType && selectedPurposeType) {
+          console.log(selectedRowIndex, UpdatedFormattedArray[selectedRowIndex]);
+          handleSaveDocuments();
+        } else {
+          toast.error('Please select both Transaction Type and Purpose Type before saving.');
+        }
       } else {
-        toast.error('Please select both Transaction Type and Purpose Type before saving.');
+        handleDeleteConfirm(selectedItem);
       }
     } else {
-      handleDeleteConfirm(selectedItem);
+      toast.error('Selected Item not found.');
     }
   };
 
@@ -426,9 +431,7 @@ const PurposeDocumentsTable = () => {
         renderRightSideActions={rightsideRenderAction}
         paginationMode={'static'}
         onPageChange={
-          isPaginationDynamic
-            ? pagination.handlePageChange
-            : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
       />
       <div className="flex justify-center space-x-2 mt-4">
