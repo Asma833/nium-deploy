@@ -20,3 +20,9 @@ export type DocumentMappingPaylod = {
   isBackRequired: boolean;
   is_mandatory: boolean;
 }[];
+export type UpdateDocumentMappingPaylod = {
+  transaction_purpose_map_id: string;
+  document_id: string;
+  isBackRequired: boolean;
+  is_mandatory: boolean;
+};

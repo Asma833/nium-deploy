@@ -2,14 +2,12 @@ import { CustomCheckbox } from '@/components/common/Checkbox';
 import { Edit, Trash2 } from 'lucide-react';
 
 export const PurposeDocumentColumn = ({
-  handleDelete,
   handleEditDocument,
   handleSelectionChange,
   handleMandatoryChange,
   handleBackMandatoryChange,
   disabled: isDisabled = false,
 }: {
-  handleDelete: (rowData: any) => void;
   handleEditDocument: (rowData: any) => void;
   handleSelectionChange: (rowId: string, isSelected: boolean) => void;
   handleMandatoryChange: (rowId: string, isChecked: boolean) => void;

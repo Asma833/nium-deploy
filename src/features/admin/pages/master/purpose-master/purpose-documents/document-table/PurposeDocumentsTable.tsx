@@ -23,14 +23,14 @@ import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocument
 import { purposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
 import { useGetData } from '@/hooks/useGetData';
 import { DeletableItem } from '@/features/admin/types/document.type';
+import { useUpdateDocumentMapping } from '@/features/admin/hooks/useUpdateDocumentMapping';
 
 const PurposeDocumentsTable = () => {
   const { mutate, isPending: isDeleting } = useDeleteDocument();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<DeletableItem | null>(null);
+  
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
@@ -193,32 +193,20 @@ const PurposeDocumentsTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  const handleDelete = (rowData: any) => {
-    setItemToDelete(rowData);
-    setIsDeleteDialogOpen(true);
-  };
   const handleDeleteConfirm = async (selectedItem: any) => {
     console.log('Deleting item with mapping ID:', selectedItem);
     if (!selectedItem) return;
     //console.log('Deleting item with mapping ID:', itemToDelete);
     mutate(selectedItem.mappingId, {
       onSuccess: () => {
-        setIsDeleteDialogOpen(false);
-        setItemToDelete(null);
         if (typeof refreshData === 'function') {
           refreshData();
         }
       },
       onError: () => {
-        setIsDeleteDialogOpen(false);
-        setItemToDelete(null);
+
       },
     });
-  };
-
-  const handleDeleteCancel = () => {
-    setIsDeleteDialogOpen(false);
-    setItemToDelete(null);
   };
   const handleEditDocument = (rowData: any) => {
     setDialogTitle('Edit Document');
@@ -264,7 +252,7 @@ const PurposeDocumentsTable = () => {
       }
       return doc;
     });
-
+    editMapDocument({data:updatedData.find((doc) => doc.id === rowId)});
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
@@ -276,14 +264,13 @@ const PurposeDocumentsTable = () => {
       }
       return doc;
     });
-
+    editMapDocument({data:updatedData.find((doc) => doc.id === rowId)});
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
   const isTypeSelectionIncomplete = !selectedTransactionType || !selectedPurposeType;
 
   const tableColumns = PurposeDocumentColumn({
-    handleDelete,
     handleEditDocument,
     handleSelectionChange,
     handleMandatoryChange,
@@ -315,6 +302,32 @@ const PurposeDocumentsTable = () => {
       setformattedDataArray(updatedData);
 
       toast.success('Document mapping saved successfully!');
+    },
+  });
+
+  //--------------------
+  const { mutate: editMapDocument } = useUpdateDocumentMapping({
+    onDocumentUpdateSuccess: () => {
+      reset({});
+      setIsModalOpen(false);
+      if (typeof refreshData === 'function') {
+        refreshData();
+      }
+      // Refetch mapped documents to update the UI
+      if (selectedMapping?.id) {
+        // The hook will automatically refetch when the mapping ID changes
+        // but we can also manually trigger a refetch if needed
+      }
+      // Reset the form state by clearing selections temporarily
+      const updatedData = formattedDataArray.map((doc) => {
+        if (doc.id) {
+          return { ...doc, requirement: false, backRequirement: false, isSelected: false };
+        }
+        return doc;
+      });
+      setformattedDataArray(updatedData);
+
+      toast.success('Document mapping updated successfully!');
     },
   });
   // -----------------

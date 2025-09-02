@@ -83,6 +83,11 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
     matchType: 'standard' as const,
     description: 'Document mapping endpoint',
   },
+  'update-mapping-document': {
+    endpoint: API.DOCUMENT_MASTER.UPDATE_MAPPING_DOCUMENT,
+    matchType: 'standard' as const,
+    description: 'Update document mapping endpoint',
+  },
 } as const;
 
 /**

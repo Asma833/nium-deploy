@@ -131,6 +131,7 @@ export const API = {
     DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
     DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
     DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,
+    UPDATE_MAPPING_DOCUMENT: `/trans-purpose-document`,
   },
 } as const;
 

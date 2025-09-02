@@ -1,6 +1,6 @@
 import { API } from '@/core/constant/apis';
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import { DocumentApiPayload, DocumentMappingPaylod } from '../types/document.type';
+import { DocumentApiPayload, DocumentMappingPaylod, UpdateDocumentMappingPaylod } from '../types/document.type';
 
 export const documentMasterApi = {
   documentMasterCreation: async (documentData: DocumentApiPayload): Promise<DocumentApiPayload> => {
@@ -10,6 +10,14 @@ export const documentMasterApi = {
   updateDocument: async (documentId: string, documentData: DocumentApiPayload): Promise<DocumentApiPayload> => {
     const { data } = await axiosInstance.put<DocumentApiPayload>(
       API.DOCUMENT_MASTER.UPDATE_DOCUMENT + `/${documentId}`,
+      documentData
+    );
+    return data;
+  },
+   updateDocumentMapping: async (document:any, documentData: UpdateDocumentMappingPaylod): Promise<UpdateDocumentMappingPaylod> => {
+    console.log("document",document);
+    const { data } = await axiosInstance.put<UpdateDocumentMappingPaylod>(
+      API.DOCUMENT_MASTER.UPDATE_MAPPING_DOCUMENT + `/${document?.mappingId}`,
       documentData
     );
     return data;
