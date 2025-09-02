@@ -11,8 +11,7 @@ export type DocumentApiPayload = {
   description: string;
 };
 export type DeletableItem = {
-  id: string;
-  name: string;
+  mappingId: string;
 };
 
 export type DocumentMappingPaylod = {

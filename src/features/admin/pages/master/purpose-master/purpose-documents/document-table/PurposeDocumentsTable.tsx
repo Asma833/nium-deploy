@@ -198,8 +198,10 @@ const PurposeDocumentsTable = () => {
     setIsDeleteDialogOpen(true);
   };
   const handleDeleteConfirm = async () => {
+    console.log('Deleting item with mapping ID:', itemToDelete);
     if (!itemToDelete) return;
-    mutate(itemToDelete.id, {
+    //console.log('Deleting item with mapping ID:', itemToDelete);
+    mutate(itemToDelete.mappingId, {
       onSuccess: () => {
         setIsDeleteDialogOpen(false);
         setItemToDelete(null);
@@ -228,6 +230,7 @@ const PurposeDocumentsTable = () => {
     // Update the selection status for the specific document
     const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
+        setItemToDelete(doc);
         return { ...doc, isSelected: isSelected };
       }
       return doc;
@@ -235,7 +238,19 @@ const PurposeDocumentsTable = () => {
 
     // Update the state with the modified data
     setformattedDataArray(updatedData);
+
+    if (isSelected) {
+      // Ensure form values are set before saving
+      if (selectedTransactionType && selectedPurposeType) {
+        handleSaveDocuments();
+      } else {
+        toast.error('Please select both Transaction Type and Purpose Type before saving.');
+      }
+    } else {
+      handleDeleteConfirm();
+    }
   };
+
   const handleMandatoryChange = (rowId: string, isChecked: boolean) => {
     // Update the mandatory value for the specific document
     const updatedData = formattedDataArray.map((doc) => {
@@ -297,6 +312,7 @@ const PurposeDocumentsTable = () => {
       toast.success('Document mapping saved successfully!');
     },
   });
+  // -----------------
 
   const handleSaveDocuments = handleSubmit((formValues) => {
     // Find the selected mapping from the data
@@ -327,6 +343,58 @@ const PurposeDocumentsTable = () => {
 
     mapDocument([...selectedDocuments]);
   });
+  // -----------------
+
+  const leftsideRenderAction = () => {
+    // Calculate unique mapped documents count
+    const uniqueMappedDocsCount = mappedDocuments ? new Set(mappedDocuments.map((doc) => doc.document_id)).size : 0;
+
+    return (
+      <div className="flex items-center space-x-2">
+        <p className="pl-3 font-semibold">Required Documents</p>
+        {selectedMapping && (
+          <span className="text-sm text-muted-foreground bg-blue-100 px-2 py-1 rounded">
+            {uniqueMappedDocsCount} mapped
+          </span>
+        )}
+      </div>
+    );
+  };
+  // -----------------
+
+  const rightsideRenderAction = () => (
+    <>
+      <DialogWrapper
+        triggerBtnText="Add Documents"
+        triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
+        title={dialogTitle}
+        isOpen={isModalOpen}
+        className="md:max-w-[60%]"
+        setIsOpen={(open) => {
+          setIsModalOpen(open);
+          if (!open) {
+            setDialogTitle('Add Documents');
+            setRowData(null);
+            reset();
+          }
+        }}
+        isLoading={isSubmitting}
+        description=""
+        renderContent={
+          <>
+            <CreatePurposeDocumentPage
+              setDialogTitle={setDialogTitle}
+              setIsModalOpen={setIsModalOpen}
+              rowData={rowData}
+              refetch={refreshData ?? (() => {})}
+            />
+          </>
+        }
+        footerBtnText=""
+      />
+    </>
+  );
+  // -----------------
 
   return (
     <div className="dynamic-table-wrap relative">
@@ -354,58 +422,13 @@ const PurposeDocumentsTable = () => {
         data={formattedDataArray}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
-        renderLeftSideActions={() => {
-          // Calculate unique mapped documents count
-          const uniqueMappedDocsCount = mappedDocuments
-            ? new Set(mappedDocuments.map((doc) => doc.document_id)).size
-            : 0;
-
-          return (
-            <div className="flex items-center space-x-2">
-              <p className="pl-3 font-semibold">Required Documents</p>
-              {selectedMapping && (
-                <span className="text-sm text-muted-foreground bg-blue-100 px-2 py-1 rounded">
-                  {uniqueMappedDocsCount} mapped
-                </span>
-              )}
-            </div>
-          );
-        }}
-        renderRightSideActions={() => (
-          <>
-            <DialogWrapper
-              triggerBtnText="Add Documents"
-              triggerBtnClassName="bg-custom-primary text-white hover:bg-custom-primary-hover"
-              title={dialogTitle}
-              isOpen={isModalOpen}
-              className="md:max-w-[60%]"
-              setIsOpen={(open) => {
-                setIsModalOpen(open);
-                if (!open) {
-                  setDialogTitle('Add Documents');
-                  setRowData(null);
-                  reset();
-                }
-              }}
-              isLoading={isSubmitting}
-              description=""
-              renderContent={
-                <>
-                  <CreatePurposeDocumentPage
-                    setDialogTitle={setDialogTitle}
-                    setIsModalOpen={setIsModalOpen}
-                    rowData={rowData}
-                    refetch={refreshData ?? (() => {})}
-                  />
-                </>
-              }
-              footerBtnText=""
-            />
-          </>
-        )}
+        renderLeftSideActions={leftsideRenderAction}
+        renderRightSideActions={rightsideRenderAction}
         paginationMode={'static'}
         onPageChange={
-          isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
+          isPaginationDynamic
+            ? pagination.handlePageChange
+            : async (_page: number, _pageSize: number) => []
         }
       />
       <div className="flex justify-center space-x-2 mt-4">
@@ -418,7 +441,7 @@ const PurposeDocumentsTable = () => {
           {isLoading || mappedDocsLoading ? 'Loading...' : 'Save'}
         </Button>
       </div>
-      <DeleteConfirmationDialog
+      {/* <DeleteConfirmationDialog
         open={isDeleteDialogOpen}
         title="Delete Document"
         message={
@@ -429,7 +452,7 @@ const PurposeDocumentsTable = () => {
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
         loading={isDeleting}
-      />
+      /> */}
     </div>
   );
 };

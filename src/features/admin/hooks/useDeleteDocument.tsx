@@ -5,7 +5,7 @@ import { documentMasterApi } from '../action/documentMasterApi';
 export const useDeleteDocument = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (documentId: string) => documentMasterApi.deleteDocument(documentId),
+    mutationFn: (documentId: string) => documentMasterApi.deleteDocumentMapping(documentId),
     onSuccess: (data) => {
       // Invalidate and refetch any related queries
       queryClient.invalidateQueries({ queryKey: ['documents'] });

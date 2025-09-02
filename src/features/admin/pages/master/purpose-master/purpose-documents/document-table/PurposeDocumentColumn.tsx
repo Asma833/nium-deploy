@@ -81,14 +81,14 @@ export const PurposeDocumentColumn = ({
             <button className="p-2 rounded-md hover:bg-muted/20" onClick={() => handleEditDocument(rowData)}>
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>
-            <button
+            {/* <button
               className="p-2 rounded-md hover:bg-muted/20"
               onClick={() => {
                 handleDelete(rowData);
               }}
             >
               <Trash2 className="w-5 h-5 text-muted-foreground" />
-            </button>
+            </button> */}
           </div>
         );
       },
