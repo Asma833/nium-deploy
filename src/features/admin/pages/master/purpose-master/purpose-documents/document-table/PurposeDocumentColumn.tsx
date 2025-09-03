@@ -28,7 +28,7 @@ export const PurposeDocumentColumn = ({
             label=""
             requirementType="select"
             onChange={handleSelectionChange}
-            disabled={isDisabled}
+            // disabled={isDisabled}
           />
         );
       },
@@ -50,7 +50,7 @@ export const PurposeDocumentColumn = ({
           label="Mandatory"
           requirementType="mandatory"
           onChange={handleMandatoryChange}
-          disabled={isDisabled}
+          // disabled={isDisabled}
         />
       ),
     },
@@ -65,7 +65,7 @@ export const PurposeDocumentColumn = ({
           label="Back Required"
           requirementType="back-required"
           onChange={handleBackMandatoryChange}
-          disabled={isDisabled}
+          // disabled={isDisabled}
         />
       ),
     },
@@ -79,14 +79,6 @@ export const PurposeDocumentColumn = ({
             <button className="p-2 rounded-md hover:bg-muted/20" onClick={() => handleEditDocument(rowData)}>
               <Edit className="w-5 h-5 text-muted-foreground" />
             </button>
-            {/* <button
-              className="p-2 rounded-md hover:bg-muted/20"
-              onClick={() => {
-                handleDelete(rowData);
-              }}
-            >
-              <Trash2 className="w-5 h-5 text-muted-foreground" />
-            </button> */}
           </div>
         );
       },

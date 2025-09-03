@@ -25,15 +25,17 @@ import { useGetData } from '@/hooks/useGetData';
 import { useUpdateDocumentMapping } from '@/features/admin/hooks/useUpdateDocumentMapping';
 
 const PurposeDocumentsTable = () => {
+  console.log('Rendering PurposeDocumentsTable');
   const { mutate, isPending: isDeleting } = useDeleteDocument();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
-  
+
   const {
     data: mappedPurposeTransactionTypesData,
     isLoading: userLoading,
     error: userError,
+    refetch: refetchMappingData,
   } = useGetData({
     endpoint: API.PURPOSE.TRANSACTION_MAPPING,
     queryKey: queryKeys.masters.documentMapping,
@@ -75,7 +77,11 @@ const PurposeDocumentsTable = () => {
   }, [selectedTransactionType, selectedPurposeType, mappedPurposeTransactionTypesData]);
 
   // Fetch mapped documents for the selected transaction-purpose combination
-  const { docsByTransPurpose: mappedDocuments, isLoading: mappedDocsLoading } = useGetDocByTransPurpose({
+  const {
+    docsByTransPurpose: mappedDocuments,
+    isLoading: mappedDocsLoading,
+    refetch: refetchMappedDocs,
+  } = useGetDocByTransPurpose({
     mappedDocPurposeId: selectedMapping?.id,
   });
 
@@ -95,6 +101,23 @@ const PurposeDocumentsTable = () => {
     mappedPurposeTransactionTypesData: (mappedPurposeTransactionTypesData as TransactionPurposeMap[]) || [],
     selectedTransactionTypeId: selectedTransactionType,
   });
+  // Add this useEffect to refetch when mapping changes
+  useEffect(() => {
+    if (selectedMapping?.id) {
+      // Force refetch of mapped documents when mapping changes
+      // This ensures the hook refetches when purpose_type changes
+    }
+  }, [selectedMapping?.id]);
+  // Fetch mapped documents for the selected transaction-purpose combination
+
+  // Force refetch when selectedMapping changes
+  useEffect(() => {
+    if (selectedMapping?.id) {
+      if (refetchMappedDocs) {
+        refetchMappedDocs();
+      }
+    }
+  }, [selectedMapping?.id, refetchMappedDocs]);
 
   const {
     data,
@@ -192,15 +215,44 @@ const PurposeDocumentsTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
+  // const handleDeleteConfirm = async (selectedItem: any) => {
+  //   if (!selectedItem) return;
+  //   mutate(selectedItem.mappingId, {
+  //     onSuccess: () => {
+  //       if (typeof refreshData === 'function') {
+  //         refreshData();
+  //       }
+  //     },
+  //     onError: () => {
+  //     },
+  //   });
+  // };
   const handleDeleteConfirm = async (selectedItem: any) => {
     if (!selectedItem) return;
+
     mutate(selectedItem.mappingId, {
       onSuccess: () => {
+        // Refetch the main document list
         if (typeof refreshData === 'function') {
           refreshData();
         }
+
+        // Refetch the mapped documents to update the mapping
+        if (refetchMappedDocs) {
+          refetchMappedDocs();
+        }
+
+        // Also refetch the mapping data if you have access to it
+        // You might need to add this refetch function from your mapping query
+        if (typeof refetchMappingData === 'function') {
+          refetchMappingData();
+        }
+
+        toast.success('Document mapping deleted successfully!');
       },
-      onError: () => {
+      onError: (error) => {
+        toast.error('Failed to delete document mapping');
+        console.error('Delete error:', error);
       },
     });
   };
@@ -247,7 +299,7 @@ const PurposeDocumentsTable = () => {
       }
       return doc;
     });
-    editMapDocument({data:updatedData.find((doc) => doc.id === rowId)});
+    editMapDocument({ data: updatedData.find((doc) => doc.id === rowId) });
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
@@ -259,7 +311,7 @@ const PurposeDocumentsTable = () => {
       }
       return doc;
     });
-    editMapDocument({data:updatedData.find((doc) => doc.id === rowId)});
+    editMapDocument({ data: updatedData.find((doc) => doc.id === rowId) });
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
@@ -321,8 +373,6 @@ const PurposeDocumentsTable = () => {
         return doc;
       });
       setformattedDataArray(updatedData);
-
-      toast.success('Document mapping updated successfully!');
     },
   });
   // -----------------
@@ -442,16 +492,6 @@ const PurposeDocumentsTable = () => {
           isPaginationDynamic ? pagination.handlePageChange : async (_page: number, _pageSize: number) => []
         }
       />
-      <div className="flex justify-center space-x-2 mt-4">
-        <Button
-          type="submit"
-          className="bg-primary text-white hover:bg-primary mt-4 ml-4 w-fit"
-          onClick={handleSaveDocuments}
-          disabled={isLoading || mappedDocsLoading || isTypeSelectionIncomplete}
-        >
-          {isLoading || mappedDocsLoading ? 'Loading...' : 'Save'}
-        </Button>
-      </div>
     </div>
   );
 };
