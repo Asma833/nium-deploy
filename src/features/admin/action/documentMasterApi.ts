@@ -15,7 +15,6 @@ export const documentMasterApi = {
     return data;
   },
    updateDocumentMapping: async (document:any, documentData: UpdateDocumentMappingPaylod): Promise<UpdateDocumentMappingPaylod> => {
-    console.log("document",document);
     const { data } = await axiosInstance.put<UpdateDocumentMappingPaylod>(
       API.DOCUMENT_MASTER.UPDATE_MAPPING_DOCUMENT + `/${document?.mappingId}`,
       documentData

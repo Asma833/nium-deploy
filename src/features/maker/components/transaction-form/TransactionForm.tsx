@@ -546,41 +546,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        <div className="flex gap-2 items-start w-full mb-4">
-          {mode === 'view' && documentUrls.mergedDocument && (
-            <div className="flex items-start">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.mergedDocument, 'mergeDoc')}
-                className="disabled:opacity-60"
-              >
-                View Document
-              </Button>
-            </div>
-          )}
-          {mode === 'view' && documentUrls.vkycDocument && (
-            <div className="flex items-start gap-2">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.vkycDocument, 'vkycDoc')}
-                className="disabled:opacity-60"
-              >
-                VKyc Document
-              </Button>
-            </div>
-          )}
-          {mode === 'view' && documentUrls.vkycVideo && (
-            <div className="flex items-start gap-2">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.vkycVideo, 'vkycVideo')}
-                className="disabled:opacity-60"
-              >
-                VKyc Video
-              </Button>
-            </div>
-          )}
-        </div>
         {/* Show success message after order generation */}
         {isOrderGenerated && (
           <FormFieldRow className="mb-4 w-full">

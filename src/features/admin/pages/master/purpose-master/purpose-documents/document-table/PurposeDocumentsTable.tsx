@@ -22,7 +22,6 @@ import { PurposeDocumentColumn } from './PurposeDocumentColumn';
 import CreatePurposeDocumentPage from '../create-documents/CreatePurposeDocumentPage';
 import { purposeDocumentFormConfig } from '../create-documents/create-purpose-document-form.config';
 import { useGetData } from '@/hooks/useGetData';
-import { DeletableItem } from '@/features/admin/types/document.type';
 import { useUpdateDocumentMapping } from '@/features/admin/hooks/useUpdateDocumentMapping';
 
 const PurposeDocumentsTable = () => {
@@ -194,9 +193,7 @@ const PurposeDocumentsTable = () => {
   });
 
   const handleDeleteConfirm = async (selectedItem: any) => {
-    console.log('Deleting item with mapping ID:', selectedItem);
     if (!selectedItem) return;
-    //console.log('Deleting item with mapping ID:', itemToDelete);
     mutate(selectedItem.mappingId, {
       onSuccess: () => {
         if (typeof refreshData === 'function') {
@@ -204,7 +201,6 @@ const PurposeDocumentsTable = () => {
         }
       },
       onError: () => {
-
       },
     });
   };
@@ -231,7 +227,6 @@ const PurposeDocumentsTable = () => {
       if (isSelected) {
         // Ensure form values are set before saving
         if (selectedTransactionType && selectedPurposeType) {
-          console.log(selectedRowIndex, UpdatedFormattedArray[selectedRowIndex]);
           handleSaveDocuments();
         } else {
           toast.error('Please select both Transaction Type and Purpose Type before saving.');
@@ -457,18 +452,6 @@ const PurposeDocumentsTable = () => {
           {isLoading || mappedDocsLoading ? 'Loading...' : 'Save'}
         </Button>
       </div>
-      {/* <DeleteConfirmationDialog
-        open={isDeleteDialogOpen}
-        title="Delete Document"
-        message={
-          <>
-            Are you sure you want to delete the document <span className="font-semibold">"{itemToDelete?.name}"</span>?
-          </>
-        }
-        onConfirm={handleDeleteConfirm}
-        onCancel={handleDeleteCancel}
-        loading={isDeleting}
-      /> */}
     </div>
   );
 };
