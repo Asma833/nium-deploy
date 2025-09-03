@@ -348,7 +348,7 @@ export const ViewStatusTableColumns = ({
             icon={<Upload size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400" />}
             tooltipText="Upload Document"
             variant="upload"
-            disabled={rowData.merged_document !== null}
+            disabled={rowData.merged_document !== null || rowData.order_status === ORDER_STATUSES.DELETED}
             className="group"
           />
           <TooltipActionButton
@@ -356,7 +356,7 @@ export const ViewStatusTableColumns = ({
             icon={<Trash2 size={16} />}
             tooltipText="Delete"
             variant="delete"
-            disabled={rowData.merged_document !== null}
+            disabled={rowData.merged_document !== null || rowData.order_status === ORDER_STATUSES.DELETED}
           />
         </div>
       ),
