@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { documentMasterApi } from '../action/documentMasterApi';
 
-export const useDeleteDocument = () => {
+export const useDeleteDocumentMapping = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (documentId: string) => documentMasterApi.deleteDocumentMapping(documentId),

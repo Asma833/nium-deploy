@@ -9,7 +9,7 @@ import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
-import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
+import { useDeleteDocumentMapping } from '@/features/admin/hooks/useDeleteDocumentMapping';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
 import useGetDocByTransPurpose from '@/features/maker/hooks/useGetDocByTransPurpose';
 import { API } from '@/core/constant/apis';
@@ -23,7 +23,7 @@ import { useGetData } from '@/hooks/useGetData';
 import { useUpdateDocumentMapping } from '@/features/admin/hooks/useUpdateDocumentMapping';
 
 const PurposeDocumentsTable = () => {
-  const { mutate, isPending: isDeleting } = useDeleteDocument();
+  const { mutate, isPending: isDeleting } = useDeleteDocumentMapping();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
