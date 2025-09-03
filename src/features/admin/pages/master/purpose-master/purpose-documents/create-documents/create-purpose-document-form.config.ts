@@ -59,7 +59,6 @@ export const purposeDocumentFormConfig = ({
       description: {
         label: 'Document Description',
         type: FieldType.TextArea,
-        required: true,
         placeholder: 'Enter Document Description',
       },
     },
