@@ -1,5 +1,5 @@
 import { CustomCheckbox } from '@/components/common/Checkbox';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit } from 'lucide-react';
 
 export const PurposeDocumentColumn = ({
   handleEditDocument,
@@ -28,7 +28,7 @@ export const PurposeDocumentColumn = ({
             label=""
             requirementType="select"
             onChange={handleSelectionChange}
-            // disabled={isDisabled}
+            disabled={isDisabled}
           />
         );
       },
@@ -50,7 +50,7 @@ export const PurposeDocumentColumn = ({
           label="Mandatory"
           requirementType="mandatory"
           onChange={handleMandatoryChange}
-          // disabled={isDisabled}
+          disabled={!row.isSelected}
         />
       ),
     },
@@ -65,7 +65,7 @@ export const PurposeDocumentColumn = ({
           label="Back Required"
           requirementType="back-required"
           onChange={handleBackMandatoryChange}
-          // disabled={isDisabled}
+          disabled={!row.isSelected}
         />
       ),
     },
