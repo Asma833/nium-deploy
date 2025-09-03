@@ -170,7 +170,7 @@ export const ViewStatusTableColumns = ({
               loading={false}
               toastInfoText=""
               disabled
-              tooltipText={isOrderDeleted ? "Transaction is deleted" : "No document available"}
+              tooltipText={isOrderDeleted ? 'Transaction is deleted' : 'No document available'}
               buttonType="copy_link"
               buttonIconType="copy_link"
             />
@@ -192,10 +192,10 @@ export const ViewStatusTableColumns = ({
           (is_esign_required && !e_sign_link && !needsGeneration);
 
         const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
-        const tooltipText = isOrderDeleted 
-          ? "Transaction is deleted" 
-          : needsGeneration 
-            ? 'Generate E Sign Link' 
+        const tooltipText = isOrderDeleted
+          ? 'Transaction is deleted'
+          : needsGeneration
+            ? 'Generate E Sign Link'
             : 'Copy E Sign Link';
         const buttonType = needsGeneration ? 'refresh' : 'copy_link';
         const buttonIconType = buttonType;
@@ -266,17 +266,17 @@ export const ViewStatusTableColumns = ({
     //   },
     // },
 
-        {
+    {
       key: 'v_kyc_link',
       id: 'v_kyc_link',
       name: 'VKYC Link',
       className: 'min-w-0 max-w-[80px]',
       cell: (_: unknown, rowData: any) => {
         const { v_kyc_status, is_v_kyc_required, nium_order_id, v_kyc_link, order_status } = rowData;
-        
+
         // Check if order is deleted
         const isOrderDeleted = order_status === 'deleted';
-        
+
         const isActionNeeded = ACTION_NEEDED_VKYC_STATUSES.includes(v_kyc_status) || (is_v_kyc_required && !v_kyc_link);
         const isDisabled =
           isOrderDeleted || // Add this condition
@@ -285,17 +285,17 @@ export const ViewStatusTableColumns = ({
           (is_v_kyc_required && !v_kyc_link && !isActionNeeded);
 
         const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
-        const tooltipText = isOrderDeleted 
-          ? "Transaction is deleted"
-          : isActionNeeded 
-            ? 'Generate VKYC Link' 
-            : is_v_kyc_required 
-              ? 'Copy VKYC Link' 
+        const tooltipText = isOrderDeleted
+          ? 'Transaction is deleted'
+          : isActionNeeded
+            ? 'Generate VKYC Link'
+            : is_v_kyc_required
+              ? 'Copy VKYC Link'
               : '';
 
         const handleGenerateLink = async () => {
           if (isOrderDeleted) return; // Prevent action if deleted
-          
+
           try {
             await handleRegenerateVkycLink(rowData);
             setHasGeneratedLink(true);

@@ -10,7 +10,7 @@ export const useUpdateDocumentMapping = ({ onDocumentUpdateSuccess }: { onDocume
         document_id: data.documentId,
         isBackRequired: data.backRequirement ?? false,
         is_mandatory: data.requirement ?? false,
-      }
+      };
 
       return await documentMasterApi.updateDocumentMapping(data, payload);
     },

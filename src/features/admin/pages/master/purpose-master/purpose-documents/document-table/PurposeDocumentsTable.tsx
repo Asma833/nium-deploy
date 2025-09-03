@@ -25,7 +25,6 @@ import { useGetData } from '@/hooks/useGetData';
 import { useUpdateDocumentMapping } from '@/features/admin/hooks/useUpdateDocumentMapping';
 
 const PurposeDocumentsTable = () => {
-  console.log('Rendering PurposeDocumentsTable');
   const { mutate, isPending: isDeleting } = useDeleteDocument();
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,21 +100,10 @@ const PurposeDocumentsTable = () => {
     mappedPurposeTransactionTypesData: (mappedPurposeTransactionTypesData as TransactionPurposeMap[]) || [],
     selectedTransactionTypeId: selectedTransactionType,
   });
-  // Add this useEffect to refetch when mapping changes
+  // Refetch mapped documents when selectedMapping changes
   useEffect(() => {
-    if (selectedMapping?.id) {
-      // Force refetch of mapped documents when mapping changes
-      // This ensures the hook refetches when purpose_type changes
-    }
-  }, [selectedMapping?.id]);
-  // Fetch mapped documents for the selected transaction-purpose combination
-
-  // Force refetch when selectedMapping changes
-  useEffect(() => {
-    if (selectedMapping?.id) {
-      if (refetchMappedDocs) {
-        refetchMappedDocs();
-      }
+    if (selectedMapping?.id && refetchMappedDocs) {
+      refetchMappedDocs();
     }
   }, [selectedMapping?.id, refetchMappedDocs]);
 
@@ -215,39 +203,21 @@ const PurposeDocumentsTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  // const handleDeleteConfirm = async (selectedItem: any) => {
-  //   if (!selectedItem) return;
-  //   mutate(selectedItem.mappingId, {
-  //     onSuccess: () => {
-  //       if (typeof refreshData === 'function') {
-  //         refreshData();
-  //       }
-  //     },
-  //     onError: () => {
-  //     },
-  //   });
-  // };
   const handleDeleteConfirm = async (selectedItem: any) => {
-    if (!selectedItem) return;
+    if (!selectedItem?.mappingId) {
+      toast.error('Invalid item selected for deletion');
+      return;
+    }
 
     mutate(selectedItem.mappingId, {
       onSuccess: () => {
-        // Refetch the main document list
-        if (typeof refreshData === 'function') {
-          refreshData();
-        }
-
-        // Refetch the mapped documents to update the mapping
+        // Refetch mapped documents and mapping data to reflect changes
         if (refetchMappedDocs) {
           refetchMappedDocs();
         }
-
-        // Also refetch the mapping data if you have access to it
-        // You might need to add this refetch function from your mapping query
         if (typeof refetchMappingData === 'function') {
           refetchMappingData();
         }
-
         toast.success('Document mapping deleted successfully!');
       },
       onError: (error) => {
@@ -331,51 +301,25 @@ const PurposeDocumentsTable = () => {
     onCreateSuccess: () => {
       reset({});
       setIsModalOpen(false);
-      if (typeof refreshData === 'function') {
-        refreshData();
+      // Refetch mapped documents to update the UI with new mappings
+      if (refetchMappedDocs) {
+        refetchMappedDocs();
       }
-      // Refetch mapped documents to update the UI
-      if (selectedMapping?.id) {
-        // The hook will automatically refetch when the mapping ID changes
-        // but we can also manually trigger a refetch if needed
-      }
-      // Reset the form state by clearing selections temporarily
-      const updatedData = formattedDataArray.map((doc) => {
-        if (doc.id) {
-          return { ...doc, requirement: false, backRequirement: false, isSelected: false };
-        }
-        return doc;
-      });
-      setformattedDataArray(updatedData);
-
       toast.success('Document mapping saved successfully!');
     },
   });
 
-  //--------------------
   const { mutate: editMapDocument } = useUpdateDocumentMapping({
     onDocumentUpdateSuccess: () => {
       reset({});
       setIsModalOpen(false);
-      if (typeof refreshData === 'function') {
-        refreshData();
+      // Refetch mapped documents to update the UI with updated mappings
+      if (refetchMappedDocs) {
+        refetchMappedDocs();
       }
-      // Refetch mapped documents to update the UI
-      if (selectedMapping?.id) {
-        // The hook will automatically refetch when the mapping ID changes
-        // but we can also manually trigger a refetch if needed
-      }
-      // Reset the form state by clearing selections temporarily
-      const updatedData = formattedDataArray.map((doc) => {
-        if (doc.id) {
-          return { ...doc, requirement: false, backRequirement: false, isSelected: false };
-        }
-        return doc;
-      });
-      setformattedDataArray(updatedData);
+      toast.success('Document mapping updated successfully!');
     },
   });
-  // -----------------
 
   const handleSaveDocuments = handleSubmit((formValues) => {
     // Find the selected mapping from the data
