@@ -80,6 +80,69 @@ export const ViewStatusTableColumns = ({
       className: 'min-w-0 p-2',
       cell: (_: any, value: any) => <EsignStatusCell rowData={value} />,
     },
+    // {
+    //   key: 'e_sign_link',
+    //   id: 'e_sign_link',
+    //   name: 'E Sign Link',
+    //   className: 'min-w-0 p-2',
+    //   cell: (_: any, rowData: any) => {
+    //     const {
+    //       merged_document,
+    //       nium_order_id,
+    //       e_sign_link,
+    //       e_sign_status,
+    //       e_sign_link_status,
+    //       is_esign_required,
+    //       order_status,
+    //     } = rowData;
+
+    //     if (!merged_document) {
+    //       return (
+    //         <SignLinkButton
+    //           id={nium_order_id}
+    //           copyLinkUrl=""
+    //           loading={false}
+    //           toastInfoText=""
+    //           disabled
+    //           tooltipText="No document available"
+    //           buttonType="copy_link"
+    //           buttonIconType="copy_link"
+    //         />
+    //       );
+    //     }
+    //     const needsGeneration =
+    //       e_sign_link_status === ESIGN_STATUSES.EXPIRED ||
+    //       e_sign_status === ESIGN_STATUSES.EXPIRED ||
+    //       e_sign_status === ESIGN_STATUSES.REJECTED ||
+    //       !e_sign_link;
+
+    //     const isDisabled =
+    //       e_sign_status === ESIGN_STATUSES.COMPLETED ||
+    //       (e_sign_status === ESIGN_STATUSES.COMPLETED &&
+    //         order_status === ORDER_STATUSES.REJECTED &&
+    //         !needsGeneration) ||
+    //       (is_esign_required && !e_sign_link && !needsGeneration);
+
+    //     const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
+    //     const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
+    //     const buttonType = needsGeneration ? 'refresh' : 'copy_link';
+    //     const buttonIconType = buttonType;
+
+    //     return (
+    //       <SignLinkButton
+    //         id={nium_order_id}
+    //         copyLinkUrl={e_sign_link || ''}
+    //         loading={isLoading}
+    //         toastInfoText="E Sign link copied successfully!"
+    //         disabled={isDisabled}
+    //         {...(needsGeneration ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}
+    //         tooltipText={tooltipText}
+    //         buttonType={buttonType}
+    //         buttonIconType={buttonIconType}
+    //       />
+    //     );
+    //   },
+    // },
     {
       key: 'e_sign_link',
       id: 'e_sign_link',
@@ -96,7 +159,10 @@ export const ViewStatusTableColumns = ({
           order_status,
         } = rowData;
 
-        if (!merged_document) {
+        // Check if order is deleted
+        const isOrderDeleted = order_status === 'deleted';
+
+        if (!merged_document || isOrderDeleted) {
           return (
             <SignLinkButton
               id={nium_order_id}
@@ -104,12 +170,13 @@ export const ViewStatusTableColumns = ({
               loading={false}
               toastInfoText=""
               disabled
-              tooltipText="No document available"
+              tooltipText={isOrderDeleted ? "Transaction is deleted" : "No document available"}
               buttonType="copy_link"
               buttonIconType="copy_link"
             />
           );
         }
+
         const needsGeneration =
           e_sign_link_status === ESIGN_STATUSES.EXPIRED ||
           e_sign_status === ESIGN_STATUSES.EXPIRED ||
@@ -117,6 +184,7 @@ export const ViewStatusTableColumns = ({
           !e_sign_link;
 
         const isDisabled =
+          isOrderDeleted || // Add this condition
           e_sign_status === ESIGN_STATUSES.COMPLETED ||
           (e_sign_status === ESIGN_STATUSES.COMPLETED &&
             order_status === ORDER_STATUSES.REJECTED &&
@@ -124,7 +192,11 @@ export const ViewStatusTableColumns = ({
           (is_esign_required && !e_sign_link && !needsGeneration);
 
         const isLoading = isSendEsignLinkLoading && loadingOrderId === nium_order_id;
-        const tooltipText = needsGeneration ? 'Generate E Sign Link' : 'Copy E Sign Link';
+        const tooltipText = isOrderDeleted 
+          ? "Transaction is deleted" 
+          : needsGeneration 
+            ? 'Generate E Sign Link' 
+            : 'Copy E Sign Link';
         const buttonType = needsGeneration ? 'refresh' : 'copy_link';
         const buttonIconType = buttonType;
 
@@ -135,7 +207,7 @@ export const ViewStatusTableColumns = ({
             loading={isLoading}
             toastInfoText="E Sign link copied successfully!"
             disabled={isDisabled}
-            {...(needsGeneration ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}
+            {...(needsGeneration && !isOrderDeleted ? { onClick: () => handleRegenerateEsignLink(rowData) } : {})}
             tooltipText={tooltipText}
             buttonType={buttonType}
             buttonIconType={buttonIconType}
@@ -143,7 +215,6 @@ export const ViewStatusTableColumns = ({
         );
       },
     },
-
     {
       key: 'v_kyc_status',
       id: 'v_kyc_status',
@@ -152,23 +223,79 @@ export const ViewStatusTableColumns = ({
       cell: (_: unknown, rowData: any) => <VKycStatusCell rowData={rowData} />,
     },
 
-    {
+    // {
+    //   key: 'v_kyc_link',
+    //   id: 'v_kyc_link',
+    //   name: 'VKYC Link',
+    //   className: 'min-w-0 max-w-[80px]',
+    //   cell: (_: unknown, rowData: any) => {
+    //     const { v_kyc_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+    //     const isActionNeeded = ACTION_NEEDED_VKYC_STATUSES.includes(v_kyc_status) || (is_v_kyc_required && !v_kyc_link);
+    //     const isDisabled =
+    //       !is_v_kyc_required ||
+    //       DISABLED_VKYC_STATUSES.includes(v_kyc_status) ||
+    //       (is_v_kyc_required && !v_kyc_link && !isActionNeeded);
+
+    //     const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
+    //     const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
+
+    //     const handleGenerateLink = async () => {
+    //       try {
+    //         await handleRegenerateVkycLink(rowData);
+    //         setHasGeneratedLink(true);
+    //       } catch (error) {
+    //         console.error('Error generating VKYC link:', error);
+    //       }
+    //     };
+
+    //     const buttonType = isLoading || hasGeneratedLink ? 'copy_link' : isActionNeeded ? 'refresh' : 'copy_link';
+
+    //     return (
+    //       <SignLinkButton
+    //         id={nium_order_id}
+    //         copyLinkUrl={v_kyc_link || ''}
+    //         loading={isLoading}
+    //         toastInfoText="VKYC Link copied successfully!"
+    //         disabled={isDisabled}
+    //         {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
+    //         tooltipText={tooltipText}
+    //         buttonType={buttonType}
+    //         buttonIconType={buttonType}
+    //       />
+    //     );
+    //   },
+    // },
+
+        {
       key: 'v_kyc_link',
       id: 'v_kyc_link',
       name: 'VKYC Link',
       className: 'min-w-0 max-w-[80px]',
       cell: (_: unknown, rowData: any) => {
-        const { v_kyc_status, is_v_kyc_required, nium_order_id, v_kyc_link } = rowData;
+        const { v_kyc_status, is_v_kyc_required, nium_order_id, v_kyc_link, order_status } = rowData;
+        
+        // Check if order is deleted
+        const isOrderDeleted = order_status === 'deleted';
+        
         const isActionNeeded = ACTION_NEEDED_VKYC_STATUSES.includes(v_kyc_status) || (is_v_kyc_required && !v_kyc_link);
         const isDisabled =
+          isOrderDeleted || // Add this condition
           !is_v_kyc_required ||
           DISABLED_VKYC_STATUSES.includes(v_kyc_status) ||
           (is_v_kyc_required && !v_kyc_link && !isActionNeeded);
 
         const isLoading = isSendVkycLinkLoading && loadingOrderId === nium_order_id;
-        const tooltipText = isActionNeeded ? 'Generate VKYC Link' : is_v_kyc_required ? 'Copy VKYC Link' : '';
+        const tooltipText = isOrderDeleted 
+          ? "Transaction is deleted"
+          : isActionNeeded 
+            ? 'Generate VKYC Link' 
+            : is_v_kyc_required 
+              ? 'Copy VKYC Link' 
+              : '';
 
         const handleGenerateLink = async () => {
+          if (isOrderDeleted) return; // Prevent action if deleted
+          
           try {
             await handleRegenerateVkycLink(rowData);
             setHasGeneratedLink(true);
@@ -186,7 +313,7 @@ export const ViewStatusTableColumns = ({
             loading={isLoading}
             toastInfoText="VKYC Link copied successfully!"
             disabled={isDisabled}
-            {...(isActionNeeded ? { onClick: handleGenerateLink } : {})}
+            {...(isActionNeeded && !isOrderDeleted ? { onClick: handleGenerateLink } : {})}
             tooltipText={tooltipText}
             buttonType={buttonType}
             buttonIconType={buttonType}
