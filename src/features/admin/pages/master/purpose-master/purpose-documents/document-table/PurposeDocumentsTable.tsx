@@ -7,10 +7,8 @@ import { useDynamicPagination } from '@/components/common/dynamic-table/hooks/us
 import FormFieldRow from '@/components/form/wrapper/FormFieldRow';
 import FieldWrapper from '@/components/form/wrapper/FieldWrapper';
 import { getController } from '@/components/form/utils/getController';
-import { Button } from '@/components/ui/button';
 import { FormContentWrapper } from '@/components/form/wrapper/FormContentWrapper';
 import Spacer from '@/components/form/wrapper/Spacer';
-import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog';
 import { useDeleteDocument } from '@/features/admin/hooks/useDeleteDocument';
 import { useCreateDocumentTransactionMap } from '@/features/admin/hooks/useCreateDocumentTransactionMap';
 import useGetDocByTransPurpose from '@/features/maker/hooks/useGetDocByTransPurpose';
