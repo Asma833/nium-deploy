@@ -299,7 +299,6 @@ const PurposeDocumentsTable = () => {
 
   const { mutate: mapDocument } = useCreateDocumentTransactionMap({
     onCreateSuccess: () => {
-      reset({});
       setIsModalOpen(false);
       // Refetch mapped documents to update the UI with new mappings
       if (refetchMappedDocs) {
@@ -311,7 +310,6 @@ const PurposeDocumentsTable = () => {
 
   const { mutate: editMapDocument } = useUpdateDocumentMapping({
     onDocumentUpdateSuccess: () => {
-      reset({});
       setIsModalOpen(false);
       // Refetch mapped documents to update the UI with updated mappings
       if (refetchMappedDocs) {
@@ -379,10 +377,13 @@ const PurposeDocumentsTable = () => {
         className="md:max-w-[60%]"
         setIsOpen={(open) => {
           setIsModalOpen(open);
+          if (open && !rowData) {
+            // Reset form when opening for add (no rowData)
+            reset({});
+          }
           if (!open) {
             setDialogTitle('Add Documents');
             setRowData(null);
-            reset();
           }
         }}
         isLoading={isSubmitting}
