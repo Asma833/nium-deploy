@@ -27,6 +27,7 @@ const PurposeDocumentsTable = () => {
   const [dialogTitle, setDialogTitle] = useState('Add Documents');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowData, setRowData] = useState(null);
+  const [isProcessingSelection, setIsProcessingSelection] = useState(false);
 
   const {
     data: mappedPurposeTransactionTypesData,
@@ -201,9 +202,10 @@ const PurposeDocumentsTable = () => {
     totalRecordsPath: 'totalRecords',
   });
 
-  const handleDeleteConfirm = async (selectedItem: any) => {
+  const handleDeleteConfirm = async (selectedItem: any, onError?: () => void) => {
     if (!selectedItem?.mappingId) {
       toast.error('Invalid item selected for deletion');
+      if (onError) onError();
       return;
     }
 
@@ -216,11 +218,13 @@ const PurposeDocumentsTable = () => {
         if (typeof refetchMappingData === 'function') {
           refetchMappingData();
         }
+        setIsProcessingSelection(false);
         toast.success('Document mapping deleted successfully!');
       },
       onError: (error) => {
         toast.error('Failed to delete document mapping');
         console.error('Delete error:', error);
+        if (onError) onError();
       },
     });
   };
@@ -232,27 +236,62 @@ const PurposeDocumentsTable = () => {
   };
 
   const handleSelectionChange = (rowId: string, isSelected: boolean) => {
+    // Prevent interaction if already processing a selection
+    if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
+      return;
+    }
+
     const selectedRowIndex = formattedDataArray.findIndex((doc) => doc.id === rowId);
 
     if (selectedRowIndex !== -1) {
       const UpdatedFormattedArray = [...formattedDataArray];
       const selectedItem = UpdatedFormattedArray[selectedRowIndex];
+      
+      // Store original state for potential rollback
+      const originalState = {
+        isSelected: selectedItem.isSelected,
+        requirement: selectedItem.requirement,
+        backRequirement: selectedItem.backRequirement,
+      };
+
       // Update selection State
       selectedItem.isSelected = isSelected;
 
       // Update the state with the modified data
       setformattedDataArray(UpdatedFormattedArray);
-      // -----
+      setIsProcessingSelection(true);
 
       if (isSelected) {
         // Ensure form values are set before saving
         if (selectedTransactionType && selectedPurposeType) {
-          handleSaveDocuments();
+          handleSaveDocuments(selectedItem, () => {
+            // On error callback - revert the selection
+            const revertedArray = [...formattedDataArray];
+            const itemToRevert = revertedArray[selectedRowIndex];
+            itemToRevert.isSelected = originalState.isSelected;
+            itemToRevert.requirement = originalState.requirement;
+            itemToRevert.backRequirement = originalState.backRequirement;
+            setformattedDataArray(revertedArray);
+            setIsProcessingSelection(false);
+          });
         } else {
           toast.error('Please select both Transaction Type and Purpose Type before saving.');
+          // Revert selection immediately
+          selectedItem.isSelected = originalState.isSelected;
+          setformattedDataArray([...UpdatedFormattedArray]);
+          setIsProcessingSelection(false);
         }
       } else {
-        handleDeleteConfirm(selectedItem);
+        handleDeleteConfirm(selectedItem, () => {
+          // On error callback - revert the selection
+          const revertedArray = [...formattedDataArray];
+          const itemToRevert = revertedArray[selectedRowIndex];
+          itemToRevert.isSelected = originalState.isSelected;
+          itemToRevert.requirement = originalState.requirement;
+          itemToRevert.backRequirement = originalState.backRequirement;
+          setformattedDataArray(revertedArray);
+          setIsProcessingSelection(false);
+        });
       }
     } else {
       toast.error('Selected Item not found.');
@@ -260,6 +299,11 @@ const PurposeDocumentsTable = () => {
   };
 
   const handleMandatoryChange = (rowId: string, isChecked: boolean) => {
+    // Prevent interaction if already processing a selection
+    if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
+      return;
+    }
+
     // Update the mandatory value for the specific document
     const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
@@ -271,7 +315,13 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
+  
   const handleBackMandatoryChange = (rowId: string, isChecked: boolean) => {
+    // Prevent interaction if already processing a selection
+    if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
+      return;
+    }
+
     // Update the back mandatory value for the specific document
     const updatedData = formattedDataArray.map((doc) => {
       if (doc.id === rowId) {
@@ -295,9 +345,10 @@ const PurposeDocumentsTable = () => {
 
   // State and handlers for DeleteConfirmationDialog
 
-  const { mutate: mapDocument } = useCreateDocumentTransactionMap({
+  const { mutate: mapDocument, isLoading: isSavingDocument } = useCreateDocumentTransactionMap({
     onCreateSuccess: () => {
       setIsModalOpen(false);
+      setIsProcessingSelection(false);
       // Refetch mapped documents to update the UI with new mappings
       if (refetchMappedDocs) {
         refetchMappedDocs();
@@ -306,9 +357,10 @@ const PurposeDocumentsTable = () => {
     },
   });
 
-  const { mutate: editMapDocument } = useUpdateDocumentMapping({
+  const { mutate: editMapDocument, isLoading: isUpdatingDocument } = useUpdateDocumentMapping({
     onDocumentUpdateSuccess: () => {
       setIsModalOpen(false);
+      setIsProcessingSelection(false);
       // Refetch mapped documents to update the UI with updated mappings
       if (refetchMappedDocs) {
         refetchMappedDocs();
@@ -317,36 +369,75 @@ const PurposeDocumentsTable = () => {
     },
   });
 
-  const handleSaveDocuments = handleSubmit((formValues) => {
+  // Calculate disabled state after all hooks are defined
+  const isTableDisabled = isTypeSelectionIncomplete || isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting;
+
+  // Update table columns with the correct disabled state
+  const tableColumnsWithLoading = PurposeDocumentColumn({
+    handleEditDocument,
+    handleSelectionChange,
+    handleMandatoryChange,
+    handleBackMandatoryChange,
+    disabled: isTableDisabled,
+  });
+
+  const handleSaveDocuments = (specificDocument?: any, onError?: () => void) => {
     // Find the selected mapping from the data
     const mappingData = mappedPurposeTransactionTypesData as TransactionPurposeMap[];
     const selectedMappingData = mappingData?.find(
       (item: TransactionPurposeMap) =>
-        item.transactionType.id === formValues.transaction_type && item.purpose.id === formValues.purpose_type
+        item.transactionType.id === selectedTransactionType && item.purpose.id === selectedPurposeType
     );
 
     if (!selectedMappingData?.id) {
       toast.error('Please select both Transaction Type and Purpose Type.');
+      if (onError) onError();
       return;
     }
 
-    const selectedDocuments = formattedDataArray
-      .filter((doc) => doc.isSelected)
-      .map((doc) => ({
+    // If specificDocument is provided, only process that document
+    // Otherwise, process all selected documents (for backward compatibility)
+    let documentsToProcess;
+    
+    if (specificDocument) {
+      documentsToProcess = [{
         transaction_purpose_map_id: selectedMappingData.id,
-        document_id: doc.id,
-        isBackRequired: doc.backRequirement ?? false,
-        is_mandatory: doc.requirement ?? false,
-      }));
+        document_id: specificDocument.id,
+        isBackRequired: specificDocument.backRequirement ?? false,
+        is_mandatory: specificDocument.requirement ?? false,
+      }];
+    } else {
+      documentsToProcess = formattedDataArray
+        .filter((doc) => doc.isSelected)
+        .map((doc) => ({
+          transaction_purpose_map_id: selectedMappingData.id,
+          document_id: doc.id,
+          isBackRequired: doc.backRequirement ?? false,
+          is_mandatory: doc.requirement ?? false,
+        }));
+    }
 
-    if (selectedDocuments.length === 0) {
+    if (documentsToProcess.length === 0) {
       toast.error('Please select at least one document.');
+      if (onError) onError();
       return;
     }
 
-    mapDocument([...selectedDocuments]);
+    mapDocument(documentsToProcess, {
+      onSuccess: () => {
+        // Success is already handled in the hook's onCreateSuccess
+      },
+      onError: (error) => {
+        console.error('Save error:', error);
+        if (onError) onError();
+      },
+    });
+  };
+
+  // Bulk save function for backward compatibility or future use
+  const handleBulkSaveDocuments = handleSubmit((formValues) => {
+    handleSaveDocuments(); // Call without specific document to process all selected
   });
-  // -----------------
 
   const leftsideRenderAction = () => {
     // Calculate unique mapped documents count
@@ -363,7 +454,6 @@ const PurposeDocumentsTable = () => {
       </div>
     );
   };
-  // -----------------
 
   const rightsideRenderAction = () => (
     <>
@@ -400,10 +490,21 @@ const PurposeDocumentsTable = () => {
       />
     </>
   );
-  // -----------------
 
   return (
     <div className="dynamic-table-wrap relative">
+      {/* Loading overlay */}
+      {isTableDisabled && (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) && (
+        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg">
+            <div className="w-6 h-6 border-2 border-dashed rounded-full animate-spin border-blue-600" />
+            <span className="text-sm font-medium text-gray-700">
+              {isDeleting ? 'Removing document...' : 'Saving changes...'}
+            </span>
+          </div>
+        </div>
+      )}
+      
       <FormProvider {...methods}>
         <FormContentWrapper className="mt-0 p-2 rounded-lg mr-auto bg-transparent w-full">
           <Spacer>
@@ -424,7 +525,7 @@ const PurposeDocumentsTable = () => {
       </FormProvider>
 
       <DynamicTable
-        columns={tableColumns}
+        columns={tableColumnsWithLoading}
         data={formattedDataArray}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
