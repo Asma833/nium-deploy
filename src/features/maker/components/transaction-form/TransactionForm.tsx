@@ -522,7 +522,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           </FormContentWrapper>
         }{' '}
         {!isUpdatePage && !isViewPage && !isOrderGenerated && (
-          <FormFieldRow className="px-2">
+          <FormFieldRow className="p-2">
             <Button
               className="min-w-60"
               onClick={handleFormSubmit}
