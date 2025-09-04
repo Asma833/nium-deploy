@@ -231,7 +231,16 @@ const PurposeDocumentsTable = () => {
   const handleEditDocument = (rowData: any) => {
     setDialogTitle('Edit Document');
     setIsModalOpen(true);
-    reset(rowData);
+
+    // Preserve current form values for transaction and purpose types
+    const currentFormValues = methods.getValues();
+    const preservedValues = {
+      transaction_type: currentFormValues.transaction_type,
+      purpose_type: currentFormValues.purpose_type,
+      ...rowData, // Add any row-specific data needed for editing
+    };
+
+    reset(preservedValues);
     setRowData(rowData);
   };
 
@@ -246,7 +255,7 @@ const PurposeDocumentsTable = () => {
     if (selectedRowIndex !== -1) {
       const UpdatedFormattedArray = [...formattedDataArray];
       const selectedItem = UpdatedFormattedArray[selectedRowIndex];
-      
+
       // Store original state for potential rollback
       const originalState = {
         isSelected: selectedItem.isSelected,
@@ -315,7 +324,7 @@ const PurposeDocumentsTable = () => {
     // Update the state with the modified data
     setformattedDataArray(updatedData);
   };
-  
+
   const handleBackMandatoryChange = (rowId: string, isChecked: boolean) => {
     // Prevent interaction if already processing a selection
     if (isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting) {
@@ -370,7 +379,8 @@ const PurposeDocumentsTable = () => {
   });
 
   // Calculate disabled state after all hooks are defined
-  const isTableDisabled = isTypeSelectionIncomplete || isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting;
+  const isTableDisabled =
+    isTypeSelectionIncomplete || isProcessingSelection || isSavingDocument || isUpdatingDocument || isDeleting;
 
   // Update table columns with the correct disabled state
   const tableColumnsWithLoading = PurposeDocumentColumn({
@@ -398,14 +408,16 @@ const PurposeDocumentsTable = () => {
     // If specificDocument is provided, only process that document
     // Otherwise, process all selected documents (for backward compatibility)
     let documentsToProcess;
-    
+
     if (specificDocument) {
-      documentsToProcess = [{
-        transaction_purpose_map_id: selectedMappingData.id,
-        document_id: specificDocument.id,
-        isBackRequired: specificDocument.backRequirement ?? false,
-        is_mandatory: specificDocument.requirement ?? false,
-      }];
+      documentsToProcess = [
+        {
+          transaction_purpose_map_id: selectedMappingData.id,
+          document_id: specificDocument.id,
+          isBackRequired: specificDocument.backRequirement ?? false,
+          is_mandatory: specificDocument.requirement ?? false,
+        },
+      ];
     } else {
       documentsToProcess = formattedDataArray
         .filter((doc) => doc.isSelected)
@@ -466,8 +478,13 @@ const PurposeDocumentsTable = () => {
         setIsOpen={(open) => {
           setIsModalOpen(open);
           if (open && !rowData) {
-            // Reset form when opening for add (no rowData)
-            reset({});
+            // Reset form when opening for add (no rowData) but preserve main form values
+            const currentFormValues = methods.getValues();
+            const preservedValues = {
+              transaction_type: currentFormValues.transaction_type,
+              purpose_type: currentFormValues.purpose_type,
+            };
+            reset(preservedValues);
           }
           if (!open) {
             setDialogTitle('Add Documents');
@@ -504,7 +521,7 @@ const PurposeDocumentsTable = () => {
           </div>
         </div>
       )}
-      
+
       <FormProvider {...methods}>
         <FormContentWrapper className="mt-0 p-2 rounded-lg mr-auto bg-transparent w-full">
           <Spacer>
@@ -526,6 +543,7 @@ const PurposeDocumentsTable = () => {
 
       <DynamicTable
         columns={tableColumnsWithLoading}
+        loading={userLoading || isLoading || mappedDocsLoading}
         data={formattedDataArray}
         defaultSortColumn="created_at"
         defaultSortDirection="desc"
