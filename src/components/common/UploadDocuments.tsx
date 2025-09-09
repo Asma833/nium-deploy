@@ -157,15 +157,15 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
 
       // Check if the uploaded document is "All Documents" (AD) and show additional info
       const mappedDoc = mappedDocuments?.find((mapped) => mapped.document_id === document.documentTypeId);
-      if (mappedDoc?.code === 'AD') {
+      if (mappedDoc?.code === 'ALL') {
         setTimeout(() => {
           toast.info("All Documents uploaded - other document types are now disabled except 'OTHER'");
         }, 1000);
-      } else if (mappedDoc?.code !== 'AD') {
+      } else if (mappedDoc?.code !== 'ALL') {
         // Check if this is the first non-AD document being uploaded
         const otherUploadedDocs = uploadedDocuments.filter((doc) => {
           const otherMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-          return otherMappedDoc?.code !== 'AD' && doc.isUploaded && doc.documentTypeId !== document.documentTypeId;
+          return otherMappedDoc?.code !== 'ALL' && doc.isUploaded && doc.documentTypeId !== document.documentTypeId;
         });
 
         if (otherUploadedDocs.length === 0) {
@@ -199,7 +199,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
     // Check if All Documents (AD) is uploaded
     const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
       const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-      return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+      return uploadedMappedDoc?.code === 'ALL' && doc.isUploaded;
     });
 
     // If AD is uploaded, validation is considered complete
@@ -230,7 +230,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           }));
 
     // Filter out AD from required documents since we're checking individual docs
-    const requiredDocs = documentsToRender.filter((doc) => doc.isRequired && doc.code !== 'AD');
+    const requiredDocs = documentsToRender.filter((doc) => doc.isRequired && doc.code !== 'ALL');
     const uploadedRequiredDocs = requiredDocs.filter((reqDoc) =>
       uploadedDocuments.some((uploadedDoc) => uploadedDoc.documentTypeId === reqDoc.id && uploadedDoc.isUploaded)
     );
@@ -363,8 +363,8 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           }))
           .sort((a, b) => {
             // Sort: AD first, OTHER last, everything else in between
-            if (a.code === 'AD' && b.code !== 'AD') return -1;
-            if (a.code !== 'AD' && b.code === 'AD') return 1;
+            if (a.code === 'ALL' && b.code !== 'ALL') return -1;
+            if (a.code !== 'ALL' && b.code === 'ALL') return 1;
             if (a.code === 'OTHER' && b.code !== 'OTHER') return 1;
             if (a.code !== 'OTHER' && b.code === 'OTHER') return -1;
             return 0; // Keep original order for others
@@ -415,7 +415,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
               {(() => {
                 const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
                   const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-                  return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+                  return uploadedMappedDoc?.code === 'ALL' && doc.isUploaded;
                 });
 
                 if (validation.isValid && isAllDocumentUploaded) {
@@ -434,7 +434,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         {!isUploadDisabled &&
           uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+            return uploadedMappedDoc?.code === 'ALL' && doc.isUploaded;
           }) && (
             <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md w-full">
               <CheckCircle className="h-4 w-4 text-blue-600" />
@@ -448,11 +448,11 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
         {!isUploadDisabled &&
           uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code !== 'AD' && doc.isUploaded;
+            return uploadedMappedDoc?.code !== 'ALL' && doc.isUploaded;
           }) &&
           !uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+            return uploadedMappedDoc?.code === 'ALL' && doc.isUploaded;
           }) && (
             <div className="flex items-center gap-2 mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md w-full">
               <AlertCircle className="h-4 w-4 text-orange-600" />
@@ -470,15 +470,15 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           // Use the code from the sorted documentsToRender array
           const docCode = docType.code;
 
-          // Check if All Documents (code 'AD') is uploaded successfully
+          // Check if All Documents (code 'ALL') is uploaded successfully
           const isAllDocumentUploaded = uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code === 'AD' && doc.isUploaded;
+            return uploadedMappedDoc?.code === 'ALL' && doc.isUploaded;
           });
           // Check if any other document (not AD) is uploaded
           const isAnyOtherDocumentUploaded = uploadedDocuments.some((doc) => {
             const uploadedMappedDoc = mappedDocuments.find((mapped) => mapped.document_id === doc.documentTypeId);
-            return uploadedMappedDoc?.code !== 'AD' && doc.isUploaded;
+            return uploadedMappedDoc?.code !== 'ALL' && doc.isUploaded;
           });
 
           // Disable logic:
@@ -488,7 +488,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
           const isDisabled =
             isUploadDisabled ||
             (isAllDocumentUploaded && docCode !== 'OTHER') ||
-            (isAnyOtherDocumentUploaded && docCode === 'AD');
+            (isAnyOtherDocumentUploaded && docCode === 'ALL');
 
           return (
             <div
@@ -517,9 +517,9 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                       : 'bg-background border-gray-300 cursor-pointer hover:border-blue-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
                   }`}
                   title={
-                    isAllDocumentUploaded && docCode !== 'OTHER' && docCode !== 'AD'
+                    isAllDocumentUploaded && docCode !== 'OTHER' && docCode !== 'ALL'
                       ? 'This document type is disabled because All Documents (AD) has been uploaded'
-                      : isAnyOtherDocumentUploaded && docCode === 'AD'
+                      : isAnyOtherDocumentUploaded && docCode === 'ALL'
                         ? 'All Documents (AD) is disabled because individual documents have been uploaded'
                         : undefined
                   }
