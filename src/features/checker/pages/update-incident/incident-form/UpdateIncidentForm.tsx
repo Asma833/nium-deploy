@@ -471,6 +471,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   ...updateFormIncidentConfig.checkFeedInput.comment,
                   control,
                   errors,
+                  required:isRejected,
                   name: 'fields.comment',
                   onInputChange: (value: string) => {
                     // Clear validation errors when user starts typing
