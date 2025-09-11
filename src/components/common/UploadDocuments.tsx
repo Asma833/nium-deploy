@@ -45,7 +45,7 @@ interface UploadDocumentsProps {
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
 const FILE_SIZE = {
   OTHER_DOC_MAX: 1 * 1024 * 1024,
-  ALL_DOC_MAX: 1 * 1024 * 1024,
+  ALL_DOC_MAX: 4 * 1024 * 1024,
 };
 
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
