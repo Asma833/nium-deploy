@@ -45,7 +45,7 @@ interface UploadDocumentsProps {
 const ALLOWED_FILE_TYPES = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
 const FILE_SIZE = {
   OTHER_DOC_MAX: 1 * 1024 * 1024,
-  ALL_DOC_MAX: 5 * 1024 * 1024,
+  ALL_DOC_MAX: 1 * 1024 * 1024,
 };
 
 export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
@@ -419,7 +419,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
                 });
 
                 if (validation.isValid && isAllDocumentUploaded) {
-                  return 'All Documents (AD) uploaded - validation complete';
+                  return 'All Documents (ALL) uploaded - validation complete';
                 } else if (validation.isValid) {
                   return `All required documents uploaded (${validation.uploaded}/${validation.total})`;
                 } else {
@@ -439,7 +439,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
             <div className="flex items-center gap-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md w-full">
               <CheckCircle className="h-4 w-4 text-blue-600" />
               <span className="text-sm text-blue-700">
-                All Documents (AD) uploaded successfully. Only "OTHER" document type remains available for upload.
+                All Documents (ALL) uploaded successfully. Only "OTHER" document type remains available for upload.
               </span>
             </div>
           )}
@@ -457,7 +457,7 @@ export const UploadDocuments: React.FC<UploadDocumentsProps> = ({
             <div className="flex items-center gap-2 mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md w-full">
               <AlertCircle className="h-4 w-4 text-orange-600" />
               <span className="text-sm text-orange-700">
-                Individual documents uploaded. "All Documents (AD)" option is now disabled.
+                Individual documents uploaded. "All Documents (ALL)" option is now disabled.
               </span>
             </div>
           )}
