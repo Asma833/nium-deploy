@@ -423,16 +423,6 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   VKYC Document
                 </Button>
               )}
-            {vkycVideoFiles && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
-              <Button
-                type="button"
-                onClick={() => handleDownloadDocument('vkycVideo')}
-                disabled={!vkycVideoFiles}
-                className="disabled:opacity-60"
-              >
-                VKYC Customer Video
-              </Button>
-            )}
             {agentVkycVideo && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
@@ -440,7 +430,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 disabled={!agentVkycVideo}
                 className="disabled:opacity-60"
               >
-                VKYC Agent Video
+                VKYC Video
               </Button>
             )}
           </FormFieldRow>
