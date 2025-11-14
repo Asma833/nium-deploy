@@ -3,6 +3,7 @@ import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import { formatDate } from '@/utils/dateFormat';
+import { maskPAN } from '@/utils/masking';
 
 export const GetTransactionTableColumns = (
   openModal: (value: string) => void,
@@ -36,6 +37,7 @@ export const GetTransactionTableColumns = (
     id: 'customer_pan',
     name: 'Customer PAN',
     className: 'min-w-0',
+    cell: (value: string) => maskPAN(value),
   },
   {
     key: 'transaction_type',

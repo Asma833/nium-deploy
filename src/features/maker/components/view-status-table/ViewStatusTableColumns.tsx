@@ -10,6 +10,7 @@ import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell
 import { ESIGN_STATUSES } from '@/features/checker/types/esignStatus';
 import { ORDER_STATUSES } from '@/components/types/status';
 import { ACTION_NEEDED_VKYC_STATUSES, DISABLED_VKYC_STATUSES } from '@/features/checker/types/vkycStatus';
+import { maskPAN } from '@/utils/masking';
 
 export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink,
@@ -59,6 +60,7 @@ export const ViewStatusTableColumns = ({
       id: 'customer_pan',
       name: 'Applicant PAN No',
       className: 'min-w-0 p-2',
+      cell: (value: string) => maskPAN(value),
     },
     {
       key: 'transaction_type_name.name',

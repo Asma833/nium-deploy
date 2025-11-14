@@ -2,6 +2,7 @@ import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import { formatDate } from '@/utils/dateFormat';
+import { maskPAN } from '@/utils/masking';
 
 export const GetAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void,
@@ -47,6 +48,7 @@ export const GetAssignCreationColumns = (
     key: 'customer_pan',
     id: 'customer_pan',
     name: 'Customer PAN',
+    cell: (value: string) => maskPAN(value),
   },
   {
     key: 'transaction_type_name',

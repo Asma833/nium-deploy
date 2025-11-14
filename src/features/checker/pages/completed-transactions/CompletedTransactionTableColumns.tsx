@@ -4,6 +4,7 @@ import EsignStatusCell from '../../components/table/EsignStatusCell';
 import NiumOrderID from '../../components/table/NiumOrderIdCell';
 import OrderStatusCell from '../../components/table/OrderStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { maskPAN } from '@/utils/masking';
 
 export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
@@ -31,6 +32,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     id: 'customer_pan',
     name: 'Customer PAN',
     className: 'min-w-0',
+    cell: (value: string) => maskPAN(value),
   },
   {
     key: 'transaction_type_name',
