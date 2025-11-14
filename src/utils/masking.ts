@@ -15,7 +15,7 @@ export const maskPAN = (pan: string): string => {
   
   const lastFourDigits = pan.slice(-4);
   const maskedLength = pan.length - 4;
-  const maskedPart = 'x'.repeat(maskedLength);
+  const maskedPart = 'X'.repeat(maskedLength);
   
   return `${maskedPart}${lastFourDigits}`;
 };
