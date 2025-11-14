@@ -48,6 +48,7 @@ import { transformFormDataToApiRequest, transformFormDataToUpdateRequest } from 
 import { cn } from '@/utils/cn';
 import useTransactionData from '../../hooks/useTransactionData';
 import handleViewDocument from '../../utils/handleViewDocument';
+import { maskPAN } from '@/utils/masking';
 
 // Constants
 const FIELD_WRAPPER_BASE_STYLE = 'mb-5';
@@ -283,7 +284,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       const formValues: Partial<TransactionFormData> = {
         applicantDetails: {
           applicantName: selectedRowTransactionData.customer_name || '',
-          applicantPanNumber: selectedRowTransactionData.customer_pan || '',
+          applicantPanNumber: maskPAN(selectedRowTransactionData.customer_pan || ''),
           email: selectedRowTransactionData.customer_email || '',
           mobileNumber: selectedRowTransactionData.customer_phone || '',
           partnerOrderId: selectedRowTransactionData.partner_order_id || '',

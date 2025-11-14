@@ -21,6 +21,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheckerOrdersByPartnerId';
 import { IncidentPageId } from '@/types/enums';
+import { maskPAN } from '@/utils/masking';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
@@ -341,6 +342,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               .slice(1, 5)
               .map(([name, field]) => {
                 const hasError = !!errors[name as keyof typeof errors];
+                // Mask PAN if this is the customer_pan field
+                const fieldValue = rowData?.[field.name as keyof typeof rowData];
+                const displayValue = field.name === 'customer_pan' && fieldValue
+                  ? maskPAN(fieldValue as string)
+                  : fieldValue;
+                
                 return (
                   <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
@@ -349,7 +356,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue: rowData?.[field.name as keyof typeof rowData],
+                      forcedValue: displayValue,
                     })}
                   </FieldWrapper>
                 );
