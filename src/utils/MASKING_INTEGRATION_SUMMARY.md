@@ -113,21 +113,21 @@ This document summarizes the integration of the masking utility across the Nium 
 }
 ```
 
-### For Admin Validation (Future Implementation)
+### For Admin Validation (Implemented in Schema)
 ```typescript
-import { validateAdminEmail, ALLOWED_ADMIN_DOMAINS } from '@/utils/masking';
+// In user-form.schema.ts
+import { ALLOWED_ADMIN_DOMAINS } from '@/utils/masking';
 
-// In user creation form
-const handleSubmit = (formData) => {
-  if (formData.role === 'NIUM_CHECKER' || formData.role === 'SUPER_ADMIN') {
-    const validation = validateAdminEmail(formData.email);
-    if (!validation.isValid) {
-      setError('email', validation.error);
-      return;
-    }
-  }
-  // Proceed with user creation
-};
+export const userSchema = z.object({
+  email: z
+    .string()
+    .email('Invalid email format')
+    .refine((email) => {
+      const domain = email.split('@')[1]?.toLowerCase();
+      return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
+    }, `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`),
+  // ... other fields
+});
 ```
 
 ## Benefits
@@ -139,10 +139,10 @@ const handleSubmit = (formData) => {
 5. **Flexibility**: Easy to add new masking types or modify existing ones
 6. **Role Protection**: Prevents unauthorized role assignments
 
-## Next Steps (Recommendations)
+## Completed Features
 
-1. **Form Validation**: Integrate `validateAdminEmail()` in user creation/update forms
-2. **Backend Validation**: Ensure backend also validates admin email domains
+1. ✅ **Form Validation**: Integrated email domain validation in user creation schema
+2. **Backend Validation**: Ensure backend also validates admin email domains (recommended)
 3. **Audit Logging**: Log attempts to assign admin roles to non-approved domains
 4. **Testing**: Add unit tests for masking functions
 5. **Documentation**: Update API documentation with masking requirements
@@ -154,8 +154,10 @@ const handleSubmit = (formData) => {
 - [ ] Test with various PAN formats
 - [ ] Test with various email formats (short, long, special characters)
 - [ ] Verify masking doesn't break table sorting/filtering
-- [ ] Test admin email validation (when implemented in forms)
-- [ ] Verify allowed domains list is correct
+- [x] Test admin email validation in user creation form
+- [x] Verify allowed domains list is correct
+- [ ] Test with non-allowed domains (should show error)
+- [ ] Test with allowed domains (should pass validation)
 
 ## Support
 

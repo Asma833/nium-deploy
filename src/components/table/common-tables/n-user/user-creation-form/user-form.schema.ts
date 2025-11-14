@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ALLOWED_ADMIN_DOMAINS } from '@/utils/masking';
 
 export const userSchema = z
   .object({
@@ -13,7 +14,12 @@ export const userSchema = z
       // Check for invalid characters or trailing commas
       .refine((email) => {
         return !email.includes(',');
-      }, 'Email address cannot contain commas'),
+      }, 'Email address cannot contain commas')
+      // Check for allowed admin domains (for checker/maker roles)
+      .refine((email) => {
+        const domain = email.split('@')[1]?.toLowerCase();
+        return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
+      }, `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`),
     password: z
       .string()
       .min(1, 'Password is required')
