@@ -286,7 +286,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           applicantName: selectedRowTransactionData.customer_name || '',
           applicantPanNumber: maskPAN(selectedRowTransactionData.customer_pan || ''),
           email: maskEmail(selectedRowTransactionData.customer_email || ''),
-          mobileNumber: `+ 91 ${maskMobile(selectedRowTransactionData.customer_phone || '')}`,
+          mobileNumber: maskMobile(selectedRowTransactionData.customer_phone || ''),
           partnerOrderId: selectedRowTransactionData.partner_order_id || '',
           isVKycRequired: selectedRowTransactionData.is_v_kyc_required || false,
           transactionType: selectedRowTransactionData.transaction_type_name?.name || '',
