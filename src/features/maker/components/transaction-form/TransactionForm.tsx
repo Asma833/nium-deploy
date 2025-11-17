@@ -48,7 +48,7 @@ import { transformFormDataToApiRequest, transformFormDataToUpdateRequest } from 
 import { cn } from '@/utils/cn';
 import useTransactionData from '../../hooks/useTransactionData';
 import handleViewDocument from '../../utils/handleViewDocument';
-import { maskPAN, maskMobile } from '@/utils/masking';
+import { maskPAN, maskMobile, maskEmail } from '@/utils/masking';
 
 // Constants
 const FIELD_WRAPPER_BASE_STYLE = 'mb-5';
@@ -285,8 +285,8 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         applicantDetails: {
           applicantName: selectedRowTransactionData.customer_name || '',
           applicantPanNumber: maskPAN(selectedRowTransactionData.customer_pan || ''),
-          email: selectedRowTransactionData.customer_email || '',
-          mobileNumber: maskMobile(selectedRowTransactionData.customer_phone || ''),
+          email: maskEmail(selectedRowTransactionData.customer_email || ''),
+          mobileNumber: `+ 91 ${maskMobile(selectedRowTransactionData.customer_phone || '')}`,
           partnerOrderId: selectedRowTransactionData.partner_order_id || '',
           isVKycRequired: selectedRowTransactionData.is_v_kyc_required || false,
           transactionType: selectedRowTransactionData.transaction_type_name?.name || '',

@@ -49,7 +49,7 @@ export const maskMobile = (mobile: string): string => {
       
       const lastFourDigits = remainingNumber.slice(-4);
       const maskedLength = remainingNumber.length - 4;
-      const maskedPart = '*'.repeat(maskedLength);
+      const maskedPart = 'X'.repeat(maskedLength);
       
       return `${countryCode} ${maskedPart}${lastFourDigits}`;
     }
@@ -62,7 +62,7 @@ export const maskMobile = (mobile: string): string => {
   
   const lastFourDigits = cleanMobile.slice(-4);
   const maskedLength = cleanMobile.length - 4;
-  const maskedPart = '*'.repeat(maskedLength);
+  const maskedPart = 'X'.repeat(maskedLength);
   
   return `${maskedPart}${lastFourDigits}`;
 };

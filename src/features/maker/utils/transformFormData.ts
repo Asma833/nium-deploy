@@ -4,6 +4,13 @@ import { CreateTransactionRequest } from '../types/create-transaction.types';
 import { PartialUpdateOrderRequest } from '../types/update-order.types';
 
 /**
+ * Helper function to clean mobile number by removing +91 prefix and spaces
+ */
+const cleanMobileNumber = (mobileNumber: string): string => {
+  return mobileNumber.replace(/^\+91\s*/, '').trim();
+};
+
+/**
  * Transform form data to API request format
  */
 export const transformFormDataToApiRequest = (
@@ -21,7 +28,7 @@ export const transformFormDataToApiRequest = (
     purpose_type_id: watchedPurposeTypeDocId || '',
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
-    customer_phone: formData.applicantDetails.mobileNumber || '',
+    customer_phone: cleanMobileNumber(formData.applicantDetails.mobileNumber || ''),
     customer_pan: formData.applicantDetails.applicantPanNumber || '',
     paid_by: formData.applicantDetails.paidBy || '',
   };
@@ -51,7 +58,7 @@ export const transformFormDataToUpdateRequest = (
     is_v_kyc_required: formData.applicantDetails.isVKycRequired || false,
     customer_name: formData.applicantDetails.applicantName || '',
     customer_email: formData.applicantDetails.email || '',
-    customer_phone: formData.applicantDetails.mobileNumber || '',
+    customer_phone: cleanMobileNumber(formData.applicantDetails.mobileNumber || ''),
     customer_pan: formData.applicantDetails.applicantPanNumber || '',
     updated_by: currentUserId,
   };
