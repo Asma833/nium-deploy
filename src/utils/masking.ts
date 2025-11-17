@@ -1,12 +1,12 @@
 /**
  * Common utility for data masking and validation
- * Provides functions for masking PAN, email addresses, and validating admin domains
+ * Provides functions for masking PAN, email addresses, mobile numbers, and validating admin domains
  */
 
 /**
  * Mask PAN number showing only last 4 digits
  * @param pan - The PAN number to mask
- * @returns Masked PAN (e.g., "****5678")
+ * @returns Masked PAN (e.g., "XXXXXX5678")
  */
 export const maskPAN = (pan: string): string => {
   if (!pan || pan.length < 4) {
@@ -16,6 +16,53 @@ export const maskPAN = (pan: string): string => {
   const lastFourDigits = pan.slice(-4);
   const maskedLength = pan.length - 4;
   const maskedPart = 'X'.repeat(maskedLength);
+  
+  return `${maskedPart}${lastFourDigits}`;
+};
+
+/**
+ * Mask mobile number showing country code and only last 4 digits
+ * @param mobile - The mobile number to mask (with or without country code)
+ * @returns Masked mobile (e.g., "+91 ******1234" or "******1234")
+ */
+export const maskMobile = (mobile: string): string => {
+  if (!mobile) {
+    return '';
+  }
+  
+  // Remove any spaces, hyphens, or parentheses for processing
+  const cleanMobile = mobile.replace(/[\s\-()]/g, '');
+  
+  // Check if it starts with + (country code)
+  const hasCountryCode = cleanMobile.startsWith('+');
+  
+  if (hasCountryCode) {
+    // Extract country code (assuming it's 1-3 digits after +)
+    const countryCodeMatch = cleanMobile.match(/^\+(\d{1,3})/);
+    if (countryCodeMatch) {
+      const countryCode = countryCodeMatch[0]; // e.g., "+91"
+      const remainingNumber = cleanMobile.substring(countryCode.length);
+      
+      if (remainingNumber.length < 4) {
+        return mobile; // Return as is if too short
+      }
+      
+      const lastFourDigits = remainingNumber.slice(-4);
+      const maskedLength = remainingNumber.length - 4;
+      const maskedPart = '*'.repeat(maskedLength);
+      
+      return `${countryCode} ${maskedPart}${lastFourDigits}`;
+    }
+  }
+  
+  // No country code - just mask showing last 4 digits
+  if (cleanMobile.length < 4) {
+    return mobile;
+  }
+  
+  const lastFourDigits = cleanMobile.slice(-4);
+  const maskedLength = cleanMobile.length - 4;
+  const maskedPart = '*'.repeat(maskedLength);
   
   return `${maskedPart}${lastFourDigits}`;
 };
@@ -123,10 +170,10 @@ export const isExternalEmail = (email: string): boolean => {
 /**
  * Comprehensive masking function that automatically detects data type
  * @param value - The value to mask
- * @param type - Type of data ('pan' | 'email' | 'auto')
+ * @param type - Type of data ('pan' | 'email' | 'mobile' | 'auto')
  * @returns Masked value
  */
-export const maskData = (value: string, type: 'pan' | 'email' | 'auto' = 'auto'): string => {
+export const maskData = (value: string, type: 'pan' | 'email' | 'mobile' | 'auto' = 'auto'): string => {
   if (!value) return value || '';
   
   switch (type) {
@@ -134,6 +181,8 @@ export const maskData = (value: string, type: 'pan' | 'email' | 'auto' = 'auto')
       return maskPAN(value);
     case 'email':
       return maskEmail(value);
+    case 'mobile':
+      return maskMobile(value);
     case 'auto':
     default:
       // Auto-detect based on content
@@ -142,6 +191,9 @@ export const maskData = (value: string, type: 'pan' | 'email' | 'auto' = 'auto')
       } else if (/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(value)) {
         // Basic PAN pattern check
         return maskPAN(value);
+      } else if (/^\+?\d+$/.test(value.replace(/[\s\-()]/g, ''))) {
+        // Looks like a phone number
+        return maskMobile(value);
       }
       return value;
   }
@@ -150,6 +202,7 @@ export const maskData = (value: string, type: 'pan' | 'email' | 'auto' = 'auto')
 export default {
   maskPAN,
   maskEmail,
+  maskMobile,
   maskData,
   isAllowedAdminDomain,
   validateAdminEmail,
