@@ -1,5 +1,4 @@
-import { SignLinkButton } from '@/components/common/SignLinkButton';
-import { DISABLED_ESIGN_STATUSES, DISABLED_ORDER_STATUSES, EsignStatus } from '@/components/types/status';
+import TooltipActionButton from '@/components/common/TooltipActionButton';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -8,25 +7,16 @@ import TransactionType from '@/features/checker/components/table/TransactionType
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
+import { RefreshCcwDot, Upload } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
-  handleRegenerateEsignLink,
-  handleRegenerateVkycLink,
   openModal,
-  isSendVkycLinkLoading = false,
-  isSendEsignLinkLoading = false,
-  loadingOrderId = null,
+  handleEkycStatus
 }: {
-  handleRegenerateEsignLink: (rowData: any) => void;
-  handleRegenerateVkycLink: (rowData: any) => void;
   openModal: (rowData: any) => void;
-  isSendEsignLinkLoading?: boolean;
-  isSendVkycLinkLoading?: boolean;
-  loadingOrderId?: string | null;
+  handleEkycStatus: (rowData: any) => void;
 }) => {
-  const isLinkDisabled = (link: string | null | undefined, status: string | undefined): boolean => {
-    return !link || DISABLED_ESIGN_STATUSES.includes(status as EsignStatus);
-  };
+ 
   return [
     {
       key: 'nium_order_id',
@@ -116,6 +106,23 @@ export const GetTransactionTableColumns = ({
       cell: (_: unknown, rowData: { incident_completion_date?: string }) => (
         <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
       ),
+    },
+     {
+      key: 'Action',
+      id: 'Action',
+      name: 'Action',
+      className: 'min-w-0',
+       cell: (_: unknown, rowData: any) => (
+        <TooltipActionButton
+            icon={
+            <RefreshCcwDot size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400"/>
+            }
+            tooltipText="Get EKYC Status"
+            variant="upload"
+            onClick={() => handleEkycStatus(rowData)}
+            className="group"
+          />
+       )
     },
   ];
 };

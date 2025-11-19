@@ -133,6 +133,10 @@ export const API = {
     DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,
     UPDATE_MAPPING_DOCUMENT: `/trans-purpose-document`,
   },
+  IDFY_STATUS:{
+   GET_EKYC_STATUS:(id: string) => `/ekyc/update-esign-status?order_id=${id}`,
+   GET_VKYC_STATUS:(id: string) => `/videokyc/update-vkyc-status?order_id=${id}`
+  }
 } as const;
 
 /**

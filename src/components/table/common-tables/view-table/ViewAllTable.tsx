@@ -5,15 +5,14 @@ import { Button } from '@/components/ui/button';
 import { API } from '@/core/constant/apis';
 import { GetTransactionTableColumns } from './ViewAllTableColumns';
 import { exportToCSV } from '@/utils/exportUtils';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
 import { Order, Orders } from '@/features/checker/types/updateIncident.types';
 import UpdateIncidentDialog from '@/features/checker/components/update-incident-dialog/UpdateIncidentDialog';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { ViewAllTableProps } from '@/components/types/common-components.types';
-import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId } from '@/types/enums';
+import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -22,52 +21,38 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   refreshData,
   disableColumns,
 }) => {
-  const [loadingOrderId, setLoadingOrderId] = useState<string>('');
-  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
   const [selectedRowData, setSelectedRowData] = useState<Orders>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filteredData, setFilteredData] = useState<Order[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>('');
+  const [localTableData, setLocalTableData] = useState<Order[]>([]);
 
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
-  const handleRegenerateEsignLink = (rowData: Order): void => {
-    if (rowData.nium_order_id) {
-      setLoadingOrderId(rowData.nium_order_id);
+  const { data: ekycStatus, isLoading: isEkycLoading, error: ekycError} = useGetEKYCStatus(selectedOrderId, !!selectedOrderId);
+
+  // Sync local table data with prop
+  useEffect(() => {
+    setLocalTableData(tableData);
+  }, [tableData]);
+
+  // Update local table data when ekycStatus is fetched
+  useEffect(() => {
+    if (ekycStatus && selectedOrderId) {
+      setLocalTableData(prevData =>
+        prevData.map(row =>
+          row.partner_order_id === selectedOrderId
+            ? {
+                ...row,
+                e_sign_status: ekycStatus.status,
+                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date
+              }
+            : row
+        )
+      );
     }
-    sendEsignLink(
-      { partner_order_id: rowData.partner_order_id || '' },
-      {
-        onSuccess: () => {
-          setLoadingOrderId('');
-          // Explicitly refresh the data after successful e-sign link generation
-          refreshData();
-        },
-        onError: () => {
-          setLoadingOrderId('');
-        },
-      }
-    );
-  };
-  const handleRegenerateVkycLink = (rowData: Order): void => {
-    if (rowData.nium_order_id) {
-      setLoadingOrderId(rowData.nium_order_id);
-    }
-    sendVkycLink(
-      { partner_order_id: rowData.partner_order_id || '' },
-      {
-        onSuccess: () => {
-          setLoadingOrderId('');
-          // Explicitly refresh the data after successful VKYC link generation
-          refreshData();
-        },
-        onError: () => {
-          setLoadingOrderId('');
-        },
-      }
-    );
-  };
+  }, [ekycStatus, selectedOrderId]);
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
@@ -126,7 +111,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
     const dataToExport =
       filteredData.length > 0
         ? filteredData.map((item) => transformOrderForTable(item))
-        : tableData.map((item) => transformOrderForTable(item)) || [];
+        : localTableData.map((item) => transformOrderForTable(item)) || [];
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -139,17 +124,16 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Check for loading and error states
   const isLoading = checkerOrdersLoading || pagination.loading;
   const hasError = checkerOrdersError || pagination.error;
-  // const isLoading =
-  //   checkerOrdersLoading || filterApi.loading || pagination.loading;
-  // const hasError = checkerOrdersError || filterApi.error || pagination.error;
-
+  const handleEkycStatus = (rowData: Order) => {
+    const orderId = rowData.partner_order_id;
+    if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
+      setSelectedOrderId(orderId);
+      // The query will automatically refetch when selectedOrderId changes due to enabled: !!selectedOrderId
+    }
+  };
   const columns = GetTransactionTableColumns({
-    handleRegenerateEsignLink,
-    isSendEsignLinkLoading,
-    isSendVkycLinkLoading,
-    handleRegenerateVkycLink,
-    loadingOrderId,
     openModal,
+    handleEkycStatus
   });
 
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));
@@ -163,7 +147,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       {' '}
       <DynamicTable
         columns={tableColumns}
-        data={tableData}
+        data={localTableData}
         loading={isLoading}
         refreshAction={{
           isRefreshButtonVisible: true,
