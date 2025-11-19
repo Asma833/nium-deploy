@@ -1,4 +1,5 @@
-import TooltipActionButton from '@/components/common/TooltipActionButton';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -7,14 +8,16 @@ import TransactionType from '@/features/checker/components/table/TransactionType
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
-import { RefreshCcwDot, Upload } from 'lucide-react';
+import { RefreshCcwDot } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
   openModal,
-  handleEkycStatus
+  handleEkycStatus,
+  handleVkycStatus
 }: {
   openModal: (rowData: any) => void;
   handleEkycStatus: (rowData: any) => void;
+  handleVkycStatus: (rowData: any) => void;
 }) => {
  
   return [
@@ -113,15 +116,36 @@ export const GetTransactionTableColumns = ({
       name: 'Action',
       className: 'min-w-0',
        cell: (_: unknown, rowData: any) => (
-        <TooltipActionButton
-            icon={
-            <RefreshCcwDot size={16} className="text-primary group-hover:text-white group-disabled:text-gray-400"/>
-            }
-            tooltipText="Get EKYC Status"
-            variant="upload"
+        <div className='flex flex-row gap-2'>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="sm" 
+            variant="outline" 
+            type="button" 
+            className="disabled:bg-gray-300"
             onClick={() => handleEkycStatus(rowData)}
-            className="group"
-          />
+            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}>
+              E-SIGN <RefreshCcwDot size={16} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Get E-Sign Status</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              type="button"
+              className="disabled:bg-gray-300"
+              disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+              onClick={() => handleVkycStatus(rowData)}
+            >
+              VKYC <RefreshCcwDot size={16} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Get VKYC Status</TooltipContent>
+        </Tooltip>
+        </div>
        )
     },
   ];

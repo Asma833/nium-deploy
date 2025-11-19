@@ -13,6 +13,7 @@ import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId } from '@/types/enums';
 import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
+import { useGetVKYCStatus } from '@/hooks/useGetVKYCStatus';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -31,7 +32,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
   const { data: ekycStatus, isLoading: isEkycLoading, error: ekycError} = useGetEKYCStatus(selectedOrderId, !!selectedOrderId);
-
+  const { data: vkycStatus, isLoading: isVkycLoading, error: vkycError} = useGetVKYCStatus(selectedOrderId, !!selectedOrderId);
   // Sync local table data with prop
   useEffect(() => {
     setLocalTableData(tableData);
@@ -53,6 +54,23 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       );
     }
   }, [ekycStatus, selectedOrderId]);
+
+  // Update local table data when vkycStatus is fetched
+  useEffect(() => {
+    if (vkycStatus && selectedOrderId) {
+      setLocalTableData(prevData =>
+        prevData.map(row =>
+          row.partner_order_id === selectedOrderId
+            ? {
+                ...row,
+                v_kyc_status: vkycStatus.status,
+                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date
+              }
+            : row
+        )
+      );
+    }
+  }, [vkycStatus, selectedOrderId]);
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
@@ -131,9 +149,17 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       // The query will automatically refetch when selectedOrderId changes due to enabled: !!selectedOrderId
     }
   };
+    const handleVkycStatus = (rowData: Order) => {
+    const orderId = rowData.partner_order_id;
+    if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
+      setSelectedOrderId(orderId);
+      // The query will automatically refetch when selectedOrderId changes due to enabled: !!selectedOrderId
+    }
+  };
   const columns = GetTransactionTableColumns({
     openModal,
-    handleEkycStatus
+    handleEkycStatus,
+    handleVkycStatus
   });
 
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));
