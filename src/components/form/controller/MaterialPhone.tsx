@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { TextField, InputAdornment } from '@mui/material';
+import { useState } from 'react';
 
 interface MaterialPhoneProps {
   name: string;
@@ -21,6 +22,7 @@ export const MaterialPhone = ({
   required = false,
 }: MaterialPhoneProps) => {
   const { control } = useFormContext();
+  const [hasBeenFocused, setHasBeenFocused] = useState(false);
 
   return (
     <Controller
@@ -38,6 +40,7 @@ export const MaterialPhone = ({
             const limitedValue = numericValue.slice(0, 10);
             onChange(limitedValue);
           }}
+          onFocus={() => setHasBeenFocused(true)}
           disabled={disabled}
           type="tel"
           label={label}
@@ -47,6 +50,13 @@ export const MaterialPhone = ({
           required={required}
           className={className ?? ''}
           placeholder="Enter phone number"
+          InputProps={{
+            startAdornment: (forcedValue ? forcedValue : value) ? (
+              <InputAdornment position="start">
+                <span style={{ color: '#666', fontSize: '14px' }}>+91</span>
+              </InputAdornment>
+            ) : null,
+          }}
           inputProps={{
             maxLength: 10, // Limit to 10 digits
           }}
