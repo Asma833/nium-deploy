@@ -8,7 +8,7 @@ interface TooltipActionButtonProps {
   icon: ReactNode;
   tooltipText: string;
   disabled?: boolean;
-  variant?: 'edit' | 'view' | 'delete' | 'upload' | 'default';
+  variant?: 'edit' | 'view' | 'delete' | 'upload' | 'default' | 'esign' | 'vkyc';
   size?: 'sm' | 'default' | 'lg';
   className?: string;
 }

@@ -1,11 +1,11 @@
 import { API, HEADER_KEYS } from '@/core/constant/apis';
 import axiosInstance from '@/core/services/axios/axiosInstance';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-export const useGetEKYCStatus = (orderId: string, enabled: boolean = true) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['ekycStatus', orderId],
-    queryFn: async () => {
+export const useGetEKYCStatus = () => {
+  const mutation = useMutation({
+    mutationFn: async (orderId: string) => {
       const response = await axiosInstance.get(API.IDFY_STATUS.GET_EKYC_STATUS(orderId), {
         headers: {
           partner_id: HEADER_KEYS.PARTNER_ID,
@@ -14,12 +14,21 @@ export const useGetEKYCStatus = (orderId: string, enabled: boolean = true) => {
       });
       return response.data;
     },
-    enabled: enabled && !!orderId,
+    onSuccess: (data) => {
+      if (data?.success) {
+        toast.success('E-Sign status retrieved successfully');
+      }
+    },
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.message || error?.message || 'Failed to retrieve E-Sign status';
+      toast.error(errorMessage);
+    },
   });
 
   return {
-    data,
-    isLoading,
-    error
+    data: mutation.data,
+    isLoading: mutation.isPending,
+    mutate: mutation.mutate,
+    refetch: mutation.mutate
   };
 };

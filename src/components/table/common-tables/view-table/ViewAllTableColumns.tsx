@@ -1,3 +1,4 @@
+import TooltipActionButton from '@/components/common/TooltipActionButton';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
@@ -8,7 +9,7 @@ import TransactionType from '@/features/checker/components/table/TransactionType
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
-import { RefreshCcwDot } from 'lucide-react';
+import { RefreshCcwDot, FileText, Video } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
   openModal,
@@ -117,34 +118,20 @@ export const GetTransactionTableColumns = ({
       className: 'min-w-0',
        cell: (_: unknown, rowData: any) => (
         <div className='flex flex-row gap-2'>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="sm" 
-            variant="outline" 
-            type="button" 
-            className="disabled:bg-gray-300"
+         <TooltipActionButton
             onClick={() => handleEkycStatus(rowData)}
-            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}>
-              E-SIGN <RefreshCcwDot size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Get E-Sign Status</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="sm"
-              variant="outline"
-              type="button"
-              className="disabled:bg-gray-300"
-              disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
-              onClick={() => handleVkycStatus(rowData)}
-            >
-              VKYC <RefreshCcwDot size={16} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Get VKYC Status</TooltipContent>
-        </Tooltip>
+            icon={<FileText size={16} />}
+            tooltipText="Get E-Sign Status"
+            variant="esign"
+            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}
+          />
+          <TooltipActionButton
+            onClick={() => handleVkycStatus(rowData)}
+            icon={<Video size={16} />}
+            tooltipText="Get VKYC Status"
+            variant="vkyc"
+            disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+          />    
         </div>
        )
     },

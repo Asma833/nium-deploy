@@ -31,8 +31,8 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
 
-  const { data: ekycStatus, isLoading: isEkycLoading, error: ekycError} = useGetEKYCStatus(selectedOrderId, !!selectedOrderId);
-  const { data: vkycStatus, isLoading: isVkycLoading, error: vkycError} = useGetVKYCStatus(selectedOrderId, !!selectedOrderId);
+  const { data: ekycStatus, isLoading: isEkycLoading, mutate: mutateEkyc } = useGetEKYCStatus();
+  const { data: vkycStatus, isLoading: isVkycLoading, mutate: mutateVkyc } = useGetVKYCStatus();
   // Sync local table data with prop
   useEffect(() => {
     setLocalTableData(tableData);
@@ -146,14 +146,16 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
     const orderId = rowData.partner_order_id;
     if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
       setSelectedOrderId(orderId);
-      // The query will automatically refetch when selectedOrderId changes due to enabled: !!selectedOrderId
+      // Trigger mutation to fetch E-Sign status
+      mutateEkyc(orderId);
     }
   };
     const handleVkycStatus = (rowData: Order) => {
     const orderId = rowData.partner_order_id;
     if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
       setSelectedOrderId(orderId);
-      // The query will automatically refetch when selectedOrderId changes due to enabled: !!selectedOrderId
+      // Trigger mutation to fetch VKYC status
+      mutateVkyc(orderId);
     }
   };
   const columns = GetTransactionTableColumns({
