@@ -1,10 +1,10 @@
-import useGetAllOrders from "@/features/admin/hooks/useGetAllOrders";
-import { TransactionOrderData } from "@/types/common.type";
-import { useMemo } from "react";
+import useGetMakerOrders from '@/features/admin/hooks/useGetMakerOrders';
+import { TransactionOrderData } from '@/types/common.type';
+import { useMemo } from 'react';
 
 // for transaction data management
 const useTransactionData = (partnerOrderId: string) => {
-  const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetAllOrders();
+  const { data: allTransactionsData = [], loading: isLoading, error, fetchData: refreshData } = useGetMakerOrders();
 
   const typedAllTransactionsData = useMemo(() => {
     if (!allTransactionsData) return [];
@@ -47,6 +47,7 @@ const useTransactionData = (partnerOrderId: string) => {
     refreshData,
     checkerComments: selectedRowTransactionData?.incident_checker_comments || '',
     orderStatus: selectedRowTransactionData?.order_status === 'completed',
+    viewStatus: selectedRowTransactionData?.order_status === 'rejected',
   };
 };
 

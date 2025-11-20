@@ -16,9 +16,10 @@ export const ROUTES = {
       CREATE_AGENT: '/user-management/agent-profile-creation/create-new-agent',
     },
     MASTER: {
-      RATE_MASTER: {
-        RATE_MARGIN: '/master/rate-margin',
-      },
+      PURPOSE_MASTER: '/master/purpose-master',
+      DOCUMENT_MASTER: '/master/purpose-master/document-mapping',
+      CREATE_PURPOSE_MASTER: '/master/purpose-master/add-purpose',
+      UPDATE_PURPOSE_MASTER: '/master/purpose-master/update/:id',
     },
     NUSER: '/users',
     MAKER: '/maker',

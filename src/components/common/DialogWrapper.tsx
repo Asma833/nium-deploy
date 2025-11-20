@@ -11,6 +11,7 @@ import {
 import { cn } from '@/utils/cn';
 import { Download, Loader2, PlusIcon, UploadIcon, X } from 'lucide-react';
 import { DialogWrapperProps } from '../types/common-components.types';
+import DialogCloseButton from './DialogCloseButton';
 
 type IconType = 'default' | 'upload' | 'download';
 
@@ -53,12 +54,7 @@ export function DialogWrapper({
       )}
 
       <DialogContent className={cn('sm:max-w-[80%] md:max-w-[50%] w-full max-h-[90%] overflow-auto', className)}>
-        <button
-          className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition"
-          onClick={() => setIsOpen(false)}
-        >
-          <X className="w-7 h-7 text-custom-primary hover:opacity-95 outline-none font-bold" />
-        </button>{' '}
+        <DialogCloseButton onClick={() => setIsOpen(false)} />
         {showHeader && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { CalendarDays, RefreshCw } from 'lucide-react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -27,6 +27,52 @@ const TableSearchFilter = ({
   const { search, dateRange, status, selects } = filterConfig.renderFilterOptions;
   const mode = filterConfig.mode || 'static';
   const callbacks = filterConfig.dynamicCallbacks;
+
+  // Sentinel for representing an originally empty option (Radix disallows value="")
+  const EMPTY_SENTINEL = '__EMPTY_OPTION__';
+
+  interface AugmentedOption {
+    value: string; // rendered value (never empty string)
+    label: string;
+    _key: string;
+    _originalValue?: string; // keeps original (could be empty string)
+    _isEmptySentinel?: boolean; // marks placeholder/clear option
+  }
+
+  const augmentOptions = (opts?: { value: string; label: string }[]): AugmentedOption[] => {
+    if (!opts) return [];
+    const counts: Record<string, number> = {};
+    let hadEmpty = false;
+    const processed: AugmentedOption[] = opts.map((opt, idx) => {
+      const originalValue = opt.value;
+      let safeValue = originalValue;
+      if (safeValue === '') {
+        safeValue = `${EMPTY_SENTINEL}`; // map to sentinel
+        hadEmpty = true;
+      }
+      const base = safeValue.toString();
+      counts[base] = (counts[base] || 0) + 1;
+      const _key = counts[base] > 1 ? `${base}__${counts[base]}` : base;
+      return {
+        value: safeValue,
+        label: opt.label,
+        _key,
+        _originalValue: originalValue,
+        _isEmptySentinel: originalValue === '',
+      };
+    });
+    // If there was an empty option we map it; keep its order (already included). Optionally could move to top.
+    return processed;
+  };
+
+  // Status options (never include invalid empty value directly)
+  const statusOptionsWithKeys: AugmentedOption[] = useMemo(() => augmentOptions(status?.options), [status?.options]);
+
+  // Each select's options with augmentation
+  const selectsWithKeys = useMemo(() => {
+    if (!selects) return [];
+    return selects.map((sel) => ({ ...sel, options: augmentOptions(sel.options) }));
+  }, [selects]);
 
   // Store filter values locally to avoid applying them immediately
   const [localDateRange, setLocalDateRange] = useState(filters.dateRange);
@@ -142,17 +188,20 @@ const TableSearchFilter = ({
 
   const handleStatusChange = useCallback(
     (value: string) => {
-      if (status?.options?.some((option) => option.value === value)) {
-        setLocalStatus(value);
+      // Translate sentinel back to empty string for internal state consistency
+      const translated = value === EMPTY_SENTINEL ? '' : value;
+      if (status?.options?.some((option) => option.value === translated || option.value === '')) {
+        setLocalStatus(translated);
       }
     },
     [status?.options]
   );
 
   const handleSelectChange = useCallback((id: string, value: string) => {
+    const translated = value === EMPTY_SENTINEL ? '' : value;
     setLocalCustomFilters((prev: typeof filters.customFilterValues) => ({
       ...prev,
-      [id]: value,
+      [id]: translated,
     }));
   }, []);
 
@@ -299,8 +348,8 @@ const TableSearchFilter = ({
                   <SelectValue placeholder={status.placeholder || `Select ${status.label}`} />
                 </SelectTrigger>
                 <SelectContent>
-                  {status.options.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                  {statusOptionsWithKeys.map((option) => (
+                    <SelectItem key={option._key} value={option.value}>
                       {option.label}
                     </SelectItem>
                   ))}
@@ -309,20 +358,24 @@ const TableSearchFilter = ({
             </div>
           )}
 
-          {selects &&
-            selects.map((select) => (
+          {selectsWithKeys &&
+            selectsWithKeys.map((select) => (
               <div key={select.id} className="flex items-start flex-col ">
                 <span className="text-sm whitespace-nowrap text-gray-500">{select.label}:</span>
                 <Select
-                  value={localCustomFilters[select.id] || ''}
+                  value={
+                    localCustomFilters[select.id] === ''
+                      ? (select.options as AugmentedOption[]).find((o) => o._isEmptySentinel)?.value || ''
+                      : localCustomFilters[select.id] || ''
+                  }
                   onValueChange={(value) => handleSelectChange(select.id, value)}
                 >
                   <SelectTrigger className="min-w-fit w-[180px] bg-[--filter-bg] text-[--filter-fg] border-none h-10">
                     <SelectValue placeholder={select.placeholder || `Select ${select.label}`} />
                   </SelectTrigger>
                   <SelectContent>
-                    {select.options.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                    {(select.options as AugmentedOption[]).map((option) => (
+                      <SelectItem key={option._key} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}

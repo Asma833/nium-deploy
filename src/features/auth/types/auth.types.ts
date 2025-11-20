@@ -1,4 +1,4 @@
-import { Role } from "@/types/enums";
+import { Role } from '@/types/enums';
 
 export type Permission = 'view_dashboard' | 'manage_agents' | 'view_transactions' | 'approve_transactions';
 

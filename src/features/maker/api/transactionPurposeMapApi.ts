@@ -47,14 +47,11 @@ export const createTransactionPurposeMap = (data: CreateTransactionPurposeMapReq
 };
 
 export const getMappedDocuments = (transactionTypeId: string) => {
-  return axiosInstance.get<GetMappedDocumentsResponse>(
-    API.TRANSACTION_PURPOSE_MAP.GET_DOCUMENTS(transactionTypeId),
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        api_key: HEADER_KEYS.API_KEY,
-        partner_id: HEADER_KEYS.PARTNER_ID,
-      },
-    }
-  );
+  return axiosInstance.get<GetMappedDocumentsResponse>(API.TRANSACTION_PURPOSE_MAP.GET_DOCUMENTS(transactionTypeId), {
+    headers: {
+      'Content-Type': 'application/json',
+      api_key: HEADER_KEYS.API_KEY,
+      partner_id: HEADER_KEYS.PARTNER_ID,
+    },
+  });
 };

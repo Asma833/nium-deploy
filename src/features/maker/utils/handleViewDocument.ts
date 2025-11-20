@@ -1,4 +1,3 @@
-
 // Utility functions
 const handleViewDocument = (docUrl: string | string[], docType: 'mergeDoc' | 'vkycDoc' | 'vkycVideo') => {
   if (docUrl && Array.isArray(docUrl)) {

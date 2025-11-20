@@ -23,15 +23,14 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
     mother: { label: 'Mother' },
     brother: { label: 'Brother' },
     sister: { label: 'Sister' },
+    husband: { label: 'Husband' },
+    wife: { label: 'Wife' },
   };
 
   // Set first option as selected if available
   if (transactionTypes.length > 0) {
     transactionOptions[transactionTypes[0].value].selected = true;
   }
-  // if (purposeTypes.length > 0) {
-  //   purposeTypes[purposeTypes[0].value].selected = true;
-  // }
 
   return {
     sectionTitle: 'Create Transaction',
@@ -47,17 +46,17 @@ export const getFormControllerMeta = (options: FormControllerMetaOptions = {}) =
         },
         applicantName: {
           name: 'applicantDetails.applicantName',
-          label: 'Applicant Name',
-          type: FieldType.Text,
-          required: true,
-          placeholder: 'Enter Applicant Name',
-        },
-        applicantPanNumber: {
-          name: 'applicantDetails.applicantPanNumber',
           label: 'Applicant Name As Per Aadhar',
           type: FieldType.Text,
           required: true,
           placeholder: 'Enter Applicant Name As Per Aadhar',
+        },
+        applicantPanNumber: {
+          name: 'applicantDetails.applicantPanNumber',
+          label: 'Applicant PAN Number',
+          type: FieldType.Text,
+          required: true,
+          placeholder: 'Enter Applicant PAN Number',
           uppercase: true,
         },
         transactionType: {

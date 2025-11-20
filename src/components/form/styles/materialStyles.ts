@@ -6,13 +6,15 @@ interface FieldWithStyleProps {
 export const baseGeneralFieldStyle = 'bg-transparent ';
 
 export const baseStyle = (field: FieldWithStyleProps) => {
-  const fieldHeight = field.height || '45px';
+  const fieldHeight = field.height || '';
 
   return {
     height: fieldHeight,
+    minHeight: '45px',
     color: 'hsl(var(--foreground))',
     '& .MuiInputBase-input': {
       height: fieldHeight,
+      minHeight: '45px',
       color: 'hsl(var(--foreground))',
       padding: '0 14px',
       '&.Mui-focused': {

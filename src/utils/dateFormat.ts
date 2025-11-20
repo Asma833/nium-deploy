@@ -23,9 +23,8 @@ export const formatDate = (dateStr?: string | null): string => {
     return dayjs(nativeDate).format('DD/MM/YYYY');
   }
 
-  return dateStr; 
+  return dateStr;
 };
-
 
 export const formatToDateString = (timestamp: Date | string): string => {
   const date = new Date(timestamp);

@@ -21,7 +21,10 @@ export const getController = (field: any) => {
     label: field.label,
     disabled: field.disabled,
     forcedValue: field.forcedValue,
+    className: field.className,
+    classNames: field.classNames,
     id: field.id,
+    required: field.required,
   };
 
   const styledProps = {
@@ -35,9 +38,12 @@ export const getController = (field: any) => {
       return (
         <MaterialText
           {...styledProps}
+          {...baseProps}
+          inputProps={field.inputProps}
           uppercase={field.uppercase}
           disabled={field.disabled}
           forcedValue={field.forcedValue}
+          required={field.required}
         />
       );
     case 'textarea':
@@ -81,6 +87,7 @@ export const getController = (field: any) => {
           helpText={field.helpText}
           accept={field.accept}
           multiple={field.maxFiles > 1}
+          viewFile={field.viewFile}
         />
       );
     case 'fileupload_with_button':
@@ -103,7 +110,15 @@ export const getController = (field: any) => {
         />
       );
     case 'select':
-      return <MaterialSelect {...baseProps} {...styledProps} options={field.options} placeholder={field.placeholder} />;
+      return (
+        <MaterialSelect
+          {...baseProps}
+          {...styledProps}
+          options={field.options}
+          placeholder={field.placeholder}
+          required={field.required}
+        />
+      );
     case 'date':
       return <MaterialDatePicker {...baseProps} {...styledProps} error={field.error} />;
     case 'radio':

@@ -112,3 +112,26 @@ export type UserFormConfig = {
   sectionTitle: string;
   fields: Fields;
 };
+
+export type NuserPayload = {
+  user_name: string;
+  first_name: string;
+  last_name: string;
+  mobile_number: string;
+  email: string;
+  password: string;
+  booking_type: string;
+  select_agent: string;
+  product_type: string;
+  hashed_key?: string;
+};
+
+export type AgentBranchUserPayload = {
+  agent_eon_code: string;
+  primary_agent_name: string;
+  primary_agent_email: string;
+  agent_branch_user_name: string;
+  agent_branch_user_email: string;
+  agent_branch_user_mobile: string;
+  role: boolean | string; // Role can be boolean or string based on your logic
+};

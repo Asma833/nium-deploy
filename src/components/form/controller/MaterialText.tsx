@@ -8,6 +8,7 @@ interface MaterialTextProps {
   name: string;
   label: string;
   baseStyle?: React.CSSProperties;
+  inputProps?: any;
   className?: string;
   uppercase?: boolean;
   disabled?: boolean;
@@ -21,6 +22,7 @@ export const MaterialText = ({
   name,
   label,
   baseStyle,
+  inputProps,
   className,
   uppercase,
   disabled = false,

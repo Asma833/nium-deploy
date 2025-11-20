@@ -1,5 +1,6 @@
-import { SignLinkButton } from '@/components/common/SignLinkButton';
-import { DISABLED_ESIGN_STATUSES, DISABLED_ORDER_STATUSES, EsignStatus } from '@/components/types/status';
+import TooltipActionButton from '@/components/common/TooltipActionButton';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -7,25 +8,19 @@ import PurposeType from '@/features/checker/components/table/PurposeType';
 import TransactionType from '@/features/checker/components/table/TransactionType';
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { maskPAN } from '@/utils/masking';
+import { RefreshCcwDot, FileText, Video } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
-  handleRegenerateEsignLink,
-  handleRegenerateVkycLink,
   openModal,
-  isSendVkycLinkLoading = false,
-  isSendEsignLinkLoading = false,
-  loadingOrderId = null,
+  handleEkycStatus,
+  handleVkycStatus
 }: {
-  handleRegenerateEsignLink: (rowData: any) => void;
-  handleRegenerateVkycLink: (rowData: any) => void;
   openModal: (rowData: any) => void;
-  isSendEsignLinkLoading?: boolean;
-  isSendVkycLinkLoading?: boolean;
-  loadingOrderId?: string | null;
+  handleEkycStatus: (rowData: any) => void;
+  handleVkycStatus: (rowData: any) => void;
 }) => {
-  const isLinkDisabled = (link: string | null | undefined, status: string | undefined): boolean => {
-    return !link || DISABLED_ESIGN_STATUSES.includes(status as EsignStatus);
-  };
+ 
   return [
     {
       key: 'nium_order_id',
@@ -52,6 +47,7 @@ export const GetTransactionTableColumns = ({
       id: 'customer_pan',
       name: 'Customer PAN',
       className: 'min-w-0',
+      cell: (value: string) => maskPAN(value),
     },
     {
       key: 'transaction_type_name',
@@ -115,58 +111,29 @@ export const GetTransactionTableColumns = ({
         <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
       ),
     },
-    {
-      key: 'e_sign_link',
-      id: 'e_sign_link',
-      name: 'E Sign Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          copyLinkUrl={rowData.e_sign_link}
-          toastInfoText={'E Sign link copied successfully!'}
-          disabled={isLinkDisabled(rowData.e_sign_link, rowData.e_sign_status)}
-          tooltipText={'Copy E sign Link'}
-          buttonType="copy_link"
-          buttonIconType="copy_link"
-        />
-      ),
-    },
-    {
-      key: 'v_kyc_link',
-      id: 'v_kyc_link',
-      name: 'VKYC Link',
-      className: 'min-w-0 max-w-[80px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          copyLinkUrl={rowData.v_kyc_link}
-          toastInfoText={'Vkyc Link link copied successfully!'}
-          disabled={isLinkDisabled(rowData.v_kyc_link, rowData.v_kyc_status)}
-          tooltipText={'Copy VKYC Link'}
-          buttonType="copy_link"
-          buttonIconType="copy_link"
-        />
-      ),
-    },
-    {
-      key: 'generate_esign_link',
-      id: 'generate_esign_link',
-      name: 'Generate Esign Link',
-      className: 'min-w-0 max-w-[100px]',
-      cell: (_: unknown, rowData: any) => (
-        <SignLinkButton
-          id={rowData.nium_order_id}
-          loading={isSendEsignLinkLoading && loadingOrderId === rowData.nium_order_id}
-          copyLinkUrl={rowData.v_kyc_link}
-          tooltipText="Generate Esign Link"
-          buttonIconType="refresh"
-          onClick={() => handleRegenerateEsignLink(rowData)}
-          disabled={(() => {
-            const { e_sign_status, order_status } = rowData || {};
-
-            return DISABLED_ORDER_STATUSES.includes(order_status) || DISABLED_ESIGN_STATUSES.includes(e_sign_status);
-          })()}
-        />
-      ),
+     {
+      key: 'Action',
+      id: 'Action',
+      name: 'Action',
+      className: 'min-w-0',
+       cell: (_: unknown, rowData: any) => (
+        <div className='flex flex-row gap-2'>
+         <TooltipActionButton
+            onClick={() => handleEkycStatus(rowData)}
+            icon={<FileText size={16} />}
+            tooltipText="Get E-Sign Status"
+            variant="esign"
+            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}
+          />
+          <TooltipActionButton
+            onClick={() => handleVkycStatus(rowData)}
+            icon={<Video size={16} />}
+            tooltipText="Get VKYC Status"
+            variant="vkyc"
+            disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+          />    
+        </div>
+       )
     },
   ];
 };

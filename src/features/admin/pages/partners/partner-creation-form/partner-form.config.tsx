@@ -1,4 +1,4 @@
-import { FieldType } from "@/types/enums";
+import { FieldType } from '@/types/enums';
 
 interface FormField {
   label: string;

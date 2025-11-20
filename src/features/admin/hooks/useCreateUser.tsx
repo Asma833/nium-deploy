@@ -46,12 +46,9 @@ export const useCreateUser = (
       navigate(url);
     },
     onError: (error: Error) => {
-      const errorMessage =
-        error.message || role === 'maker' ? 'Maker creation failed' : 'Checker creation failed';
+      const errorMessage = error.message || role === 'maker' ? 'Maker creation failed' : 'Checker creation failed';
       toast.error(
-        error.message === 'Request failed with status code 409'
-          ? 'Email already exist'
-          : error.message || errorMessage
+        error.message === 'Request failed with status code 409' ? 'Email already exist' : error.message || errorMessage
       );
     },
   });

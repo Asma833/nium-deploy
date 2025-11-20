@@ -20,6 +20,8 @@ import { Label } from '@/components/ui/label';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheckerOrdersByPartnerId';
+import { IncidentPageId } from '@/types/enums';
+import { maskPAN } from '@/utils/masking';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   const { formActionRight, rowData, setIsModalOpen, mode, pageId } = props;
@@ -115,7 +117,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   }, []);
 
   useEffect(() => {
-    if (pageId === 'completedIncident') {
+    if (pageId === IncidentPageId.COMPLETED) {
       setShowNiumInvoice(true);
     }
   }, [pageId]);
@@ -278,7 +280,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
   };
 
   // Download handler for eSign Document
-  const handleDownloadDocument = (docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'mergeDoc') => {
+  const handleDownloadDocument = (
+    docType: 'esignDocument' | 'vkycDocument' | 'vkycVideo' | 'agentVideo' | 'mergeDoc'
+  ) => {
     if (docType && docType === 'esignDocument' && esignFile) {
       window.open(esignFile, '_blank');
     } else if (docType === 'vkycDocument' && vkycDocumentFilesArray.length > 0) {
@@ -291,7 +295,13 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
       }
     } else if (docType === 'vkycVideo' && vkycVideoFiles) {
       const videoUrl = vkycVideoFiles || '';
-
+      if (videoUrl) {
+        window.open(videoUrl, '_blank');
+      } else {
+        toast.error('No VKYC video available for download');
+      }
+    } else if (docType === 'agentVideo' && agentVkycVideo) {
+      const videoUrl = agentVkycVideo || '';
       if (videoUrl) {
         window.open(videoUrl, '_blank');
       } else {
@@ -332,6 +342,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
               .slice(1, 5)
               .map(([name, field]) => {
                 const hasError = !!errors[name as keyof typeof errors];
+                // Mask PAN if this is the customer_pan field
+                const fieldValue = rowData?.[field.name as keyof typeof rowData];
+                const displayValue = field.name === 'customer_pan' && fieldValue
+                  ? maskPAN(fieldValue as string)
+                  : fieldValue;
+                
                 return (
                   <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
@@ -340,7 +356,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                       control,
                       errors,
                       disabled: formActionRight === 'view',
-                      forcedValue: rowData?.[field.name as keyof typeof rowData],
+                      forcedValue: displayValue,
                     })}
                   </FieldWrapper>
                 );
@@ -384,12 +400,12 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           {/* <ExchangeRateDetails data={updateFormIncidentConfig.tableData} /> */}
 
           <FormFieldRow>
-            {mode === 'view' && pageId === 'viewAllIncident' && rowData?.merged_document !== null && (
+            {mode === 'view' && pageId === IncidentPageId.VIEW_ALL && rowData?.merged_document !== null && (
               <Button type="button" onClick={handleViewDocument} className="disabled:opacity-60">
                 View Document
               </Button>
             )}
-            {isEsignDocumentLink && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {isEsignDocumentLink && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
                 onClick={() => {
@@ -404,7 +420,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
             {Array.isArray(vkycDocumentFilesArray) &&
               vkycDocumentFilesArray.length > 0 &&
-              (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+              (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
                 <Button
                   type="button"
                   onClick={() => handleDownloadDocument('vkycDocument')}
@@ -414,24 +430,14 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   VKYC Document
                 </Button>
               )}
-            {vkycVideoFiles && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {agentVkycVideo && (pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <Button
                 type="button"
-                onClick={() => handleDownloadDocument('vkycVideo')}
-                disabled={!vkycVideoFiles}
-                className="disabled:opacity-60"
-              >
-                VKYC Customer Video
-              </Button>
-            )}
-             {agentVkycVideo && (pageId === 'updateIncident' || pageId === 'completedIncident') && (
-              <Button
-                type="button"
-                onClick={() => handleDownloadDocument('vkycVideo')}
+                onClick={() => handleDownloadDocument('agentVideo')}
                 disabled={!agentVkycVideo}
                 className="disabled:opacity-60"
               >
-                VKYC Agent Video
+                VKYC Video
               </Button>
             )}
           </FormFieldRow>
@@ -462,6 +468,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   ...updateFormIncidentConfig.checkFeedInput.comment,
                   control,
                   errors,
+                  required:isRejected,
                   name: 'fields.comment',
                   onInputChange: (value: string) => {
                     // Clear validation errors when user starts typing
@@ -472,7 +479,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 })}
               </FormFieldRow>
             )}
-            {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
+            {(pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
               <FormFieldRow className="flex-1">
                 {showNiumInvoice &&
                   getController({
@@ -486,7 +493,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
           </FormFieldRow>
         </Spacer>
       </FormContentWrapper>
-      {(pageId === 'updateIncident' || pageId === 'completedIncident') && (
+      {(pageId === IncidentPageId.UPDATE || pageId === IncidentPageId.COMPLETED) && (
         <div className="flex justify-center bg-background">
           <Button disabled={isPending} onClick={handleFormSubmit}>
             {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}

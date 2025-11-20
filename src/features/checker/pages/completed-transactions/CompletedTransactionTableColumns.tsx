@@ -4,6 +4,7 @@ import EsignStatusCell from '../../components/table/EsignStatusCell';
 import NiumOrderID from '../../components/table/NiumOrderIdCell';
 import OrderStatusCell from '../../components/table/OrderStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
+import { maskPAN } from '@/utils/masking';
 
 export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
   {
@@ -18,9 +19,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     id: 'created_at',
     name: 'Order Date',
     className: 'min-w-0',
-    cell: (_: unknown, rowData: { created_at?: string }) => (
-      <span>{formatDate(rowData.created_at)}</span>
-    ),
+    cell: (_: unknown, rowData: { created_at?: string }) => <span>{formatDate(rowData.created_at)}</span>,
   },
   {
     key: 'partner_order_id',
@@ -33,6 +32,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     id: 'customer_pan',
     name: 'Customer PAN',
     className: 'min-w-0',
+    cell: (value: string) => maskPAN(value),
   },
   {
     key: 'transaction_type_name',
@@ -59,9 +59,7 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     name: 'E-Sign Status Completion Date',
     className: 'min-w-0',
     cell: (_: unknown, rowData: { e_sign_customer_completion_date?: string }) => (
-      <span>
-        {formatDateWithFallback(rowData.e_sign_customer_completion_date)}
-      </span>
+      <span>{formatDateWithFallback(rowData.e_sign_customer_completion_date)}</span>
     ),
   },
   {

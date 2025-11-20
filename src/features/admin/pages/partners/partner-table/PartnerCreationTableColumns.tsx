@@ -1,5 +1,6 @@
 import { Edit } from 'lucide-react';
 import Switch from '@/components/ui/switch';
+import { maskEmail } from '@/utils/masking';
 
 interface TableColumn {
   key: string;
@@ -30,6 +31,7 @@ export const GetUserTableColumns = (
       key: 'email',
       id: 'email',
       name: 'Email',
+      cell: (value: string) => maskEmail(value),
     },
     {
       key: 'productType',

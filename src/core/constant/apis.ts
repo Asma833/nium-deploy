@@ -24,6 +24,7 @@ export const API = {
   ORDERS: {
     ORDERS: '/fxorders',
     LIST: `/fxorders`,
+    GET_MAKER_ORDERS: `/fxorders/maker`,
     CREATE: `/orders`,
     GET_BY_ID: (id: string) => `/orders/${id}`,
     UPDATE: (id: string) => `/orders/${id}`,
@@ -57,10 +58,17 @@ export const API = {
     },
   },
   MAKER: {
-    GENERATE_ORDER: `/fxorders/generate-order`,
+    GENERATE_ORDER: `/fxorders/generate-order-maker`,
   },
   FEATURES: {
     ENABLE_GEMINI_FLASH: `/features/gemini-flash/enable`,
+  },
+  USER_MANAGEMENT: {
+    AGENT_BRANCH_USER: {
+      LIST: `/agent-branch-users`,
+      CREATE: `/agent-branch-users`,
+      STATUS_UPDATE: `/agent-branch-users`,
+    },
   },
   NUSERS: {
     PARTNERS: {
@@ -94,6 +102,8 @@ export const API = {
     GET_PRODUCTS: '/products',
   },
   TRANSACTION: {
+    GET_TRANSACTIONS: `/transaction_type`,
+    GET_ALL_TRANSACTIONS: `/transaction_type/all`,
     GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
     GET_TRANSACTIONS_TYPES: `/transaction_type`,
     GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
@@ -101,11 +111,32 @@ export const API = {
   },
   PURPOSE: {
     GET_PURPOSES: `/fx/purposes`,
+    CREATE_PURPOSE: `/fx/purpose`,
+    UPDATE_PURPOSE: `/fx/purpose/`,
+    TRANSACTION_MAPPING: `/transaction-purpose-map`,
+    GET_TRANSACTION_PURPOSES: `/transaction-purpose-map`,
+    GET_ALL_TRANSACTIONS_TYPES: `/transaction_type/all`,
+    GET_TRANSACTIONS_TYPES: `/transaction_type`,
+    GET_MAPPED_PURPOSES: `/transaction-purpose-map`,
+    GET_MAPPED_PURPOSES_BY_ID: (id: string) => `/transaction-purpose-map/purposes/${id}`,
   },
   TRANSACTION_PURPOSE_MAP: {
     CREATE: `/transaction-purpose-map`,
     GET_DOCUMENTS: (transactionTypeId: string) => `/trans-purpose-document/${transactionTypeId}/documents`,
   },
+  DOCUMENT_MASTER: {
+    GET_DOCUMENTS: `/fx/documents`,
+    CREATE_DOCUMENT: `/fx/document`,
+    UPDATE_DOCUMENT: `/fx/document`,
+    DELETE_DOCUMENT: (id: string) => `/fx/document/${id}`,
+    DOC_PURPOSE_TRANS_MAPPING: `/trans-purpose-document/map`,
+    DELETE_MAPPING_DOCUMENT: (id: string) => `/trans-purpose-document/${id}`,
+    UPDATE_MAPPING_DOCUMENT: `/trans-purpose-document`,
+  },
+  IDFY_STATUS:{
+   GET_EKYC_STATUS:(id: string) => `/ekyc/update-esign-status?order_id=${id}`,
+   GET_VKYC_STATUS:(id: string) => `/videokyc/update-vkyc-status?order_id=${id}`
+  }
 } as const;
 
 /**

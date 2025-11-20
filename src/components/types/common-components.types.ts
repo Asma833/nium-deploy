@@ -52,6 +52,7 @@ export interface DynamicTableProps<T> {
   data: T[];
   tableWrapperClass?: string;
   renderLeftSideActions?: () => JSX.Element;
+  renderRightSideActions?: () => JSX.Element;
   initialPageSize?: number;
   pageSizeOption?: number[];
   defaultSortColumn?: keyof T | string;

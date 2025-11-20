@@ -34,8 +34,6 @@ import { useCreateTransaction } from '../../hooks/useCreateTransaction';
 import { useUpdateOrder } from '../../hooks/useUpdateOrder';
 import { useCreateTransactionPurposeMap } from '../../hooks/useTransactionPurposeMap';
 import useGetDocByTransPurpose from '../../hooks/useGetDocByTransPurpose';
-import { useSendEsignLink } from '@/features/checker/hooks/useSendEsignLink';
-import { useSendVkycLink } from '@/features/checker/hooks/useSendVkycLink';
 import { useDynamicOptions } from '@/features/checker/hooks/useDynamicOptions';
 import { useCurrentUser } from '@/utils/getUserFromRedux';
 import { useGetData } from '@/hooks/useGetData';
@@ -50,6 +48,7 @@ import { transformFormDataToApiRequest, transformFormDataToUpdateRequest } from 
 import { cn } from '@/utils/cn';
 import useTransactionData from '../../hooks/useTransactionData';
 import handleViewDocument from '../../utils/handleViewDocument';
+import { maskPAN, maskMobile, maskEmail } from '@/utils/masking';
 
 // Constants
 const FIELD_WRAPPER_BASE_STYLE = 'mb-5';
@@ -74,6 +73,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   const [createdTransactionId, setCreatedTransactionId] = useState<string>('');
   const [niumForexOrderId, setNiumForexOrderId] = useState<string>('');
   const [partnerOrderId, setPartnerOrderId] = useState<string>(partnerOrderIdParam);
+  const [isVkycRequired, setIsVkycRequired] = useState<boolean>(false);
 
   // Document and purpose state
   const [showUploadSection, setShowUploadSection] = useState(false);
@@ -82,8 +82,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     []
   );
   const [currentTransactionTypeId, setCurrentTransactionTypeId] = useState<string>('');
-  const [currentPurposeTypeId, setCurrentPurposeTypeId] = useState<string>('');
-  const [purposeTypeId, setPurposeTypeId] = useState<string>('');
 
   // Refs for performance optimization
   const lastProcessedCombination = useRef<string>('');
@@ -93,8 +91,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Hooks for external operations
   const { getUserHashedKey } = useCurrentUser();
-  const { mutate: sendEsignLink, isSendEsignLinkLoading } = useSendEsignLink();
-  const { mutate: sendVkycLink, isSendVkycLinkLoading } = useSendVkycLink();
 
   // Transaction operations
   const createTransactionMutation = useCreateTransaction();
@@ -103,18 +99,17 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
 
   // Data fetching hooks
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
-  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus } =
+  const { selectedRowTransactionData, documentUrls, isLoading, refreshData, checkerComments, orderStatus, viewStatus } =
     useTransactionData(partnerOrderId);
-
   const { data: transactionPurposeMapData, refetch: refetchTransactionPurposeMap } = useGetData<
-  TransactionPurposeMap[]
+    TransactionPurposeMap[]
   >({
     endpoint: API.TRANSACTION.GET_MAPPED_PURPOSES_BY_ID(currentTransactionTypeId),
-    queryKey: queryKeys.transaction.transactionPurposeMap,
+    queryKey: [...queryKeys.transaction.transactionPurposeMap, currentTransactionTypeId],
     dataPath: 'data',
-    enabled: !!currentTransactionTypeId,
+    enabled: !!currentTransactionTypeId && currentTransactionTypeId.length > 0,
   });
-  
+
   const {
     docsByTransPurpose,
     isLoading: isDocsLoading,
@@ -211,34 +206,47 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   // Initialize transaction type ID early for update/edit/view pages to enable purpose data fetching
   useEffect(() => {
     if (
-      (isUpdatePage || isEditPage || isViewPage) && 
-      selectedRowTransactionData && 
+      (isUpdatePage || isEditPage || isViewPage) &&
+      selectedRowTransactionData &&
       formattedTransactionTypes &&
       !currentTransactionTypeId // Only set if not already set
     ) {
       const transactionTypeName = selectedRowTransactionData.transaction_type_name?.name;
       if (transactionTypeName) {
-        const matchedType = formattedTransactionTypes.find(type => type.value === transactionTypeName);
+        const matchedType = formattedTransactionTypes.find((type) => type.value === transactionTypeName);
         if (matchedType?.typeId) {
           setCurrentTransactionTypeId(matchedType.typeId);
         }
       }
     }
   }, [
-    selectedRowTransactionData, 
-    formattedTransactionTypes, 
-    isUpdatePage, 
-    isEditPage, 
+    selectedRowTransactionData,
+    formattedTransactionTypes,
+    isUpdatePage,
+    isEditPage,
     isViewPage,
-    currentTransactionTypeId
+    currentTransactionTypeId,
   ]);
 
-  // Handle transaction type changes from form input (for create mode)
+  // Handle transaction type changes from form input - Always update currentTransactionTypeId when transaction type changes
   useEffect(() => {
-    if (!isUpdatePage && !isEditPage && !isViewPage) {
-      setCurrentTransactionTypeId(watchedTransactionTypeId);
+    if (watchedTransactionTypeId) {
+      // Clear any existing timeout
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      // Debounce the transaction type ID update to prevent rapid API calls
+      debounceTimeout.current = setTimeout(() => {
+        // Only update if it's actually different to prevent unnecessary refetches
+        if (currentTransactionTypeId !== watchedTransactionTypeId) {
+          setCurrentTransactionTypeId(watchedTransactionTypeId);
+          // Clear filtered purposes immediately when transaction type changes
+          setFilteredPurposesBySelectedTnxType([]);
+        }
+      }, 100); // Small delay to debounce rapid changes
     }
-  }, [watchedTransactionTypeId, isUpdatePage, isEditPage, isViewPage]);
+  }, [watchedTransactionTypeId, currentTransactionTypeId]);
 
   // Filter purposes when transaction purpose data or current transaction type changes
   useEffect(() => {
@@ -252,11 +260,23 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
   }, [transactionPurposeMapData, currentTransactionTypeId]);
 
+  // Manually refetch transaction purpose map when currentTransactionTypeId changes
+  useEffect(() => {
+    if (currentTransactionTypeId && refetchTransactionPurposeMap) {
+      // Small delay to ensure the query key has been updated
+      const timeoutId = setTimeout(() => {
+        refetchTransactionPurposeMap();
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+    return () => {}; // Ensure we always return a cleanup function
+  }, [currentTransactionTypeId, refetchTransactionPurposeMap]);
+
   // Initialize form values when data is loaded for edit/view mode
   useEffect(() => {
     if (
-      (isEditPage || isViewPage || isUpdatePage) && 
-      selectedRowTransactionData && 
+      (isEditPage || isViewPage || isUpdatePage) &&
+      selectedRowTransactionData &&
       !isLoading &&
       formattedTransactionTypes &&
       !isFormInitialized.current // Prevent multiple initializations
@@ -264,9 +284,9 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       const formValues: Partial<TransactionFormData> = {
         applicantDetails: {
           applicantName: selectedRowTransactionData.customer_name || '',
-          applicantPanNumber: selectedRowTransactionData.customer_pan || '',
-          email: selectedRowTransactionData.customer_email || '',
-          mobileNumber: selectedRowTransactionData.customer_phone || '',
+          applicantPanNumber: maskPAN(selectedRowTransactionData.customer_pan || ''),
+          email: maskEmail(selectedRowTransactionData.customer_email || ''),
+          mobileNumber: `+91 ${maskMobile(selectedRowTransactionData.customer_phone || '')}`,
           partnerOrderId: selectedRowTransactionData.partner_order_id || '',
           isVKycRequired: selectedRowTransactionData.is_v_kyc_required || false,
           transactionType: selectedRowTransactionData.transaction_type_name?.name || '',
@@ -280,17 +300,17 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           setValue(`applicantDetails.${key}` as any, value);
         }
       });
-      
+
       isFormInitialized.current = true;
     }
   }, [
-    selectedRowTransactionData, 
-    isLoading, 
-    isEditPage, 
-    isViewPage, 
+    selectedRowTransactionData,
+    isLoading,
+    isEditPage,
+    isViewPage,
     isUpdatePage,
-    setValue, 
-    formattedTransactionTypes
+    setValue,
+    formattedTransactionTypes,
   ]);
 
   // Handle purpose type changes and update document mapping
@@ -307,7 +327,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
   }, [selectedMapDocId, refetchDocs]);
 
-  // Reset purpose field when transaction type changes (but not on edit/view/update pages)
+  // Reset purpose field when transaction type changes (but not on edit/view/update pages during initial load)
   useEffect(() => {
     if (isInitialLoad.current || isEditPage || isViewPage || isUpdatePage) {
       isInitialLoad.current = false;
@@ -315,9 +335,11 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     }
 
     if (watchedTransactionType) {
-      refetchTransactionPurposeMap?.()
+      // Reset purpose field and selected document mapping immediately when transaction type changes
       setValue('applicantDetails.purposeType', '');
       setSelectedMapDocId('');
+      // Clear filtered purposes to prevent showing stale data
+      setFilteredPurposesBySelectedTnxType([]);
     }
   }, [watchedTransactionType, setValue, isEditPage, isViewPage, isUpdatePage]);
 
@@ -327,26 +349,12 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
       lastProcessedCombination.current = '';
       isInitialLoad.current = true;
       isFormInitialized.current = false;
+      setCurrentTransactionTypeId(''); // Reset transaction type ID on cleanup
       if (debounceTimeout.current) {
         clearTimeout(debounceTimeout.current);
       }
     };
   }, [isViewPage, isEditPage, isUpdatePage]);
-
-  const handleRegenerateEsignLink = (pOrderId: string): void => {
-    sendEsignLink(
-      { partner_order_id: pOrderId || '' },
-      {
-        onSuccess: () => {
-          toast.success('E-sign link generated successfully');
-          navigate(`/maker/view-status`);
-        },
-        onError: () => {
-          toast.error('Failed to generate e-sign link');
-        },
-      }
-    );
-  };
 
   // Handle successful document submission and reset form
   const handleDocumentSubmissionSuccess = () => {
@@ -354,11 +362,13 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     reset(transactionFormDefaults);
     setIsOrderGenerated(false);
     setPartnerOrderId('');
+    setIsVkycRequired(false);
     setCreatedTransactionId('');
     setNiumForexOrderId('');
     setShowUploadSection(false);
     setSelectedMapDocId('');
     setFilteredPurposesBySelectedTnxType([]);
+    setCurrentTransactionTypeId(''); // Reset transaction type ID
     toast.success('Transaction completed successfully!');
     // Navigate to status page
     navigate(`/maker/view-status`);
@@ -370,16 +380,17 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
     reset(transactionFormDefaults);
     setIsOrderGenerated(false);
     setPartnerOrderId('');
+    setIsVkycRequired(false);
     setCreatedTransactionId('');
     setNiumForexOrderId('');
     setShowUploadSection(false);
     setSelectedMapDocId('');
     setFilteredPurposesBySelectedTnxType([]);
+    setCurrentTransactionTypeId(''); // Reset transaction type ID
     setIsDialogOpen(false);
     toast.success('Ready to create a new transaction');
   };
   const onSubmit = async (formData: TransactionFormData) => {
-    setPurposeTypeId('f2a2fc1a-c31a-47f8-b8f1-9b35f3083730');
     try {
       if (isEditPage) {
         const updateRequestData = transformFormDataToUpdateRequest(
@@ -403,22 +414,13 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
         );
         const response = await createTransactionMutation.mutateAsync(apiRequestData);
 
-        if (formData?.applicantDetails?.isVKycRequired && response?.status === 201) {
-          sendVkycLink(
-            { partner_order_id: response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId },
-            {
-              onError: () => {
-                toast.error('Failed to generated VKYC link');
-              },
-            }
-          );
-        }
-
         const partnerOrder = response.data?.partner_order_id || formData?.applicantDetails?.partnerOrderId || '';
         const niumOrder = response.data?.nium_forex_order_id || '';
+        const isVkycRequired = formData?.applicantDetails?.isVKycRequired || false;
         setCreatedTransactionId(partnerOrder);
         setNiumForexOrderId(niumOrder);
         setPartnerOrderId(partnerOrder);
+        setIsVkycRequired(isVkycRequired);
         setShowUploadSection(true);
         setIsDialogOpen(true);
         setIsOrderGenerated(true);
@@ -473,18 +475,12 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className={cn('flex items-center justify-between pl-2', pageTitle !== 'update' ? 'mb-6' : 'mb-0')}>
         <h1 className="text-xl font-bold capitalize">{pageTitle || 'Create'} Transaction</h1>
-        {isOrderGenerated && (
-          <Button onClick={handleCreateNewTransaction} className="flex items-center gap-2">
-            <span>Create New Transaction</span>
-          </Button>
-        )}
       </div>
       <FormProvider methods={methods}>
         {
-          // {(!isUpdatePage || isViewPage) && (
           <FormContentWrapper className="w-full bg-transparent">
             <Spacer>
               <FormFieldRow className={cn(FIELD_WRAPPER_BASE_STYLE, 'mb-4 px-0')} rowCols={4}>
@@ -527,7 +523,7 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
           </FormContentWrapper>
         }{' '}
         {!isUpdatePage && !isViewPage && !isOrderGenerated && (
-          <FormFieldRow className="px-2">
+          <FormFieldRow className="p-2">
             <Button
               className="min-w-60"
               onClick={handleFormSubmit}
@@ -551,41 +547,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        <div className="flex gap-2 items-start w-full mb-4">
-          {mode === 'view' && documentUrls.mergedDocument && (
-            <div className="flex items-start">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.mergedDocument, 'mergeDoc')}
-                className="disabled:opacity-60"
-              >
-                View Document
-              </Button>
-            </div>
-          )}
-          {mode === 'view' && documentUrls.vkycDocument && (
-            <div className="flex items-start gap-2">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.vkycDocument, 'vkycDoc')}
-                className="disabled:opacity-60"
-              >
-                VKyc Document
-              </Button>
-            </div>
-          )}
-          {mode === 'view' && documentUrls.vkycVideo && (
-            <div className="flex items-start gap-2">
-              <Button
-                type="button"
-                onClick={() => handleViewDocument(documentUrls.vkycVideo, 'vkycVideo')}
-                className="disabled:opacity-60"
-              >
-                VKyc Video
-              </Button>
-            </div>
-          )}
-        </div>
         {/* Show success message after order generation */}
         {isOrderGenerated && (
           <FormFieldRow className="mb-4 w-full">
@@ -603,19 +564,6 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             </div>
           </FormFieldRow>
         )}
-        {/* {shouldShowSection ? (
-          <FormFieldRow className="w-full">
-            <UploadDocuments
-              partnerOrderId={partnerOrderId}
-              purposeTypeId={seletedRowTransactionData?.purpose_type_id}
-              onESignGenerated={() => {
-                handleRegenerateEsignLink(partnerOrderId);
-              }}
-              isResubmission={isUpdatePage && !orderStatus}
-            />
-          </FormFieldRow>
-        ) : null} */}
-        {/* {handlePurposeTypeId() && ( */}
         <FormFieldRow className="w-full">
           {(createTransactionPurposeMapMutation.isPending || isDocsLoading) && (
             <div className="flex items-center justify-center gap-3 mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg shadow-sm">
@@ -633,9 +581,10 @@ const TransactionForm = ({ mode }: TransactionFormProps) => {
             mappedDocuments={enhancedDocsByTransPurpose}
             onESignGenerated={handleDocumentSubmissionSuccess}
             isResubmission={isUpdatePage && !orderStatus}
+            disabled={mode === 'view' && !viewStatus}
+            isVkycRequired={isVkycRequired}
           />
         </FormFieldRow>
-        {/* )} */}
       </FormProvider>
       <TransactionCreatedDialog
         isDialogOpen={isDialogOpen}

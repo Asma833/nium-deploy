@@ -14,9 +14,10 @@ interface FileUploadProps {
   helpText?: string;
   accept?: string;
   multiple?: boolean;
+  viewFile?: boolean;
 }
 
-const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => {
+const FileUploadWithView = ({ id, name, label, className, viewFile = true }: FileUploadProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { watch } = useFormContext();
@@ -87,7 +88,7 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
     <div className="flex">
       <div className="flex flex-col w-full">
         <span className="fileupload-label text-sm mb-2">{label}</span>
-        <div className="flex w-full gap-2">
+        <div className="flex w-full">
           <FileUpload
             id={id || name}
             name={name}
@@ -96,17 +97,19 @@ const FileUploadWithView = ({ id, name, label, className }: FileUploadProps) => 
             className="w-5/6 p-0 flex-1"
             styleType="fileUploadWithView"
           />
-          <button
-            type="button"
-            disabled={!selectedFile}
-            className={`px-2 text-gray-500 disabled:text-gray-400 hover:text-gray-800 text-sm border-none bg-transparent rounded w-[60px] flex items-center justify-center gap-2 ${className}`}
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Eye size={20} className="min-w-5" /> View
-          </button>
+          {viewFile && (
+            <button
+              type="button"
+              disabled={!selectedFile}
+              className={`px-2 text-gray-500 disabled:text-gray-400 hover:text-gray-800 text-sm border-none bg-transparent rounded w-[60px] flex items-center justify-center gap-2 ${className}`}
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Eye size={20} className="min-w-5" /> View
+            </button>
+          )}
         </div>
       </div>
-      {isModalOpen && (
+      {isModalOpen && viewFile && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="relative bg-white p-6 rounded shadow-lg min-w-full md:min-w-[800px] lg:min-w-[1200px] md:max-w-[1100px] max-h-[95vh] overflow-auto">
             <h2 className="text-lg font-bold mb-4">File Preview</h2>

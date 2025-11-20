@@ -67,6 +67,8 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
     if (selectedRow && Object.keys(selectedRow).length > 0) {
       reset({
         email: selectedRow.email || '',
+        password: '',
+        confirmPassword: '',
       });
     }
   }, [selectedRow, reset]);
@@ -90,7 +92,7 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
         <FormContentWrapper className="p-2 rounded-lg mr-auto bg-transparent">
           <h2 className="text-xl font-bold mb-4 title-case">{pageTitle}</h2>
           <Spacer>
-            <FormFieldRow className="mb-4">
+            <FormFieldRow>
               <FieldWrapper>
                 {getController({
                   ...formConfig.fields.email,
@@ -111,7 +113,7 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
                 </div>
               </FieldWrapper> */}
             </FormFieldRow>
-            <FormFieldRow className="mb-4 mt-1">
+            <FormFieldRow className="mt-1">
               {Object.entries(formConfig.fields)
                 .slice(2, 3)
                 .map(([name, field]) => (
@@ -125,7 +127,7 @@ const UserCreationFormPage = ({ formConfig, schema, role }: UserCreationFormPage
                   </FieldWrapper>
                 ))}
             </FormFieldRow>
-            <FormFieldRow className="mb-4 mt-2">
+            <FormFieldRow className="mt-2">
               {Object.entries(formConfig.fields)
                 .slice(3, 4)
                 .map(([name, field]) => (

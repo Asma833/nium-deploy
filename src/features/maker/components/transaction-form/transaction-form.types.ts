@@ -32,6 +32,9 @@ export type FormControllerMetaOptions = {
   transactionTypes?: OptionType[];
   purposeTypes?: OptionType[];
 };
+export type TransactionOptions = {
+  transactionTypes?: OptionType[];
+};
 
 export type TransactionFormProps = {
   mode?: TransactionMode;
@@ -39,7 +42,6 @@ export type TransactionFormProps = {
 
 export type TransactionPurposeMap = {
   id: string;
-
   transaction_type_id: string;
   transaction_purpose_map_id?: string;
   purpose_id: string;

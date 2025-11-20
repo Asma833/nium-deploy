@@ -11,4 +11,7 @@ export const queryKeys = {
     transactionPurposeMap: ['transaction', 'purposeMap'],
     getMappedDocuments: ['transaction', 'purposeMap', 'documents'],
   },
+  masters: {
+    documentMapping: ['masters', 'documentMapping'],
+  },
 };

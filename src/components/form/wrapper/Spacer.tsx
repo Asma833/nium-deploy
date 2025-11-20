@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Spacer = ({ children, className }: Props) => {
-  return <div className={cn('flex flex-col gap-4', className)}>{children}</div>;
+  return <div className={cn('flex flex-col gap-[30px]', className)}>{children}</div>;
 };
 
 export default Spacer;

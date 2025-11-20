@@ -14,12 +14,13 @@ export const useCreateTransactionPurposeMap = () => {
     },
     onError: (error: any) => {
       console.error('Transaction purpose mapping creation failed:', error);
-      
+
       // Check if it's a duplicate mapping error (which might be acceptable)
-      const isDuplicateError = error?.response?.status === 409 || 
-                              error?.response?.data?.message?.includes('already exists') ||
-                              error?.response?.data?.message?.includes('duplicate');
-      
+      const isDuplicateError =
+        error?.response?.status === 409 ||
+        error?.response?.data?.message?.includes('already exists') ||
+        error?.response?.data?.message?.includes('duplicate');
+
       if (isDuplicateError) {
         console.warn('Mapping already exists, proceeding with document fetch...');
       } else {

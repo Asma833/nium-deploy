@@ -1,6 +1,7 @@
 import { Edit } from 'lucide-react';
 import Switch from '@/components/ui/switch';
 import { HandleNavigate, HandleStatusChange, TableColumn } from '@/features/admin/types/user.types';
+import { maskEmail } from '@/utils/masking';
 
 export const GetUserTableColumns = (
   handleStatusChange: HandleStatusChange,
@@ -12,6 +13,7 @@ export const GetUserTableColumns = (
       key: 'email',
       id: 'email',
       name: 'Email',
+      cell: (value: string) => maskEmail(value),
     },
     {
       key: 'actions',

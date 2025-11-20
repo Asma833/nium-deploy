@@ -123,6 +123,9 @@
 .status-badge.rejected {
   @apply bg-rejected-badge-bg text-badge-fg px-2 py-1 rounded-full;
 }
+.status-badge.deleted {
+  @apply bg-rejected-badge-bg text-badge-fg px-2 py-1 rounded-full;
+}
 
 .status-badge.expired {
   @apply bg-expired-badge-bg text-badge-fg px-2 py-1 rounded-full;
