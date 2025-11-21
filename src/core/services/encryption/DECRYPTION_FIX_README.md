@@ -13,12 +13,14 @@ The backend already includes the raw `aesKey` in encrypted responses. The fronte
 #### 1. **Enhanced Response Interceptor** ([`encryptionInterceptor.ts`](./encryptionInterceptor.ts))
 
 **What Changed:**
+
 - Improved key resolution logic to prioritize backend's raw `aesKey`
 - Added comprehensive validation for all decryption parameters
 - Enhanced error messages for debugging
 - Added detailed logging for troubleshooting
 
 **Key Logic:**
+
 ```typescript
 // Priority order for AES key:
 // 1. Backend's raw aesKey (preferred)
@@ -39,6 +41,7 @@ if (responseData.aesKey) {
 #### 2. **Enhanced Decryption Function** ([`encryptionService.ts`](./encryptionService.ts))
 
 **What Changed:**
+
 - Added comprehensive input validation
 - Validates hex string format for all parameters
 - Validates key and IV lengths (AES-128 requires 16 bytes)
@@ -46,6 +49,7 @@ if (responseData.aesKey) {
 - Better handling of Web Crypto API errors
 
 **Validation Added:**
+
 - ✅ AES key: 32 hex chars (16 bytes for AES-128)
 - ✅ IV: 24 hex chars (12 bytes for GCM)
 - ✅ Auth tag: 32 hex chars (16 bytes)
@@ -54,6 +58,7 @@ if (responseData.aesKey) {
 #### 3. **Test Utilities** ([`encryptionTestUtils.ts`](./encryptionTestUtils.ts))
 
 **New Features:**
+
 - `testDecryption()` - Test decryption with backend payload
 - `testEncryptionCycle()` - Test full encrypt/decrypt cycle
 - `validateBackendResponse()` - Validate response format
@@ -90,7 +95,7 @@ For decryption to work, the backend **MUST** include the raw `aesKey` in encrypt
 const encryptedResponse = this.cryptoService.encryptAESGCM(
   JSON.stringify(responseData),
   aesKeyBuffer,
-  Buffer.from(ivHex, 'hex'),
+  Buffer.from(ivHex, 'hex')
 );
 
 return {
@@ -110,10 +115,10 @@ import { testDecryption, validateBackendResponse } from '@/core/services/encrypt
 
 // Your backend response
 const backendResponse = {
-  encryptedData: "03863cdd911c248d...",
-  iv: "7aa4ae64f850b449b7c3f0a6",
-  authTag: "80cd97ccc8c2d2d0ce0eb4e42114df08",
-  aesKey: "a1b2c3d4e5f6..." // From backend
+  encryptedData: '03863cdd911c248d...',
+  iv: '7aa4ae64f850b449b7c3f0a6',
+  authTag: '80cd97ccc8c2d2d0ce0eb4e42114df08',
+  aesKey: 'a1b2c3d4e5f6...', // From backend
 };
 
 // Validate format
@@ -137,10 +142,10 @@ import { encryptionService } from '@/core/services/encryption';
 
 // Test with your backend response
 const response = {
-  encryptedData: "03863cdd911c248d...",
-  iv: "7aa4ae64f850b449b7c3f0a6",
-  authTag: "80cd97ccc8c2d2d0ce0eb4e42114df08",
-  aesKey: "a1b2c3d4e5f6..." // Must be provided by backend
+  encryptedData: '03863cdd911c248d...',
+  iv: '7aa4ae64f850b449b7c3f0a6',
+  authTag: '80cd97ccc8c2d2d0ce0eb4e42114df08',
+  aesKey: 'a1b2c3d4e5f6...', // Must be provided by backend
 };
 
 // Decrypt
@@ -159,7 +164,7 @@ const decrypted = await encryptionService.decryptWithAES(
 ```typescript
 // Test with actual API endpoint
 const result = await axios.post('/api/your-endpoint', {
-  message: 'Test data'
+  message: 'Test data',
 });
 
 // Should automatically encrypt request and decrypt response
@@ -222,10 +227,11 @@ If you need enhanced security:
 **Cause:** Backend response doesn't include `aesKey` field
 
 **Solution:** Update backend to include raw AES key in response:
+
 ```typescript
 return {
   ...encryptedResponse,
-  aesKey: aesKeyBuffer.toString('hex')
+  aesKey: aesKeyBuffer.toString('hex'),
 };
 ```
 
@@ -234,6 +240,7 @@ return {
 **Cause:** AES key is not 32 hex characters (16 bytes)
 
 **Solution:** Ensure backend generates 16-byte keys:
+
 ```typescript
 const aesKey = crypto.randomBytes(16); // 128 bits for AES-128
 ```
@@ -241,11 +248,13 @@ const aesKey = crypto.randomBytes(16); // 128 bits for AES-128
 ### Error: "Authentication tag verification failed"
 
 **Possible Causes:**
+
 1. Wrong AES key used for decryption
 2. Data was modified in transit
 3. IV or auth tag mismatch
 
-**Solution:** 
+**Solution:**
+
 - Verify backend sends correct `aesKey`
 - Check HTTPS is enabled
 - Validate all parameters match encryption
@@ -255,6 +264,7 @@ const aesKey = crypto.randomBytes(16); // 128 bits for AES-128
 **Cause:** Parameters contain non-hex characters
 
 **Solution:** Ensure backend converts all buffers to hex:
+
 ```typescript
 {
   encryptedData: encrypted.toString('hex'),
@@ -267,17 +277,20 @@ const aesKey = crypto.randomBytes(16); // 128 bits for AES-128
 ## 📝 Summary
 
 ### What Was Fixed
+
 ✅ Response interceptor now properly uses backend's `aesKey`  
 ✅ Added comprehensive validation and error handling  
 ✅ Created test utilities for verification  
-✅ Improved logging for debugging  
+✅ Improved logging for debugging
 
 ### What You Need to Do
+
 1. ✅ Ensure backend includes `aesKey` in all encrypted responses
 2. ✅ Test with the provided test utilities
 3. ✅ Monitor console logs for any issues
 
 ### Files Modified
+
 - [`encryptionInterceptor.ts`](./encryptionInterceptor.ts) - Enhanced key resolution
 - [`encryptionService.ts`](./encryptionService.ts) - Added validation
 - [`encryptionTestUtils.ts`](./encryptionTestUtils.ts) - New test utilities
@@ -286,12 +299,14 @@ const aesKey = crypto.randomBytes(16); // 128 bits for AES-128
 ## 🎯 Next Steps
 
 1. **Test the fix:**
+
    ```typescript
    import { testDecryption } from '@/core/services/encryption';
    const result = await testDecryption(yourBackendResponse);
    ```
 
 2. **Verify backend response format:**
+
    ```typescript
    import { validateBackendResponse } from '@/core/services/encryption';
    const validation = validateBackendResponse(response);

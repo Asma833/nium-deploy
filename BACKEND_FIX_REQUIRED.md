@@ -3,6 +3,7 @@
 ## 🔍 Root Cause
 
 The backend is sending this response format:
+
 ```json
 {
   "encryptedKey": "2e7fd399b18663d9...", // RSA-encrypted AES key
@@ -13,6 +14,7 @@ The backend is sending this response format:
 ```
 
 **The Problem:**
+
 - `encryptedKey` is encrypted with RSA public key
 - Frontend cannot decrypt it without the RSA private key
 - Storing private keys in frontend is a **major security risk**
@@ -51,16 +53,13 @@ In your interceptor or wherever you send encrypted responses:
 
 ```typescript
 // Decrypt AES key with RSA
-const aesKeyBuffer = await this.cryptoService.decryptAESKeyWithS3Pem(
-  encryptedKey,
-  pemContent,
-);
+const aesKeyBuffer = await this.cryptoService.decryptAESKeyWithS3Pem(encryptedKey, pemContent);
 
 // Encrypt response data with AES-128-GCM
 const encryptedResponse = this.cryptoService.encryptAESGCM(
   JSON.stringify(responseData),
   aesKeyBuffer,
-  Buffer.from(ivHex, 'hex'),
+  Buffer.from(ivHex, 'hex')
 );
 
 // ✅ IMPORTANT: Include the raw AES key in response
@@ -110,6 +109,7 @@ async generateTestPayload(
 ### Q: Why not just send the encrypted key?
 
 **A:** The frontend cannot decrypt RSA-encrypted keys because:
+
 - It doesn't have the RSA private key (and shouldn't have it)
 - Storing private keys in browsers is a **critical security vulnerability**
 - Private keys should **never** leave the server
@@ -117,6 +117,7 @@ async generateTestPayload(
 ## 📊 Current vs Fixed Flow
 
 ### ❌ Current Flow (BROKEN)
+
 ```
 Frontend                          Backend
    |                                 |
@@ -136,6 +137,7 @@ Frontend                          Backend
 ```
 
 ### ✅ Fixed Flow (WORKING)
+
 ```
 Frontend                          Backend
    |                                 |
@@ -176,17 +178,20 @@ The frontend will automatically use the `aesKey` field for decryption.
 ## 📝 Summary
 
 **What needs to change:**
+
 1. ✅ Add `aesKey` field to `encryptAESGCM()` return type
 2. ✅ Include raw AES key in all encrypted responses
 3. ✅ Update `generate-test-payload` endpoint
 
 **Why this is secure:**
+
 - AES keys are ephemeral (one-time use)
 - Transmitted over HTTPS
 - No private keys exposed
 - Standard practice for this encryption pattern
 
 **After these changes:**
+
 - Frontend decryption will work immediately
 - No frontend code changes needed
 - More secure than trying to decrypt RSA keys in browser

@@ -29,6 +29,6 @@ export const useGetEKYCStatus = () => {
     data: mutation.data,
     isLoading: mutation.isPending,
     mutate: mutation.mutate,
-    refetch: mutation.mutate
+    refetch: mutation.mutate,
   };
 };

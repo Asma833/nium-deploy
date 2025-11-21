@@ -5,7 +5,6 @@ A modern React-based web portal for NIUM agents built with TypeScript and Vite.
 ## Features
 
 - **State Management**
-
   - Redux Toolkit for global state management
   - React Hook Form for efficient form handling
   - React Query for server state management
@@ -13,7 +12,6 @@ A modern React-based web portal for NIUM agents built with TypeScript and Vite.
     - ⚠️ Always use hooks that access the QueryClient via `useQueryClient()` instead of importing the client directly
 
 - **UI/UX**
-
   - Responsive Shadcn and Material-UI components
   - Light/Dark mode support
   - Accessibility compliance

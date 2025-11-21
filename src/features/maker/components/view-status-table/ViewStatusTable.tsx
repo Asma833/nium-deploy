@@ -24,7 +24,7 @@ const ViewStatusTable: React.FC = () => {
 
   const { data: ekycStatus, isLoading: isEkycLoading, mutate: mutateEkyc } = useGetEKYCStatus();
   const { data: vkycStatus, isLoading: isVkycLoading, mutate: mutateVkyc } = useGetVKYCStatus();
-  
+
   const incidentStatusOptions = [
     { value: 'completed', label: 'Approved' },
     { value: 'rejected', label: 'Rejected' },
@@ -72,13 +72,13 @@ const ViewStatusTable: React.FC = () => {
   // Update local table data when ekycStatus is fetched
   useEffect(() => {
     if (ekycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 e_sign_status: ekycStatus.status,
-                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date
+                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date,
               }
             : row
         )
@@ -89,13 +89,13 @@ const ViewStatusTable: React.FC = () => {
   // Update local table data when vkycStatus is fetched
   useEffect(() => {
     if (vkycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 v_kyc_status: vkycStatus.status,
-                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date
+                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date,
               }
             : row
         )

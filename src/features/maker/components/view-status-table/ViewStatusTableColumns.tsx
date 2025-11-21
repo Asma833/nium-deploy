@@ -25,8 +25,8 @@ export const ViewStatusTableColumns = ({
   handleRegenerateEsignLink: (rowData: any) => void;
   handleRegenerateVkycLink: (rowData: any) => void;
   handleDelete: (rowData: any) => void;
-  handleEkycStatus:(rowData: any) => void;
-  handleVkycStatus:(rowData: any) => void;
+  handleEkycStatus: (rowData: any) => void;
+  handleVkycStatus: (rowData: any) => void;
   isSendEsignLinkLoading?: boolean;
   isSendVkycLinkLoading?: boolean;
   loadingOrderId?: string | null;
@@ -257,20 +257,20 @@ export const ViewStatusTableColumns = ({
             variant="delete"
             disabled={rowData.merged_document !== null || rowData.order_status === ORDER_STATUSES.DELETED}
           />
-            <TooltipActionButton
+          <TooltipActionButton
             onClick={() => handleEkycStatus(rowData)}
             icon={<FileText size={16} />}
             tooltipText="Get E-Sign Status"
             variant="esign"
-             disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}
+            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}
           />
           <TooltipActionButton
             onClick={() => handleVkycStatus(rowData)}
             icon={<Video size={16} />}
             tooltipText="Get VKYC Status"
             variant="vkyc"
-             disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
-          />             
+            disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+          />
         </div>
       ),
     },

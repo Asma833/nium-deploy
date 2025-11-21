@@ -14,13 +14,12 @@ import { RefreshCcwDot, FileText, Video } from 'lucide-react';
 export const GetTransactionTableColumns = ({
   openModal,
   handleEkycStatus,
-  handleVkycStatus
+  handleVkycStatus,
 }: {
   openModal: (rowData: any) => void;
   handleEkycStatus: (rowData: any) => void;
   handleVkycStatus: (rowData: any) => void;
 }) => {
- 
   return [
     {
       key: 'nium_order_id',
@@ -111,14 +110,14 @@ export const GetTransactionTableColumns = ({
         <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
       ),
     },
-     {
+    {
       key: 'Action',
       id: 'Action',
       name: 'Action',
       className: 'min-w-0',
-       cell: (_: unknown, rowData: any) => (
-        <div className='flex flex-row gap-2'>
-         <TooltipActionButton
+      cell: (_: unknown, rowData: any) => (
+        <div className="flex flex-row gap-2">
+          <TooltipActionButton
             onClick={() => handleEkycStatus(rowData)}
             icon={<FileText size={16} />}
             tooltipText="Get E-Sign Status"
@@ -131,9 +130,9 @@ export const GetTransactionTableColumns = ({
             tooltipText="Get VKYC Status"
             variant="vkyc"
             disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
-          />    
+          />
         </div>
-       )
+      ),
     },
   ];
 };

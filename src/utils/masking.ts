@@ -12,11 +12,11 @@ export const maskPAN = (pan: string): string => {
   if (!pan || pan.length < 4) {
     return pan || '';
   }
-  
+
   const lastFourDigits = pan.slice(-4);
   const maskedLength = pan.length - 4;
   const maskedPart = 'X'.repeat(maskedLength);
-  
+
   return `${maskedPart}${lastFourDigits}`;
 };
 
@@ -29,41 +29,41 @@ export const maskMobile = (mobile: string): string => {
   if (!mobile) {
     return '';
   }
-  
+
   // Remove any spaces, hyphens, or parentheses for processing
   const cleanMobile = mobile.replace(/[\s\-()]/g, '');
-  
+
   // Check if it starts with + (country code)
   const hasCountryCode = cleanMobile.startsWith('+');
-  
+
   if (hasCountryCode) {
     // Extract country code (assuming it's 1-3 digits after +)
     const countryCodeMatch = cleanMobile.match(/^\+(\d{1,3})/);
     if (countryCodeMatch) {
       const countryCode = countryCodeMatch[0]; // e.g., "+91"
       const remainingNumber = cleanMobile.substring(countryCode.length);
-      
+
       if (remainingNumber.length < 4) {
         return mobile; // Return as is if too short
       }
-      
+
       const lastFourDigits = remainingNumber.slice(-4);
       const maskedLength = remainingNumber.length - 4;
       const maskedPart = 'X'.repeat(maskedLength);
-      
+
       return `${countryCode} ${maskedPart}${lastFourDigits}`;
     }
   }
-  
+
   // No country code - just mask showing last 4 digits
   if (cleanMobile.length < 4) {
     return mobile;
   }
-  
+
   const lastFourDigits = cleanMobile.slice(-4);
   const maskedLength = cleanMobile.length - 4;
   const maskedPart = 'X'.repeat(maskedLength);
-  
+
   return `${maskedPart}${lastFourDigits}`;
 };
 
@@ -76,9 +76,9 @@ export const maskEmail = (email: string): string => {
   if (!email || !email.includes('@')) {
     return email || '';
   }
-  
+
   const [localPart, domain] = email.split('@');
-  
+
   if (localPart.length <= 2) {
     // If local part is 1-2 characters, show first character and mask rest
     const visibleChar = localPart.charAt(0);
@@ -95,13 +95,9 @@ export const maskEmail = (email: string): string => {
 /**
  * Allowed domains for NIUM Checker and Super Admin roles
  */
-export const ALLOWED_ADMIN_DOMAINS = [
-  'instarem.co.in',
-  'nium.com',
-  'niumforex.com'
-] as const;
+export const ALLOWED_ADMIN_DOMAINS = ['instarem.co.in', 'nium.com', 'niumforex.com'] as const;
 
-export type AdminDomain = typeof ALLOWED_ADMIN_DOMAINS[number];
+export type AdminDomain = (typeof ALLOWED_ADMIN_DOMAINS)[number];
 
 /**
  * Check if email domain is allowed for admin roles
@@ -112,7 +108,7 @@ export const isAllowedAdminDomain = (email: string): boolean => {
   if (!email || !email.includes('@')) {
     return false;
   }
-  
+
   const domain = email.split('@')[1].toLowerCase();
   return ALLOWED_ADMIN_DOMAINS.includes(domain as AdminDomain);
 };
@@ -126,18 +122,18 @@ export const validateAdminEmail = (email: string): { isValid: boolean; error?: s
   if (!email) {
     return { isValid: false, error: 'Email is required' };
   }
-  
+
   if (!email.includes('@')) {
     return { isValid: false, error: 'Invalid email format' };
   }
-  
+
   if (!isAllowedAdminDomain(email)) {
-    return { 
-      isValid: false, 
-      error: `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`
+    return {
+      isValid: false,
+      error: `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`,
     };
   }
-  
+
   return { isValid: true };
 };
 
@@ -162,7 +158,7 @@ export const isExternalEmail = (email: string): boolean => {
   if (!email || !email.includes('@')) {
     return true;
   }
-  
+
   const domain = getEmailDomain(email).toLowerCase();
   return !ALLOWED_ADMIN_DOMAINS.includes(domain as AdminDomain);
 };
@@ -175,7 +171,7 @@ export const isExternalEmail = (email: string): boolean => {
  */
 export const maskData = (value: string, type: 'pan' | 'email' | 'mobile' | 'auto' = 'auto'): string => {
   if (!value) return value || '';
-  
+
   switch (type) {
     case 'pan':
       return maskPAN(value);
@@ -208,5 +204,5 @@ export default {
   validateAdminEmail,
   getEmailDomain,
   isExternalEmail,
-  ALLOWED_ADMIN_DOMAINS
+  ALLOWED_ADMIN_DOMAINS,
 };

@@ -41,13 +41,13 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Update local table data when ekycStatus is fetched
   useEffect(() => {
     if (ekycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 e_sign_status: ekycStatus.status,
-                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date
+                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date,
               }
             : row
         )
@@ -58,13 +58,13 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Update local table data when vkycStatus is fetched
   useEffect(() => {
     if (vkycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 v_kyc_status: vkycStatus.status,
-                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date
+                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date,
               }
             : row
         )
@@ -150,7 +150,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       mutateEkyc(orderId);
     }
   };
-    const handleVkycStatus = (rowData: Order) => {
+  const handleVkycStatus = (rowData: Order) => {
     const orderId = rowData.partner_order_id;
     if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
       setSelectedOrderId(orderId);
@@ -161,7 +161,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const columns = GetTransactionTableColumns({
     openModal,
     handleEkycStatus,
-    handleVkycStatus
+    handleVkycStatus,
   });
 
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));

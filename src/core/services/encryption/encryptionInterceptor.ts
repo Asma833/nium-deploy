@@ -60,14 +60,14 @@ export const encryptRequestInterceptor = async (
       // For GET/DELETE, we need to store the SAME aesKey and iv that we sent in headers
       // Backend will use these header values to encrypt the response
       const contextKey = `${url}_${Date.now()}`;
-      
+
       // Generate auth tag from fixed data using the SAME aesKey and iv
       const fixedData = 'GET_REQUEST';
       const { authTag } = await encryptionService.encryptWithAES(fixedData, aesKey, iv);
-      
+
       encryptionContext.set(contextKey, {
         aesKey: aesKey, // Use the SAME aesKey we sent in headers
-        iv: iv,         // Use the SAME iv we sent in headers
+        iv: iv, // Use the SAME iv we sent in headers
         authTag: authTag,
       });
       (config as any).encryptionContextKey = contextKey;
@@ -117,8 +117,8 @@ export const encryptRequestInterceptor = async (
 };
 
 /**
-  * Response interceptor to decrypt incoming data
-  */
+ * Response interceptor to decrypt incoming data
+ */
 export const decryptResponseInterceptor = async (response: AxiosResponse): Promise<AxiosResponse> => {
   try {
     if (!encryptionService.isEncryptionEnabled()) {
@@ -161,7 +161,7 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
     } else if (responseData.encryptedKey) {
       // Try to decrypt the RSA-encrypted AES key
       const decryptedKey = await encryptionService.decryptAESKeyWithRSA(responseData.encryptedKey);
-      
+
       if (decryptedKey) {
         aesKeyToUse = decryptedKey;
         // IMPORTANT: Always use request context IV - backend should encrypt with the same IV we sent
@@ -174,7 +174,8 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
         ivToUse = encryptionCtx.iv;
         authTagToUse = responseData.authTag || encryptionCtx.authTag;
       } else {
-        const errorMsg = 'Cannot decrypt RSA-encrypted key (no private key in frontend) and no request context key available. Backend must send raw "aesKey" field.';
+        const errorMsg =
+          'Cannot decrypt RSA-encrypted key (no private key in frontend) and no request context key available. Backend must send raw "aesKey" field.';
         encryptionLogger.error(errorMsg, new Error('Missing AES key'));
         throw new Error(errorMsg);
       }
@@ -187,7 +188,8 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
       authTagToUse = responseData.authTag || encryptionCtx.authTag;
     } else {
       // No AES key available - cannot decrypt
-      const errorMsg = 'No AES key available for decryption. Backend must include "aesKey" in encrypted responses or reuse request key.';
+      const errorMsg =
+        'No AES key available for decryption. Backend must include "aesKey" in encrypted responses or reuse request key.';
       encryptionLogger.error(errorMsg, new Error('Missing AES key'));
       throw new Error(errorMsg);
     }

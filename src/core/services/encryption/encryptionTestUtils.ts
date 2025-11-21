@@ -1,6 +1,6 @@
 /**
  * Encryption Test Utilities
- * 
+ *
  * This file provides utilities to test AES-GCM encryption/decryption
  * with the backend implementation.
  */
@@ -17,7 +17,7 @@ export interface BackendEncryptedResponse {
 
 /**
  * Test decryption with a backend-generated encrypted payload
- * 
+ *
  * @example
  * const backendResponse = {
  *   encryptedKey: "2125adc6806b0ca9...",
@@ -26,14 +26,15 @@ export interface BackendEncryptedResponse {
  *   authTag: "80cd97ccc8c2d2d0ce0eb4e42114df08",
  *   aesKey: "..." // Must be provided by backend
  * };
- * 
+ *
  * const result = await testDecryption(backendResponse);
  * console.log('Decrypted:', result);
  */
 export async function testDecryption(payload: BackendEncryptedResponse): Promise<any> {
-
   if (!payload.aesKey) {
-    throw new Error('❌ Backend must provide "aesKey" field for decryption. The encryptedKey cannot be decrypted in the browser without the private key.');
+    throw new Error(
+      '❌ Backend must provide "aesKey" field for decryption. The encryptedKey cannot be decrypted in the browser without the private key.'
+    );
   }
 
   try {
@@ -58,7 +59,7 @@ export async function testDecryption(payload: BackendEncryptedResponse): Promise
 
 /**
  * Test full encryption/decryption cycle
- * 
+ *
  * @example
  * const testData = { message: 'Hello World', timestamp: Date.now() };
  * const result = await testEncryptionCycle(testData);
@@ -74,14 +75,14 @@ export async function testEncryptionCycle(data: any): Promise<any> {
       encryptedData: encrypted.encryptedData,
       aesKey: encrypted.aesKey,
       iv: encrypted.iv,
-      authTag: encrypted.authTag
+      authTag: encrypted.authTag,
     });
     // Verify data matches
     const originalJson = JSON.stringify(data);
     const decryptedJson = JSON.stringify(decrypted);
-    
+
     if (originalJson === decryptedJson) {
-   //   console.log('✅ Data integrity verified - original and decrypted match!');
+      //   console.log('✅ Data integrity verified - original and decrypted match!');
     } else {
       // console.warn('⚠️ Data mismatch detected');
       // console.log('Original:', originalJson);
@@ -124,7 +125,7 @@ export function validateBackendResponse(response: any): {
 
   // Validate hex format
   const hexRegex = /^[0-9a-fA-F]+$/;
-  
+
   if (response.encryptedData && !hexRegex.test(response.encryptedData)) {
     errors.push('encryptedData is not a valid hex string');
   }
@@ -151,21 +152,23 @@ export function validateBackendResponse(response: any): {
 
   // Warnings
   if (response.encryptedKey && !response.aesKey) {
-    warnings.push('Response contains encryptedKey but no aesKey. Frontend cannot decrypt RSA-encrypted keys without private key.');
+    warnings.push(
+      'Response contains encryptedKey but no aesKey. Frontend cannot decrypt RSA-encrypted keys without private key.'
+    );
   }
 
   return {
     valid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
 /**
  * Example usage in browser console:
- * 
+ *
  * import { testDecryption, validateBackendResponse } from '@/core/services/encryption/encryptionTestUtils';
- * 
+ *
  * // Test with your backend response
  * const backendResponse = {
  *   encryptedKey: "2125adc6806b0ca9...",
@@ -174,11 +177,11 @@ export function validateBackendResponse(response: any): {
  *   authTag: "80cd97ccc8c2d2d0ce0eb4e42114df08",
  *   aesKey: "..." // Backend must provide this
  * };
- * 
+ *
  * // Validate format
  * const validation = validateBackendResponse(backendResponse);
  * console.log('Validation:', validation);
- * 
+ *
  * // Test decryption
  * if (validation.valid) {
  *   const decrypted = await testDecryption(backendResponse);
@@ -189,5 +192,5 @@ export function validateBackendResponse(response: any): {
 export default {
   testDecryption,
   testEncryptionCycle,
-  validateBackendResponse
+  validateBackendResponse,
 };
