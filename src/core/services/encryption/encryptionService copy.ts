@@ -4,24 +4,21 @@ import { encryptionLogger } from './encryptionLogger';
 
 export interface EncryptionResult {
   encryptedData: string;
-  encryptedKey: string; // RSA encrypted AES key
+  encryptedAESKey: string;
   iv: string;
-  authTag: string;
   aesKey: string; // Include the AES key for response decryption
 }
 
 export interface ApiEncryptionPayload {
-  encryptedData: string; // HEX_ENCRYPTED_AES_PAYLOAD
+  encryptedValue: string; // HEX_ENCRYPTED_AES_PAYLOAD
   encryptedKey: string; // HEX_RSA_ENCRYPTED_AES_KEY
   iv: string; // HEX_IV
-  authTag: string; // GCM authentication tag
 }
 
 export interface DecryptionParams {
   encryptedData: string;
   aesKey: string;
   iv: string;
-  authTag: string;
 }
 
 class EncryptionService {
@@ -123,122 +120,70 @@ class EncryptionService {
   }
 
   /**
-    * Generate a secure random AES key (16 bytes for AES-128)
-    */
+   * Generate a secure random AES key (32 bytes for AES-256)
+   */
   generateAESKey(): string {
+    return CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Hex);
+  }
+
+  /**
+   * Generate a secure random IV (16 bytes for AES-CBC)
+   */
+  generateIV(): string {
     return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
   }
 
   /**
-    * Generate a secure random IV (12 bytes for AES-GCM)
-    */
-  generateIV(): string {
-    return CryptoJS.lib.WordArray.random(12).toString(CryptoJS.enc.Hex);
-  }
-
-  /**
-    * Convert hex string to Uint8Array
-    */
-  private hexToUint8Array(hex: string): Uint8Array {
-    return new Uint8Array(
-      hex.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || []
-    );
-  }
-
-  /**
-    * Convert Uint8Array to hex string
-    */
-  private uint8ArrayToHex(array: Uint8Array): string {
-    return Array.from(array)
-      .map(byte => byte.toString(16).padStart(2, '0'))
-      .join('');
-  }
-
-  /**
-    * Encrypt data using AES-128-GCM
-    */
-  async encryptWithAES(data: any, aesKey: string, iv: string): Promise<{ encryptedData: string; authTag: string }> {
+   * Encrypt data using AES-256-CBC
+   */
+  encryptWithAES(data: any, aesKey: string, iv: string): string {
     try {
+      const key = CryptoJS.enc.Hex.parse(aesKey);
+      const ivWordArray = CryptoJS.enc.Hex.parse(iv);
+
       const dataString = typeof data === 'string' ? data : JSON.stringify(data);
-      const encodedData = new TextEncoder().encode(dataString);
 
-      // Import the key
-      const keyData = this.hexToUint8Array(aesKey);
-      const key = await crypto.subtle.importKey(
-        'raw',
-        keyData as any,
-        { name: 'AES-GCM', length: 128 },
-        false,
-        ['encrypt']
-      );
-
-      // Encrypt with AES-GCM
-      const ivData = this.hexToUint8Array(iv);
-      const encrypted = await crypto.subtle.encrypt(
-        {
-          name: 'AES-GCM',
-          iv: ivData as any,
-        },
-        key,
-        encodedData
-      );
-
-      // Extract ciphertext and auth tag (last 16 bytes)
-      const encryptedArray = new Uint8Array(encrypted);
-      const authTagLength = 16;
-      const ciphertext = encryptedArray.slice(0, encryptedArray.length - authTagLength);
-      const authTag = encryptedArray.slice(encryptedArray.length - authTagLength);
-
-      return {
-        encryptedData: this.uint8ArrayToHex(ciphertext),
-        authTag: this.uint8ArrayToHex(authTag),
-      };
+      const encrypted = CryptoJS.AES.encrypt(dataString, key, {
+        iv: ivWordArray,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      }); // Return as HEX instead of Base64 (backend expects HEX format)
+      return encrypted.ciphertext.toString(CryptoJS.enc.Hex);
     } catch (error) {
-      encryptionLogger.error('AES-GCM encryption error', error as Error);
-      throw new Error('Failed to encrypt data with AES-GCM');
+      encryptionLogger.error('AES encryption error', error as Error);
+      throw new Error('Failed to encrypt data with AES');
     }
   }
 
   /**
-    * Decrypt data using AES-128-GCM
-    */
-  async decryptWithAES(encryptedData: string, aesKey: string, iv: string, authTag: string): Promise<string> {
+   * Decrypt data using AES-256-CBC
+   */
+  decryptWithAES(encryptedData: string, aesKey: string, iv: string): string {
     try {
-      // Combine ciphertext and auth tag
-      const ciphertext = this.hexToUint8Array(encryptedData);
-      const tag = this.hexToUint8Array(authTag);
-      const combined = new Uint8Array(ciphertext.length + tag.length);
-      combined.set(ciphertext);
-      combined.set(tag, ciphertext.length);
+      const key = CryptoJS.enc.Hex.parse(aesKey);
+      const ivWordArray = CryptoJS.enc.Hex.parse(iv);
 
-      // Import the key
-      const key = await crypto.subtle.importKey(
-        'raw',
-        this.hexToUint8Array(aesKey) as any,
-        { name: 'AES-GCM', length: 128 },
-        false,
-        ['decrypt']
-      );
+      // Create CipherParams object from HEX encrypted data
+      const encryptedDataWordArray = CryptoJS.enc.Hex.parse(encryptedData);
+      const cipherParams = CryptoJS.lib.CipherParams.create({
+        ciphertext: encryptedDataWordArray,
+      });
 
-      // Decrypt with AES-GCM
-      const decrypted = await crypto.subtle.decrypt(
-        {
-          name: 'AES-GCM',
-          iv: this.hexToUint8Array(iv) as any,
-        },
-        key,
-        combined
-      );
+      const decrypted = CryptoJS.AES.decrypt(cipherParams, key, {
+        iv: ivWordArray,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
 
-      const decryptedString = new TextDecoder().decode(decrypted);
+      const decryptedString = decrypted.toString(CryptoJS.enc.Utf8);
 
       if (!decryptedString) {
         throw new Error('Decryption failed - invalid key or corrupted data');
       }
       return decryptedString;
     } catch (error) {
-      encryptionLogger.error('AES-GCM decryption error', error as Error);
-      throw new Error('Failed to decrypt data with AES-GCM');
+      encryptionLogger.error('AES decryption error', error as Error);
+      throw new Error('Failed to decrypt data with AES');
     }
   }
 
@@ -282,9 +227,8 @@ class EncryptionService {
         // Return data as-is if encryption is disabled
         return {
           encryptedData: typeof data === 'string' ? data : JSON.stringify(data),
-          encryptedKey: '',
+          encryptedAESKey: '',
           iv: '',
-          authTag: '',
           aesKey: '',
         };
       }
@@ -297,16 +241,15 @@ class EncryptionService {
       const iv = this.generateIV();
 
       // Encrypt the data with AES
-      const encryptionResult = await this.encryptWithAES(data, aesKey, iv);
+      const encryptedData = this.encryptWithAES(data, aesKey, iv);
 
       // Encrypt the AES key with RSA
       const encryptedAESKey = this.encryptAESKeyWithRSA(aesKey, rsaPublicKey);
 
       return {
-        encryptedData: encryptionResult.encryptedData,
-        encryptedKey: encryptedAESKey,
+        encryptedData,
+        encryptedAESKey,
         iv,
-        authTag: encryptionResult.authTag,
         aesKey, // Include the AES key for response decryption
       };
     } catch (error) {
@@ -316,9 +259,9 @@ class EncryptionService {
   }
 
   /**
-    * Decrypt response data using stored AES key and IV
-    */
-  async decryptResponse(params: DecryptionParams): Promise<any> {
+   * Decrypt response data using stored AES key and IV
+   */
+  decryptResponse(params: DecryptionParams): any {
     try {
       const encryptionEnabled = import.meta.env.VITE_ENABLE_ENCRYPTION === 'true';
 
@@ -331,7 +274,7 @@ class EncryptionService {
         }
       }
 
-      const decryptedString = await this.decryptWithAES(params.encryptedData, params.aesKey, params.iv, params.authTag);
+      const decryptedString = this.decryptWithAES(params.encryptedData, params.aesKey, params.iv);
 
       // Try to parse as JSON, fallback to string
       try {

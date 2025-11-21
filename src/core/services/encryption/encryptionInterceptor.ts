@@ -5,19 +5,20 @@ import { shouldEncryptEndpoint } from '@/core/constant/encryptionEndpoints';
 import encryptionLogger from './encryptionLogger';
 
 interface EncryptedRequestData {
-  encryptedValue: string;
+  encryptedData: string;
   encryptedKey: string;
   iv: string;
+  authTag: string;
   originalData?: any;
 }
 
 interface EncryptedResponseData {
-  encryptedValue: string;
+  encryptedData: string;
   success?: boolean;
   message?: string;
 }
 
-const encryptionContext = new Map<string, { aesKey: string; iv: string }>();
+const encryptionContext = new Map<string, { aesKey: string; iv: string; authTag: string }>();
 
 /**
  * Request interceptor to encrypt outgoing data
@@ -46,7 +47,7 @@ export const encryptRequestInterceptor = async (
       const encryptedAESKey = encryptionService.encryptAESKeyWithRSA(aesKey);
 
       const contextKey = `${url}_${Date.now()}`;
-      encryptionContext.set(contextKey, { aesKey, iv });
+      encryptionContext.set(contextKey, { aesKey, iv, authTag: '' });
       (config as any).encryptionContextKey = contextKey;
 
       if (config.headers) {
@@ -67,14 +68,16 @@ export const encryptRequestInterceptor = async (
     encryptionContext.set(contextKey, {
       aesKey: encryptionResult.aesKey,
       iv: encryptionResult.iv,
+      authTag: encryptionResult.authTag,
     });
 
     (config as any).encryptionContextKey = contextKey;
 
     const encryptedPayload: EncryptedRequestData = {
-      encryptedValue: encryptionResult.encryptedData,
-      encryptedKey: encryptionResult.encryptedAESKey,
+      encryptedData: encryptionResult.encryptedData,
+      encryptedKey: encryptionResult.encryptedKey,
       iv: encryptionResult.iv,
+      authTag: encryptionResult.authTag,
     };
 
     config.data = encryptedPayload;
@@ -91,9 +94,9 @@ export const encryptRequestInterceptor = async (
 };
 
 /**
- * Response interceptor to decrypt incoming data
- */
-export const decryptResponseInterceptor = (response: AxiosResponse): AxiosResponse => {
+  * Response interceptor to decrypt incoming data
+  */
+export const decryptResponseInterceptor = async (response: AxiosResponse): Promise<AxiosResponse> => {
   try {
     if (!encryptionService.isEncryptionEnabled()) {
       return response;
@@ -101,7 +104,7 @@ export const decryptResponseInterceptor = (response: AxiosResponse): AxiosRespon
 
     const responseData = response.data as EncryptedResponseData;
 
-    if (!responseData || typeof responseData !== 'object' || !responseData.encryptedValue) {
+    if (!responseData || typeof responseData !== 'object' || !responseData.encryptedData) {
       return response;
     }
 
@@ -118,10 +121,11 @@ export const decryptResponseInterceptor = (response: AxiosResponse): AxiosRespon
       return response;
     }
 
-    const decryptedData = encryptionService.decryptResponse({
-      encryptedData: responseData.encryptedValue,
+    const decryptedData = await encryptionService.decryptResponse({
+      encryptedData: responseData.encryptedData,
       aesKey: encryptionCtx.aesKey,
       iv: encryptionCtx.iv,
+      authTag: encryptionCtx.authTag,
     });
 
     encryptionContext.delete(contextKey);
@@ -147,6 +151,7 @@ export class EncryptedApiClient {
   private static instance: EncryptedApiClient;
   private aesKey: string | null = null;
   private iv: string | null = null;
+  private authTag: string | null = null;
 
   static getInstance(): EncryptedApiClient {
     if (!EncryptedApiClient.instance) {
@@ -160,23 +165,26 @@ export class EncryptedApiClient {
 
     this.aesKey = result.aesKey;
     this.iv = result.iv;
+    this.authTag = result.authTag;
 
     return {
-      encryptedValue: result.encryptedData,
-      encryptedKey: result.encryptedAESKey,
+      encryptedData: result.encryptedData,
+      encryptedKey: result.encryptedKey,
       iv: result.iv,
+      authTag: result.authTag,
     };
   }
 
-  decryptResponse(encryptedData: string): any {
-    if (!this.aesKey || !this.iv) {
+  async decryptResponse(encryptedData: string): Promise<any> {
+    if (!this.aesKey || !this.iv || !this.authTag) {
       throw new Error('No encryption context available for decryption');
     }
 
-    const result = encryptionService.decryptResponse({
+    const result = await encryptionService.decryptResponse({
       encryptedData,
       aesKey: this.aesKey,
       iv: this.iv,
+      authTag: this.authTag,
     });
 
     this.clearContext();
@@ -186,6 +194,7 @@ export class EncryptedApiClient {
   clearContext(): void {
     this.aesKey = null;
     this.iv = null;
+    this.authTag = null;
   }
 }
 
