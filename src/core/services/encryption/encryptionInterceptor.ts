@@ -68,21 +68,30 @@ export const encryptRequestInterceptor = async (
     }
 
     if (method === 'get' || method === 'delete') {
-      // For GET/DELETE, generate auth tag from fixed data
-      const fixedData = 'GET_REQUEST'; // Fixed data to generate auth tag
-      const encryptionResult = await encryptionService.encryptPayload(fixedData);
-
+      // For GET/DELETE, we need to store the SAME aesKey and iv that we sent in headers
+      // Backend will use these header values to encrypt the response
       const contextKey = `${url}_${Date.now()}`;
+      
+      // Generate auth tag from fixed data using the SAME aesKey and iv
+      const fixedData = 'GET_REQUEST';
+      const { authTag } = await encryptionService.encryptWithAES(fixedData, aesKey, iv);
+      
       encryptionContext.set(contextKey, {
-        aesKey: encryptionResult.aesKey,
-        iv: encryptionResult.iv,
-        authTag: encryptionResult.authTag,
+        aesKey: aesKey, // Use the SAME aesKey we sent in headers
+        iv: iv,         // Use the SAME iv we sent in headers
+        authTag: authTag,
       });
       (config as any).encryptionContextKey = contextKey;
 
       if (config.headers) {
-        config.headers['x-auth-tag'] = encryptionResult.authTag;
+        config.headers['x-auth-tag'] = authTag;
       }
+
+      console.log('🔐 GET request encryption context stored:', {
+        aesKeyLength: aesKey.length,
+        ivLength: iv.length,
+        authTagLength: authTag.length
+      });
 
       return config;
     }
@@ -197,7 +206,8 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
       // Backend provided raw AES key (use this if available)
       console.log('🔐 Using raw AES key from backend response');
       aesKeyToUse = responseData.aesKey;
-      ivToUse = responseData.iv || encryptionCtx.iv;
+      // IMPORTANT: Always use request context IV - backend should encrypt with the same IV we sent
+      ivToUse = encryptionCtx.iv;
       authTagToUse = responseData.authTag || encryptionCtx.authTag;
     } else if (responseData.encryptedKey) {
       // Try to decrypt the RSA-encrypted AES key
@@ -207,13 +217,15 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
       if (decryptedKey) {
         console.log('🔐 Successfully decrypted AES key from encryptedKey');
         aesKeyToUse = decryptedKey;
-        ivToUse = responseData.iv || encryptionCtx.iv;
+        // IMPORTANT: Always use request context IV - backend should encrypt with the same IV we sent
+        ivToUse = encryptionCtx.iv;
         authTagToUse = responseData.authTag || encryptionCtx.authTag;
       } else if (encryptionCtx.aesKey) {
         // Fallback to request context key
         console.log('🔐 Could not decrypt encryptedKey, using request context key');
         aesKeyToUse = encryptionCtx.aesKey;
-        ivToUse = responseData.iv || encryptionCtx.iv;
+        // IMPORTANT: Always use request context IV - backend should encrypt with the same IV we sent
+        ivToUse = encryptionCtx.iv;
         authTagToUse = responseData.authTag || encryptionCtx.authTag;
       } else {
         const errorMsg = 'Cannot decrypt RSA-encrypted key (no private key in frontend) and no request context key available. Backend must send raw "aesKey" field.';
@@ -223,10 +235,11 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
       }
     } else if (encryptionCtx.aesKey) {
       // Use AES key from request context (this is the normal flow)
-      // Backend encrypts response with the same key we sent in the request
-      console.log('🔐 Using AES key from request context (backend reuses request key)');
+      // Backend encrypts response with the same key and IV we sent in the request
+      console.log('🔐 Using AES key and IV from request context (backend reuses request key and IV)');
       aesKeyToUse = encryptionCtx.aesKey;
-      ivToUse = responseData.iv || encryptionCtx.iv;
+      // IMPORTANT: Always use request context IV - backend should encrypt with the same IV we sent
+      ivToUse = encryptionCtx.iv;
       authTagToUse = responseData.authTag || encryptionCtx.authTag;
     } else {
       // No AES key available - cannot decrypt
