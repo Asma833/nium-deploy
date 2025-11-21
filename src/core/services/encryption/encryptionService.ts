@@ -221,6 +221,37 @@ class EncryptionService {
     */
   async decryptWithAES(encryptedData: string, aesKey: string, iv: string, authTag: string): Promise<string> {
     try {
+      // Validate input parameters
+      if (!encryptedData || !aesKey || !iv || !authTag) {
+        throw new Error(`Missing required parameters: ${!encryptedData ? 'encryptedData ' : ''}${!aesKey ? 'aesKey ' : ''}${!iv ? 'iv ' : ''}${!authTag ? 'authTag' : ''}`);
+      }
+
+      // Validate hex string format
+      const hexRegex = /^[0-9a-fA-F]+$/;
+      if (!hexRegex.test(encryptedData)) {
+        throw new Error('Invalid encryptedData format - must be hex string');
+      }
+      if (!hexRegex.test(aesKey)) {
+        throw new Error('Invalid aesKey format - must be hex string');
+      }
+      if (!hexRegex.test(iv)) {
+        throw new Error('Invalid iv format - must be hex string');
+      }
+      if (!hexRegex.test(authTag)) {
+        throw new Error('Invalid authTag format - must be hex string');
+      }
+
+      // Validate key and IV lengths
+      if (aesKey.length !== 32) { // 16 bytes = 32 hex chars for AES-128
+        throw new Error(`Invalid AES key length: expected 32 hex chars (16 bytes), got ${aesKey.length}`);
+      }
+      if (iv.length !== 24) { // 12 bytes = 24 hex chars for GCM IV
+        throw new Error(`Invalid IV length: expected 24 hex chars (12 bytes), got ${iv.length}`);
+      }
+      if (authTag.length !== 32) { // 16 bytes = 32 hex chars for GCM auth tag
+        throw new Error(`Invalid auth tag length: expected 32 hex chars (16 bytes), got ${authTag.length}`);
+      }
+
       console.log('🔐 Starting AES-GCM decryption:', {
         encryptedDataLength: encryptedData.length,
         aesKeyLength: aesKey.length,
@@ -236,22 +267,24 @@ class EncryptionService {
       combined.set(ciphertext);
       combined.set(tag, ciphertext.length);
 
-      console.log('🔐 Combined data length:', combined.length);
+      console.log('🔐 Combined data length:', combined.length, 'bytes (ciphertext:', ciphertext.length, '+ tag:', tag.length, ')');
 
       // Import the key
+      const keyData = this.hexToUint8Array(aesKey);
       const key = await crypto.subtle.importKey(
         'raw',
-        this.hexToUint8Array(aesKey) as any,
+        keyData as any,
         { name: 'AES-GCM', length: 128 },
         false,
         ['decrypt']
       );
 
       // Decrypt with AES-GCM - let Web Crypto API handle the auth tag
+      const ivData = this.hexToUint8Array(iv);
       const decrypted = await crypto.subtle.decrypt(
         {
           name: 'AES-GCM',
-          iv: this.hexToUint8Array(iv) as any,
+          iv: ivData as any,
           tagLength: 128, // 16 bytes = 128 bits auth tag
         },
         key,
@@ -260,25 +293,40 @@ class EncryptionService {
 
       const decryptedString = new TextDecoder().decode(decrypted);
 
-      console.log('🔐 AES-GCM decryption completed:', {
+      console.log('🔐 AES-GCM decryption completed successfully:', {
         decryptedLength: decryptedString.length,
         decryptedPreview: decryptedString.substring(0, 100)
       });
 
       if (!decryptedString) {
-        throw new Error('Decryption failed - invalid key or corrupted data');
+        throw new Error('Decryption produced empty result');
       }
       return decryptedString;
     } catch (error) {
       console.error('🔐 AES-GCM decryption error:', error);
-      console.error('🔐 Error details:', {
-        encryptedData: encryptedData.substring(0, 50) + '...',
-        aesKey: aesKey.substring(0, 10) + '...',
+      
+      // Provide detailed error information for debugging
+      const errorDetails = {
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        encryptedDataPreview: encryptedData.substring(0, 50) + '...',
+        encryptedDataLength: encryptedData.length,
+        aesKeyPreview: aesKey.substring(0, 10) + '...',
+        aesKeyLength: aesKey.length,
         iv,
-        authTag
-      });
+        ivLength: iv.length,
+        authTag,
+        authTagLength: authTag.length
+      };
+      
+      console.error('🔐 Decryption error details:', errorDetails);
       encryptionLogger.error('AES-GCM decryption error', error as Error);
-      throw new Error('Failed to decrypt data with AES-GCM');
+      
+      // Provide helpful error message based on error type
+      if (error instanceof Error && error.message.includes('OperationError')) {
+        throw new Error('AES-GCM decryption failed: Authentication tag verification failed. This usually means the key, IV, or data is incorrect.');
+      }
+      
+      throw new Error(`Failed to decrypt data with AES-GCM: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -424,6 +472,42 @@ class EncryptionService {
    */
   setRSAPublicKey(publicKey: string): void {
     this.rsaPublicKey = publicKey;
+  }
+
+  /**
+   * Decrypt RSA-encrypted AES key using private key (if available)
+   * NOTE: This should only be used for testing. In production, backend should send raw aesKey.
+   */
+  async decryptAESKeyWithRSA(encryptedKey: string): Promise<string | null> {
+    try {
+      // Check if private key is available in environment (NOT RECOMMENDED for production)
+      const privateKey = import.meta.env.VITE_RSA_PRIVATE_KEY;
+      
+      if (!privateKey) {
+        console.warn('🔐 No RSA private key available in frontend. Backend must send raw aesKey.');
+        return null;
+      }
+
+      console.warn('⚠️ WARNING: Using RSA private key in frontend is NOT secure for production!');
+      
+      // Use node-forge to decrypt
+      const forgePrivateKey = forge.pki.privateKeyFromPem(privateKey);
+      
+      // Convert hex to bytes
+      const encryptedBytes = forge.util.hexToBytes(encryptedKey);
+      
+      // Decrypt using RSA-OAEP
+      const decryptedBytes = forgePrivateKey.decrypt(encryptedBytes, 'RSA-OAEP');
+      
+      // Convert bytes to hex
+      const aesKeyHex = forge.util.bytesToHex(decryptedBytes);
+      
+      console.log('🔐 Successfully decrypted AES key from RSA-encrypted key');
+      return aesKeyHex;
+    } catch (error) {
+      console.error('🔐 Failed to decrypt RSA-encrypted AES key:', error);
+      return null;
+    }
   }
 }
 
