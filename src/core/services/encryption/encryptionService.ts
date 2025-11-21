@@ -281,7 +281,6 @@ class EncryptionService {
       }
       return decryptedString;
     } catch (error) {
-      console.error('🔐 AES-GCM decryption error:', error);
       
       // Provide detailed error information for debugging
       const errorDetails = {
@@ -296,7 +295,7 @@ class EncryptionService {
         authTagLength: authTag.length
       };
       
-      console.error('🔐 Decryption error details:', errorDetails);
+      console.error('Decryption error details:', errorDetails);
       encryptionLogger.error('AES-GCM decryption error', error as Error);
       
       // Provide helpful error message based on error type
