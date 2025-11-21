@@ -56,20 +56,14 @@ export async function testDecryption(payload: BackendEncryptedResponse): Promise
       payload.authTag
     );
 
-    console.log('✅ Decryption successful!');
-    console.log('📄 Decrypted string preview:', decryptedString.substring(0, 200));
-
     // Try to parse as JSON
     try {
       const parsed = JSON.parse(decryptedString);
-      console.log('✅ Successfully parsed as JSON');
       return parsed;
     } catch {
-      console.log('ℹ️ Decrypted data is not JSON, returning as string');
       return decryptedString;
     }
   } catch (error) {
-    console.error('❌ Decryption failed:', error);
     throw error;
   }
 }

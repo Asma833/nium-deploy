@@ -165,8 +165,6 @@ class EncryptionService {
     */
   async encryptWithAES(data: any, aesKey: string, iv: string): Promise<{ encryptedData: string; authTag: string }> {
     try {
-      console.log('🔐 Starting AES-GCM encryption:', { dataKeys: Object.keys(data), aesKeyLength: aesKey.length, ivLength: iv.length });
-
       const dataString = typeof data === 'string' ? data : JSON.stringify(data);
       const encodedData = new TextEncoder().encode(dataString);
 
@@ -203,14 +201,8 @@ class EncryptionService {
         authTag: this.uint8ArrayToHex(authTag),
       };
 
-      console.log('🔐 AES-GCM encryption completed:', {
-        encryptedDataLength: result.encryptedData.length,
-        authTagLength: result.authTag.length
-      });
-
       return result;
     } catch (error) {
-      console.error('🔐 AES-GCM encryption error:', error);
       encryptionLogger.error('AES-GCM encryption error', error as Error);
       throw new Error('Failed to encrypt data with AES-GCM');
     }
@@ -484,11 +476,8 @@ class EncryptionService {
       const privateKey = import.meta.env.VITE_RSA_PRIVATE_KEY;
       
       if (!privateKey) {
-        console.warn('🔐 No RSA private key available in frontend. Backend must send raw aesKey.');
         return null;
       }
-
-      console.warn('⚠️ WARNING: Using RSA private key in frontend is NOT secure for production!');
       
       // Use node-forge to decrypt
       const forgePrivateKey = forge.pki.privateKeyFromPem(privateKey);
@@ -502,10 +491,8 @@ class EncryptionService {
       // Convert bytes to hex
       const aesKeyHex = forge.util.bytesToHex(decryptedBytes);
       
-      console.log('🔐 Successfully decrypted AES key from RSA-encrypted key');
       return aesKeyHex;
     } catch (error) {
-      console.error('🔐 Failed to decrypt RSA-encrypted AES key:', error);
       return null;
     }
   }
