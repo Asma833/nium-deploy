@@ -14,6 +14,10 @@ interface EncryptedRequestData {
 
 interface EncryptedResponseData {
   encryptedData: string;
+  aesKey?: string; // Raw AES key (not recommended for production)
+  encryptedKey?: string; // RSA encrypted AES key
+  iv?: string;
+  authTag?: string;
   success?: boolean;
   message?: string;
 }
@@ -34,7 +38,18 @@ export const encryptRequestInterceptor = async (
     const headerSkipEncryption = config.headers?.['X-Skip-Encryption'] === 'true';
     const configSkipEncryption = (config as any).skipEncryption === true;
 
+    console.log('🔐 Request encryption check:', {
+      url,
+      method,
+      shouldEncrypt,
+      headerSkipEncryption,
+      configSkipEncryption,
+      encryptionEnabled: encryptionService.isEncryptionEnabled(),
+      hasData: !!config.data
+    });
+
     if (!shouldEncrypt || headerSkipEncryption || configSkipEncryption || !encryptionService.isEncryptionEnabled()) {
+      console.log('🔐 Skipping encryption for:', url);
       return config;
     }
 
@@ -99,12 +114,20 @@ export const encryptRequestInterceptor = async (
 export const decryptResponseInterceptor = async (response: AxiosResponse): Promise<AxiosResponse> => {
   try {
     if (!encryptionService.isEncryptionEnabled()) {
+      console.log('🔐 Encryption disabled, skipping decryption');
       return response;
     }
 
     const responseData = response.data as EncryptedResponseData;
 
+    console.log('🔐 Response decryption check:', {
+      url: response.config.url,
+      hasEncryptedData: !!(responseData && responseData.encryptedData),
+      responseDataKeys: responseData ? Object.keys(responseData) : []
+    });
+
     if (!responseData || typeof responseData !== 'object' || !responseData.encryptedData) {
+      console.log('🔐 No encrypted data found, returning response as-is');
       return response;
     }
 
@@ -121,11 +144,20 @@ export const decryptResponseInterceptor = async (response: AxiosResponse): Promi
       return response;
     }
 
+    // Check if backend sent raw AES key or encrypted AES key
+    let aesKeyToUse = encryptionCtx.aesKey;
+
+    // If response contains aesKey directly (not encrypted), use it
+    if (responseData.aesKey && !responseData.encryptedKey) {
+      console.log('🔐 Using raw AES key from response');
+      aesKeyToUse = responseData.aesKey;
+    }
+
     const decryptedData = await encryptionService.decryptResponse({
       encryptedData: responseData.encryptedData,
-      aesKey: encryptionCtx.aesKey,
-      iv: encryptionCtx.iv,
-      authTag: encryptionCtx.authTag,
+      aesKey: aesKeyToUse,
+      iv: responseData.iv || encryptionCtx.iv,
+      authTag: responseData.authTag || encryptionCtx.authTag,
     });
 
     encryptionContext.delete(contextKey);

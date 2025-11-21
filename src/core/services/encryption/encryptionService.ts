@@ -126,14 +126,20 @@ class EncryptionService {
     * Generate a secure random AES key (16 bytes for AES-128)
     */
   generateAESKey(): string {
-    return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+    // Generate 16 bytes (128 bits) for AES-128
+    const keyBytes = new Uint8Array(16);
+    crypto.getRandomValues(keyBytes);
+    return this.uint8ArrayToHex(keyBytes);
   }
 
   /**
     * Generate a secure random IV (12 bytes for AES-GCM)
     */
   generateIV(): string {
-    return CryptoJS.lib.WordArray.random(12).toString(CryptoJS.enc.Hex);
+    // Generate 12 bytes (96 bits) for GCM
+    const ivBytes = new Uint8Array(12);
+    crypto.getRandomValues(ivBytes);
+    return this.uint8ArrayToHex(ivBytes);
   }
 
   /**
@@ -159,6 +165,8 @@ class EncryptionService {
     */
   async encryptWithAES(data: any, aesKey: string, iv: string): Promise<{ encryptedData: string; authTag: string }> {
     try {
+      console.log('🔐 Starting AES-GCM encryption:', { dataKeys: Object.keys(data), aesKeyLength: aesKey.length, ivLength: iv.length });
+
       const dataString = typeof data === 'string' ? data : JSON.stringify(data);
       const encodedData = new TextEncoder().encode(dataString);
 
@@ -183,17 +191,26 @@ class EncryptionService {
         encodedData
       );
 
-      // Extract ciphertext and auth tag (last 16 bytes)
+      // Web Crypto API returns ciphertext + auth tag concatenated
+      // Extract them separately to match backend format
       const encryptedArray = new Uint8Array(encrypted);
-      const authTagLength = 16;
+      const authTagLength = 16; // 16 bytes for GCM auth tag
       const ciphertext = encryptedArray.slice(0, encryptedArray.length - authTagLength);
       const authTag = encryptedArray.slice(encryptedArray.length - authTagLength);
 
-      return {
+      const result = {
         encryptedData: this.uint8ArrayToHex(ciphertext),
         authTag: this.uint8ArrayToHex(authTag),
       };
+
+      console.log('🔐 AES-GCM encryption completed:', {
+        encryptedDataLength: result.encryptedData.length,
+        authTagLength: result.authTag.length
+      });
+
+      return result;
     } catch (error) {
+      console.error('🔐 AES-GCM encryption error:', error);
       encryptionLogger.error('AES-GCM encryption error', error as Error);
       throw new Error('Failed to encrypt data with AES-GCM');
     }
@@ -204,12 +221,22 @@ class EncryptionService {
     */
   async decryptWithAES(encryptedData: string, aesKey: string, iv: string, authTag: string): Promise<string> {
     try {
-      // Combine ciphertext and auth tag
+      console.log('🔐 Starting AES-GCM decryption:', {
+        encryptedDataLength: encryptedData.length,
+        aesKeyLength: aesKey.length,
+        ivLength: iv.length,
+        authTagLength: authTag.length
+      });
+
+      // For Web Crypto API GCM, we need ciphertext + auth tag concatenated
+      // The backend sends them separately, so we combine them
       const ciphertext = this.hexToUint8Array(encryptedData);
       const tag = this.hexToUint8Array(authTag);
       const combined = new Uint8Array(ciphertext.length + tag.length);
       combined.set(ciphertext);
       combined.set(tag, ciphertext.length);
+
+      console.log('🔐 Combined data length:', combined.length);
 
       // Import the key
       const key = await crypto.subtle.importKey(
@@ -220,11 +247,12 @@ class EncryptionService {
         ['decrypt']
       );
 
-      // Decrypt with AES-GCM
+      // Decrypt with AES-GCM - let Web Crypto API handle the auth tag
       const decrypted = await crypto.subtle.decrypt(
         {
           name: 'AES-GCM',
           iv: this.hexToUint8Array(iv) as any,
+          tagLength: 128, // 16 bytes = 128 bits auth tag
         },
         key,
         combined
@@ -232,11 +260,23 @@ class EncryptionService {
 
       const decryptedString = new TextDecoder().decode(decrypted);
 
+      console.log('🔐 AES-GCM decryption completed:', {
+        decryptedLength: decryptedString.length,
+        decryptedPreview: decryptedString.substring(0, 100)
+      });
+
       if (!decryptedString) {
         throw new Error('Decryption failed - invalid key or corrupted data');
       }
       return decryptedString;
     } catch (error) {
+      console.error('🔐 AES-GCM decryption error:', error);
+      console.error('🔐 Error details:', {
+        encryptedData: encryptedData.substring(0, 50) + '...',
+        aesKey: aesKey.substring(0, 10) + '...',
+        iv,
+        authTag
+      });
       encryptionLogger.error('AES-GCM decryption error', error as Error);
       throw new Error('Failed to decrypt data with AES-GCM');
     }
