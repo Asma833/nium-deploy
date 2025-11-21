@@ -118,14 +118,14 @@ const backendResponse = {
 
 // Validate format
 const validation = validateBackendResponse(backendResponse);
-console.log('Validation:', validation);
+///console.log('Validation:', validation);
 
 if (validation.valid) {
   // Test decryption
   const decrypted = await testDecryption(backendResponse);
-  console.log('Decrypted:', decrypted);
+  //console.log('Decrypted:', decrypted);
 } else {
-  console.error('Invalid response format:', validation.errors);
+  //console.error('Invalid response format:', validation.errors);
 }
 ```
 
@@ -151,7 +151,7 @@ const decrypted = await encryptionService.decryptWithAES(
   response.authTag
 );
 
-console.log('Decrypted:', JSON.parse(decrypted));
+//console.log('Decrypted:', JSON.parse(decrypted));
 ```
 
 ### Method 3: API Testing
@@ -163,7 +163,7 @@ const result = await axios.post('/api/your-endpoint', {
 });
 
 // Should automatically encrypt request and decrypt response
-console.log('Result:', result.data);
+//console.log('Result:', result.data);
 ```
 
 ## 🔐 Security Considerations

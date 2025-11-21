@@ -244,13 +244,6 @@ class EncryptionService {
         throw new Error(`Invalid auth tag length: expected 32 hex chars (16 bytes), got ${authTag.length}`);
       }
 
-      console.log('🔐 Starting AES-GCM decryption:', {
-        encryptedDataLength: encryptedData.length,
-        aesKeyLength: aesKey.length,
-        ivLength: iv.length,
-        authTagLength: authTag.length
-      });
-
       // For Web Crypto API GCM, we need ciphertext + auth tag concatenated
       // The backend sends them separately, so we combine them
       const ciphertext = this.hexToUint8Array(encryptedData);
@@ -258,8 +251,6 @@ class EncryptionService {
       const combined = new Uint8Array(ciphertext.length + tag.length);
       combined.set(ciphertext);
       combined.set(tag, ciphertext.length);
-
-      console.log('🔐 Combined data length:', combined.length, 'bytes (ciphertext:', ciphertext.length, '+ tag:', tag.length, ')');
 
       // Import the key
       const keyData = this.hexToUint8Array(aesKey);
@@ -284,11 +275,6 @@ class EncryptionService {
       );
 
       const decryptedString = new TextDecoder().decode(decrypted);
-
-      console.log('🔐 AES-GCM decryption completed successfully:', {
-        decryptedLength: decryptedString.length,
-        decryptedPreview: decryptedString.substring(0, 100)
-      });
 
       if (!decryptedString) {
         throw new Error('Decryption produced empty result');

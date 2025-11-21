@@ -31,18 +31,6 @@ export interface BackendEncryptedResponse {
  * console.log('Decrypted:', result);
  */
 export async function testDecryption(payload: BackendEncryptedResponse): Promise<any> {
-  console.log('🧪 Testing decryption with backend payload...');
-  console.log('📦 Payload info:', {
-    hasEncryptedKey: !!payload.encryptedKey,
-    hasEncryptedData: !!payload.encryptedData,
-    hasIv: !!payload.iv,
-    hasAuthTag: !!payload.authTag,
-    hasAesKey: !!payload.aesKey,
-    encryptedDataLength: payload.encryptedData?.length,
-    ivLength: payload.iv?.length,
-    authTagLength: payload.authTag?.length,
-    aesKeyLength: payload.aesKey?.length
-  });
 
   if (!payload.aesKey) {
     throw new Error('❌ Backend must provide "aesKey" field for decryption. The encryptedKey cannot be decrypted in the browser without the private key.');
@@ -78,20 +66,9 @@ export async function testDecryption(payload: BackendEncryptedResponse): Promise
  * console.log('Decrypted:', result);
  */
 export async function testEncryptionCycle(data: any): Promise<any> {
-  console.log('🧪 Testing full encryption/decryption cycle...');
-  console.log('📦 Original data:', data);
-
   try {
     // Encrypt
     const encrypted = await encryptionService.encryptPayload(data);
-    console.log('✅ Encryption successful');
-    console.log('🔐 Encrypted payload:', {
-      encryptedDataLength: encrypted.encryptedData.length,
-      ivLength: encrypted.iv.length,
-      authTagLength: encrypted.authTag.length,
-      aesKeyLength: encrypted.aesKey.length
-    });
-
     // Decrypt
     const decrypted = await encryptionService.decryptResponse({
       encryptedData: encrypted.encryptedData,
@@ -99,25 +76,21 @@ export async function testEncryptionCycle(data: any): Promise<any> {
       iv: encrypted.iv,
       authTag: encrypted.authTag
     });
-
-    console.log('✅ Decryption successful');
-    console.log('📄 Decrypted data:', decrypted);
-
     // Verify data matches
     const originalJson = JSON.stringify(data);
     const decryptedJson = JSON.stringify(decrypted);
     
     if (originalJson === decryptedJson) {
-      console.log('✅ Data integrity verified - original and decrypted match!');
+   //   console.log('✅ Data integrity verified - original and decrypted match!');
     } else {
-      console.warn('⚠️ Data mismatch detected');
-      console.log('Original:', originalJson);
-      console.log('Decrypted:', decryptedJson);
+      // console.warn('⚠️ Data mismatch detected');
+      // console.log('Original:', originalJson);
+      // console.log('Decrypted:', decryptedJson);
     }
 
     return decrypted;
   } catch (error) {
-    console.error('❌ Encryption/decryption cycle failed:', error);
+    // console.error('❌ Encryption/decryption cycle failed:', error);
     throw error;
   }
 }
