@@ -23,7 +23,8 @@ export const MaterialPhone = ({
 }: MaterialPhoneProps) => {
   const { control } = useFormContext();
   const [hasBeenFocused, setHasBeenFocused] = useState(false);
-
+  const prefixColor = disabled ? "#666" : "#111";
+  const prefixErrorColor = "#d32f2f";
   return (
     <Controller
       name={name}
@@ -52,9 +53,22 @@ export const MaterialPhone = ({
           placeholder="Enter phone number"
           InputProps={{
             startAdornment: (forcedValue ? forcedValue : value) ? (
-              <InputAdornment position="start">
-                <span style={{ color: '#666', fontSize: '14px' }}>+91</span>
-              </InputAdornment>
+               <InputAdornment
+                  position="start"
+                  sx={{
+                    mr: 1, // small gap between adornment and input text
+                    display: "flex",
+                    alignItems: "center",
+                    "& span": {
+                      fontSize: "14px",
+                      color: !!error ? prefixErrorColor : prefixColor,
+                      WebkitTextFillColor: !!error ? prefixErrorColor : prefixColor,
+                    },
+                  }}
+                >
+                  {/* always render prefix so space is reserved */}
+                  <span>+91</span>
+                </InputAdornment>
             ) : null,
           }}
           inputProps={{

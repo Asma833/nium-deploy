@@ -1,6 +1,4 @@
 import TooltipActionButton from '@/components/common/TooltipActionButton';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -9,7 +7,7 @@ import TransactionType from '@/features/checker/components/table/TransactionType
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
-import { RefreshCcwDot, FileText, Video } from 'lucide-react';
+import { FileText, Video } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
   openModal,

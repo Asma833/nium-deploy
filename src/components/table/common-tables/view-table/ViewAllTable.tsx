@@ -14,6 +14,7 @@ import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId } from '@/types/enums';
 import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
 import { useGetVKYCStatus } from '@/hooks/useGetVKYCStatus';
+import { maskPAN } from '@/utils/masking';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -94,7 +95,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
-      customer_pan: order.customer_pan || 'N/A',
+      customer_pan: maskPAN(order.customer_pan) || 'N/A',
       transaction_type_name: order?.transaction_type_name?.name || 'N/A',
       purpose_type_name: order?.purpose_type_name?.purpose_name || 'N/A',
       e_sign_link: order.e_sign_link || null,
