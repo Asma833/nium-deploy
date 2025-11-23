@@ -60,7 +60,6 @@ export const MaterialPhone = ({
                     display: "flex",
                     alignItems: "center",
                     "& span": {
-                      fontSize: "14px",
                       color: !!error ? prefixErrorColor : prefixColor,
                       WebkitTextFillColor: !!error ? prefixErrorColor : prefixColor,
                     },
