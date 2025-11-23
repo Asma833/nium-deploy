@@ -12,6 +12,7 @@ import { formatDate } from '@/utils/dateFormat';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
+import { maskPAN } from '@/utils/masking';
 
 const CompletedTransactionTable = () => {
   const {
@@ -92,7 +93,7 @@ const CompletedTransactionTable = () => {
         order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || '',
       customer_name: order.customer_name || '',
-      customer_pan: order.customer_pan || '',
+      customer_pan: maskPAN(order.customer_pan) || '',
       transaction_type_name: order?.transaction_type_name?.name || '',
       purpose_type_name: order?.purpose_type_name?.purpose_name || '',
       is_esign_required: order.is_esign_required || '',

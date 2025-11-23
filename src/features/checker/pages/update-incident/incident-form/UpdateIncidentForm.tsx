@@ -344,10 +344,9 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                 const hasError = !!errors[name as keyof typeof errors];
                 // Mask PAN if this is the customer_pan field
                 const fieldValue = rowData?.[field.name as keyof typeof rowData];
-                const displayValue = field.name === 'customer_pan' && fieldValue
-                  ? maskPAN(fieldValue as string)
-                  : fieldValue;
-                
+                const displayValue =
+                  field.name === 'customer_pan' && fieldValue ? maskPAN(fieldValue as string) : fieldValue;
+
                 return (
                   <FieldWrapper key={name} className={cn('w-full', hasError ? 'mb-8' : 'mb-2')}>
                     {getController({
@@ -468,7 +467,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
                   ...updateFormIncidentConfig.checkFeedInput.comment,
                   control,
                   errors,
-                  required:isRejected,
+                  required: isRejected,
                   name: 'fields.comment',
                   onInputChange: (value: string) => {
                     // Clear validation errors when user starts typing

@@ -1,6 +1,4 @@
 import TooltipActionButton from '@/components/common/TooltipActionButton';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import EsignStatusCell from '@/features/checker/components/table/EsignStatusCell';
 import NiumOrderID from '@/features/checker/components/table/NiumOrderIdCell';
 import OrderStatusCell from '@/features/checker/components/table/OrderStatusCell';
@@ -9,18 +7,17 @@ import TransactionType from '@/features/checker/components/table/TransactionType
 import VKycStatusCell from '@/features/checker/components/table/VKycStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
-import { RefreshCcwDot, FileText, Video } from 'lucide-react';
+import { FileText, Video } from 'lucide-react';
 
 export const GetTransactionTableColumns = ({
   openModal,
   handleEkycStatus,
-  handleVkycStatus
+  handleVkycStatus,
 }: {
   openModal: (rowData: any) => void;
   handleEkycStatus: (rowData: any) => void;
   handleVkycStatus: (rowData: any) => void;
 }) => {
- 
   return [
     {
       key: 'nium_order_id',
@@ -111,14 +108,14 @@ export const GetTransactionTableColumns = ({
         <span>{formatDateWithFallback(rowData.incident_completion_date)}</span>
       ),
     },
-     {
+    {
       key: 'Action',
       id: 'Action',
       name: 'Action',
       className: 'min-w-0',
-       cell: (_: unknown, rowData: any) => (
-        <div className='flex flex-row gap-2'>
-         <TooltipActionButton
+      cell: (_: unknown, rowData: any) => (
+        <div className="flex flex-row gap-2">
+          <TooltipActionButton
             onClick={() => handleEkycStatus(rowData)}
             icon={<FileText size={16} />}
             tooltipText="Get E-Sign Status"
@@ -131,9 +128,9 @@ export const GetTransactionTableColumns = ({
             tooltipText="Get VKYC Status"
             variant="vkyc"
             disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
-          />    
+          />
         </div>
-       )
+      ),
     },
   ];
 };

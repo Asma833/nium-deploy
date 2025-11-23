@@ -16,10 +16,13 @@ export const userSchema = z
         return !email.includes(',');
       }, 'Email address cannot contain commas')
       // Check for allowed admin domains (for checker/maker roles)
-      .refine((email) => {
-        const domain = email.split('@')[1]?.toLowerCase();
-        return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
-      }, `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`),
+      .refine(
+        (email) => {
+          const domain = email.split('@')[1]?.toLowerCase();
+          return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
+        },
+        `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`
+      ),
     password: z
       .string()
       .min(1, 'Password is required')

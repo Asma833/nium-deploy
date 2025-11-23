@@ -14,6 +14,7 @@ import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId } from '@/types/enums';
 import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
 import { useGetVKYCStatus } from '@/hooks/useGetVKYCStatus';
+import { maskPAN } from '@/utils/masking';
 
 const ViewAllTable: React.FC<ViewAllTableProps> = ({
   tableData,
@@ -41,13 +42,13 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Update local table data when ekycStatus is fetched
   useEffect(() => {
     if (ekycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 e_sign_status: ekycStatus.status,
-                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date
+                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date,
               }
             : row
         )
@@ -58,13 +59,13 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   // Update local table data when vkycStatus is fetched
   useEffect(() => {
     if (vkycStatus && selectedOrderId) {
-      setLocalTableData(prevData =>
-        prevData.map(row =>
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
           row.partner_order_id === selectedOrderId
             ? {
                 ...row,
                 v_kyc_status: vkycStatus.status,
-                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date
+                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date,
               }
             : row
         )
@@ -94,7 +95,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         order.created_at === 'N/A' || order.created_at === 'NA' ? 'N/A' : formatDateWithFallback(order.created_at),
       partner_order_id: order.partner_order_id || 'N/A',
       customer_name: order.customer_name || 'N/A',
-      customer_pan: order.customer_pan || 'N/A',
+      customer_pan: maskPAN(order.customer_pan) || 'N/A',
       transaction_type_name: order?.transaction_type_name?.name || 'N/A',
       purpose_type_name: order?.purpose_type_name?.purpose_name || 'N/A',
       e_sign_link: order.e_sign_link || null,
@@ -150,7 +151,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
       mutateEkyc(orderId);
     }
   };
-    const handleVkycStatus = (rowData: Order) => {
+  const handleVkycStatus = (rowData: Order) => {
     const orderId = rowData.partner_order_id;
     if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
       setSelectedOrderId(orderId);
@@ -161,7 +162,7 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
   const columns = GetTransactionTableColumns({
     openModal,
     handleEkycStatus,
-    handleVkycStatus
+    handleVkycStatus,
   });
 
   const tableColumns = columns.filter((col) => !disableColumns?.includes(col.id as string));

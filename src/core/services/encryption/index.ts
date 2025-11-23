@@ -5,6 +5,10 @@ export type { EncryptionResult, DecryptionParams, ApiEncryptionPayload } from '.
 // Axios interceptors
 export { encryptRequestInterceptor, decryptResponseInterceptor, EncryptedApiClient } from './encryptionInterceptor';
 
+// Test utilities
+export { testDecryption, testEncryptionCycle, validateBackendResponse } from './encryptionTestUtils';
+export type { BackendEncryptedResponse } from './encryptionTestUtils';
+
 // React hook
 export { useEncryption } from '@/hooks/useEncryption';
 

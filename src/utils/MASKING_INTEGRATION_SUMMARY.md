@@ -1,34 +1,39 @@
 # Masking Utility Integration Summary
 
 ## Overview
+
 This document summarizes the integration of the masking utility across the Nium Forex Agent Portal frontend application.
 
 ## Files Created
 
 ### 1. Core Utility Files
+
 - **`src/utils/masking.ts`** - Main masking utility with all functions
 - **`src/utils/MASKING_USAGE.md`** - Usage documentation and examples
 
 ## Masking Functions Implemented
 
 ### 1. PAN Masking (`maskPAN`)
+
 - **Purpose**: Mask PAN numbers showing only last 4 digits
 - **Example**: `"ABCDE1234F"` → `"******1234F"`
 - **Usage**: Applied to all customer_pan fields in table columns
 
 ### 2. Email Masking (`maskEmail`)
+
 - **Purpose**: Mask email addresses showing 1-2 characters before "@" and full domain
-- **Examples**: 
+- **Examples**:
   - `"john.doe@gmail.com"` → `"jo*******@gmail.com"`
   - `"ab@yahoo.com"` → `"a*@yahoo.com"`
 - **Usage**: Applied to all email fields in user tables
 
 ### 3. Admin Email Domain Validation
-- **Functions**: 
+
+- **Functions**:
   - `validateAdminEmail()` - Validates email for admin roles
   - `isAllowedAdminDomain()` - Checks if domain is allowed
   - `isExternalEmail()` - Identifies external/third-party emails
-- **Allowed Domains**: 
+- **Allowed Domains**:
   - `instarem.co.in`
   - `nium.com`
   - `niumforex.com`
@@ -78,16 +83,19 @@ This document summarizes the integration of the masking utility across the Nium 
 ## Security Features Implemented
 
 ### 1. Data Privacy
+
 - ✅ PAN numbers are masked showing only last 4 digits
 - ✅ Email addresses are masked showing minimal characters before @
 - ✅ Full domain visible for proper identification
 
 ### 2. Role-Based Access Control
+
 - ✅ Admin email domain validation prevents unauthorized access
 - ✅ Only approved domains can be assigned to NIUM Checker and Super Admin roles
 - ✅ Prevents assignment to agents, contractors, or third-party employees
 
 ### 3. Consistent Implementation
+
 - ✅ Masking applied across all table views
 - ✅ Consistent masking pattern throughout the application
 - ✅ Easy to maintain and extend
@@ -95,6 +103,7 @@ This document summarizes the integration of the masking utility across the Nium 
 ## Usage Examples
 
 ### In Table Columns
+
 ```typescript
 // Email masking
 {
@@ -114,6 +123,7 @@ This document summarizes the integration of the masking utility across the Nium 
 ```
 
 ### For Admin Validation (Implemented in Schema)
+
 ```typescript
 // In user-form.schema.ts
 import { ALLOWED_ADMIN_DOMAINS } from '@/utils/masking';
@@ -122,10 +132,13 @@ export const userSchema = z.object({
   email: z
     .string()
     .email('Invalid email format')
-    .refine((email) => {
-      const domain = email.split('@')[1]?.toLowerCase();
-      return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
-    }, `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`),
+    .refine(
+      (email) => {
+        const domain = email.split('@')[1]?.toLowerCase();
+        return ALLOWED_ADMIN_DOMAINS.includes(domain as any);
+      },
+      `Email domain must be one of: ${ALLOWED_ADMIN_DOMAINS.join(', ')}`
+    ),
   // ... other fields
 });
 ```
@@ -162,6 +175,7 @@ export const userSchema = z.object({
 ## Support
 
 For questions or issues related to the masking utility, refer to:
+
 - `src/utils/masking.ts` - Source code
 - `src/utils/MASKING_USAGE.md` - Usage documentation
 - This file - Integration summary

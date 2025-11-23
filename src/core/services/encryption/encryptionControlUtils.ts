@@ -52,7 +52,6 @@ export class EncryptionControlUtils {
    */
   static addSkipEndpoint(endpoint: string): void {
     // This would require modifying the interceptor to use a dynamic list
-    console.warn('Dynamic endpoint control not implemented yet. Use static configuration.');
   }
 }
 
