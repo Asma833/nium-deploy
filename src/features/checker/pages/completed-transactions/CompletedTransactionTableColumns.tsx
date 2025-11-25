@@ -1,3 +1,4 @@
+import TooltipActionButton from '@/components/common/TooltipActionButton';
 import { formatDate } from '@/utils/dateFormat';
 import VKycStatusCell from '../../components/table/VKycStatusCell';
 import EsignStatusCell from '../../components/table/EsignStatusCell';
@@ -5,8 +6,17 @@ import NiumOrderID from '../../components/table/NiumOrderIdCell';
 import OrderStatusCell from '../../components/table/OrderStatusCell';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { maskPAN } from '@/utils/masking';
+import { FileText, Video } from 'lucide-react';
 
-export const GetTransactionTableColumns = (openModal: (value: string) => void) => [
+export const GetTransactionTableColumns = ({
+  openModal,
+  handleEkycStatus,
+  handleVkycStatus,
+}: {
+  openModal: (rowData: any) => void;
+  handleEkycStatus: (rowData: any) => void;
+  handleVkycStatus: (rowData: any) => void;
+}) => [
   {
     key: 'nium_order_id',
     id: 'nium_order_id',
@@ -99,4 +109,28 @@ export const GetTransactionTableColumns = (openModal: (value: string) => void) =
     id: 'nium_invoice_number',
     name: 'NIUM INVOICE NUMBER',
   },
+  {
+  key: 'Action',
+  id: 'Action',
+  name: 'Action',
+  className: 'min-w-0',
+  cell: (_: unknown, rowData: any) => (
+    <div className="flex flex-row gap-2">
+      <TooltipActionButton
+        onClick={() => handleEkycStatus(rowData)}
+        icon={<FileText size={16} />}
+        tooltipText="Get E-Sign Status"
+        variant="esign"
+        disabled={ rowData.e_sign_link_doc_id === null }
+      />
+      <TooltipActionButton
+        onClick={() => handleVkycStatus(rowData)}
+        icon={<Video size={16} />}
+        tooltipText="Get VKYC Status"
+        variant="vkyc"
+        disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+      />
+    </div>
+  ),
+},
 ];
