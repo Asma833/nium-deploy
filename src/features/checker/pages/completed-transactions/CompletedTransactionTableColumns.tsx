@@ -110,27 +110,27 @@ export const GetTransactionTableColumns = ({
     name: 'NIUM INVOICE NUMBER',
   },
   {
-  key: 'Action',
-  id: 'Action',
-  name: 'Action',
-  className: 'min-w-0',
-  cell: (_: unknown, rowData: any) => (
-    <div className="flex flex-row gap-2">
-      <TooltipActionButton
-        onClick={() => handleEkycStatus(rowData)}
-        icon={<FileText size={16} />}
-        tooltipText="Get E-Sign Status"
-        variant="esign"
-        disabled={ rowData.e_sign_link_doc_id === null }
-      />
-      <TooltipActionButton
-        onClick={() => handleVkycStatus(rowData)}
-        icon={<Video size={16} />}
-        tooltipText="Get VKYC Status"
-        variant="vkyc"
-        disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
-      />
-    </div>
-  ),
-},
+    key: 'Action',
+    id: 'Action',
+    name: 'Action',
+    className: 'min-w-0',
+    cell: (_: unknown, rowData: any) => (
+      <div className="flex flex-row gap-2">
+        <TooltipActionButton
+          onClick={() => handleEkycStatus(rowData)}
+          icon={<FileText size={16} />}
+          tooltipText="Get E-Sign Status"
+          variant="esign"
+          disabled={rowData.e_sign_link_doc_id === null}
+        />
+        <TooltipActionButton
+          onClick={() => handleVkycStatus(rowData)}
+          icon={<Video size={16} />}
+          tooltipText="Get VKYC Status"
+          variant="vkyc"
+          disabled={rowData.v_kyc_status === 'N/A' || rowData.v_kyc_status === 'pending'}
+        />
+      </div>
+    ),
+  },
 ];

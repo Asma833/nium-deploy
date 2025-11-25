@@ -132,10 +132,12 @@ const ViewAllTable: React.FC<ViewAllTableProps> = ({
         ? filteredData.map((item) => transformOrderForTable(item))
         : localTableData.map((item) => transformOrderForTable(item)) || [];
 
-    const exportColumns = columns.map((col) => ({
-      accessorKey: col.id,
-      header: col.name,
-    }));
+    const exportColumns = columns
+      .filter((col) => col.id !== 'Action')
+      .map((col) => ({
+        accessorKey: col.id,
+        header: col.name,
+      }));
 
     exportToCSV(dataToExport, exportColumns, 'view-all');
   };
