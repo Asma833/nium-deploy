@@ -196,7 +196,7 @@ const CompletedTransactionTable = () => {
     // Use filtered data if available, otherwise fall back to all data
     const dataToExport = filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable);
 
-    const exportColumns = columns.map((col) => ({
+    const exportColumns = columns.filter((col) => col.id !== 'Action').map((col) => ({
       accessorKey: col.id,
       header: col.name,
     }));
