@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DynamicTable } from '@/components/common/dynamic-table/DynamicTable';
 import { Button } from '@/components/ui/button';
 import { GetTransactionTableColumns } from './CompletedTransactionTableColumns';
@@ -13,6 +13,8 @@ import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
 import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 import { maskPAN } from '@/utils/masking';
+import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
+import { useGetVKYCStatus } from '@/hooks/useGetVKYCStatus';
 
 const CompletedTransactionTable = () => {
   const {
@@ -75,12 +77,77 @@ const CompletedTransactionTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<string>('');
+  const [localTableData, setLocalTableData] = useState<Order[]>([]);
+
+  const { data: ekycStatus, isLoading: isEkycLoading, mutate: mutateEkyc } = useGetEKYCStatus();
+  const { data: vkycStatus, isLoading: isVkycLoading, mutate: mutateVkyc } = useGetVKYCStatus();
+
+  // Sync local table data with computed tableData
+  useEffect(() => {
+    setLocalTableData(tableData);
+  }, [tableData]);
+
+  // Update local table data when ekycStatus is fetched
+  useEffect(() => {
+    if (ekycStatus && selectedOrderId) {
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
+          row.partner_order_id === selectedOrderId
+            ? {
+                ...row,
+                e_sign_status: ekycStatus.status,
+                e_sign_customer_completion_date: ekycStatus.data?.completed_at || row.e_sign_customer_completion_date,
+              }
+            : row
+        )
+      );
+    }
+  }, [ekycStatus, selectedOrderId]);
+
+  // Update local table data when vkycStatus is fetched
+  useEffect(() => {
+    if (vkycStatus && selectedOrderId) {
+      setLocalTableData((prevData) =>
+        prevData.map((row) =>
+          row.partner_order_id === selectedOrderId
+            ? {
+                ...row,
+                v_kyc_status: vkycStatus.status,
+                v_kyc_customer_completion_date: vkycStatus.data?.completed_at || row.v_kyc_customer_completion_date,
+              }
+            : row
+        )
+      );
+    }
+  }, [vkycStatus, selectedOrderId]);
 
   const openModal = (rowData: any) => {
     setSelectedRowData(rowData);
     setIsModalOpen(true);
   };
-  const columns = GetTransactionTableColumns(openModal);
+
+  const handleEkycStatus = (rowData: Order) => {
+    const orderId = rowData.partner_order_id;
+    if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
+      setSelectedOrderId(orderId);
+      mutateEkyc(orderId);
+    }
+  };
+
+  const handleVkycStatus = (rowData: Order) => {
+    const orderId = rowData.partner_order_id;
+    if (orderId && orderId !== 'N/A' && typeof orderId === 'string' && orderId.trim() !== '') {
+      setSelectedOrderId(orderId);
+      mutateVkyc(orderId);
+    }
+  };
+
+  const columns = GetTransactionTableColumns({
+    openModal,
+    handleEkycStatus,
+    handleVkycStatus,
+  });
   const { options: purposeTypeOptions } = useDynamicOptions(API.PURPOSE.GET_PURPOSES);
 
   const { options: transactionTypeOptions } = useDynamicOptions(API.TRANSACTION.GET_ALL_TRANSACTIONS_TYPES);
@@ -127,7 +194,7 @@ const CompletedTransactionTable = () => {
 
   const handleExportToCSV = () => {
     // Use filtered data if available, otherwise fall back to all data
-    const dataToExport = filteredData.length > 0 ? filteredData : getTableData();
+    const dataToExport = filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable);
 
     const exportColumns = columns.map((col) => ({
       accessorKey: col.id,
@@ -164,7 +231,7 @@ const CompletedTransactionTable = () => {
     <div className="dynamic-table-wrap">
       <DynamicTable
         columns={columns}
-        data={getTableData()}
+        data={localTableData.map(transformOrderForTable)}
         refreshAction={{
           isRefreshButtonVisible: true,
           onRefresh: refreshData,

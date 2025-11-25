@@ -262,7 +262,7 @@ export const ViewStatusTableColumns = ({
             icon={<FileText size={16} />}
             tooltipText="Get E-Sign Status"
             variant="esign"
-            disabled={rowData.e_sign_status === 'pending' || rowData.e_sign_status === 'N/A'}
+            disabled={ rowData.e_sign_link_doc_id === null  }
           />
           <TooltipActionButton
             onClick={() => handleVkycStatus(rowData)}
