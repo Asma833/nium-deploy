@@ -21,6 +21,7 @@ import { useCurrentUser } from '@/utils/getUserFromRedux';
 import useSubmitIncidentFormData from '../../completed-transactions/hooks/useSubmitIncidentFormData';
 import useGetCheckerOrdersByPartnerId from '@/features/checker/hooks/useGetCheckerOrdersByPartnerId';
 import { IncidentPageId } from '@/types/enums';
+import { useQueryInvalidator } from '@/hooks/useQueryInvalidator';
 import { maskPAN } from '@/utils/masking';
 
 const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
@@ -39,6 +40,7 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
 
   const { getUserHashedKey } = useCurrentUser();
   const { submitIncidentFormData, isPending } = useSubmitIncidentFormData();
+  const { invalidateMultipleQueries } = useQueryInvalidator();
 
   // usestates
   const [showNiumInvoice, setShowNiumInvoice] = useState(true);
@@ -247,6 +249,10 @@ const UpdateIncidentForm = (props: UpdateIncidentFormData) => {
             setIsModalOpen(false);
             toast.success('Incident updated successfully');
             resetFormValues();
+            // Invalidate assign list if updated from assign page
+            if (pageId === IncidentPageId.UPDATE) {
+              invalidateMultipleQueries([['checkerOrders']]);
+            }
           },
           onError: (error) => {
             toast.error(error?.message || 'Failed to update incident');
