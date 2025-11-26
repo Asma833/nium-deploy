@@ -64,6 +64,7 @@ const AssignCreationTable = () => {
     }
   }, [formateDataArray]);
 
+
   // Display error toast if API request fails
   useEffect(() => {
     if (error) {
@@ -126,7 +127,7 @@ const AssignCreationTable = () => {
     }
   };
 
-  const columns = GetAssignCreationColumns(handleSelectionChange, openModal);
+  const columns = GetAssignCreationColumns(handleSelectionChange, openModal, selectedRows);
 
   return (
     <div className="dynamic-table-wrap flex flex-col">
@@ -138,7 +139,12 @@ const AssignCreationTable = () => {
         paginationMode={isPaginationDynamic ? 'dynamic' : 'static'}
         refreshAction={{
           isRefreshButtonVisible: true,
-          onRefresh: refetch ?? (() => {}),
+          onRefresh: async () => {
+            if (refetch) {
+              await refetch();
+            }
+            setSelectedRows([]);
+          },
           isLoading: isLoading,
           hasError: error,
         }}
