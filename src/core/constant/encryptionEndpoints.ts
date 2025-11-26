@@ -90,7 +90,6 @@ export const ENDPOINT_MATCHING_RULES: EndpointRulesConfig = {
   },
 } as const;
 
-
 /**
  * Extract endpoints for backward compatibility
  */

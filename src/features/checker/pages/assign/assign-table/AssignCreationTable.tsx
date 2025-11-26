@@ -64,7 +64,6 @@ const AssignCreationTable = () => {
     }
   }, [formateDataArray]);
 
-
   // Display error toast if API request fails
   useEffect(() => {
     if (error) {

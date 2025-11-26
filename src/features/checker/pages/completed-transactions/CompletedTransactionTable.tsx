@@ -196,10 +196,12 @@ const CompletedTransactionTable = () => {
 
   const handleExportToCSV = () => {
     // Use filtered data if available, otherwise fall back to all data
-    const dataToExport = (filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable)).map((row) => ({
-      ...row,
-      order_status: ORDER_STATUS_LABELS[_.toLower(String(row.order_status || ''))] || row.order_status,
-    }));
+    const dataToExport = (filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable)).map(
+      (row) => ({
+        ...row,
+        order_status: ORDER_STATUS_LABELS[_.toLower(String(row.order_status || ''))] || row.order_status,
+      })
+    );
 
     const exportColumns = columns
       .filter((col) => col.id !== 'Action')
