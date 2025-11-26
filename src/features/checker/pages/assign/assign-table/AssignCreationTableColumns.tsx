@@ -6,18 +6,19 @@ import { maskPAN } from '@/utils/masking';
 
 export const GetAssignCreationColumns = (
   handleSelectionChange: (rowId: string, checked: boolean) => void,
-  openModal: (value: string) => void
+  openModal: (value: string) => void,
+  selectedRows: string[]
 ) => [
   {
     key: 'select',
     id: 'select',
     name: 'Select',
     className: 'min-w-0 p-2',
-    cell: (value: boolean, row: any) => {
+    cell: (_: any, row: any) => {
       return (
         <input
           type="checkbox"
-          checked={value}
+          checked={selectedRows.includes(row.partner_order_id)}
           onChange={(e) => handleSelectionChange(row.partner_order_id, e.target.checked)}
           className="relative h-5 w-5 cursor-pointer rounded-sm border-2 transition-all duration-300 inline-block align-middle accent-[#E53888]"
         />

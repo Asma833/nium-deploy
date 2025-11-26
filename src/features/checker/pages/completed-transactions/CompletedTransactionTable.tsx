@@ -11,10 +11,12 @@ import { Order } from '../../types/updateIncident.types';
 import { formatDate } from '@/utils/dateFormat';
 import { formatDateWithFallback } from '@/utils/formatDateWithFallback';
 import { STATUS_MAP, STATUS_TYPES } from '@/core/constant/statusTypes';
+import { ORDER_STATUS_LABELS } from '@/components/types/status';
 import { IncidentMode, IncidentPageId, TransactionTypeEnum } from '@/types/enums';
 import { maskPAN } from '@/utils/masking';
 import { useGetEKYCStatus } from '@/hooks/useGetEKYCStatus';
 import { useGetVKYCStatus } from '@/hooks/useGetVKYCStatus';
+import _ from 'lodash';
 
 const CompletedTransactionTable = () => {
   const {
@@ -194,7 +196,10 @@ const CompletedTransactionTable = () => {
 
   const handleExportToCSV = () => {
     // Use filtered data if available, otherwise fall back to all data
-    const dataToExport = filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable);
+    const dataToExport = (filteredData.length > 0 ? filteredData : localTableData.map(transformOrderForTable)).map((row) => ({
+      ...row,
+      order_status: ORDER_STATUS_LABELS[_.toLower(String(row.order_status || ''))] || row.order_status,
+    }));
 
     const exportColumns = columns
       .filter((col) => col.id !== 'Action')
